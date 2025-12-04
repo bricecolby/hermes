@@ -22,7 +22,7 @@ export default function Index() {
         {/* Logo */}
         <View style={styles.logoWrap}>
           <Image
-            source={require("../assets/images/1x/logo.png")}
+            source={require("../src/assets/images/1x/logo.png")}
             style={styles.logo}
             resizeMode="contain"
           />
