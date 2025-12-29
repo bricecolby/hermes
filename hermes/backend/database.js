@@ -2,9 +2,10 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
+const config = require('./config');
 const { schemaStatements } = require('../shared/schema');
 
-const dataDir = path.resolve('./backend/data');
+const dataDir = path.resolve(config.DB_PATH);
 const dbPath = path.join(dataDir, 'hermes.db');
 
 if (!fs.existsSync(dataDir)) {
