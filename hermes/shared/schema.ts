@@ -13,22 +13,23 @@ export const schemaStatements: string[] = [
 
 
   `CREATE TABLE IF NOT EXISTS users (
-    id                INTEGER PRIMARY KEY AUTOINCREMENT,
-    username          TEXT NOT NULL UNIQUE,
-    learning_lang_id  INTEGER NOT NULL,
-    native_lang_id    INTEGER NOT NULL,    
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    username            TEXT NOT NULL UNIQUE,
+    learning_lang_id    INTEGER NOT NULL,
+    native_lang_id      INTEGER NOT NULL,    
 
-    xp            INTEGER NOT NULL DEFAULT 0,
-    level         INTEGER NOT NULL DEFAULT 1,
+    xp                  INTEGER NOT NULL DEFAULT 0,
+    level               INTEGER NOT NULL DEFAULT 1,
+    current_stamina     INTEGER NOT NULL DEFAULT 100,
+    stamina_updated_at  TEXT NOT NULL,
 
-    perk_points   INTEGER NOT NULL DEFAULT 0,
-    equip_slots   INTEGER NOT NULL DEFAULT 1,
+    perk_points         INTEGER NOT NULL DEFAULT 0,
+    equip_slots         INTEGER NOT NULL DEFAULT 1,
+    streak_count        INTEGER NOT NULL DEFAULT 0,
+    last_login          TEXT NOT NULL,
 
-    streak_count  INTEGER NOT NULL DEFAULT 0,
-    last_login    TEXT NOT NULL,
-
-    created_at    TEXT NOT NULL,
-    updated_at    TEXT NOT NULL,
+    created_at          TEXT NOT NULL,
+    updated_at          TEXT NOT NULL,
 
     UNIQUE (username, learning_lang_id, native_lang_id),
 
