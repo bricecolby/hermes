@@ -4,7 +4,7 @@ const {
     computePerkPointGains,
     getMaxStaminaForLevel,
     BASE_STAMINA_REGEN_SECONDS,
-} = require('../../shared/rules/progressionRules');
+} = require('../rules/progressionRules');
 
 class User {
     #id;
