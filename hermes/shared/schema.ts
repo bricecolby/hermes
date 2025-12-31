@@ -254,20 +254,20 @@ export const schemaStatements: string[] = [
 
   `CREATE TABLE IF NOT EXISTS concepts (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    language_id     INTEGER NOT NULL,
 
+    kind            TEXT NOT NULL, 
+    ref_id          INTEGER NOT NULL,
+
+    language_id     INTEGER NOT NULL,
+    slug            TEXT NOT NULL, 
     title           TEXT NOT NULL,
     description     TEXT,
-    parent_id       INTEGER,
-    cefr_level_id   INTEGER,
-  
-    sort_order      INTEGER NOT NULL DEFAULT 0,
+ 
     created_at      TEXT NOT NULL,
-    updated_at      TEXT NOT NULL,
+ 
+    UNIQUE (kind, ref_id),
 
     FOREIGN KEY (language_id)   REFERENCES languages(id)    ON DELETE CASCADE,
-    FOREIGN KEY (parent_id)     REFERENCES concepts(id)     ON DELETE SET NULL,
-    FOREIGN KEY (cefr_level_id) REFERENCES cefr_levels(id)  ON DELETE CASCADE
   );`,
 
   `CREATE TABLE IF NOT EXISTS concept_links (
@@ -282,32 +282,35 @@ export const schemaStatements: string[] = [
     FOREIGN KEY (from_concept_id) REFERENCES concepts(id) ON DELETE CASCADE,
     FOREIGN KEY (to_concept_id)   REFERENCES concepts(id) ON DELETE CASCADE
   )`,
-  
-  `CREATE TABLE IF NOT EXISTS concept_vocab_items (
-    concept_id      INTEGER NOT NULL,
-    vocab_item_id   INTEGER NOT NULL,
+
+  `CREATE TABLE IF NOT EXISTS lessons (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    language_id     INTEGER NOT NULL,
+
+    title           TEXT NOT NULL,
+    description     TEXT,
+    cefr_level_id   INTEGER
+
+    sort_order      INTEGER NOT NULL DEFAULT 0,
 
     created_at      TEXT NOT NULL,
+    updated_at      TEXT NOT NULL,
 
-    PRIMARY KEY (concept_id, vocab_item_id),
+    FOREIGN KEY (language_id) REFERENCES languages(id) ON DELETE CASCADE
+  );`,
 
-    FOREIGN KEY (concept_id)      REFERENCES concepts(id)    ON DELETE CASCADE,
-    FOREIGN KEY (vocab_item_id)   REFERENCES vocab_items(id) ON DELETE CASCADE
+  `CREATE TABLE IF NOT EXISTS lesson_concepts (
+    lesson_id       INTEGER NOT NULL,
+    concept_id      INTEGER NOT NULL,
+    order_in_lesson INTEGER NOT NULL DEFAULT 0,
+    
+    created_at      TEXT NOT NULL,
 
-  )`,
+    PRIMARY KEY (lesson_id, concept_id),
 
-  `CREATE TABLE IF NOT EXISTS concept_grammar_points (
-    concept_id        INTEGER NOT NULL,
-    grammar_point_id  INTEGER NOT NULL,
-
-    created_at        TEXT NOT NULL,
-
-    PRIMARY KEY (concept_id, grammar_point_id),
-
-    FOREIGN KEY (concept_id)        REFERENCES concepts(id)       ON DELETE CASCADE,
-    FOREIGN KEY (grammar_point_id)  REFERENCES grammar_points(id)  ON DELETE CASCADE
-
-  )`,
+    FOREIGN KEY (lesson_id)  REFERENCES lessons(id)  ON DELETE CASCADE,
+    FOREIGN KEY (concept_id) REFERENCES concepts(id) ON DELETE CASCADE
+  );`,
 
   `CREATE TABLE IF NOT EXISTS practice_sessions (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -323,7 +326,7 @@ export const schemaStatements: string[] = [
 
     FOREIGN KEY (language_id)   REFERENCES languages(id)  ON DELETE CASCADE,
     FOREIGN KEY (user_id)       REFERENCES users(id)      ON DELETE CASCADE
-  )`,
+  );`,
 
   `CREATE TABLE IF NOT EXISTS practice_attempts (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -336,30 +339,35 @@ export const schemaStatements: string[] = [
     user_response_json  TEXT,
     evaluation_json     TEXT,
 
-    concept_id          INTEGER,
-    vocab_item_id       INTEGER,
-    vocab_sense_id      INTEGER,
-    vocab_form_id       INTEGER,
-    grammar_point_id    INTEGER,
-
     created_at          TEXT NOT NULL,
 
     FOREIGN KEY (session_id)  REFERENCES practice_sessions(id)  ON DELETE CASCADE,
     FOREIGN KEY (user_id)     REFERENCES users(id)              ON DELETE CASCADE,
+  );`,
 
-    FOREIGN KEY (concept_id)        REFERENCES concepts(id)       ON DELETE SET NULL,
-    FOREIGN KEY (vocab_item_id)     REFERENCES vocab_items(id)    ON DELETE SET NULL,
-    FOREIGN KEY (vocab_sense_id)    REFERENCES vocab_senses(id)   ON DELETE SET NULL,
-    FOREIGN KEY (vocab_form_id)     REFERENCES vocab_forms(id)    ON DELETE SET NULL,
-    FOREIGN KEY (grammar_point_id)  REFERENCES grammar_points(id) ON DELETE SET NULL
-  )`,
+  `CREATE TABLE IF NOT EXISTS practice_attempt_concepts (
+    attempt_id      INTEGER NOT NULL,
+    concept_id      INTEGER NOT NULL,
+    
+    score           REAL,
+    is_correct      INTEGER,
+    weight          REAL,
+    evidence_json   TEXT,
+    
+    created_at      TEXT NOT NULL,
 
+    PRIMARY KEY (attempt_id, concept_id),
+
+    FOREIGN KEY (attempt_id)  REFERENCES practice_attempts(id)  ON DELETE CASCADE,
+    FOREIGN KEY (concept_id)  REFERENCES concepts(id)           ON DELETE CASCADE
+  );`,
   
-  `CREATE TABLE IF NOT EXISTS tasks (
+  `CREATE TABLE IF NOT EXISTS quests (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id       INTEGER NOT NULL,
 
-    task_type     TEXT NOT NULL,
+    quest_type    TEXT NOT NULL,
+    title         TEXT NOT NULL,
     description   TEXT,
     status        TEXT NOT NULL DEFAULT 'pending',
     due_at        TEXT,
@@ -370,7 +378,7 @@ export const schemaStatements: string[] = [
     created_at    TEXT NOT NULL,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-  )`,
+  );`,
 
   `CREATE TABLE IF NOT EXISTS achievements (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -381,7 +389,7 @@ export const schemaStatements: string[] = [
     points_awarded  INTEGER NOT NULL DEFAULT 0,
 
     created_at      TEXT NOT NULL
-  )`,
+  );`,
 
   `CREATE TABLE IF NOT EXISTS user_achievements (
     user_id         INTEGER NOT NULL,
