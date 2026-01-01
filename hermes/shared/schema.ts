@@ -267,7 +267,7 @@ export const schemaStatements: string[] = [
  
     UNIQUE (kind, ref_id),
 
-    FOREIGN KEY (language_id)   REFERENCES languages(id)    ON DELETE CASCADE,
+    FOREIGN KEY (language_id)   REFERENCES languages(id)    ON DELETE CASCADE
   );`,
 
   `CREATE TABLE IF NOT EXISTS concept_links (
@@ -289,7 +289,7 @@ export const schemaStatements: string[] = [
 
     title           TEXT NOT NULL,
     description     TEXT,
-    cefr_level_id   INTEGER
+    cefr_level_id   INTEGER,
 
     sort_order      INTEGER NOT NULL DEFAULT 0,
 
@@ -342,7 +342,7 @@ export const schemaStatements: string[] = [
     created_at          TEXT NOT NULL,
 
     FOREIGN KEY (session_id)  REFERENCES practice_sessions(id)  ON DELETE CASCADE,
-    FOREIGN KEY (user_id)     REFERENCES users(id)              ON DELETE CASCADE,
+    FOREIGN KEY (user_id)     REFERENCES users(id)              ON DELETE CASCADE
   );`,
 
   `CREATE TABLE IF NOT EXISTS practice_attempt_concepts (

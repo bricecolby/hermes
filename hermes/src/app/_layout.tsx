@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import * as SplashScreen from 'expo-splash-screen';
 import { Alert, View, Text, Button } from 'react-native';
+import { registerPracticeItems } from '../../shared/domain/practice/registerPracticeItems';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { initDb } from '@/db';
@@ -24,6 +25,7 @@ export default function RootLayout() {
   useEffect(() => {
     (async () => {
       try {
+        registerPracticeItems();
         await initDb();
         console.log('DB init successful');
         setDbReady(true);
@@ -60,6 +62,7 @@ export default function RootLayout() {
             setDbError(null);
             SplashScreen.preventAutoHideAsync().catch(() => {});
             try {
+              registerPracticeItems();
               await initDb();
               setDbReady(true);
             } catch (err: any) {
@@ -94,6 +97,7 @@ export default function RootLayout() {
             setDbError(null);
             SplashScreen.preventAutoHideAsync().catch(() => {});
             try {
+              registerPracticeItems();
               await initDb();
               setDbReady(true);
             } catch (err: any) {
