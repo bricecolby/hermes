@@ -1,0 +1,12 @@
+{
+  "type": "mediation_v1.translate_sentence",
+  "mode": "mediation",
+  "skills": ["reading", "writing"],
+  "conceptIds": [1201, 1202],
+  "sourceSentence": "I like apples.",
+  "acceptedTranslations": ["me gustan las manzanas", "me gustan manzanas"],
+  "requiredTokens": [
+    { "token": "gustan", "conceptId": 1201 },
+    { "token": "manzanas", "conceptId": 1202 }
+  ]
+}

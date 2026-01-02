@@ -1,0 +1,19 @@
+{
+  "type": "matching_v1.audio_to_text",
+  "mode": "reception",
+  "skills": ["listening"],
+  "conceptIds": [301, 302],
+  "audioUrl": "https://example.com/audio/lesson1.mp3",
+  "clips": [
+    { "id": "c1", "label": "clip 1", "conceptId": 301 },
+    { "id": "c2", "label": "clip 2", "conceptId": 302 }
+  ],
+  "options": [
+    { "id": "o1", "text": "hello" },
+    { "id": "o2", "text": "goodbye" }
+  ],
+  "correctMatches": {
+    "c1": "o1",
+    "c2": "o2"
+  }
+}

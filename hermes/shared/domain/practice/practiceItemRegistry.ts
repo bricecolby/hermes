@@ -3,7 +3,7 @@ import { PracticeItem, PracticeItemJSON } from "./practiceItem";
 export class UnsupportedPracticeItemTypeError extends Error {
     public readonly type: string;
 
-    constructor(type:string, supportedTypes: string[]) {
+    constructor(type: string, supportedTypes: string[]) {
         super(
             `Unsupported PracticeItem type: "${type}". ` +
             `Supported types are: ${supportedTypes.length ? supportedTypes.join(", ") : "(none)"}`

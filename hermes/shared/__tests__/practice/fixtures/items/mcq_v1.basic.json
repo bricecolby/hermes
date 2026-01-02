@@ -1,0 +1,13 @@
+{
+  "type": "mcq_v1.basic",
+  "mode": "reception",
+  "skills": ["reading"],
+  "conceptIds": [101],
+  "prompt": "What is the capital of France?",
+  "choices": [
+    { "id": "a", "text": "Paris" },
+    { "id": "b", "text": "Rome" },
+    { "id": "c", "text": "Berlin" }
+  ],
+  "correctChoiceId": "a"
+}

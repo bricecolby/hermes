@@ -1,0 +1,8 @@
+{
+  "type": "short_answer_v1.spoken_stub",
+  "mode": "production",
+  "skills": ["speaking"],
+  "conceptIds": [701],
+  "prompt": "Say: 'Good morning.'",
+  "acceptedTranscripts": ["good morning"]
+}

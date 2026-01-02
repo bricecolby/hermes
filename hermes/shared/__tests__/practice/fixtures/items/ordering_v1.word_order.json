@@ -1,0 +1,13 @@
+{
+  "type": "ordering_v1.word_order",
+  "mode": "production",
+  "skills": ["writing"],
+  "conceptIds": [501],
+  "prompt": "Put the words in the correct order.",
+  "tokens": [
+    { "id": "t1", "text": "I", "conceptId": 501 },
+    { "id": "t2", "text": "like", "conceptId": 501 },
+    { "id": "t3", "text": "pizza", "conceptId": 501 }
+  ],
+  "correctOrder": ["t1", "t2", "t3"]
+}

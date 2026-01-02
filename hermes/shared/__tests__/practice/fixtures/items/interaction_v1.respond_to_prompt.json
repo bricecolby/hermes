@@ -1,0 +1,11 @@
+{
+  "type": "interaction_v1.respond_to_prompt",
+  "mode": "interaction",
+  "skills": ["listening", "speaking"],
+  "conceptIds": [901],
+  "audioUrl": "https://example.com/audio/prompt_weekend.mp3",
+  "promptText": "Audio prompt: 'Tell me your name.'",
+  "targetKeywords": [
+    { "keyword": "my name is", "conceptId": 901 }
+  ]
+}

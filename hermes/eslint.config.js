@@ -12,7 +12,7 @@ module.exports = defineConfig([
 
   // Jest test files
   {
-    files: ['**/*.test.js', '**/*.spec.js'],
+    files: ['**/*.test.js', '**/*.spec.js', '**/*.test.ts', '**/*.spec.ts'],
     languageOptions: {
       globals: {
         describe: 'readonly',

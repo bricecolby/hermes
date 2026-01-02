@@ -1,0 +1,19 @@
+{
+  "type": "matching_v1.pairwise",
+  "mode": "reception",
+  "skills": ["reading"],
+  "conceptIds": [201, 202],
+  "prompt": "Match each word to its meaning.",
+  "left": [
+    { "id": "l1", "text": "cat", "conceptId": 201 },
+    { "id": "l2", "text": "dog", "conceptId": 202 }
+  ],
+  "right": [
+    { "id": "r1", "text": "a small domesticated feline" },
+    { "id": "r2", "text": "a domesticated canine" }
+  ],
+  "correctMatches": {
+    "l1": "r1",
+    "l2": "r2"
+  }
+}

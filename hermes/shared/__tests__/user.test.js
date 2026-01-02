@@ -1,4 +1,4 @@
-const User = require('./user'); 
+const User = require('../entities/user'); 
 
 describe('User (progression + stamina)', () => {
   test('constructs from minimal required fields', () => {
@@ -33,7 +33,6 @@ describe('User (progression + stamina)', () => {
   });
 
   test('level-up adds overflow stamina equal to new max stamina', () => {
-    // Start just below level 2 threshold (per your table: level 2 at 100 XP)
     const u = new User({
       username: 'brice',
       learning_lang_id: 1,
@@ -43,9 +42,8 @@ describe('User (progression + stamina)', () => {
       stamina_updated_at: new Date(0).toISOString(),
     });
 
-    u.addXP(20); // should hit level 2
+    u.addXP(20); 
 
-    // Level 2 max stamina is 105 in your table, so 50 + 105 = 155 expected
     expect(u.getLevel()).toBe(2);
     expect(u.getStamina()).toBe(155);
   });
@@ -96,7 +94,7 @@ describe('User (progression + stamina)', () => {
       learning_lang_id: 1,
       native_lang_id: 2,
       xp: 0,
-      stamina: 100, // max at level 1 is 100
+      stamina: 100, 
       stamina_updated_at: new Date(0).toISOString(),
     });
 

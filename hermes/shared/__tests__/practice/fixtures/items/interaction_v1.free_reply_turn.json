@@ -1,0 +1,11 @@
+{
+  "type": "interaction_v1.free_reply_turn",
+  "mode": "interaction",
+  "skills": ["reading", "writing"],
+  "conceptIds": [801, 802],
+  "prompt": "Your friend asks: 'What did you do this weekend?' Reply in 1–2 sentences.",
+  "targetKeywords": [
+    { "keyword": "went", "conceptId": 801 },
+    { "keyword": "played", "conceptId": 802 }
+  ]
+}

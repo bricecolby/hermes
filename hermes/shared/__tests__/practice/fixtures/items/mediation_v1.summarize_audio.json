@@ -1,0 +1,12 @@
+{
+  "type": "mediation_v1.summarize_audio",
+  "mode": "mediation",
+  "skills": ["listening", "writing"],
+  "conceptIds": [1101],
+  "audioUrl": "https://example.com/audio/story1.mp3",
+  "keyPoints": [
+    { "text": "went to the store", "conceptId": 1101 }
+  ],
+  "minWords": 5,
+  "maxWords": 30
+}

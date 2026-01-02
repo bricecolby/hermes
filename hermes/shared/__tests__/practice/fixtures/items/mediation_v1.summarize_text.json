@@ -1,0 +1,13 @@
+{
+  "type": "mediation_v1.summarize_text",
+  "mode": "mediation",
+  "skills": ["reading", "writing"],
+  "conceptIds": [1001, 1002],
+  "sourceText": "Tom went to the store. He bought milk and bread. Then he went home.",
+  "keyPoints": [
+    { "text": "went to the store", "conceptId": 1001 },
+    { "text": "bought milk", "conceptId": 1002 }
+  ],
+  "minWords": 5,
+  "maxWords": 30
+}

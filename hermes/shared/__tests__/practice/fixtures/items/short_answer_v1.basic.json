@@ -1,0 +1,9 @@
+{
+  "type": "short_answer_v1.basic",
+  "mode": "production",
+  "skills": ["writing"],
+  "conceptIds": [601],
+  "prompt": "Type the plural of 'child'.",
+  "acceptedAnswers": ["children"],
+  "keywords": ["children"]
+}
