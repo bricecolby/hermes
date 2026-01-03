@@ -1,9 +1,8 @@
-// src/db/index.ts
 import { openDatabaseAsync, SQLiteDatabase } from "expo-sqlite";
 import { schemaStatements } from "../../shared/schema";
 
 const DB_NAME = "hermes.db";
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 let db: SQLiteDatabase | null = null;
 

@@ -334,6 +334,7 @@ export const schemaStatements: string[] = [
     user_id             INTEGER NOT NULL,
 
     modality            TEXT,
+    type                TEXT,
     prompt_text         TEXT,
     question_json       TEXT NOT NULL,
     user_response_json  TEXT,
