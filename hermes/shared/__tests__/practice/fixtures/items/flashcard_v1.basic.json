@@ -1,0 +1,9 @@
+{
+  "type": "flashcard_v1.basic",
+  "mode": "reception",
+  "skills": ["reading"],
+  "conceptIds": [1301],
+  "front": "apple",
+  "back": "manzana",
+  "example": "I eat an apple every day."
+}

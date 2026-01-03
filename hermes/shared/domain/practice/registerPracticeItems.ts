@@ -4,6 +4,7 @@ import { practiceItemRegistry } from "./practiceItemRegistry";
 import { McqBasicPracticeItem } from "./items/mcqPracticeItem";
 import { MatchingPairwisePracticeItem } from "./items/matchingPairwisePracticeItem";
 import { MatchingAudioToTextPracticeItem } from "./items/matchingAudioToTextPracticeItem";
+import { FlashcardBasicPracticeItem } from "./items/flashcardBasicPracticeItem";
 
 // Production
 import { ClozeFreeFillPracticeItem } from "./items/clozeFreeFillPracticeItem";
@@ -30,6 +31,7 @@ export function registerPracticeItems() {
   practiceItemRegistry.register("mcq_v1.basic", (json) => new McqBasicPracticeItem(json as any));
   practiceItemRegistry.register("matching_v1.pairwise", (json) => new MatchingPairwisePracticeItem(json as any));
   practiceItemRegistry.register("matching_v1.audio_to_text", (json) => new MatchingAudioToTextPracticeItem(json as any));
+  practiceItemRegistry.register("flashcard_v1.basic", (json) => new FlashcardBasicPracticeItem(json as any));
 
   // Production
   practiceItemRegistry.register("cloze_v1.free_fill", (json) => new ClozeFreeFillPracticeItem(json as any));
