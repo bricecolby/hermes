@@ -12,13 +12,22 @@
 ### Architecture diagram
 ```mermaid
 flowchart TB
-  UI[UI / Controllers] --> APP[Application Services]
-  APP --> DOM[Domain]
-  APP --> PORTS[Ports (Interfaces)]
-  PORTS --> ADAPT[Adapters (Implementations)]
-  ADAPT --> DB[(Persistence)]
-  ADAPT --> EXT[(External APIs)]
-  DOM -->|pure logic| APP
+  UI[UI / Controllers]
+  APP[Application Services]
+  DOM[Domain]
+  PORTS[Ports]
+  ADAPT[Adapters]
+  DB[(Persistence)]
+  EXT[(External APIs)]
+
+  UI --> APP
+  APP --> DOM
+  APP --> PORTS
+  PORTS --> ADAPT
+  ADAPT --> DB
+  ADAPT --> EXT
+  DOM --> APP
+
 ```
 ### OOP Design
 Class diagram
