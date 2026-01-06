@@ -69,4 +69,17 @@ classDiagram
   PracticeItem <|-- FreeResponseItem
 
   PracticeItemRepository ..> PracticeItem
+
 ```
+
+## Encapsulation
+- Domain objects enforce invariants (e.g., a PracticeItem cannot be created without required fields; evaluation results must include required scoring fields).
+- State mutation is controlled through methods (e.g., `PracticeSession.addTurn()`), preventing invalid session states.
+- Side effects (DB/API access) are encapsulated behind ports (interfaces), keeping odmain logic pure and testable. 
+
+## Polymorphism
+- `PracticeItem.evaluate(response)` is polymorphic:
+    - Multiple choice items evaluate via options matching and feedback mapping. 
+    - Cloze items evaluate via token/blank correctness.
+    - Free response items evaluate via rubric/LLM scoring (if applicable)
+- `PracticeItem.validate()` can be overridden/extended per subtype to enforce type-specific rules. 
