@@ -1,18 +1,16 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, Slot } from 'expo-router';
+import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import * as SplashScreen from 'expo-splash-screen';
 import { Alert, View, Text, Button } from 'react-native';
+
 import { registerPracticeItems } from '../../shared/domain/practice/registerPracticeItems';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { initDb } from '@/db';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
-// export const unstable_settings = {
-//   anchor: '(tabs)',
-// };
+import { AppStateProvider } from '@/state/AppState';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -31,24 +29,20 @@ export default function RootLayout() {
         setDbReady(true);
       } catch (err: any) {
         console.error('DB init failed', err);
-
         const msg =
           err?.message ??
           (typeof err === 'string' ? err : 'Unknown DB initialization error');
-
         setDbError(msg);
       }
     })();
   }, []);
 
-  // When either success or failure happens, hide the native splash
   useEffect(() => {
     if (dbReady || dbError) {
       SplashScreen.hideAsync().catch(() => {});
     }
   }, [dbReady, dbError]);
 
-  // Pop an alert once when we hit an error
   useEffect(() => {
     if (!dbError) return;
 
@@ -68,7 +62,9 @@ export default function RootLayout() {
             } catch (err: any) {
               const msg =
                 err?.message ??
-                (typeof err === 'string' ? err : 'Unknown DB initialization error');
+                (typeof err === 'string'
+                  ? err
+                  : 'Unknown DB initialization error');
               setDbError(msg);
             }
           },
@@ -84,7 +80,14 @@ export default function RootLayout() {
   // Hard stop UI if DB failed
   if (dbError) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 24,
+        }}
+      >
         <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 12 }}>
           Can’t start the app
         </Text>
@@ -103,7 +106,9 @@ export default function RootLayout() {
             } catch (err: any) {
               const msg =
                 err?.message ??
-                (typeof err === 'string' ? err : 'Unknown DB initialization error');
+                (typeof err === 'string'
+                  ? err
+                  : 'Unknown DB initialization error');
               setDbError(msg);
             }
           }}
@@ -112,10 +117,11 @@ export default function RootLayout() {
     );
   }
 
-  // Normal app
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Slot />
+      <AppStateProvider>
+        <Slot />
+      </AppStateProvider>
       <StatusBar style="auto" />
     </ThemeProvider>
   );
