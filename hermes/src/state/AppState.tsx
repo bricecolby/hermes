@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PracticeItem } from '../../shared/domain/practice';
 
 export type SessionType = "learn" | "review";
 
@@ -40,7 +39,7 @@ type AppState = {
 
 const STORAGE = {
     languages: "hermes.languages",
-    activeLanguageId: "hermes.activeLangaugeId",
+    activeLanguageId: "hermes.activeLanguageId",
 };
 
 const Ctx = createContext<AppState | null>(null);

@@ -29,7 +29,56 @@ flowchart TB
   DOM --> APP
 
 ```
-### OOP Design
+
+## Frontend Architecture (Mobile Client)
+
+The mobile client is implemented using Expo (React Native) and follows a local-first architecture. The application is structured to keep UI, state management, domain logic, and data access concerns clearly separated.
+
+### Key frontend layers
+- **Screens (Expo Router)**  
+  Responsible for navigation and rendering UI. Screens do not directly access persistence or domain logic.
+
+- **App State (UI Runtime State)**  
+  Manages client-side runtime state such as:
+  - Active language selection
+  - Current practice session progress
+  - Navigation flow decisions  
+  This state is UI-specific and distinct from domain models.
+
+- **Services (Application Logic)**  
+  Orchestrate learning flows (e.g., starting a session, advancing practice) by coordinating domain logic and repositories.
+
+- **Domain (Shared)**  
+  Core learning models (PracticeItem hierarchy, evaluation logic, session concepts) shared across platforms.
+
+- **Repositories (Local Persistence)**  
+  SQLite-backed repositories implementing domain-defined ports. All data access is asynchronous and offline-capable.
+
+The frontend is designed so that screens depend only on state and services, not directly on repositories or domain internals.
+
+## Data Access Workflow (Local-First, API-Optional)
+
+Although the system was originally designed to support a remote API, the current implementation uses a local-first architecture. All learning functionality operates entirely offline using local persistence.
+
+### Current workflow (local-first)
+
+```mermaid
+flowchart LR
+  UI[Mobile Screens]
+  STATE[App State]
+  SVC[Application Services]
+  DOM[Shared Domain]
+  REPO[Repository Interfaces]
+  DB[(SQLite)]
+
+  UI --> STATE
+  STATE --> SVC
+  SVC --> DOM
+  SVC --> REPO
+  REPO --> DB
+```
+
+## OOP Design
 Class diagram
 ```mermaid
 classDiagram
