@@ -1,5 +1,4 @@
-import type { PracticeItemJSON, EvaluationResult } from "../practiceItem";
-import type { PracticeItem } from "../practiceItem";
+import type { PracticeItem, PracticeItemJSON, EvaluationResult } from "../practiceItem";
 
 export type StartPracticeSessionInput = {
   languageId: number;
