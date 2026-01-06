@@ -1,5 +1,20 @@
-const { get } = require('http');
 const { LEVEL_TABLE, BASE_STAMINA_REGEN_SECONDS } = require('../constants/progression');
+
+function applyXpToProgression({ totalXp, level, xpGained }) {
+    if (!Number.isFinite(totalXp) || totalXp < 0) throw new Error(`totalXp must be non-negative: ${totalXp}`);
+    if (!Number.isInteger(level) || level < 1) throw new Error(`level must be a positive integer: ${level}`);
+    if (!Number.isFinite(xpGained) || xpGained < 0) throw new Error(`xpGained must be non-negative: ${xpGained}`);
+
+    const nextTotalXp = totalXp + xpGained;
+    const nextLevel = computeLevelFromXP(nextTotalXp);
+    const perkPointsGained = computePerkPointGains(level, nextLevel);
+
+    return {
+        totalXp: nextTotalXp,
+        level: nextLevel,
+        perkPointsGained,
+    };
+}
 
 function computeLevelFromXP(xp) {
     if (!Number.isFinite(xp) || xp < 0) throw new Error(`XP must be a non-negative number: ${xp}`);
@@ -47,6 +62,7 @@ function getMaxStaminaForLevel(level) {
 }
 
 module.exports = {
+    applyXpToProgression,
     computeLevelFromXP,
     getRowForLevel,
     computePerkPointGains,
