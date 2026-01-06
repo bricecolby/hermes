@@ -31,7 +31,7 @@ flowchart TB
 ```
 ### OOP Design
 Class diagram
-````mermaid
+```mermaid
 classDiagram
   class PracticeItem {
     +id: string
