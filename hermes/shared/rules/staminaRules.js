@@ -4,12 +4,12 @@ const { BASE_STAMINA_REGEN_RATE } = require('../constants/progression');
 function getRegenSecondsForUser({ equippedPerkIds = [] } = {}) {
     let regenSeconds = BASE_STAMINA_REGEN_RATE;
 
-    for (const perkId of equippedPerkIds) {
+    // for (const perkId of equippedPerkIds) {
         // const perk = getPerkById(perkId);
         // if (perk && perk.staminaRegenModifier) {
         //     regenSeconds *= perk.staminaRegenModifier;
         // }
-    }
+    // }
 
     return regenSeconds;
 }

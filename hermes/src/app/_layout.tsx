@@ -1,24 +1,31 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import * as SplashScreen from 'expo-splash-screen';
-import { Alert, View, Text, Button } from 'react-native';
+import { Alert, View, Text, Button, Appearance } from 'react-native';
+
+import { TamaguiProvider, Theme } from 'tamagui';
+import tamaguiConfig from '../../tamagui.config'; // adjust path if needed
 
 import { registerPracticeItems } from '../../shared/domain/practice/registerPracticeItems';
 import { initDb } from '@/db';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
 import { AppStateProvider } from '@/state/AppState';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   const [dbReady, setDbReady] = useState(false);
   const [dbError, setDbError] = useState<string | null>(null);
+
+  // Force dark mode globally
+  useEffect(() => {
+    try {
+      // Some RN versions support this; if not, it just won't exist / won't apply.
+      Appearance.setColorScheme?.('dark');
+    } catch {}
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -74,10 +81,8 @@ export default function RootLayout() {
     );
   }, [dbError]);
 
-  // Keep splash while initializing
   if (!dbReady && !dbError) return null;
 
-  // Hard stop UI if DB failed
   if (dbError) {
     return (
       <View
@@ -117,12 +122,17 @@ export default function RootLayout() {
     );
   }
 
+  // ✅ Always dark mode
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AppStateProvider>
-        <Slot />
-      </AppStateProvider>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <TamaguiProvider config={tamaguiConfig}>
+      <Theme name="dark">
+        <ThemeProvider value={DarkTheme}>
+          <AppStateProvider>
+            <Slot />
+          </AppStateProvider>
+          <StatusBar style="light" />
+        </ThemeProvider>
+      </Theme>
+    </TamaguiProvider>
   );
 }

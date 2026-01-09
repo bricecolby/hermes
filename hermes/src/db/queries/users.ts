@@ -3,8 +3,7 @@ import type { SQLiteDatabase } from "expo-sqlite";
 export type UserRow = {
   id: number;
   username: string;
-  learning_lang_id: number;
-  native_lang_id: number;
+  language_pack_id: number;
 
   xp: number;
   level: number;
@@ -54,23 +53,6 @@ export async function listUsers(db: SQLiteDatabase): Promise<UserRow[]> {
   );
 }
 
-export async function insertUser(
-  db: SQLiteDatabase,
-  params: { username: string; learningLangId: number; nativeLangId: number }
-): Promise<number> {
-  const now = new Date().toISOString();
-  const res = await db.runAsync(
-    `INSERT INTO users (
-       username, learning_lang_id, native_lang_id,
-       xp, level, current_stamina, stamina_updated_at,
-       perk_points, equip_slots, streak_count, last_login,
-       created_at, updated_at
-     ) VALUES (?, ?, ?, 0, 1, 100, ?, 0, 1, 0, ?, ?, ?);`,
-    [params.username, params.learningLangId, params.nativeLangId, now, now, now, now]
-  );
-  return Number(res.lastInsertRowId);
-}
-
 export async function updateUserLogin(
   db: SQLiteDatabase,
   userId: number
@@ -106,16 +88,93 @@ export async function getUserXpLevel(
   );
 }
 
-export async function setUserActiveLanguage(
+export type LanguageProfileRow = {
+  userId: number;
+  username: string;
+
+  languagePackId: number;
+
+  learningLangId: number;
+  learningName: string;
+  learningCode: string;
+
+  nativeLangId: number;
+  nativeName: string;
+  nativeCode: string;
+
+  level: number;
+  xp: number;
+  updatedAt: string;
+};
+
+export async function listLanguageProfilesForUsername(
   db: SQLiteDatabase,
-  params: { userId: number; learningLangId: number }
-): Promise<void> {
-  const now = new Date().toISOString();
-  await db.runAsync(
-    `UPDATE users
-     SET learning_lang_id = ?,
-         updated_at = ?
-     WHERE id = ?;`,
-    [params.learningLangId, now, params.userId]
+  username: string
+): Promise<LanguageProfileRow[]> {
+  return db.getAllAsync<LanguageProfileRow>(
+    `
+    SELECT
+      u.id                AS userId,
+      u.username          AS username,
+      u.language_pack_id  AS languagePackId,
+
+      lp.target_lang_id   AS learningLangId,
+      tl.name             AS learningName,
+      tl.code             AS learningCode,
+
+      lp.native_lang_id   AS nativeLangId,
+      nl.name             AS nativeName,
+      nl.code             AS nativeCode,
+
+      u.level             AS level,
+      u.xp                AS xp,
+      u.updated_at        AS updatedAt
+    FROM users u
+    JOIN language_packs lp ON lp.id = u.language_pack_id
+    JOIN languages tl     ON tl.id = lp.target_lang_id
+    JOIN languages nl     ON nl.id = lp.native_lang_id
+    WHERE u.username = ?
+    ORDER BY u.updated_at DESC;
+    `,
+    [username]
   );
+}
+
+/**
+ * Creates a "language profile" for this username by selecting a supported language_pack row.
+ * This is what Add Language should call.
+ */
+export async function createUserProfileForLanguagePack(
+  db: SQLiteDatabase,
+  username: string,
+  languagePackId: number
+): Promise<number> {
+  const now = new Date().toISOString();
+
+  const res = await db.runAsync(
+    `
+    INSERT INTO users (
+      username, language_pack_id,
+      xp, level, current_stamina, stamina_updated_at,
+      perk_points, equip_slots, streak_count, last_login,
+      created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `,
+    [
+      username,
+      languagePackId,
+      0, // xp
+      1, // level
+      100, // current_stamina
+      now, // stamina_updated_at
+      0, // perk_points
+      1, // equip_slots
+      0, // streak_count
+      now, // last_login
+      now, // created_at
+      now, // updated_at
+    ]
+  );
+
+  return Number(res.lastInsertRowId);
 }

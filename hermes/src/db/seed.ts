@@ -13,15 +13,25 @@ export async function seedDb(db: SQLiteDatabase) {
     ["Russian", "ru", now, now]
   );
 
+  await db.runAsync(
+    `
+    INSERT INTO language_packs (target_lang_id, native_lang_id, created_at, updated_at)
+    VALUES (?, ?, ?, ?);
+    `,
+    [2, 1, now, now]
+  );
+
   // User (learning ru, native en)
   await db.runAsync(
-    `INSERT INTO users (
-      username, learning_lang_id, native_lang_id,
+    `
+    INSERT INTO users (
+      username, language_pack_id,
       xp, level, current_stamina, stamina_updated_at,
       perk_points, equip_slots, streak_count, last_login,
       created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-    ["brice", 2, 1, 250, 3, 85, now, 1, 1, 2, now, now, now]
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `,
+    ["default", 1, 250, 3, 85, now, 1, 1, 2, now, now, now]
   );
 
   // CEFR levels
@@ -267,4 +277,53 @@ export async function seedDb(db: SQLiteDatabase) {
     `INSERT INTO feature_unlock_requirements (feature_id, achievement_id) VALUES (?, ?);`,
     [1, 1]
   );
+
+  await db.runAsync(
+    `
+    INSERT INTO user_concept_mastery (
+      user_id,
+      concept_id,
+      modality,
+      model_key,
+      mastery,
+      attempts_count,
+      correct_count,
+      last_attempt_at,
+      updated_at
+    ) VALUES
+      -- привет (hello)
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?),
+
+      -- книга (book)
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?),
+
+      -- Nominative vs Genitive (grammar)
+      (?,?,?,?,?,?,?,?,?),
+      (?,?,?,?,?,?,?,?,?)
+    `,
+    [
+      // привет
+      1, 1, 'reading',   'ema_v1', 0.85, 10, 9, '2026-01-06T14:30:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 1, 'listening', 'ema_v1', 0.90, 8,  8, '2026-01-06T14:25:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 1, 'speaking',  'ema_v1', 0.55, 6,  4, '2026-01-06T14:20:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 1, 'writing',   'ema_v1', 0.60, 5,  4, '2026-01-06T14:15:00.000Z', '2026-01-06T15:00:00.000Z',
+
+      // книга
+      1, 2, 'reading',   'ema_v1', 0.70, 9,  7, '2026-01-06T14:40:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 2, 'listening', 'ema_v1', 0.65, 7,  5, '2026-01-06T14:35:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 2, 'speaking',  'ema_v1', 0.40, 6,  3, '2026-01-06T14:30:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 2, 'writing',   'ema_v1', 0.45, 6,  3, '2026-01-06T14:25:00.000Z', '2026-01-06T15:00:00.000Z',
+
+      // grammar: nominative vs genitive
+      1, 3, 'reading',   'ema_v1', 0.55, 8,  5, '2026-01-06T14:50:00.000Z', '2026-01-06T15:00:00.000Z',
+      1, 3, 'writing',   'ema_v1', 0.35, 6,  2, '2026-01-06T14:45:00.000Z', '2026-01-06T15:00:00.000Z'
+    ]
+  );
+
 }

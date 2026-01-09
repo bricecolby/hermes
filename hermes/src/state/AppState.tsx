@@ -1,141 +1,149 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type SessionType = "learn" | "review";
 
 export type UISession = {
-    id: string;
-    type: SessionType;
-    languageId: string;
-    
-    conceptIds: string[];
-    practiceItemIds: string[];
-    practiceIndex: number;
+  id: string;
+  type: SessionType;
 
-    startedAt: number;
+  // Learning language id (languages.id) as string for convenience
+  languageId: string;
+
+  conceptIds: string[];
+  practiceItemIds: string[];
+  practiceIndex: number;
+
+  startedAt: number;
 };
-
-export type LanguageProfile = {
-    id: string;
-    name: string;
-    code: string;
-    createdAt: number;
-};
-
 
 type AppState = {
-    languages: LanguageProfile[];
-    activeLanguageId: string | null;
+  // "Active profile" = a row in users table (your language profile)
+  activeProfileId: number | null;
 
-    session: UISession | null;
+  // "Active language" = the learning_lang_id for the chosen profile
+  activeLanguageId: string | null;
 
-    addLanguage: (lang: { name: string; code: string }) => Promise<void>;
-    setActiveLanguage: (id: string | null) => Promise<void>;
+  session: UISession | null;
 
-    startSession: (type:SessionType) => void;
-    advancePractice: () => void;
-    endSession: () => void;
+  // Called by Profile screen after selecting a profile
+  setActiveProfile: (params: { profileId: number; learningLangId: number } | null) => Promise<void>;
+
+  // Kept for compatibility (other parts of the app might already call this)
+  setActiveLanguage: (id: string | null) => Promise<void>;
+
+  startSession: (type: SessionType) => void;
+  advancePractice: () => void;
+  endSession: () => void;
 };
 
 const STORAGE = {
-    languages: "hermes.languages",
-    activeLanguageId: "hermes.activeLanguageId",
+  activeProfileId: "hermes.activeProfileId",
+  activeLanguageId: "hermes.activeLanguageId",
 };
 
 const Ctx = createContext<AppState | null>(null);
 
 function uid() {
-    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
-    const [languages, setLanguages] = useState<LanguageProfile[]>([]);
-    const [activeLanguageId, setActiveLanguageId] = useState<string | null>(null);
-    const [session, setSession] = useState<UISession | null>(null);
+  const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
+  const [activeLanguageId, setActiveLanguageId] = useState<string | null>(null);
+  const [session, setSession] = useState<UISession | null>(null);
 
-    useEffect(() => {
-        (async () => {
-            const [langsRaw, activeRaw] = await Promise.all([
-                AsyncStorage.getItem(STORAGE.languages),
-                AsyncStorage.getItem(STORAGE.activeLanguageId),
-            ]);
+  useEffect(() => {
+    (async () => {
+      const [profileRaw, langRaw] = await Promise.all([
+        AsyncStorage.getItem(STORAGE.activeProfileId),
+        AsyncStorage.getItem(STORAGE.activeLanguageId),
+      ]);
 
-            if (langsRaw) setLanguages(JSON.parse(langsRaw));
-            if (activeRaw) setActiveLanguageId(activeRaw);
-        })();
-    }, []);
+      if (profileRaw) setActiveProfileId(Number(profileRaw));
+      if (langRaw) setActiveLanguageId(langRaw);
+    })();
+  }, []);
 
-    useEffect(() => {
-        AsyncStorage.setItem(STORAGE.languages, JSON.stringify(languages));
-    }, [languages]);
+  const setActiveProfile: AppState["setActiveProfile"] = async (params) => {
+    if (!params) {
+      setActiveProfileId(null);
+      setActiveLanguageId(null);
+      setSession(null);
 
-    const addLanguage: AppState['addLanguage'] = async ({ name, code }) => {
-        const newLang: LanguageProfile = {
-            id: uid(),
-            name,
-            code,
-            createdAt: Date.now(),
-        }; 
-        const next = [...languages, newLang];
-        setLanguages(next);
+      await Promise.all([
+        AsyncStorage.removeItem(STORAGE.activeProfileId),
+        AsyncStorage.removeItem(STORAGE.activeLanguageId),
+      ]);
+      return;
+    }
 
-        if (!activeLanguageId) {
-            await setActiveLanguage(newLang.id); 
-        }
-    };
+    const nextProfileId = params.profileId;
+    const nextLangId = String(params.learningLangId);
 
-    const setActiveLanguage: AppState["setActiveLanguage"] = async (id) => {
-        setActiveLanguageId(id);
-        if (id) await AsyncStorage.setItem(STORAGE.activeLanguageId, id);
-        else await AsyncStorage.removeItem(STORAGE.activeLanguageId);   
-    };
+    setActiveProfileId(nextProfileId);
+    setActiveLanguageId(nextLangId);
 
-    const startSession: AppState["startSession"] = (type) => {
-        if (!activeLanguageId) return;
+    await Promise.all([
+      AsyncStorage.setItem(STORAGE.activeProfileId, String(nextProfileId)),
+      AsyncStorage.setItem(STORAGE.activeLanguageId, nextLangId),
+    ]);
+  };
 
-        //TODO call servcies to assembe real queues
-        const conceptIds = ['concept1', 'concept2', 'concept3']; // Initialize as an array
-        const practiceItemIds = ['item1', 'item2', 'item3'];
+  const setActiveLanguage: AppState["setActiveLanguage"] = async (id) => {
+    // Compatibility setter: language-only selection.
+    // (Profile screen should prefer setActiveProfile.)
+    setActiveLanguageId(id);
+    if (id) await AsyncStorage.setItem(STORAGE.activeLanguageId, id);
+    else await AsyncStorage.removeItem(STORAGE.activeLanguageId);
+  };
 
-        setSession({
-            id: uid(),
-            type,
-            languageId: activeLanguageId,
-            conceptIds,
-            practiceItemIds,
-            practiceIndex: 0,
-            startedAt: Date.now(),
-        });
-    };
+  const startSession: AppState["startSession"] = (type) => {
+    if (!activeLanguageId) return;
 
-    const advancePractice = () => {
-        setSession((prev) => {
-            if (!prev) return prev;
-            return { ...prev, practiceIndex: prev.practiceIndex + 1 }; 
-        });
-    };
+    // TODO: replace with real queue assembly from DB / services
+    const conceptIds = ["concept1", "concept2", "concept3"];
+    const practiceItemIds = ["item1", "item2", "item3"];
 
-    const endSession = () => setSession(null);
+    setSession({
+      id: uid(),
+      type,
+      languageId: activeLanguageId,
+      conceptIds,
+      practiceItemIds,
+      practiceIndex: 0,
+      startedAt: Date.now(),
+    });
+  };
 
-    const value = useMemo<AppState>( 
-        () => ({
-            languages,
-            activeLanguageId,
-            session,
-            addLanguage,
-            setActiveLanguage,
-            startSession,
-            advancePractice,
-            endSession,
-        }),
-        [languages, activeLanguageId, session]
-    );
+  const advancePractice = () => {
+    setSession((prev) => {
+      if (!prev) return prev;
+      return { ...prev, practiceIndex: prev.practiceIndex + 1 };
+    });
+  };
 
-    return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+  const endSession = () => setSession(null);
+
+  const value = useMemo<AppState>(
+    () => ({
+      activeProfileId,
+      activeLanguageId,
+      session,
+      setActiveProfile,
+      setActiveLanguage,
+      startSession,
+      advancePractice,
+      endSession,
+    }),
+    [activeProfileId, activeLanguageId, session]
+  );
+
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
 export function useAppState() {
-    const v = useContext(Ctx);
-    if (!v) throw new Error("useAppState must be used within AppStateProvider");
-    return v;     
+  const v = useContext(Ctx);
+  if (!v) throw new Error("useAppState must be used within AppStateProvider");
+  return v;
 }

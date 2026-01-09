@@ -1,116 +1,180 @@
-import React from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
+import * as SQLite from "expo-sqlite";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
-import { useRouter } from "expo-router";
+
+import { YStack, Text, View } from "tamagui";
+
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GradientBorderCard } from "@/components/ui/GradientBorderCard";
 import { useAppState } from "@/state/AppState";
+
+import Logo from "@/assets/images/1x/logo3.svg";
+import { listLanguageProfilesForUsername, type LanguageProfileRow } from "@/db/queries/users";
+
+const DB_NAME = "hermes.db";
+const MVP_USERNAME = "default";
+
+async function openDb() {
+  return SQLite.openDatabaseAsync(DB_NAME);
+}
 
 export default function Profile() {
   const router = useRouter();
-  const { languages, setActiveLanguage } = useAppState();
+  const { setActiveProfile } = useAppState();
 
-  const onSelect = async (id: string) => {
-    await setActiveLanguage(id);
+  const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setErr(null);
+      setLoading(true);
+
+      const db = await openDb();
+      const rows = await listLanguageProfilesForUsername(db, MVP_USERNAME);
+      setProfiles(rows);
+    } catch (e: any) {
+      setErr(e?.message ?? "Failed to load profiles");
+      setProfiles([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load])
+  );
+
+  const onSelect = async (p: LanguageProfileRow) => {
+    await setActiveProfile({ profileId: p.userId, learningLangId: p.learningLangId });
     router.replace("/(app)/home");
   };
 
+  const renderProfile = ({ item }: { item: LanguageProfileRow }) => (
+    <TouchableOpacity activeOpacity={0.9} onPress={() => onSelect(item)}>
+      <GlassCard>
+        <Text fontSize={16} fontWeight="800" color="$color">
+          {item.learningName}
+        </Text>
+        <Text marginTop={8} color="$textMuted">
+          {item.learningCode} • {item.nativeCode} • lvl {item.level} • xp {item.xp}
+        </Text>
+      </GlassCard>
+    </TouchableOpacity>
+  );
+
+  const ListFooter = () => (
+    <YStack marginTop={16} paddingBottom={12}>
+      <TouchableOpacity onPress={() => router.push("/(modals)/add-language")} activeOpacity={0.9}>
+        <GradientBorderCard>
+          <Text fontSize={16} fontWeight="800" color="$color">
+            Add Language
+          </Text>
+          <Text marginTop={8} color="$textMuted">
+            Choose another supported language pack
+          </Text>
+        </GradientBorderCard>
+      </TouchableOpacity>
+    </YStack>
+  );
+
   return (
-    <LinearGradient colors={["#0B1220", "#0B1220"]} style={styles.container}>
+    <LinearGradient
+      colors={["#06101C", "#0B1220", "#06101C"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ flex: 1 }}
+    >
       <StatusBar style="light" />
 
-      <View style={styles.inner}>
-        {/* Logo */}
-        <View style={styles.logoWrap}>
-          <Image
-            source={require("@/assets/images/1x/logo.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Text style={styles.brand}>Hermes</Text>
-        </View>
+      <YStack flex={1} paddingHorizontal={24} paddingTop={72} paddingBottom={18}>
+        {/* Header (fixed) */}
+        <YStack alignItems="center" marginBottom={16}>
+          {/* slight x-offset to visually center the SVG as you had it */}
+          <View style={{ marginLeft: 30 }}>
+            <Logo width={172} height={172} />
+          </View>
 
-        <Text style={styles.tagline}>Pick a language to continue.</Text>
+          <Text
+            fontSize={30}
+            fontWeight="800"
+            letterSpacing={0.4}
+            color="$color"
+            marginTop={12}
+          >
+            Hermes
+          </Text>
 
-        {/* Language list */}
-        <View style={styles.form}>
-          {languages.length === 0 ? (
-            <Text style={styles.empty}>No languages yet. Add one to get started.</Text>
+          <Text fontSize={14} color="$textMuted" marginTop={8} textAlign="center">
+            Pick a profile to continue.
+          </Text>
+        </YStack>
+
+        {/* List area (only this scrolls) */}
+        <YStack flex={1} marginTop={12}>
+          {loading ? (
+            <YStack
+              marginTop={16}
+              alignItems="center"
+              justifyContent="center"
+              paddingHorizontal={12}
+            >
+              <ActivityIndicator />
+              <Text marginTop={12} color="$textFaint" textAlign="center">
+                Loading profiles…
+              </Text>
+            </YStack>
+          ) : err ? (
+            <YStack
+              marginTop={16}
+              alignItems="center"
+              justifyContent="center"
+              paddingHorizontal={12}
+            >
+              <Text color="$textFaint" textAlign="center">
+                {err}
+              </Text>
+            </YStack>
           ) : (
             <FlatList
-              data={languages}
-              keyExtractor={(x) => x.id}
-              contentContainerStyle={{ gap: 10 }}
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.card} onPress={() => onSelect(item.id)} activeOpacity={0.9}>
-                  <Text style={styles.cardTitle}>{item.name}</Text>
-                  <Text style={styles.cardMeta}>{item.code}</Text>
-                </TouchableOpacity>
-              )}
+              data={profiles}
+              keyExtractor={(x) => String(x.userId)}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingTop: 10, paddingBottom: 16, gap: 12 }}
+              renderItem={renderProfile}
+              ListEmptyComponent={
+                <YStack
+                  marginTop={16}
+                  alignItems="center"
+                  justifyContent="center"
+                  paddingHorizontal={12}
+                >
+                  <Text color="$textFaint" textAlign="center">
+                    No profiles yet. Add one to get started.
+                  </Text>
+                </YStack>
+              }
+              ListFooterComponent={ListFooter}
             />
           )}
+        </YStack>
 
-          <TouchableOpacity
-            onPress={() => router.push("/(modals)/add-language")}
-            activeOpacity={0.9}
-            style={{ marginTop: 18 }}
-          >
-            <LinearGradient
-              colors={["#1971FF", "#1EE6A8"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.cta}
-            >
-              <Text style={styles.ctaText}>Add Language</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.footer}>© {new Date().getFullYear()} Hermes</Text>
-      </View>
+        {/* Footer pinned to bottom */}
+        <Text color="#5E6C8A" fontSize={12} textAlign="center" paddingTop={12} marginBottom={20}>
+          © 2026 Hermes
+        </Text>
+      </YStack>
     </LinearGradient>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  inner: {
-    flex: 1,
-    paddingHorizontal: 24,
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingTop: 80,
-    paddingBottom: 24,
-  },
-  logoWrap: { alignItems: "center" },
-  logo: { width: 128, height: 128, marginBottom: 8 },
-  brand: { color: "#E6EBFF", fontSize: 28, fontWeight: "700", letterSpacing: 0.5 },
-  tagline: { color: "#9BA3B4", fontSize: 14, marginTop: -32, textAlign: "center" },
-
-  form: { width: "100%", marginTop: 8, flex: 1 },
-
-  empty: { color: "#7A8194", textAlign: "center", marginTop: 20 },
-
-  card: {
-    backgroundColor: "#121A2A",
-    borderWidth: 1,
-    borderColor: "#1E2A44",
-    borderRadius: 14,
-    padding: 14,
-  },
-  cardTitle: { color: "#E6EBFF", fontSize: 16, fontWeight: "700" },
-  cardMeta: { color: "#7A8194", marginTop: 4 },
-
-  cta: {
-    height: 52,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#1EE6A8",
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-  },
-  ctaText: { color: "#06101C", fontSize: 16, fontWeight: "700" },
-
-  footer: { color: "#5E6C8A", fontSize: 12 },
-});

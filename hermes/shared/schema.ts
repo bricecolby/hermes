@@ -11,12 +11,25 @@ export const schemaStatements: string[] = [
     updated_at  TEXT NOT NULL
   );`,
 
+  `CREATE TABLE IF NOT EXISTS language_packs (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    target_lang_id  INTEGER NOT NULL,
+    native_lang_id  INTEGER NOT NULL,
+
+    created_at      TEXT NOT NULL,
+    updated_at      TEXT NOT NULL,
+
+    UNIQUE (target_lang_id, native_lang_id),
+
+    FOREIGN KEY (target_lang_id) REFERENCES languages(id) ON DELETE CASCADE,
+    FOREIGN KEY (native_lang_id) REFERENCES languages(id) ON DELETE CASCADE
+  );`,
 
   `CREATE TABLE IF NOT EXISTS users (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
     username            TEXT NOT NULL UNIQUE,
-    learning_lang_id    INTEGER NOT NULL,
-    native_lang_id      INTEGER NOT NULL,    
+    language_pack_id    INTEGER NOT NULL,
 
     xp                  INTEGER NOT NULL DEFAULT 0,
     level               INTEGER NOT NULL DEFAULT 1,
@@ -31,11 +44,10 @@ export const schemaStatements: string[] = [
     created_at          TEXT NOT NULL,
     updated_at          TEXT NOT NULL,
 
-    UNIQUE (username, learning_lang_id, native_lang_id),
+    UNIQUE (username, language_pack_id),
 
-    FOREIGN KEY (learning_lang_id) REFERENCES languages(id) ON DELETE CASCADE,
-    FOREIGN KEY (native_lang_id)   REFERENCES languages(id) ON DELETE CASCADE
-  )`,
+    FOREIGN KEY (language_pack_id) REFERENCES language_packs(id) ON DELETE CASCADE
+  );`,
 
   `CREATE TABLE IF NOT EXISTS vocab_items (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -456,7 +468,7 @@ export const schemaStatements: string[] = [
     last_attempt_at TEXT,
     updated_at      TEXT NOT NULL,
 
-    PRIMARY KEY (user_id, concept_id, modality, direction, model_key),
+    PRIMARY KEY (user_id, concept_id, modality, model_key),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (concept_id) REFERENCES concepts(id) ON DELETE CASCADE
   );`,

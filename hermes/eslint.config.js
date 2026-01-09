@@ -7,7 +7,7 @@ module.exports = defineConfig([
 
   // Ignore build output
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', '**/*.d.ts'],
   },
 
   // Jest test files

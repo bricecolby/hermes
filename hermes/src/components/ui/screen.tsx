@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export function Screen({ children }: { children: React.ReactNode }) {
   return (
