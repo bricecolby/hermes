@@ -90,6 +90,21 @@ export const schemaStatements: string[] = [
     FOREIGN KEY (vocab_item_id) REFERENCES vocab_items(id) ON DELETE CASCADE
   );`,
 
+  `CREATE TABLE IF NOT EXISTS vocab_media (
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    vocab_item_id    INTEGER NOT NULL,
+
+    media_type       TEXT    NOT NULL, 
+    uri              TEXT    NOT NULL,  
+    description      TEXT,
+    attribution      TEXT,
+
+    created_at       TEXT    NOT NULL,
+    updated_at       TEXT    NOT NULL,
+
+    FOREIGN KEY (vocab_item_id) REFERENCES vocab_items(id) ON DELETE CASCADE
+  );`,
+
   `CREATE TABLE IF NOT EXISTS vocab_examples (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
     vocab_sense_id      INTEGER NOT NULL,
@@ -103,22 +118,6 @@ export const schemaStatements: string[] = [
     FOREIGN KEY (vocab_sense_id)    REFERENCES vocab_senses(id)  ON DELETE CASCADE,
     FOREIGN KEY (vocab_form_id)     REFERENCES vocab_forms(id)   ON DELETE SET NULL,
     FOREIGN KEY (media_id)          REFERENCES vocab_media(id)   ON DELETE SET NULL
-  );`,
-
-  `CREATE TABLE IF NOT EXISTS grammar_examples (
-    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
-    grammar_point_id    INTEGER NOT NULL,
-
-    example_text        TEXT NOT NULL,
-    translation_text    TEXT,
-    media_id            INTEGER,
-    notes               TEXT,
-
-    created_at          TEXT NOT NULL,
-    updated_at          TEXT NOT NULL,
-
-    FOREIGN KEY (grammar_point_id)  REFERENCES grammar_points(id) ON DELETE CASCADE,
-    FOREIGN KEY (media_id)          REFERENCES vocab_media(id)    ON DELETE SET NULL
   );`,
 
   `CREATE TABLE IF NOT EXISTS vocab_tags (
@@ -140,20 +139,7 @@ export const schemaStatements: string[] = [
     FOREIGN KEY (vocab_tag_id)  REFERENCES vocab_tags(id)   ON DELETE CASCADE
   );`,
 
-  `CREATE TABLE IF NOT EXISTS vocab_media (
-    id               INTEGER PRIMARY KEY AUTOINCREMENT,
-    vocab_item_id    INTEGER NOT NULL,
 
-    media_type       TEXT    NOT NULL, 
-    uri              TEXT    NOT NULL,  
-    description      TEXT,
-    attribution      TEXT,
-
-    created_at       TEXT    NOT NULL,
-    updated_at       TEXT    NOT NULL,
-
-    FOREIGN KEY (vocab_item_id) REFERENCES vocab_items(id) ON DELETE CASCADE
-  );`,
 
   `CREATE TABLE IF NOT EXISTS grammar_points (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -168,6 +154,22 @@ export const schemaStatements: string[] = [
     updated_at   TEXT NOT NULL,
 
     FOREIGN KEY (language_id) REFERENCES languages(id) ON DELETE CASCADE
+  );`,
+
+    `CREATE TABLE IF NOT EXISTS grammar_examples (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    grammar_point_id    INTEGER NOT NULL,
+
+    example_text        TEXT NOT NULL,
+    translation_text    TEXT,
+    media_id            INTEGER,
+    notes               TEXT,
+
+    created_at          TEXT NOT NULL,
+    updated_at          TEXT NOT NULL,
+
+    FOREIGN KEY (grammar_point_id)  REFERENCES grammar_points(id) ON DELETE CASCADE,
+    FOREIGN KEY (media_id)          REFERENCES vocab_media(id)    ON DELETE SET NULL
   );`,
 
   `CREATE TABLE IF NOT EXISTS grammar_sections (
@@ -401,7 +403,7 @@ export const schemaStatements: string[] = [
 
     FOREIGN KEY (user_id)           REFERENCES users(id)            ON DELETE CASCADE,
     FOREIGN KEY (achievement_id)    REFERENCES achievements(id)     ON DELETE CASCADE
-  )`,
+  );`,
 
   `CREATE TABLE IF NOT EXISTS features (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -415,7 +417,7 @@ export const schemaStatements: string[] = [
     min_level   INTEGER NOT NULL DEFAULT 1,
 
     created_at  TEXT NOT NULL
-  )`,
+  );`,
 
   `CREATE TABLE IF NOT EXISTS user_features (
     user_id       INTEGER NOT NULL,
@@ -427,7 +429,7 @@ export const schemaStatements: string[] = [
 
     FOREIGN KEY (user_id)    REFERENCES users(id)    ON DELETE CASCADE,
     FOREIGN KEY (feature_id) REFERENCES features(id) ON DELETE CASCADE
-  )`,
+  );`,
 
   `CREATE TABLE IF NOT EXISTS feature_unlock_requirements (
     feature_id      INTEGER NOT NULL,
@@ -437,7 +439,33 @@ export const schemaStatements: string[] = [
 
     FOREIGN KEY (feature_id)      REFERENCES features(id)     ON DELETE CASCADE,
     FOREIGN KEY (achievement_id)  REFERENCES achievements(id) ON DELETE CASCADE
-  )`,
+  );`,
+
+  `CREATE TABLE IF NOT EXISTS user_concept_mastery (
+    user_id         INTEGER NOT NULL,
+    concept_id      INTEGER NOT NULL,
+
+    modality        TEXT NOT NULL,            
+
+    model_key       TEXT NOT NULL,           
+    mastery         REAL NOT NULL,             
+
+    attempts_count  INTEGER NOT NULL DEFAULT 0,
+    correct_count   INTEGER NOT NULL DEFAULT 0,
+
+    last_attempt_at TEXT,
+    updated_at      TEXT NOT NULL,
+
+    PRIMARY KEY (user_id, concept_id, modality, direction, model_key),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (concept_id) REFERENCES concepts(id) ON DELETE CASCADE
+  );`,
+
+  `CREATE INDEX IF NOT EXISTS idx_ucm_user_model
+    ON user_concept_mastery(user_id, model_key);`,
+
+  `CREATE INDEX IF NOT EXISTS idx_ucm_user_concept
+    ON user_concept_mastery(user_id, concept_id);`,
 
   `CREATE INDEX IF NOT EXISTS idx_vocab_items_language_base
     ON vocab_items (language_id, base_form);`,
@@ -460,27 +488,6 @@ export const schemaStatements: string[] = [
   `CREATE INDEX IF NOT EXISTS idx_grammar_tags_language_name
     ON grammar_tags (language_id, name);`,
 
-  `CREATE INDEX IF NOT EXISTS idx_concepts_language_parent
-    ON concepts (language_id, parent_id);`,
-
-  `CREATE INDEX IF NOT EXISTS idx_concepts_language_cefr
-    ON concepts (language_id, cefr_level_id);`,
-
-  `CREATE INDEX IF NOT EXISTS idx_concept_vocab_items_vocab_item
-    ON concept_vocab_items (vocab_item_id);`,
-
-  `CREATE INDEX IF NOT EXISTS idx_concept_grammar_points_grammar
-    ON concept_grammar_points (grammar_point_id);`,
-
   `CREATE INDEX IF NOT EXISTS idx_attempts_user_time
     ON practice_attempts(user_id, created_at);`,
-
-  `CREATE INDEX IF NOT EXISTS idx_attempts_vocab_sense
-    ON practice_attempts(vocab_sense_id);`,
-
-  `CREATE INDEX IF NOT EXISTS idx_attempts_grammar
-    ON practice_attempts(grammar_point_id);`,
-
-  `CREATE INDEX IF NOT EXISTS idx_attempts_concept
-    ON practice_attempts(concept_id);`
 ];
