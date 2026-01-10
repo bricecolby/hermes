@@ -13,6 +13,8 @@ import { registerPracticeItems } from '../../shared/domain/practice/registerPrac
 import { initDb } from '@/db';
 import { AppStateProvider } from '@/state/AppState';
 
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
@@ -124,15 +126,17 @@ export default function RootLayout() {
 
   // ✅ Always dark mode
   return (
-    <TamaguiProvider config={tamaguiConfig}>
-      <Theme name="dark">
-        <ThemeProvider value={DarkTheme}>
-          <AppStateProvider>
-            <Slot />
-          </AppStateProvider>
-          <StatusBar style="light" />
-        </ThemeProvider>
-      </Theme>
-    </TamaguiProvider>
+    <SafeAreaProvider>
+      <TamaguiProvider config={tamaguiConfig}>
+        <Theme name="dark">
+          <ThemeProvider value={DarkTheme}>
+            <AppStateProvider>
+              <Slot />
+            </AppStateProvider>
+            <StatusBar style="light" />
+          </ThemeProvider>
+        </Theme>
+      </TamaguiProvider>
+    </SafeAreaProvider>
   );
 }

@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { ActivityIndicator } from "react-native";
+import { Stack, useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
 
-import { Screen } from "../../components/ui/screen";
+import { YStack, Text } from "tamagui";
+
+import { Screen } from "../../components/ui/Screen";
+import { AppHeader } from "../../components/ui/AppHeader";
+import { ActionCard } from "../../components/ui/ActionCard";
 import { useAppState } from "../../state/AppState";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
 
@@ -17,108 +21,92 @@ export default function Home() {
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load profiles so we can display the selected one (name/code)
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const db = await SQLite.openDatabaseAsync(DB_NAME);
-        const rows = await listLanguageProfilesForUsername(db, MVP_USERNAME);
-        setProfiles(rows);
-      } finally {
-        setLoading(false);
-      }
-    })();
+  const loadProfiles = useCallback(async () => {
+    try {
+      setLoading(true);
+      const db = await SQLite.openDatabaseAsync(DB_NAME);
+      const rows = await listLanguageProfilesForUsername(db, MVP_USERNAME);
+      setProfiles(rows);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadProfiles();
+  }, [loadProfiles]);
 
   const activeProfile = useMemo(() => {
     if (!activeProfileId) return null;
     return profiles.find((p) => p.userId === activeProfileId) ?? null;
   }, [profiles, activeProfileId]);
 
-  // If nothing selected, send them back to profile screen
   useEffect(() => {
     if (!activeProfileId) router.replace("/(onboarding)/profile");
   }, [activeProfileId, router]);
 
   return (
     <Screen>
-      <Text style={styles.h1}>Home</Text>
+      <Stack.Screen options={{ headerShown: false }} />
 
-      {loading ? (
-        <View style={{ marginTop: 10 }}>
-          <ActivityIndicator />
-        </View>
-      ) : (
-        <Text style={styles.sub}>
-          Active Profile:{" "}
-          {activeProfile ? `${activeProfile.learningName} (${activeProfile.learningCode})` : "None"}
-        </Text>
-      )}
+      <YStack paddingTop={6}>
+        <AppHeader title="Home" />
 
-      {/* This can stay for debugging if you want */}
-      {!!activeLanguageId && <Text style={styles.debug}>activeLanguageId: {activeLanguageId}</Text>}
-
-      <View style={{ gap: 12, marginTop: 18 }}>
-        {session ? (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => router.push("/(app)/session/concept")}
-          >
-            <Text style={styles.cardTitle}>Continue Session</Text>
-            <Text style={styles.cardMeta}>{session.type} • step {session.practiceIndex + 1}</Text>
-          </TouchableOpacity>
+        {loading ? (
+          <YStack marginTop={10} alignItems="center" justifyContent="center">
+            <ActivityIndicator />
+          </YStack>
         ) : (
-          <>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() => {
-                startSession("learn");
-                router.push("/(app)/session/setup");
-              }}
-              disabled={!activeLanguageId}
-            >
-              <Text style={styles.cardTitle}>Start Learning</Text>
-              <Text style={styles.cardMeta}>New concepts</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() => {
-                startSession("review");
-                router.push("/(app)/session/setup");
-              }}
-              disabled={!activeLanguageId}
-            >
-              <Text style={styles.cardTitle}>Review</Text>
-              <Text style={styles.cardMeta}>Spaced repetition</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.card, { opacity: 0.95 }]}
-              onPress={() => router.push("/(onboarding)/profile")}
-            >
-              <Text style={styles.cardTitle}>Switch Profile</Text>
-              <Text style={styles.cardMeta}>Choose a different language pack</Text>
-            </TouchableOpacity>
-          </>
+          <Text color="$textMuted" marginTop={6}>
+            Active Profile:{" "}
+            {activeProfile ? `${activeProfile.learningName} (${activeProfile.learningCode})` : "None"}
+          </Text>
         )}
-      </View>
+
+        {!!activeLanguageId && (
+          <Text color="$textFaint" marginTop={8} fontSize={12}>
+            activeLanguageId: {activeLanguageId}
+          </Text>
+        )}
+
+        <YStack marginTop={18} gap={12}>
+          {session ? (
+            <ActionCard
+              title="Continue Session"
+              subtitle={`${session.type} • step ${session.practiceIndex + 1}`}
+              onPress={() => router.push("/(app)/session/concept")}
+            />
+          ) : (
+            <>
+              <ActionCard
+                title="Start Learning"
+                subtitle="New concepts"
+                disabled={!activeLanguageId}
+                onPress={() => {
+                  startSession("learn");
+                  router.push("/(app)/session/setup");
+                }}
+              />
+
+              <ActionCard
+                title="Review"
+                subtitle="Spaced repetition"
+                disabled={!activeLanguageId}
+                onPress={() => {
+                  startSession("review");
+                  router.push("/(app)/session/setup");
+                }}
+              />
+
+              <ActionCard
+                title="Switch Profile"
+                subtitle="Choose a different language pack"
+                onPress={() => router.push("/(onboarding)/profile")}
+              />
+            </>
+          )}
+        </YStack>
+      </YStack>
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  h1: { color: "#E6EBFF", fontSize: 26, fontWeight: "900" },
-  sub: { color: "#9BA3B4", marginTop: 6 },
-  debug: { color: "#5E6C8A", marginTop: 8, fontSize: 12 },
-  card: {
-    backgroundColor: "#121A2A",
-    borderWidth: 1,
-    borderColor: "#1E2A44",
-    borderRadius: 14,
-    padding: 14,
-  },
-  cardTitle: { color: "#E6EBFF", fontSize: 16, fontWeight: "800" },
-  cardMeta: { color: "#7A8194", marginTop: 4 },
-});

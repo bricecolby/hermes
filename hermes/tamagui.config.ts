@@ -1,14 +1,9 @@
-
 import { createTamagui } from "@tamagui/core";
 import { config } from "@tamagui/config/v3";
-import { tokens as hermesTokens } from "./src/theme/tokens";
+import { tokens as hermesTokens } from "./tamagui.tokens";
 
 const appConfig = createTamagui({
   ...config,
-
-  shorthands: {
-    ...config.shorthands,
-  }, 
 
   themes: {
     ...config.themes,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { Screen } from "../../components/ui/screen";
+import { Screen } from "../../components/ui/Screen";
 import { useAppState } from "../../state/AppState";
 
 export default function Settings() {

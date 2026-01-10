@@ -99,9 +99,8 @@ export default function Profile() {
       <StatusBar style="light" />
 
       <YStack flex={1} paddingHorizontal={24} paddingTop={72} paddingBottom={18}>
-        {/* Header (fixed) */}
+
         <YStack alignItems="center" marginBottom={16}>
-          {/* slight x-offset to visually center the SVG as you had it */}
           <View style={{ marginLeft: 30 }}>
             <Logo width={172} height={172} />
           </View>
@@ -121,7 +120,6 @@ export default function Profile() {
           </Text>
         </YStack>
 
-        {/* List area (only this scrolls) */}
         <YStack flex={1} marginTop={12}>
           {loading ? (
             <YStack
@@ -170,7 +168,6 @@ export default function Profile() {
           )}
         </YStack>
 
-        {/* Footer pinned to bottom */}
         <Text color="#5E6C8A" fontSize={12} textAlign="center" paddingTop={12} marginBottom={20}>
           © 2026 Hermes
         </Text>

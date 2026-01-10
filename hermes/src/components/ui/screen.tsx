@@ -12,5 +12,5 @@ export function Screen({ children }: { children: React.ReactNode }) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "#0B1220" },
-  inner: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
+  inner: { flex: 1, paddingHorizontal: 20 },
 });

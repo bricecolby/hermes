@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { Screen } from "../../components/ui/screen";
+import { Screen } from "../../components/ui/Screen";
 import {
   listLanguagePacksNotOwnedByUsername,
   type LanguagePackRow,
