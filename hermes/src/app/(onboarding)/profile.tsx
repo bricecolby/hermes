@@ -15,16 +15,13 @@ import { useAppState } from "@/state/AppState";
 import Logo from "@/assets/images/1x/logo3.svg";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "@/db/queries/users";
 
-const DB_NAME = "hermes.db";
 const MVP_USERNAME = "default";
-
-async function openDb() {
-  return SQLite.openDatabaseAsync(DB_NAME);
-}
 
 export default function Profile() {
   const router = useRouter();
   const { setActiveProfile } = useAppState();
+
+  const db = SQLite.useSQLiteContext();
 
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +32,6 @@ export default function Profile() {
       setErr(null);
       setLoading(true);
 
-      const db = await openDb();
       const rows = await listLanguageProfilesForUsername(db, MVP_USERNAME);
       setProfiles(rows);
     } catch (e: any) {

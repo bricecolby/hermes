@@ -62,9 +62,8 @@ async function resetDb(db: SQLiteDatabase) {
 }
 
 
-export async function initDb() {
-  const db = await getDb();
 
+export async function initDb(db: SQLiteDatabase) {
   await db.execAsync(`PRAGMA foreign_keys = ON;`);
   await ensureMetaTable(db);
 
@@ -73,10 +72,10 @@ export async function initDb() {
   if (currentVersion !== SCHEMA_VERSION) {
     console.log(`🧨 Resetting DB (v${currentVersion} -> v${SCHEMA_VERSION})`);
 
-    // ✅ reset OUTSIDE transaction so PRAGMA foreign_keys=OFF actually applies
+    // reset OUTSIDE transaction so PRAGMA foreign_keys=OFF actually applies
     await resetDb(db);
 
-    // ✅ then build + seed atomically
+    // then build + seed atomically
     await db.withTransactionAsync(async () => {
       for (let i = 0; i < schemaStatements.length; i++) {
         await db.execAsync(schemaStatements[i]);

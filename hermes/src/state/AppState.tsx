@@ -7,7 +7,6 @@ export type UISession = {
   id: string;
   type: SessionType;
 
-  // Learning language id (languages.id) as string for convenience
   languageId: string;
 
   conceptIds: string[];
@@ -18,18 +17,13 @@ export type UISession = {
 };
 
 type AppState = {
-  // "Active profile" = a row in users table (your language profile)
   activeProfileId: number | null;
-
-  // "Active language" = the learning_lang_id for the chosen profile
   activeLanguageId: string | null;
 
   session: UISession | null;
 
-  // Called by Profile screen after selecting a profile
   setActiveProfile: (params: { profileId: number; learningLangId: number } | null) => Promise<void>;
 
-  // Kept for compatibility (other parts of the app might already call this)
   setActiveLanguage: (id: string | null) => Promise<void>;
 
   startSession: (type: SessionType) => void;
@@ -91,8 +85,6 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setActiveLanguage: AppState["setActiveLanguage"] = async (id) => {
-    // Compatibility setter: language-only selection.
-    // (Profile screen should prefer setActiveProfile.)
     setActiveLanguageId(id);
     if (id) await AsyncStorage.setItem(STORAGE.activeLanguageId, id);
     else await AsyncStorage.removeItem(STORAGE.activeLanguageId);

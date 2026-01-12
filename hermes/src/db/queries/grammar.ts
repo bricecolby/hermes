@@ -50,6 +50,25 @@ export type VocabGrammarLinkRow = {
   created_at: string;
 };
 
+export type GrammarPointListItem = {
+  id: number;
+  title: string;
+  summary: string | null;
+  language_id: number;
+  sort_order: number;
+};
+
+export type GrammarSectionWithCount = {
+  id: number;
+  language_id: number;
+  title: string;
+  description: string | null;
+  parent_id: number | null;
+  sort_order: number;
+  point_count: number;
+};
+
+
 export async function listGrammarPointsByLanguage(
   db: SQLiteDatabase,
   languageId: number
@@ -139,5 +158,48 @@ export async function listVocabLinksForGrammarPoint(
      WHERE grammar_point_id = ?
      ORDER BY id ASC;`,
     [grammarPointId]
+  );
+}
+
+export async function listTopLevelGrammarLessons(
+  db: SQLiteDatabase,
+  languageId: number
+): Promise<GrammarSectionWithCount[]> {
+  return db.getAllAsync<GrammarSectionWithCount>(
+    `
+    SELECT
+      s.*,
+      COUNT(gps.grammar_point_id) AS point_count
+    FROM grammar_sections s
+    LEFT JOIN grammar_point_sections gps
+      ON gps.grammar_section_id = s.id
+    WHERE s.language_id = ?
+      AND s.parent_id IS NULL
+    GROUP BY s.id
+    ORDER BY s.sort_order ASC, s.title ASC;
+    `,
+    [languageId]
+  );
+}
+
+export async function listGrammarPointsForSection(
+  db: SQLiteDatabase,
+  grammarSectionId: number
+): Promise<GrammarPointListItem[]> {
+  return db.getAllAsync<GrammarPointListItem>(
+    `
+    SELECT
+      gp.id,
+      gp.title,
+      gp.summary,
+      gp.language_id,
+      gps.sort_order
+    FROM grammar_point_sections gps
+    JOIN grammar_points gp
+      ON gp.id = gps.grammar_point_id
+    WHERE gps.grammar_section_id = ?
+    ORDER BY gps.sort_order ASC, gp.title ASC;
+    `,
+    [grammarSectionId]
   );
 }
