@@ -1,7 +1,20 @@
-// src/components/ui/HermesAccordion.tsx
+// components/ui/Accordion.tsx
 import React from "react";
 import { TouchableOpacity } from "react-native";
+import { ChevronDown } from "@tamagui/lucide-icons";
 import { XStack, YStack, Text } from "tamagui";
+
+type Props = {
+  title: string;
+  subtitle?: string;
+  expanded: boolean;
+  onToggle: () => void;
+  children?: React.ReactNode;
+
+  // Optional overrides (handy later)
+  headerBg?: string;
+  contentBg?: string;
+};
 
 export function HermesAccordion({
   title,
@@ -9,19 +22,15 @@ export function HermesAccordion({
   expanded,
   onToggle,
   children,
-}: {
-  title: string;
-  subtitle?: string;
-  expanded: boolean;
-  onToggle: () => void;
-  children?: React.ReactNode;
-}) {
+  headerBg = "$glassFill",
+  contentBg = "$background",
+}: Props) {
   return (
     <YStack
       borderBottomWidth={1}
       borderColor="$borderColor"
-      backgroundColor="$background"
     >
+      {/* Header */}
       <TouchableOpacity onPress={onToggle} activeOpacity={0.85}>
         <XStack
           paddingHorizontal="$4"
@@ -29,9 +38,10 @@ export function HermesAccordion({
           alignItems="center"
           justifyContent="space-between"
           gap="$3"
+          backgroundColor={headerBg}
         >
           <YStack flex={1} gap="$1">
-            <Text fontSize="$6" fontWeight="800" color="$color">
+            <Text fontSize="$7" fontWeight="800" color="$color">
               {title}
             </Text>
             {subtitle ? (
@@ -41,13 +51,28 @@ export function HermesAccordion({
             ) : null}
           </YStack>
 
-          <Text color="$color11" fontSize="$6">
-            {expanded ? "▾" : "▸"}
-          </Text>
+          <YStack
+            width={28}
+            height={28}
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="$2"
+          >
+            <ChevronDown
+              size={18}
+              color={"#9BA3B4" as any}
+              style={{ transform: [{ rotate: expanded ? "180deg" : "0deg" }] }}
+            />
+          </YStack>
         </XStack>
       </TouchableOpacity>
 
-      {expanded ? <YStack paddingBottom="$2">{children}</YStack> : null}
+      {/* Content */}
+      {expanded ? (
+        <YStack backgroundColor={contentBg} paddingLeft="$3">
+          {children}
+        </YStack>
+      ) : null}
     </YStack>
   );
 }

@@ -70,7 +70,7 @@ export default function AppLayout() {
       />
 
       <Drawer.Screen
-        name="library-vocab"
+        name="vocab"
         options={{
           title: "Vocab",
           drawerIcon: ({ color, size }) => <WholeWord color={color as any} size={size} />,
@@ -78,7 +78,7 @@ export default function AppLayout() {
       />
 
       <Drawer.Screen
-        name="library-grammar"
+        name="grammar"
         options={{
           title: "Grammar",
           drawerIcon: ({ color, size }) => <NotepadText color={color as any} size={size} />,

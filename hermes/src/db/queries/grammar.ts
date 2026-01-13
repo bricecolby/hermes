@@ -174,13 +174,14 @@ export async function listTopLevelGrammarLessons(
     LEFT JOIN grammar_point_sections gps
       ON gps.grammar_section_id = s.id
     WHERE s.language_id = ?
-      AND s.parent_id IS NULL
     GROUP BY s.id
+    HAVING COUNT(gps.grammar_point_id) > 0
     ORDER BY s.sort_order ASC, s.title ASC;
     `,
     [languageId]
   );
 }
+
 
 export async function listGrammarPointsForSection(
   db: SQLiteDatabase,
