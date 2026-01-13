@@ -33,7 +33,7 @@ export type VocabFormRow = {
   person: number | null;
   number: string | null;
   gender: string | null;
-  case: string | null; // column is "case"
+  case: string | null;
   aspect: string | null;
   degree: string | null;
   is_irregular: number | null;
@@ -120,7 +120,6 @@ export async function listFormsForItem(
   db: SQLiteDatabase,
   vocabItemId: number
 ): Promise<VocabFormRow[]> {
-  // alias "case" because it's a keyword-ish column name
   return db.getAllAsync<VocabFormRow>(
     `SELECT
        id,
@@ -131,7 +130,7 @@ export async function listFormsForItem(
        person,
        number,
        gender,
-       "case" as case,
+       "case",
        aspect,
        degree,
        is_irregular,

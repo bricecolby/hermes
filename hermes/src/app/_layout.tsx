@@ -132,7 +132,7 @@ export default function RootLayout() {
               </View>
             ) : null}
 
-            <StatusBar style="light" />
+            <StatusBar style="light" backgroundColor="$background" translucent={false} />
           </ThemeProvider>
         </Theme>
       </TamaguiProvider>
