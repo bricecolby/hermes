@@ -8,17 +8,15 @@ import * as LegacyFS from "expo-file-system/legacy";
 
 import { initLlama, loadLlamaModelInfo } from "llama.rn";
 
-// Small multilingual instruct GGUF starter
+import { z } from "zod";
+import { practiceItemRegistry, registerPracticeItems } from "shared/domain/practice";
+
 const MODEL_URL =
   "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf";
 
 const MODEL_FILENAME = "qwen2.5-0.5b-instruct-q4_k_m.gguf";
-
 const MODEL_SUBDIR = "models";
-
-// Conservative: below this, downloads will likely fail
-const MIN_FREE_BYTES_FOR_MODEL = 800_000_000; // ~800MB
-
+const MIN_FREE_BYTES_FOR_MODEL = 800_000_000;
 
 const STOP_WORDS = [
   "</s>",
@@ -38,6 +36,151 @@ function mb(bytes: number) {
   return Math.round(bytes / 1e6);
 }
 
+function extractLikelyJson(text: string): string | null {
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) return null;
+  return text.slice(start, end + 1);
+}
+
+function formatZodError(err: z.ZodError): string {
+  return err.issues
+    .map((i) => `${i.path.join(".") || "(root)"}: ${i.message}`)
+    .join("\n");
+}
+
+function buildMcqPrompt() {
+  const system = [
+    "You generate content for a language-learning app.",
+    "Return ONLY valid JSON (no markdown, no commentary).",
+    "All keys and strings must use double quotes.",
+    "No trailing commas.",
+  ].join(" ");
+
+  const user = [
+    "Generate ONE practice item JSON for this schema:",
+    "{",
+    '  "type": "mcq_v1.basic",',
+    '  "mode": "reception",',
+    '  "skills": ["reading"],',
+    '  "conceptIds": [123],',
+    '  "prompt": string,',
+    '  "choices": [{"id":"A","text":string},{"id":"B","text":string},{"id":"C","text":string},{"id":"D","text":string}],',
+    '  "correctChoiceId": "A" | "B" | "C" | "D"',
+    "}",
+    "",
+    "Constraints:",
+    "- Target language: Russian",
+    "- Learner level: A1",
+    "- Use short, natural phrases.",
+    "- prompt and choices must be Russian.",
+    "- correctChoiceId must match one of the choice ids.",
+    "- conceptIds must be [123] exactly.",
+    `Example valid output:
+        {
+        "type": "mcq_v1.basic",
+        "mode": "reception",
+        "skills": ["reading"],
+        "conceptIds": [123],
+        "prompt": "Где находится банк?",
+        "choices": [
+            {"id":"A","text":"В школе"},
+            {"id":"B","text":"В банке"},
+            {"id":"C","text":"В парке"},
+            {"id":"D","text":"Дома"}
+        ],
+        "correctChoiceId": "B"
+        }`,
+  ].join("\n");
+
+  return { system, user };
+}
+
+async function completionToText(
+  ctx: any,
+  params: any,
+  onPartial?: (t: string) => void
+): Promise<{ text: string; timings?: any }> {
+  let built = "";
+  const result = await ctx.completion(params, (data: any) => {
+    if (data?.token) {
+      built += data.token;
+      if (onPartial && built.length % 64 === 0) onPartial(built);
+    }
+  });
+
+  return { text: String(result?.text ?? built ?? ""), timings: result?.timings };
+}
+
+async function generateValidatedMcq(
+  ctx: any,
+  setOutput: (s: string) => void
+): Promise<
+  | { ok: true; rawText: string; parsed: any; attempts: number; timings?: any }
+  | { ok: false; rawText: string; error: string; attempts: number; timings?: any }
+> {
+  const { system, user } = buildMcqPrompt();
+
+  const first = await completionToText(
+    ctx,
+    {
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ],
+      n_predict: 260,
+      temperature: 0.6,
+      stop: STOP_WORDS,
+    },
+    setOutput
+  );
+
+  let rawText = first.text;
+  let timings = first.timings;
+  let jsonStr = extractLikelyJson(rawText) ?? rawText;
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const parsed = JSON.parse(jsonStr);
+      practiceItemRegistry.create(parsed);
+      return { ok: true, rawText, parsed, attempts: attempt, timings };
+    } catch (e: any) {
+      const errorText =
+        e instanceof z.ZodError ? formatZodError(e) : e?.message ?? String(e);
+
+      const repair = await completionToText(
+        ctx,
+        {
+          messages: [
+            { role: "system", content: system },
+            {
+              role: "user",
+              content:
+                "Fix the JSON to satisfy the schema. Return ONLY corrected JSON.\n\n" +
+                `Validation errors:\n${errorText}\n\n` +
+                `JSON:\n${jsonStr}`,
+            },
+          ],
+          n_predict: 260,
+          temperature: 0.2,
+          stop: STOP_WORDS,
+        },
+        setOutput
+      );
+
+      rawText = repair.text;
+      timings = repair.timings;
+      jsonStr = extractLikelyJson(rawText) ?? rawText;
+
+      if (attempt === 2) {
+        return { ok: false, rawText, error: errorText, attempts: attempt, timings };
+      }
+    }
+  }
+
+  return { ok: false, rawText, error: "Unknown error", attempts: 2, timings };
+}
+
 export default function LlmDevScreen() {
   const modelDir = useMemo(() => new Directory(Paths.document, MODEL_SUBDIR), []);
   const modelFile = useMemo(
@@ -49,13 +192,27 @@ export default function LlmDevScreen() {
   const [modelInfo, setModelInfo] = useState<any>(null);
   const [output, setOutput] = useState<string>("");
   const [timings, setTimings] = useState<any>(null);
+  const [lastError, setLastError] = useState<string>("");
+  const [lastParsed, setLastParsed] = useState<any>(null);
+  const [batchStats, setBatchStats] = useState<{
+    n: number;
+    ok: number;
+    firstTryOk: number;
+    repairedOk: number;
+    failed: number;
+    avgMs: number;
+  } | null>(null);
 
   const ctxRef = useRef<LlamaContext | null>(null);
+
+  useMemo(() => {
+    registerPracticeItems();
+    return null;
+  }, []);
 
   async function onCheckStorage() {
     const free = await LegacyFS.getFreeDiskStorageAsync();
     const total = await LegacyFS.getTotalDiskCapacityAsync();
-
     setStatus(`disk free=${mb(free)}MB / total=${mb(total)}MB`);
 
     try {
@@ -95,14 +252,9 @@ export default function LlmDevScreen() {
     const info = await modelFile.info();
     if (!info.exists) return;
 
-    // If it's smaller than "real model" threshold, it's probably a partial download.
     if (typeof info.size === "number" && info.size < 50_000_000) {
       await modelFile.delete();
-      return;
     }
-
-    // Even if it's larger, it may still be incomplete/corrupt.
-    // If you want to be aggressive during dev, you can delete any existing file here.
   }
 
   async function ensureModelOnDevice() {
@@ -120,11 +272,9 @@ export default function LlmDevScreen() {
     const info = await modelFile.info();
 
     if (info.exists && typeof info.size === "number" && info.size > 50_000_000) {
-      // Looks like we already have a real file. (May still be corrupt, but good enough for spike.)
       return;
     }
 
-    // Clean up partial file if present
     await deletePartialModelIfAny();
 
     setStatus("creating model directory…");
@@ -144,7 +294,10 @@ export default function LlmDevScreen() {
   async function onLoadModelInfo() {
     try {
       setOutput("");
+      setLastError("");
+      setLastParsed(null);
       setTimings(null);
+      setBatchStats(null);
 
       await ensureModelOnDevice();
 
@@ -162,11 +315,14 @@ export default function LlmDevScreen() {
   async function onInitContext() {
     try {
       setOutput("");
+      setLastError("");
+      setLastParsed(null);
       setTimings(null);
+      setBatchStats(null);
 
       await ensureModelOnDevice();
 
-      setStatus("initializing llama context… (can take a bit)");
+      setStatus("initializing llama context…");
       const ctx = await initLlama({
         model: modelFile.uri,
         use_mlock: true,
@@ -182,7 +338,7 @@ export default function LlmDevScreen() {
     }
   }
 
-  async function onGenerateJsonTest() {
+  async function onGenerateValidatedMcq() {
     try {
       const ctx = ctxRef.current;
       if (!ctx) {
@@ -191,58 +347,75 @@ export default function LlmDevScreen() {
       }
 
       setOutput("");
+      setLastError("");
+      setLastParsed(null);
       setTimings(null);
-      setStatus("generating…");
+      setBatchStats(null);
 
-      const system = [
-        "You are a generator for a language-learning app.",
-        "Return ONLY valid JSON. No markdown. No commentary.",
-        "All strings must be double-quoted. No trailing commas.",
-        'If you cannot comply, return: {"error":"cannot_comply"}',
-      ].join(" ");
+      setStatus("generating mcq…");
 
-      const user = [
-        "Target language: Russian.",
-        "Learner level: A1.",
-        "Task: generate ONE practice item.",
-        "Return JSON with this exact shape:",
-        "{",
-        '  "type": "multipleChoice",',
-        '  "prompt": string,',
-        '  "choices": [string, string, string, string],',
-        '  "answerIndex": number,',
-        '  "explanation": string',
-        "}",
-        "Constraints:",
-        "- prompt and choices must be in Russian",
-        "- explanation can be in English",
-      ].join("\n");
+      const res = await generateValidatedMcq(ctx, setOutput);
 
-      let built = "";
-      const result = await ctx.completion(
-        {
-          messages: [
-            { role: "system", content: system },
-            { role: "user", content: user },
-          ],
-          n_predict: 220,
-          temperature: 0.7,
-          stop: STOP_WORDS,
-        },
-        (data) => {
-          if (data?.token) {
-            built += data.token;
-            if (built.length % 32 === 0) setOutput(built);
-          }
-        }
-      );
+      setOutput(res.rawText);
+      setTimings(res.timings);
 
-      setOutput(result.text ?? built);
-      setTimings(result.timings);
-      setStatus("done ✅");
+      if (res.ok) {
+        setLastParsed(res.parsed);
+        setStatus(res.attempts === 1 ? "valid ✅ (first try)" : "valid ✅ (repaired)");
+      } else {
+        setLastError(res.error);
+        setStatus("invalid ❌");
+      }
     } catch (e: any) {
       setStatus("error");
       Alert.alert("Generate error", e?.message ?? String(e));
+    }
+  }
+
+  async function onGenerateBatch() {
+    try {
+      const ctx = ctxRef.current;
+      if (!ctx) {
+        Alert.alert("Not ready", "Initialize the context first.");
+        return;
+      }
+
+      setOutput("");
+      setLastError("");
+      setLastParsed(null);
+      setTimings(null);
+      setBatchStats(null);
+
+      const n = 20;
+      setStatus(`batch generating (${n})…`);
+
+      let ok = 0;
+      let firstTryOk = 0;
+      let repairedOk = 0;
+      let failed = 0;
+      const times: number[] = [];
+
+      for (let i = 0; i < n; i++) {
+        const t0 = Date.now();
+        const res = await generateValidatedMcq(ctx, () => {});
+        times.push(Date.now() - t0);
+
+        if (res.ok) {
+          ok += 1;
+          if (res.attempts === 1) firstTryOk += 1;
+          else repairedOk += 1;
+        } else {
+          failed += 1;
+        }
+      }
+
+      const avgMs = Math.round(times.reduce((a, b) => a + b, 0) / Math.max(times.length, 1));
+
+      setBatchStats({ n, ok, firstTryOk, repairedOk, failed, avgMs });
+      setStatus(`batch done ✅ ok=${ok}/${n} avg=${avgMs}ms`);
+    } catch (e: any) {
+      setStatus("error");
+      Alert.alert("Batch error", e?.message ?? String(e));
     }
   }
 
@@ -251,6 +424,9 @@ export default function LlmDevScreen() {
     setModelInfo(null);
     setOutput("");
     setTimings(null);
+    setLastError("");
+    setLastParsed(null);
+    setBatchStats(null);
     setStatus("idle");
   }
 
@@ -271,7 +447,9 @@ export default function LlmDevScreen() {
 
           <Button onPress={onLoadModelInfo}>Load model info</Button>
           <Button onPress={onInitContext}>Init context</Button>
-          <Button onPress={onGenerateJsonTest}>Generate JSON test</Button>
+
+          <Button onPress={onGenerateValidatedMcq}>Generate MCQ (validate+repair)</Button>
+          <Button onPress={onGenerateBatch}>Generate 20 MCQs (stats)</Button>
 
           <Button onPress={onReset} theme="gray">
             Reset
@@ -285,6 +463,33 @@ export default function LlmDevScreen() {
           </Text>
         </YStack>
 
+        {batchStats ? (
+          <YStack gap="$1">
+            <Text fontWeight="700">Batch Stats</Text>
+            <Text selectable fontFamily="$mono" fontSize={12}>
+              {JSON.stringify(batchStats, null, 2)}
+            </Text>
+          </YStack>
+        ) : null}
+
+        {lastError ? (
+          <YStack gap="$1">
+            <Text fontWeight="700">Validation Error</Text>
+            <Text selectable fontFamily="$mono" fontSize={12}>
+              {lastError}
+            </Text>
+          </YStack>
+        ) : null}
+
+        {lastParsed ? (
+          <YStack gap="$1">
+            <Text fontWeight="700">Parsed JSON</Text>
+            <Text selectable fontFamily="$mono" fontSize={12}>
+              {JSON.stringify(lastParsed, null, 2)}
+            </Text>
+          </YStack>
+        ) : null}
+
         {modelInfo ? (
           <YStack gap="$1">
             <Text fontWeight="700">Model Info</Text>
@@ -295,7 +500,7 @@ export default function LlmDevScreen() {
         ) : null}
 
         <YStack gap="$1">
-          <Text fontWeight="700">Output</Text>
+          <Text fontWeight="700">Raw Output</Text>
           <Text selectable fontFamily="$mono" fontSize={12}>
             {output || "(none yet)"}
           </Text>

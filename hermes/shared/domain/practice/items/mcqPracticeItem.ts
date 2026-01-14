@@ -1,10 +1,23 @@
-import { PracticeItem, PracticeItemJSON, EvaluationResult } from "../practiceItem";
+import { PracticeItem, EvaluationResult } from "../practiceItem";
+import { z } from "zod";
+import { PracticeItemBaseSchema } from "../practiceItemSchemas";
 
-export type McqBasicJSON = PracticeItemJSON & {
-  prompt: string;
-  choices: { id: string; text: string }[];
-  correctChoiceId: string;
-};
+export const McqBasicSchema = PracticeItemBaseSchema.extend({
+  type: z.literal("mcq_v1.basic"),
+  prompt: z.string().min(1),
+  choices: z.array(z.object({ id: z.string().min(1), text: z.string().min(1) })).min(2),
+  correctChoiceId: z.string().min(1),
+}).superRefine((val, ctx) => {
+  if (!val.choices.some((c) => c.id === val.correctChoiceId)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["correctChoiceId"],
+      message: "correctChoiceId must match one of choices[].id",
+    });
+  }
+});
+
+export type McqBasicJSON = z.infer<typeof McqBasicSchema>;
 
 export class McqBasicPracticeItem extends PracticeItem {
   private readonly prompt: string;
@@ -12,10 +25,10 @@ export class McqBasicPracticeItem extends PracticeItem {
   private readonly correctChoiceId: string;
 
   constructor(json: McqBasicJSON) {
-    super({ type: json.type, mode: json.mode, skills: json.skills, conceptIds: json.conceptIds });
-    this.prompt = String(json.prompt);
-    this.choices = (json.choices ?? []) as any;
-    this.correctChoiceId = String(json.correctChoiceId);
+    super(json); // base fields already validated
+    this.prompt = json.prompt;
+    this.choices = json.choices;
+    this.correctChoiceId = json.correctChoiceId;
   }
 
   override evaluate(userResponse: unknown): EvaluationResult {
@@ -43,6 +56,7 @@ export class McqBasicPracticeItem extends PracticeItem {
   override toJSON(): McqBasicJSON {
     return {
       ...super.toJSON(),
+      type: "mcq_v1.basic",
       prompt: this.prompt,
       choices: this.choices,
       correctChoiceId: this.correctChoiceId,

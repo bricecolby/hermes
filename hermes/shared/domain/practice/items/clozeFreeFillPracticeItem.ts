@@ -1,52 +1,83 @@
-import { PracticeItem, PracticeItemJSON, EvaluationResult } from "../practiceItem";
+// shared/domain/practice/items/clozeFreeFillPracticeItem.ts
+import { z } from "zod";
+import { PracticeItemBaseSchema } from "../practiceItemSchemas";
+import { PracticeItem, EvaluationResult } from "../practiceItem";
 
-export type ClozeFreeFillJSON = PracticeItemJSON & {
-  text: string;
-  blanks: { accepted: string[]; conceptId?: number }[];
-};
+export const ClozeFreeFillSchema = PracticeItemBaseSchema.extend({
+  type: z.literal("cloze_v1.free_fill"),
+  text: z.string().min(1),
+  blanks: z
+    .array(
+      z.object({
+        accepted: z.array(z.string().min(1)).min(1),
+        conceptId: z.number().int().positive().optional(),
+      })
+    )
+    .min(1),
+});
+
+export type ClozeFreeFillJSON = z.infer<typeof ClozeFreeFillSchema>;
+
+function normalizeAnswer(s: unknown): string {
+  return String(s ?? "")
+    .trim()
+    .toLowerCase();
+}
 
 export class ClozeFreeFillPracticeItem extends PracticeItem {
   private readonly text: string;
   private readonly blanks: { accepted: string[]; conceptId?: number }[];
 
   constructor(json: ClozeFreeFillJSON) {
-    super({ type: json.type, mode: json.mode, skills: json.skills, conceptIds: json.conceptIds });
-    this.text = String(json.text);
-    this.blanks = (json.blanks ?? []) as any;
-  }
-
-  private norm(s: string): string {
-    return s.trim().toLowerCase();
+    super(json); 
+    this.text = json.text;
+    this.blanks = json.blanks;
   }
 
   override evaluate(userResponse: unknown): EvaluationResult {
-    const filled: string[] = ((userResponse as any)?.filled ?? []) as any;
-
-    const total = this.blanks.length || 1;
-    let correct = 0;
+    // Expected: { answers: string[] } aligned to blanks order
+    const answers = (userResponse as any)?.answers;
+    const safeAnswers: unknown[] = Array.isArray(answers) ? answers : [];
 
     const perBlank = this.blanks.map((b, idx) => {
-      const submitted = this.norm(String(filled[idx] ?? ""));
-      const accepted = (b.accepted ?? []).map((a) => this.norm(String(a)));
-      const isCorrect = accepted.includes(submitted) && submitted.length > 0;
-      if (isCorrect) correct += 1;
+      const response = normalizeAnswer(safeAnswers[idx]);
+      const accepted = b.accepted.map(normalizeAnswer);
 
-      const conceptId = b.conceptId ?? this.conceptIds[idx % this.conceptIds.length];
+      const isCorrect = response.length > 0 && accepted.includes(response);
+      const score = isCorrect ? 1 : 0;
+
+      const conceptId =
+        b.conceptId ?? (this.conceptIds.length ? this.conceptIds[0] : 0);
 
       return {
         conceptId,
-        isCorrect,
-        score: isCorrect ? 1 : 0,
+        score,
         maxScore: 1,
-        evidence: { idx, submitted, accepted },
+        isCorrect,
+        evidence: {
+          index: idx,
+          response,
+          accepted: b.accepted,
+        },
       };
     });
 
-    const score = correct / total;
+    const total = perBlank.length;
+    const correct = perBlank.reduce((acc, r) => acc + r.score, 0);
+    const score = total > 0 ? correct / total : 0;
 
-    const byConcept = new Map<number, { s: number; m: number; anyWrong: boolean; evid: any[] }>();
+    const byConcept = new Map<
+      number,
+      { s: number; m: number; anyWrong: boolean; evid: any[] }
+    >();
+
     for (const r of perBlank) {
-      const cur = byConcept.get(r.conceptId) ?? { s: 0, m: 0, anyWrong: false, evid: [] };
+      const cur = byConcept.get(r.conceptId) ?? {
+        s: 0,
+        m: 0,
+        anyWrong: false,
+        evid: [],
+      };
       cur.s += r.score;
       cur.m += r.maxScore;
       cur.anyWrong = cur.anyWrong || !r.isCorrect;
@@ -54,13 +85,15 @@ export class ClozeFreeFillPracticeItem extends PracticeItem {
       byConcept.set(r.conceptId, cur);
     }
 
-    const conceptResults = Array.from(byConcept.entries()).map(([conceptId, v]) => ({
-      conceptId,
-      score: v.s,
-      maxScore: v.m,
-      isCorrect: !v.anyWrong,
-      evidence: v.evid,
-    }));
+    const conceptResults = Array.from(byConcept.entries()).map(
+      ([conceptId, v]) => ({
+        conceptId,
+        score: v.s,
+        maxScore: v.m,
+        isCorrect: !v.anyWrong,
+        evidence: v.evid,
+      })
+    );
 
     return {
       type: this.type,
@@ -71,6 +104,15 @@ export class ClozeFreeFillPracticeItem extends PracticeItem {
       conceptResults,
       feedback: score === 1 ? "All blanks correct." : "Some blanks incorrect.",
       meta: { text: this.text },
+    };
+  }
+
+  override toJSON(): ClozeFreeFillJSON {
+    return {
+      ...super.toJSON(),
+      type: "cloze_v1.free_fill", 
+      text: this.text,
+      blanks: this.blanks,
     };
   }
 }

@@ -1,16 +1,21 @@
-import { PracticeItem, PracticeItemJSON, EvaluationResult } from "../practiceItem";
+import { z } from "zod";
+import { PracticeItem, EvaluationResult } from "../practiceItem";
+import { PracticeItemBaseSchema } from "../practiceItemSchemas";
 
 export type FlashcardConfidence = "easy" | "hard" | "forgot" | "unknown";
 
-export type FlashcardBasicJSON = PracticeItemJSON & {
-  front: string;       // prompt side
-  back: string;        // answer side
-  example?: string;    // optional usage example
-};
+export const FlashcardBasicSchema = PracticeItemBaseSchema.extend({
+  type: z.literal("flashcard_v1.basic"),
+  front: z.string().min(1),
+  back: z.string().min(1),
+  example: z.string().optional(),
+});
+
+export type FlashcardBasicJSON = z.infer<typeof FlashcardBasicSchema>;
 
 export type FlashcardSubmission = {
-  revealed?: boolean;                 // user flipped card
-  confidence?: FlashcardConfidence;   // self-reported recall
+  revealed?: boolean;
+  confidence?: FlashcardConfidence;
 };
 
 export class FlashcardBasicPracticeItem extends PracticeItem {
@@ -19,33 +24,26 @@ export class FlashcardBasicPracticeItem extends PracticeItem {
   private readonly example?: string;
 
   constructor(json: FlashcardBasicJSON) {
-    super({
-      type: json.type,
-      mode: json.mode,
-      skills: json.skills,
-      conceptIds: json.conceptIds,
-    });
-
-    this.front = String(json.front);
-    this.back = String(json.back);
-    this.example = json.example != null ? String(json.example) : undefined;
+    super(json);
+    this.front = json.front;
+    this.back = json.back;
+    this.example = json.example;
   }
 
   override evaluate(userResponse: unknown): EvaluationResult {
     const submission = (userResponse ?? {}) as FlashcardSubmission;
+    const confidence: FlashcardConfidence = submission.confidence ?? "unknown";
 
-    const confidence: FlashcardConfidence =
-      submission.confidence ?? "unknown";
-
-    // "forgot" is objectively incorrect; others are "correct" in the sense of recall.
     const isCorrect = confidence !== "forgot" && confidence !== "unknown";
 
-    // Strength score (0..1). Useful later for spaced repetition scheduling.
     const score =
-      confidence === "easy" ? 1 :
-      confidence === "hard" ? 0.5 :
-      confidence === "forgot" ? 0 :
-      0.25; // unknown/other: low credit for engagement
+      confidence === "easy"
+        ? 1
+        : confidence === "hard"
+        ? 0.5
+        : confidence === "forgot"
+        ? 0
+        : 0.25;
 
     return {
       type: this.type,
@@ -70,6 +68,7 @@ export class FlashcardBasicPracticeItem extends PracticeItem {
   override toJSON(): FlashcardBasicJSON {
     return {
       ...super.toJSON(),
+      type: "flashcard_v1.basic",
       front: this.front,
       back: this.back,
       example: this.example,
