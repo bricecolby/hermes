@@ -9,9 +9,17 @@ const SEED_VERSION = 2;
 
 let db: SQLiteDatabase | null = null;
 
+export function invalidateDbHandle() {
+  db = null;
+}
+
 export async function getDb(): Promise<SQLiteDatabase> {
   if (!db) db = await openDatabaseAsync(DB_NAME);
   return db;
+}
+
+export async function pingDb(db: SQLiteDatabase) {
+  await db.getFirstAsync(`SELECT 1 as ok;`);
 }
 
 async function ensureMetaTable(db: SQLiteDatabase) {
@@ -137,5 +145,34 @@ export async function initDb(db: SQLiteDatabase) {
     return;
   }
 
+
+
   console.log("✅ DB initialized (schema + seed versions)", SCHEMA_VERSION, currentSeed);
+}
+
+function isNativePrepareNPE(err: any) {
+  const msg = String(err?.message ?? err ?? "");
+  return (
+    msg.includes("NativeDatabase.prepareAsync") ||
+    msg.includes("NullPointerException")
+  );
+}
+
+export async function ensureDbReady(): Promise<SQLiteDatabase> {
+  try {
+    const d = await getDb();
+    await pingDb(d);
+    return d;
+  } catch (e: any) {
+    if (!isNativePrepareNPE(e)) throw e;
+
+    console.warn("DB ping failed; reopening DB.", e?.message ?? e);
+
+    invalidateDbHandle();
+    const d2 = await getDb();
+
+    await initDb(d2);
+
+    return d2;
+  }
 }
