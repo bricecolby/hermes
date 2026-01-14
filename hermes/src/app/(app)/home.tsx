@@ -10,6 +10,7 @@ import { AppHeader } from "../../components/ui/AppHeader";
 import { ActionCard } from "../../components/ui/ActionCard";
 import { useAppState } from "../../state/AppState";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
+import { Link } from "expo-router";
 
 const DB_NAME = "hermes.db";
 const MVP_USERNAME = "default";
@@ -103,6 +104,8 @@ export default function Home() {
                 subtitle="Choose a different language pack"
                 onPress={() => router.push("/(onboarding)/profile")}
               />
+              <Link href="/dev/llm">LLM Dev</Link>
+
             </>
           )}
         </YStack>
