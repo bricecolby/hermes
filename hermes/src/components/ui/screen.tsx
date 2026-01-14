@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export function Screen({
   children,
   noPad = false,
-  backgroundColor = "$background",
+  backgroundColor = "#06101C",
 }: {
   children: React.ReactNode;
   noPad?: boolean;
