@@ -7,10 +7,10 @@ export type UISession = {
   id: string;
   type: SessionType;
 
-  languageId: string;
+  languageId: number;
 
-  conceptIds: string[];
-  practiceItemIds: string[];
+  conceptIds: number[];
+  practiceItemIds: number[];
   practiceIndex: number;
 
   startedAt: number;
@@ -93,20 +93,23 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const startSession: AppState["startSession"] = (type) => {
     if (!activeLanguageId) return;
 
-    // TODO: replace with real queue assembly from DB / services
-    const conceptIds = ["concept1", "concept2", "concept3"];
-    const practiceItemIds = ["item1", "item2", "item3"];
+    const languageId = Number(activeLanguageId);
+    if (!Number.isFinite(languageId)) return;
+
+    const conceptIds = [1, 2, 3];
+    const practiceItemIds = [1, 2, 3];
 
     setSession({
       id: uid(),
       type,
-      languageId: activeLanguageId,
+      languageId,
       conceptIds,
       practiceItemIds,
       practiceIndex: 0,
       startedAt: Date.now(),
     });
   };
+
 
   const advancePractice = () => {
     setSession((prev) => {

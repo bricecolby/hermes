@@ -1,7 +1,7 @@
 // ✅ corrected RootLayout: provider always mounts, UI gates on dbReady/dbError
 
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
@@ -90,8 +90,12 @@ export default function RootLayout() {
             >
               {showApp ? (
                 <AppStateProvider>
-                  <Slot />
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="(app)" />
+                    <Stack.Screen name="(modals)" options={{ presentation: "modal" }} />
+                  </Stack>
                 </AppStateProvider>
+
               ) : null}
             </SQLiteProvider>
 
