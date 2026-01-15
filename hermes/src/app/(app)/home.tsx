@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, Link } from "expo-router";
 import * as SQLite from "expo-sqlite";
 
 import { YStack, Text } from "tamagui";
@@ -10,7 +10,6 @@ import { AppHeader } from "../../components/ui/AppHeader";
 import { ActionCard } from "../../components/ui/ActionCard";
 import { useAppState } from "../../state/AppState";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
-import { Link } from "expo-router";
 
 const DB_NAME = "hermes.db";
 const MVP_USERNAME = "default";

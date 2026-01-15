@@ -3,7 +3,7 @@
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import * as SplashScreen from "expo-splash-screen";
 import { Alert, View, Text, Button, Appearance } from "react-native";
