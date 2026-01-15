@@ -1,5 +1,5 @@
 // src/app/dev/llm.tsx
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, ScrollView } from "react-native";
 import { Button, Text, YStack } from "tamagui";
 
@@ -57,6 +57,23 @@ function buildMcqPrompt() {
     "No trailing commas.",
   ].join(" ");
 
+  const example = [
+    "{",
+    '  "type": "mcq_v1.basic",',
+    '  "mode": "reception",',
+    '  "skills": ["reading"],',
+    '  "conceptIds": [123],',
+    '  "prompt": "Где находится банк?",',
+    '  "choices": [',
+    '    {"id":"A","text":"В школе"},',
+    '    {"id":"B","text":"В банке"},',
+    '    {"id":"C","text":"В парке"},',
+    '    {"id":"D","text":"Дома"}',
+    "  ],",
+    '  "correctChoiceId": "B"',
+    "}",
+  ].join("\n");
+
   const user = [
     "Generate ONE practice item JSON for this schema:",
     "{",
@@ -72,25 +89,13 @@ function buildMcqPrompt() {
     "Constraints:",
     "- Target language: Russian",
     "- Learner level: A1",
-    "- Use short, natural phrases.",
-    "- prompt and choices must be Russian.",
-    "- correctChoiceId must match one of the choice ids.",
+    "- prompt and choices must be Russian (Cyrillic only; no Latin letters).",
+    '- Use EXACTLY these choice ids: "A","B","C","D".',
+    "- Keep the prompt under 10 words; each choice under 8 words.",
     "- conceptIds must be [123] exactly.",
-    `Example valid output:
-        {
-        "type": "mcq_v1.basic",
-        "mode": "reception",
-        "skills": ["reading"],
-        "conceptIds": [123],
-        "prompt": "Где находится банк?",
-        "choices": [
-            {"id":"A","text":"В школе"},
-            {"id":"B","text":"В банке"},
-            {"id":"C","text":"В парке"},
-            {"id":"D","text":"Дома"}
-        ],
-        "correctChoiceId": "B"
-        }`,
+    "",
+    "Example valid output:",
+    example,
   ].join("\n");
 
   return { system, user };
@@ -112,73 +117,196 @@ async function completionToText(
   return { text: String(result?.text ?? built ?? ""), timings: result?.timings };
 }
 
+function hasCyrillic(s: string) {
+  return /[\u0400-\u04FF]/.test(s);
+}
+
+function hasLatin(s: string) {
+  return /[A-Za-z]/.test(s);
+}
+
+function normalizeWhitespace(s: string) {
+  return s.replace(/\s+/g, " ").trim();
+}
+
+function qualityCheckMcq(parsed: any): string[] {
+  const issues: string[] = [];
+
+  const prompt = normalizeWhitespace(String(parsed?.prompt ?? ""));
+  if (prompt.length < 6) issues.push("prompt too short");
+  if (!hasCyrillic(prompt)) issues.push("prompt missing Cyrillic");
+  if (hasLatin(prompt)) issues.push("prompt contains Latin letters");
+  if (prompt.split(" ").length > 10) issues.push("prompt too long for A1");
+
+  const choices: Array<{ id?: unknown; text?: unknown }> = Array.isArray(parsed?.choices)
+    ? (parsed.choices as Array<{ id?: unknown; text?: unknown }>)
+    : [];
+  if (choices.length !== 4) issues.push("choices must be exactly 4");
+
+  const ids = choices.map((c: { id?: unknown }) => String(c?.id ?? ""));
+  const texts = choices.map((c: { text?: unknown }) =>
+    normalizeWhitespace(String(c?.text ?? ""))
+  );
+
+  const expectedIds = ["A", "B", "C", "D"];
+  for (const id of expectedIds) {
+    if (!ids.includes(id)) issues.push(`missing choice id "${id}"`);
+  }
+  for (const id of ids) {
+    if (!expectedIds.includes(id)) issues.push(`unexpected choice id "${id}"`);
+  }
+
+  const uniqueTexts = new Set(texts.map((t: string) => t.toLowerCase()));
+  if (uniqueTexts.size !== texts.length) issues.push("choices contain duplicates");
+
+  for (let i = 0; i < texts.length; i++) {
+    const t = texts[i];
+    const id = ids[i] || String(i);
+
+    if (t.length < 1) issues.push(`choice ${id} is empty`);
+    if (!hasCyrillic(t)) issues.push(`choice ${id} missing Cyrillic`);
+    if (hasLatin(t)) issues.push(`choice ${id} contains Latin letters`);
+    if (t.split(" ").length > 8) issues.push(`choice ${id} too long for A1`);
+  }
+
+  const correct = String(parsed?.correctChoiceId ?? "");
+  if (!expectedIds.includes(correct)) issues.push("correctChoiceId must be A/B/C/D");
+
+  const correctChoice = choices.find(
+    (c: { id?: unknown }) => String(c?.id ?? "") === correct
+  );
+  if (!correctChoice) issues.push("correctChoiceId does not match any choice id");
+
+  const correctText = normalizeWhitespace(String(correctChoice?.text ?? "")).toLowerCase();
+  const distractors = choices
+    .filter((c: { id?: unknown }) => String(c?.id ?? "") !== correct)
+    .map((c: { text?: unknown }) => normalizeWhitespace(String(c?.text ?? "")).toLowerCase());
+
+  if (correctChoice && distractors.some((d: string) => d === correctText)) {
+    issues.push("a distractor matches the correct answer text");
+  }
+
+  return issues;
+}
+
+
+function formatQualityIssues(issues: string[]) {
+  return issues.map((s) => `- ${s}`).join("\n");
+}
+
 async function generateValidatedMcq(
   ctx: any,
   setOutput: (s: string) => void
 ): Promise<
-  | { ok: true; rawText: string; parsed: any; attempts: number; timings?: any }
-  | { ok: false; rawText: string; error: string; attempts: number; timings?: any }
+  | {
+      ok: true;
+      rawText: string;
+      parsed: any;
+      attempts: number;
+      timings?: any;
+      qualityIssues: string[];
+    }
+  | {
+      ok: false;
+      rawText: string;
+      error: string;
+      attempts: number;
+      timings?: any;
+      qualityIssues: string[];
+    }
 > {
   const { system, user } = buildMcqPrompt();
 
-  const first = await completionToText(
-    ctx,
-    {
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ],
-      n_predict: 260,
-      temperature: 0.6,
-      stop: STOP_WORDS,
-    },
-    setOutput
-  );
+  let rawText = "";
+  let timings: any = null;
+  let jsonStr = "";
+  let lastError = "";
+  let lastQualityIssues: string[] = [];
+  let hadParsableJson = false;
 
-  let rawText = first.text;
-  let timings = first.timings;
-  let jsonStr = extractLikelyJson(rawText) ?? rawText;
-
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const parsed = JSON.parse(jsonStr);
-      practiceItemRegistry.create(parsed);
-      return { ok: true, rawText, parsed, attempts: attempt, timings };
-    } catch (e: any) {
-      const errorText =
-        e instanceof z.ZodError ? formatZodError(e) : e?.message ?? String(e);
-
-      const repair = await completionToText(
-        ctx,
-        {
-          messages: [
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const msg =
+      attempt === 1 || !rawText
+        ? [
+            { role: "system", content: system },
+            { role: "user", content: user },
+          ]
+        : [
             { role: "system", content: system },
             {
               role: "user",
               content:
-                "Fix the JSON to satisfy the schema. Return ONLY corrected JSON.\n\n" +
-                `Validation errors:\n${errorText}\n\n` +
-                `JSON:\n${jsonStr}`,
+                "Fix the JSON to satisfy BOTH structure and quality requirements. Return ONLY corrected JSON.\n\n" +
+                (hadParsableJson
+                  ? `Current JSON:\n${jsonStr}\n\n`
+                  : `Previous output (may be invalid):\n${rawText}\n\n`) +
+                (lastError ? `Structure/validation errors:\n${lastError}\n\n` : "") +
+                (lastQualityIssues.length
+                  ? `Quality issues:\n${formatQualityIssues(lastQualityIssues)}\n\n`
+                  : "") +
+                "Requirements reminder:\n" +
+                '- JSON only, double quotes, no trailing commas\n' +
+                '- type="mcq_v1.basic", mode="reception", skills=["reading"], conceptIds=[123]\n' +
+                '- choices must be 4 with ids A/B/C/D, and correctChoiceId must match one of them\n' +
+                "- Russian only (Cyrillic), no Latin letters\n" +
+                "- Short A1 phrasing",
             },
-          ],
-          n_predict: 260,
-          temperature: 0.2,
-          stop: STOP_WORDS,
-        },
-        setOutput
-      );
+          ];
 
-      rawText = repair.text;
-      timings = repair.timings;
-      jsonStr = extractLikelyJson(rawText) ?? rawText;
+    const r = await completionToText(
+      ctx,
+      {
+        messages: msg,
+        n_predict: 260,
+        temperature: attempt === 1 ? 0.4 : 0.2,
+        stop: STOP_WORDS,
+      },
+      setOutput
+    );
 
-      if (attempt === 2) {
-        return { ok: false, rawText, error: errorText, attempts: attempt, timings };
-      }
+    rawText = r.text;
+    timings = r.timings;
+    jsonStr = extractLikelyJson(rawText) ?? rawText;
+
+    let parsed: any = null;
+
+    try {
+      parsed = JSON.parse(jsonStr);
+      hadParsableJson = true;
+    } catch (e: any) {
+      hadParsableJson = false;
+      lastQualityIssues = [];
+      lastError = `JSON parse error: ${e?.message ?? String(e)}`;
+      continue;
     }
+
+    try {
+      practiceItemRegistry.create(parsed);
+    } catch (e: any) {
+      lastQualityIssues = [];
+      lastError = e instanceof z.ZodError ? formatZodError(e) : e?.message ?? String(e);
+      continue;
+    }
+
+    const qIssues = qualityCheckMcq(parsed);
+    lastQualityIssues = qIssues;
+
+    if (qIssues.length === 0) {
+      return { ok: true, rawText, parsed, attempts: attempt, timings, qualityIssues: qIssues };
+    }
+
+    lastError = "";
   }
 
-  return { ok: false, rawText, error: "Unknown error", attempts: 2, timings };
+  const error = lastError || (lastQualityIssues.length ? "quality check failed" : "unknown error");
+  return {
+    ok: false,
+    rawText,
+    error,
+    attempts: 3,
+    timings,
+    qualityIssues: lastQualityIssues,
+  };
 }
 
 export default function LlmDevScreen() {
@@ -192,22 +320,26 @@ export default function LlmDevScreen() {
   const [modelInfo, setModelInfo] = useState<any>(null);
   const [output, setOutput] = useState<string>("");
   const [timings, setTimings] = useState<any>(null);
+
   const [lastError, setLastError] = useState<string>("");
   const [lastParsed, setLastParsed] = useState<any>(null);
+  const [lastQualityIssues, setLastQualityIssues] = useState<string[]>([]);
+  const [lastQualityOk, setLastQualityOk] = useState<boolean | null>(null);
+
   const [batchStats, setBatchStats] = useState<{
     n: number;
     ok: number;
     firstTryOk: number;
     repairedOk: number;
+    qualityOk: number;
     failed: number;
     avgMs: number;
   } | null>(null);
 
   const ctxRef = useRef<LlamaContext | null>(null);
 
-  useMemo(() => {
+  useEffect(() => {
     registerPracticeItems();
-    return null;
   }, []);
 
   async function onCheckStorage() {
@@ -251,7 +383,6 @@ export default function LlmDevScreen() {
   async function deletePartialModelIfAny() {
     const info = await modelFile.info();
     if (!info.exists) return;
-
     if (typeof info.size === "number" && info.size < 50_000_000) {
       await modelFile.delete();
     }
@@ -271,9 +402,7 @@ export default function LlmDevScreen() {
     setStatus("checking model file…");
     const info = await modelFile.info();
 
-    if (info.exists && typeof info.size === "number" && info.size > 50_000_000) {
-      return;
-    }
+    if (info.exists && typeof info.size === "number" && info.size > 50_000_000) return;
 
     await deletePartialModelIfAny();
 
@@ -296,6 +425,8 @@ export default function LlmDevScreen() {
       setOutput("");
       setLastError("");
       setLastParsed(null);
+      setLastQualityIssues([]);
+      setLastQualityOk(null);
       setTimings(null);
       setBatchStats(null);
 
@@ -317,6 +448,8 @@ export default function LlmDevScreen() {
       setOutput("");
       setLastError("");
       setLastParsed(null);
+      setLastQualityIssues([]);
+      setLastQualityOk(null);
       setTimings(null);
       setBatchStats(null);
 
@@ -347,10 +480,13 @@ export default function LlmDevScreen() {
       }
 
       setOutput("");
-      setLastError("");
-      setLastParsed(null);
       setTimings(null);
       setBatchStats(null);
+
+      setLastError("");
+      setLastParsed(null);
+      setLastQualityIssues([]);
+      setLastQualityOk(null);
 
       setStatus("generating mcq…");
 
@@ -358,13 +494,17 @@ export default function LlmDevScreen() {
 
       setOutput(res.rawText);
       setTimings(res.timings);
+      setLastQualityIssues(res.qualityIssues);
+      setLastQualityOk(res.ok && res.qualityIssues.length === 0);
 
       if (res.ok) {
         setLastParsed(res.parsed);
-        setStatus(res.attempts === 1 ? "valid ✅ (first try)" : "valid ✅ (repaired)");
+        setLastError("");
+        setStatus(res.attempts === 1 ? "valid ✅ (first try)" : `valid ✅ (attempt ${res.attempts})`);
       } else {
+        setLastParsed(null);
         setLastError(res.error);
-        setStatus("invalid ❌");
+        setStatus(`failed ❌ (attempts=${res.attempts})`);
       }
     } catch (e: any) {
       setStatus("error");
@@ -381,10 +521,13 @@ export default function LlmDevScreen() {
       }
 
       setOutput("");
-      setLastError("");
-      setLastParsed(null);
       setTimings(null);
       setBatchStats(null);
+
+      setLastError("");
+      setLastParsed(null);
+      setLastQualityIssues([]);
+      setLastQualityOk(null);
 
       const n = 20;
       setStatus(`batch generating (${n})…`);
@@ -392,6 +535,7 @@ export default function LlmDevScreen() {
       let ok = 0;
       let firstTryOk = 0;
       let repairedOk = 0;
+      let qualityOk = 0;
       let failed = 0;
       const times: number[] = [];
 
@@ -402,6 +546,7 @@ export default function LlmDevScreen() {
 
         if (res.ok) {
           ok += 1;
+          qualityOk += 1;
           if (res.attempts === 1) firstTryOk += 1;
           else repairedOk += 1;
         } else {
@@ -410,8 +555,7 @@ export default function LlmDevScreen() {
       }
 
       const avgMs = Math.round(times.reduce((a, b) => a + b, 0) / Math.max(times.length, 1));
-
-      setBatchStats({ n, ok, firstTryOk, repairedOk, failed, avgMs });
+      setBatchStats({ n, ok, firstTryOk, repairedOk, qualityOk, failed, avgMs });
       setStatus(`batch done ✅ ok=${ok}/${n} avg=${avgMs}ms`);
     } catch (e: any) {
       setStatus("error");
@@ -424,8 +568,12 @@ export default function LlmDevScreen() {
     setModelInfo(null);
     setOutput("");
     setTimings(null);
+
     setLastError("");
     setLastParsed(null);
+    setLastQualityIssues([]);
+    setLastQualityOk(null);
+
     setBatchStats(null);
     setStatus("idle");
   }
@@ -448,7 +596,7 @@ export default function LlmDevScreen() {
           <Button onPress={onLoadModelInfo}>Load model info</Button>
           <Button onPress={onInitContext}>Init context</Button>
 
-          <Button onPress={onGenerateValidatedMcq}>Generate MCQ (validate+repair)</Button>
+          <Button onPress={onGenerateValidatedMcq}>Generate MCQ (validate+quality)</Button>
           <Button onPress={onGenerateBatch}>Generate 20 MCQs (stats)</Button>
 
           <Button onPress={onReset} theme="gray">
@@ -463,20 +611,31 @@ export default function LlmDevScreen() {
           </Text>
         </YStack>
 
+        <YStack gap="$1">
+          <Text fontWeight="700">Quality</Text>
+          <Text selectable fontFamily="$mono" fontSize={12}>
+            {lastQualityOk === null
+              ? "(not evaluated yet)"
+              : lastQualityOk
+              ? "✅ passed"
+              : `❌ failed\n${lastQualityIssues.join("\n")}`}
+          </Text>
+        </YStack>
+
+        {lastError ? (
+          <YStack gap="$1">
+            <Text fontWeight="700">Last Error</Text>
+            <Text selectable fontFamily="$mono" fontSize={12}>
+              {lastError}
+            </Text>
+          </YStack>
+        ) : null}
+
         {batchStats ? (
           <YStack gap="$1">
             <Text fontWeight="700">Batch Stats</Text>
             <Text selectable fontFamily="$mono" fontSize={12}>
               {JSON.stringify(batchStats, null, 2)}
-            </Text>
-          </YStack>
-        ) : null}
-
-        {lastError ? (
-          <YStack gap="$1">
-            <Text fontWeight="700">Validation Error</Text>
-            <Text selectable fontFamily="$mono" fontSize={12}>
-              {lastError}
             </Text>
           </YStack>
         ) : null}
