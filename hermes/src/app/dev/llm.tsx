@@ -11,6 +11,7 @@ import { initLlama, loadLlamaModelInfo } from "llama.rn";
 import { registerPracticeItems } from "shared/domain/practice";
 import { registerPracticeItemSpecs } from "shared/services/practiceGeneration/specs/registerPracticeItemSpecs";
 import { PracticeItemGenerator } from "shared/services/practiceGeneration/PracticeItemGenerator";
+import { buildGenerationContext } from "shared/services/practiceGeneration/context/buildGenerationContext";
 
 const MODEL_URL =
   "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf";
@@ -233,9 +234,16 @@ export default function LlmDevScreen() {
 
       const generator = new PracticeItemGenerator(buildCompletionFn(ctx), STOP_WORDS);
 
+      const genCtx = await buildGenerationContext({
+        userId: "dev",
+        mode: "reception",
+        skills: ["reading"],
+        conceptIds: [123],
+      });
+
       const res = await generator.generate(
         "mcq_v1.basic",
-        { targetLanguage: "Russian", cefr: "A1", conceptIds: [123] },
+        genCtx,
         (partial) => setOutput(partial),
         { maxAttempts: 3 }
       );
@@ -291,12 +299,20 @@ export default function LlmDevScreen() {
 
       for (let i = 0; i < n; i++) {
         const t0 = Date.now();
+        const genCtx = await buildGenerationContext({
+            userId: "dev",
+            mode: "reception",
+            skills: ["reading"],
+            conceptIds: [123],
+        });
+
         const res = await generator.generate(
-          "mcq_v1.basic",
-          { targetLanguage: "Russian", cefr: "A1", conceptIds: [123] },
-          undefined,
-          { maxAttempts: 3 }
-        );
+            "mcq_v1.basic",
+            genCtx,
+            undefined,
+            { maxAttempts: 3 }
+        );  
+
         times.push(Date.now() - t0);
 
         if (res.ok) {
