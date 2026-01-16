@@ -3,13 +3,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type SessionType = "learn" | "review";
 
+export type ConceptRef = {
+  conceptId: number;
+  kind: string; // ✅ keep open-ended
+  refId: number;
+  title: string | null;
+  description: string | null;
+};
+
 export type UISession = {
   id: string;
   type: SessionType;
-
   languageId: number;
 
   conceptIds: number[];
+
+  // ✅ resolved concept metadata (hydrated in setup)
+  conceptRefs: ConceptRef[];
+
   practiceItemIds: number[];
   practiceIndex: number;
 
@@ -23,10 +34,12 @@ type AppState = {
   session: UISession | null;
 
   setActiveProfile: (params: { profileId: number; learningLangId: number } | null) => Promise<void>;
-
   setActiveLanguage: (id: string | null) => Promise<void>;
 
   startSession: (type: SessionType) => void;
+
+  hydrateSessionConceptRefs: (conceptRefs: ConceptRef[]) => void;
+
   advancePractice: () => void;
   endSession: () => void;
 };
@@ -96,6 +109,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     const languageId = Number(activeLanguageId);
     if (!Number.isFinite(languageId)) return;
 
+    // TODO: replace with real selection/assembly
     const conceptIds = [1, 2, 3];
     const practiceItemIds = [1, 2, 3];
 
@@ -104,12 +118,19 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       type,
       languageId,
       conceptIds,
+      conceptRefs: [], 
       practiceItemIds,
       practiceIndex: 0,
       startedAt: Date.now(),
     });
   };
 
+  const hydrateSessionConceptRefs: AppState["hydrateSessionConceptRefs"] = (conceptRefs) => {
+    setSession((prev) => {
+      if (!prev) return prev;
+      return { ...prev, conceptRefs };
+    });
+  };
 
   const advancePractice = () => {
     setSession((prev) => {
@@ -128,6 +149,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setActiveProfile,
       setActiveLanguage,
       startSession,
+      hydrateSessionConceptRefs, 
       advancePractice,
       endSession,
     }),

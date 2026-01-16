@@ -1,16 +1,19 @@
 import React, { useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { Text, YStack } from "tamagui";
+
 import { Screen } from "../../../components/ui/Screen";
+import { GlassCard } from "../../../components/ui/GlassCard";
+import { H1, Sub, Muted } from "../../../components/ui/Typography";
+import { HermesButton } from "../../../components/ui/HermesButton";
 import { useAppState } from "../../../state/AppState";
 
 import { practiceItemRegistry } from "shared/domain/practice/practiceItemRegistry";
-import { McqBasicSchema } from "shared/domain/practice/items/mcqPracticeItem"; 
+import { McqBasicSchema } from "shared/domain/practice/items/mcqPracticeItem";
 import { McqCard, type McqViewModel } from "../../../components/practice/McqCard";
 
 type FeedbackVM = { isCorrect: boolean; correctChoiceId: string; message: string } | null;
 
-// MVP dummy generator: later replaced by LLM queue/prefetcher
 function getDummyMcqByIndex(i: number) {
   const bank = [
     {
@@ -56,7 +59,6 @@ function getDummyMcqByIndex(i: number) {
       correctChoiceId: "A",
     },
   ];
-
   return bank[i % bank.length];
 }
 
@@ -78,11 +80,7 @@ export default function Practice() {
 
   const mcqVm: McqViewModel = useMemo(() => {
     const parsed = McqBasicSchema.parse(currentJson);
-    return {
-      prompt: parsed.prompt,
-      choices: parsed.choices,
-      correctChoiceId: parsed.correctChoiceId,
-    };
+    return { prompt: parsed.prompt, choices: parsed.choices, correctChoiceId: parsed.correctChoiceId };
   }, [currentJson]);
 
   async function handleSubmit(payload: { choiceId: string }) {
@@ -90,20 +88,13 @@ export default function Practice() {
     setLocked(true);
 
     const evaluation = currentItem.evaluate(payload);
-
     const isCorrect = evaluation.isCorrect === true;
+
     setFeedback({
       isCorrect,
       correctChoiceId: mcqVm.correctChoiceId,
-      message: evaluation.feedback ?? (evaluation.isCorrect ? "Correct." : "Incorrect."),
+      message: evaluation.feedback ?? (isCorrect ? "Correct." : "Incorrect."),
     });
-
-    // TODO (next step): persist attempt using PracticeSessionRepository or db/queries
-    // - practice_attempts row: question_json, user_response_json, evaluation_json
-    // - practice_attempt_concepts rows: evaluation.conceptResults
-
-    // Keep it on screen for a moment then allow continue
-    // (You can also require the user tap “Continue” explicitly later.)
   }
 
   function onContinue() {
@@ -113,64 +104,35 @@ export default function Practice() {
     const next = idx + 1;
     advancePractice();
 
-    if (next >= total) {
-      router.replace("/(app)/session/results");
-    }
+    if (next >= total) router.replace("/(app)/session/results");
   }
 
   if (!session) {
     return (
       <Screen>
-        <Text style={styles.h1}>Practice</Text>
-        <Text style={styles.sub}>No active session.</Text>
+        <H1>Practice</H1>
+        <Sub>No active session.</Sub>
       </Screen>
     );
   }
 
   return (
     <Screen>
-      <Text style={styles.h1}>Practice</Text>
-      <Text style={styles.sub}>
+      <H1>Practice</H1>
+      <Sub>
         Item {idx + 1} / {Math.max(total, idx + 1)}
-      </Text>
+      </Sub>
 
-      <View style={{ height: 14 }} />
-
-      <McqCard
-        key={`${idx}-${mcqVm.prompt}`}
-        item={mcqVm}
-        locked={locked}
-        feedback={feedback}
-        onSubmit={handleSubmit}
-      />
-
-
-      <View style={{ height: 14 }} />
+      <YStack marginTop={14}>
+        <McqCard key={`${idx}-${mcqVm.prompt}`} item={mcqVm} locked={locked} feedback={feedback} onSubmit={handleSubmit} />
+      </YStack>
 
       {feedback ? (
-        <View style={styles.continueWrap}>
-          <Text style={styles.continueHint}>Ready?</Text>
-          <Text style={styles.continueBtn} onPress={onContinue}>
-            Continue →
-          </Text>
-        </View>
+        <GlassCard marginTop={14}>
+          <Muted marginBottom={10}>Ready?</Muted>
+          <HermesButton label="Continue →" variant="primary" marginTop={0} onPress={onContinue} />
+        </GlassCard>
       ) : null}
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  h1: { color: "#E6EBFF", fontSize: 24, fontWeight: "900" },
-  sub: { color: "#9BA3B4", marginTop: 6 },
-
-  continueWrap: {
-    marginTop: 6,
-    padding: 14,
-    borderRadius: 14,
-    backgroundColor: "rgba(255,255,255,0.04)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.06)",
-  },
-  continueHint: { color: "#9BA3B4", marginBottom: 6 },
-  continueBtn: { color: "#1EE6A8", fontWeight: "900", fontSize: 16 },
-});
