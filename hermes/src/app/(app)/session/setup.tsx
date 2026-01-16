@@ -15,6 +15,45 @@ import { getConceptRefsByConceptIds } from "../../../db/queries/concepts";
 
 const MVP_USERNAME = "default";
 
+function buildDummyPracticeBank(conceptIds: number[]) {
+  return [
+    {
+      type: "mcq_v1.basic",
+      mode: "reception",
+      skills: ["reading"],
+      conceptIds,
+      prompt: "Где метро?",
+      choices: [
+        { id: "A", text: "Там" },
+        { id: "B", text: "Здесь" },
+        { id: "C", text: "Сейчас" },
+        { id: "D", text: "Потом" },
+      ],
+      correctChoiceId: "B",
+    },
+    {
+      type: "flashcard_v1.basic",
+      mode: "reception",
+      skills: ["reading"],
+      conceptIds,
+      front: "метро",
+      back: "subway",
+    },
+    {
+      type: "cloze_v1.free_fill",
+      mode: "reception",
+      skills: ["reading"],
+      conceptIds,
+      parts: [
+        { type: "text", value: "Я иду в " },
+        { type: "blank", id: "b1", accepted: ["метро", "школа", "дом"], conceptId: conceptIds[0] },
+        { type: "text", value: "." },
+      ],
+    },
+  ];
+}
+
+
 export default function SessionSetup() {
   const router = useRouter();
   const db = useSQLiteContext();
@@ -24,6 +63,7 @@ export default function SessionSetup() {
     activeProfileId,
     activeLanguageId,
     hydrateSessionConceptRefs,
+    hydrateSessionPracticeBank,
   } = useAppState();
 
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
@@ -66,6 +106,15 @@ export default function SessionSetup() {
     };
   }, [db, session?.id]); 
 
+  useEffect(() => {
+    if (!session) return;
+    if (session.practiceBank.length > 0) return;
+
+    const bank = buildDummyPracticeBank(session.conceptIds);
+    hydrateSessionPracticeBank(bank);
+  }, [session?.id]);
+
+
   const activeProfile = useMemo(() => {
     if (!activeProfileId) return null;
     return profiles.find((p) => p.userId === activeProfileId) ?? null;
@@ -98,7 +147,7 @@ export default function SessionSetup() {
 
             <Muted marginTop={10}>Session length</Muted>
             <Text color="$color" fontSize={16} fontWeight="800">
-              ~{session?.practiceItemIds.length ?? 0} questions
+              ~{session?.practiceBank.length ?? 0} questions
             </Text>
 
             <Muted marginTop={10}>Concepts</Muted>

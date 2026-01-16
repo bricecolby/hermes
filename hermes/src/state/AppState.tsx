@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import type { PracticeItemJSON } from "shared/domain/practice";
 
 export type SessionType = "learn" | "review";
 
@@ -17,11 +18,9 @@ export type UISession = {
   languageId: number;
 
   conceptIds: number[];
-
-  // ✅ resolved concept metadata (hydrated in setup)
   conceptRefs: ConceptRef[];
 
-  practiceItemIds: number[];
+  practiceBank: PracticeItemJSON[];
   practiceIndex: number;
 
   startedAt: number;
@@ -39,6 +38,7 @@ type AppState = {
   startSession: (type: SessionType) => void;
 
   hydrateSessionConceptRefs: (conceptRefs: ConceptRef[]) => void;
+  hydrateSessionPracticeBank: (practiceBank: any[]) => void;
 
   advancePractice: () => void;
   endSession: () => void;
@@ -111,15 +111,14 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
     // TODO: replace with real selection/assembly
     const conceptIds = [1, 2, 3];
-    const practiceItemIds = [1, 2, 3];
 
     setSession({
       id: uid(),
       type,
       languageId,
       conceptIds,
-      conceptRefs: [], 
-      practiceItemIds,
+      conceptRefs: [],
+      practiceBank: [],
       practiceIndex: 0,
       startedAt: Date.now(),
     });
@@ -129,6 +128,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     setSession((prev) => {
       if (!prev) return prev;
       return { ...prev, conceptRefs };
+    });
+  };
+
+  const hydrateSessionPracticeBank: AppState["hydrateSessionPracticeBank"] = (practiceBank) => {
+    setSession((prev) => {
+      if (!prev) return prev;
+      return { ...prev, practiceBank };
     });
   };
 
@@ -150,6 +156,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setActiveLanguage,
       startSession,
       hydrateSessionConceptRefs, 
+      hydrateSessionPracticeBank,
       advancePractice,
       endSession,
     }),
@@ -164,3 +171,5 @@ export function useAppState() {
   if (!v) throw new Error("useAppState must be used within AppStateProvider");
   return v;
 }
+
+
