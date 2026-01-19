@@ -1,30 +1,21 @@
 // src/components/DbResumeGuard.tsx
 import React, { useEffect, useRef } from "react";
 import { AppState, type AppStateStatus } from "react-native";
-import * as SQLite from "expo-sqlite";
-import { initDb, pingDb } from "@/db";
+import { ensureDbReady } from "@/db";
 
 export function DbResumeGuard({ children }: { children: React.ReactNode }) {
-  const db = SQLite.useSQLiteContext();
   const appState = useRef<AppStateStatus>(AppState.currentState);
 
-  // 👇 single-flight promise
+  // single-flight promise
   const ensuring = useRef<Promise<void> | null>(null);
 
   useEffect(() => {
     const ensure = async () => {
-      // 👇 if one is in progress, await it
       if (ensuring.current) return ensuring.current;
 
       ensuring.current = (async () => {
         try {
-          await pingDb(db);
-        } catch (e) {
-          console.warn(
-            "⚠️ DB ping failed on resume; re-initializing.",
-            (e as any)?.message ?? e
-          );
-          await initDb(db);
+          await ensureDbReady();
         } finally {
           ensuring.current = null;
         }
@@ -45,7 +36,7 @@ export function DbResumeGuard({ children }: { children: React.ReactNode }) {
     });
 
     return () => sub.remove();
-  }, [db]);
+  }, []);
 
   return <>{children}</>;
 }

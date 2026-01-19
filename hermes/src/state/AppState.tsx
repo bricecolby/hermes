@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PracticeItemJSON } from "shared/domain/practice";
 
-export type SessionType = "learn" | "review";
+export type SessionType = "learn" | "review" | "memorize";
 
 export type ConceptRef = {
   conceptId: number;
@@ -28,12 +28,12 @@ export type UISession = {
 
 type AppState = {
   activeProfileId: number | null;
-  activeLanguageId: string | null;
+  activeLanguageId: number | null;
 
   session: UISession | null;
 
   setActiveProfile: (params: { profileId: number; learningLangId: number } | null) => Promise<void>;
-  setActiveLanguage: (id: string | null) => Promise<void>;
+  setActiveLanguage: (id: number | null) => Promise<void>;
 
   startSession: (type: SessionType) => void;
 
@@ -57,7 +57,7 @@ function uid() {
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
-  const [activeLanguageId, setActiveLanguageId] = useState<string | null>(null);
+  const [activeLanguageId, setActiveLanguageId] = useState<number | null>(null);
   const [session, setSession] = useState<UISession | null>(null);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       ]);
 
       if (profileRaw) setActiveProfileId(Number(profileRaw));
-      if (langRaw) setActiveLanguageId(langRaw);
+      if (langRaw) setActiveLanguageId(Number(langRaw));
     })();
   }, []);
 
@@ -86,28 +86,25 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     }
 
     const nextProfileId = params.profileId;
-    const nextLangId = String(params.learningLangId);
+    const nextLangId = params.learningLangId;
 
     setActiveProfileId(nextProfileId);
     setActiveLanguageId(nextLangId);
 
     await Promise.all([
       AsyncStorage.setItem(STORAGE.activeProfileId, String(nextProfileId)),
-      AsyncStorage.setItem(STORAGE.activeLanguageId, nextLangId),
+      AsyncStorage.setItem(STORAGE.activeLanguageId, String(nextLangId)),
     ]);
   };
 
   const setActiveLanguage: AppState["setActiveLanguage"] = async (id) => {
     setActiveLanguageId(id);
-    if (id) await AsyncStorage.setItem(STORAGE.activeLanguageId, id);
+    if (id) await AsyncStorage.setItem(STORAGE.activeLanguageId, String(id));
     else await AsyncStorage.removeItem(STORAGE.activeLanguageId);
   };
 
   const startSession: AppState["startSession"] = (type) => {
     if (!activeLanguageId) return;
-
-    const languageId = Number(activeLanguageId);
-    if (!Number.isFinite(languageId)) return;
 
     // TODO: replace with real selection/assembly
     const conceptIds = [1, 2, 3];
@@ -115,7 +112,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     setSession({
       id: uid(),
       type,
-      languageId,
+      languageId: activeLanguageId,
       conceptIds,
       conceptRefs: [],
       practiceBank: [],

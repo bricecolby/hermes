@@ -11,7 +11,6 @@ import { ActionCard } from "../../components/ui/ActionCard";
 import { useAppState } from "../../state/AppState";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
 
-const DB_NAME = "hermes.db";
 const MVP_USERNAME = "default";
 
 export default function Home() {
@@ -21,16 +20,17 @@ export default function Home() {
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const db = SQLite.useSQLiteContext();
+
   const loadProfiles = useCallback(async () => {
     try {
       setLoading(true);
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
       const rows = await listLanguageProfilesForUsername(db, MVP_USERNAME);
       setProfiles(rows);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [db]);
 
   useEffect(() => {
     loadProfiles();
@@ -78,6 +78,18 @@ export default function Home() {
             />
           ) : (
             <>
+              <ActionCard
+                title="Memorize"
+                subtitle="Vocab and Grammar"
+                disabled={!activeLanguageId}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(app)/memorize",
+                    params: { run: String(Date.now()) },
+                  })
+                }
+              />
+
               <ActionCard
                 title="Start Learning"
                 subtitle="New concepts"

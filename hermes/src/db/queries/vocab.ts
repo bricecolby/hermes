@@ -59,6 +59,36 @@ export type VocabTagRow = {
   created_at: string;
 };
 
+export type VocabRow = {
+  id: number;
+  base_form: string;
+  translation: string;
+}
+
+export async function getRandomVocab(
+  db: SQLiteDatabase,
+  languageId: number,
+  limit = 20
+): Promise<VocabRow[]> {
+  return db.getAllAsync<VocabRow>(
+    `
+    SELECT
+      vi.id AS id,
+      vi.base_form AS base_form,
+      vs.translation AS translation
+    FROM vocab_items vi
+    JOIN vocab_senses vs
+      ON vs.vocab_item_id = vi.id
+     AND vs.sense_index = 1
+    WHERE vi.language_id = ?
+      AND vs.translation IS NOT NULL
+    ORDER BY RANDOM()
+    LIMIT ?;
+    `,
+    [languageId, limit]
+  );
+}
+
 export async function searchVocabItems(
   db: SQLiteDatabase,
   params: { languageId: number; q: string; limit?: number }
