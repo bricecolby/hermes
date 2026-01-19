@@ -44,6 +44,8 @@ export default function VocabDetailScreen() {
   const [forms, setForms] = useState<VocabFormRow[]>([]);
   const [tags, setTags] = useState<VocabTagRow[]>([]);
   const [examplesBySense, setExamplesBySense] = useState<Record<number, VocabExampleRow[]>>({});
+  const [error, setError] = useState<string | null>(null);
+
 
   const [tab, setTab] = useState<TabKey>("meaning");
   const scrollRef = useRef<ScrollView>(null);
@@ -63,25 +65,53 @@ export default function VocabDetailScreen() {
       if (!Number.isFinite(vocabItemId)) return;
 
       setLoading(true);
+      setItem(null);
+      setSenses([]);
+      setForms([]);
+      setTags([]);
+      setExamplesBySense({});
 
-      const it = await getVocabItem(db, vocabItemId);
-      const ss = await listSensesForItem(db, vocabItemId);
-      const ff = await listFormsForItem(db, vocabItemId);
-      const tg = await listTagsForItem(db, vocabItemId);
+      const mark = (label: string) => console.log(`[vocab detail] ${label}`);
 
-      const exPairs = await Promise.all(
-        ss.map(async (s) => [s.id, await listExamplesForSense(db, s.id)] as const)
-      );
-      const exMap: Record<number, VocabExampleRow[]> = {};
-      for (const [senseId, ex] of exPairs) exMap[senseId] = ex;
+      try {
+        mark(`start id=${vocabItemId}`);
 
-      if (!cancelled) {
-        setItem(it ?? null);
-        setSenses(ss);
-        setForms(ff);
-        setTags(tg);
-        setExamplesBySense(exMap);
-        setLoading(false);
+        mark("getVocabItem");
+        const it = await getVocabItem(db, vocabItemId);
+
+        mark("listSensesForItem");
+        const ss = await listSensesForItem(db, vocabItemId);
+
+        mark("listFormsForItem");
+        const ff = await listFormsForItem(db, vocabItemId);
+
+        mark("listTagsForItem");
+        const tg = await listTagsForItem(db, vocabItemId);
+
+        mark(`listExamplesForSense x${ss.length}`);
+        const exPairs = await Promise.all(
+          ss.map(async (s) => {
+            const ex = await listExamplesForSense(db, s.id);
+            return [s.id, ex] as const;
+          })
+        );
+
+        const exMap: Record<number, VocabExampleRow[]> = {};
+        for (const [senseId, ex] of exPairs) exMap[senseId] = ex;
+
+        if (!cancelled) {
+          setItem(it ?? null);
+          setSenses(ss);
+          setForms(ff);
+          setTags(tg);
+          setExamplesBySense(exMap);
+          setLoading(false);
+        }
+
+        mark("done");
+      } catch (e: any) {
+        console.error("[vocab detail] load failed", e);
+        if (!cancelled) setLoading(false);
       }
     }
 
@@ -90,6 +120,7 @@ export default function VocabDetailScreen() {
       cancelled = true;
     };
   }, [db, vocabItemId]);
+
 
   const primaryTranslation = useMemo(() => {
     const first = senses[0];
@@ -151,6 +182,22 @@ export default function VocabDetailScreen() {
       </Screen>
     );
   }
+
+  if (error) {
+    return (
+      <Screen noPad>
+        <YStack flex={1} backgroundColor="$background" padding="$4" gap="$3">
+          <AppHeader title="Vocab" />
+          <Text fontSize="$7" fontWeight="800" color="$color">Couldn’t load</Text>
+          <Text color="$color11">{error}</Text>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text color="$color" textDecorationLine="underline">Go back</Text>
+          </TouchableOpacity>
+        </YStack>
+      </Screen>
+    );
+  }
+
 
   return (
     <Screen noPad>
@@ -324,9 +371,7 @@ function MeaningSection({
                     f.person != null ? `person=${f.person}` : null,
                     f.number ? `number=${f.number}` : null,
                     f.gender ? `gender=${f.gender}` : null,
-                    // NOTE: your row type likely uses `case` as a key; this is fine in TS.
-                    // The SQL just needs to quote "case" when selecting.
-                    (f as any).case ? `case=${(f as any).case}` : null,
+                    (f as any).case_value ? `case=${(f as any).case_value}` : null,
                     f.aspect ? `aspect=${f.aspect}` : null,
                     f.degree ? `degree=${f.degree}` : null,
                     f.is_irregular ? `irregular` : null,

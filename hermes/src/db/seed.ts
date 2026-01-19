@@ -1,11 +1,14 @@
 import type { SQLiteDatabase } from "expo-sqlite";
+import { importVocabPacks } from "./importers/vocabPackImporter";
+import { RU_VOCAB_PACKS } from "@/assets/packs/ru/vocab";
+import { SEED_VERSION } from "./index";
 
 type SeedOpts = { fromSeedVersion?: number };
 
 export async function seedDb(db: SQLiteDatabase, opts: SeedOpts = {}) {
   const from = opts.fromSeedVersion ?? 0;
 
-  if (from < 1) {
+  if (from < SEED_VERSION) {
     await seedPatch_v1(db);
   }
 }
@@ -103,180 +106,29 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   // VOCAB
   // ============================================================
 
-  // ----------------------------
-  // Vocab items (idempotent by language + base_form)
-  // ----------------------------
-  await db.runAsync(
-    `INSERT OR IGNORE INTO vocab_items (language_id, base_form, part_of_speech, frequency_rank, frequency_band, usage_notes, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "привет", "interjection", 50, 1, "Informal greeting", now, now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO vocab_items (language_id, base_form, part_of_speech, frequency_rank, frequency_band, usage_notes, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "книга", "noun", 300, 2, "Feminine noun", now, now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO vocab_items (language_id, base_form, part_of_speech, frequency_rank, frequency_band, usage_notes, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "читать", "verb", 220, 2, "Imperfective verb", now, now]
-  );
+  // ============================================================
+  // RESET VOCAB TABLES (DEV SEED ONLY)
+  // ============================================================
+  // Since vocab is now sourced from language packs, we clear all
+  // vocab-related tables before importing fresh data.
+  // This is safe during early development when no user data exists.
 
-  const vocabPrivetId = await getId("vocab_items", "language_id = ? AND base_form = ?", [RU, "привет"]);
-  const vocabKnigaId = await getId("vocab_items", "language_id = ? AND base_form = ?", [RU, "книга"]);
-  const vocabChitatId = await getId("vocab_items", "language_id = ? AND base_form = ?", [RU, "читать"]);
+  await db.execAsync(`
+    DELETE FROM vocab_examples;
+    DELETE FROM vocab_media;
+    DELETE FROM vocab_forms;
+    DELETE FROM vocab_senses;
+    DELETE FROM vocab_item_tags;
+    DELETE FROM vocab_items;
+  `);
 
-  // ----------------------------
-  // Vocab senses (guarded; no unique constraint shown)
-  // ----------------------------
-  if (!(await hasRow("vocab_senses", "vocab_item_id = ? AND sense_index = ?", [vocabPrivetId, 1]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_senses (vocab_item_id, sense_index, definition, translation, usage_notes, grammar_hint, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-      [vocabPrivetId, 1, "A casual greeting", "hi / hello", "Used with friends", null, now, now]
-    );
-  }
-
-  if (!(await hasRow("vocab_senses", "vocab_item_id = ? AND sense_index = ?", [vocabKnigaId, 1]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_senses (vocab_item_id, sense_index, definition, translation, usage_notes, grammar_hint, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-      [vocabKnigaId, 1, "A bound set of pages for reading", "book", "Common noun", "Case changes: книга/книги/книгу…", now, now]
-    );
-  }
-
-  if (!(await hasRow("vocab_senses", "vocab_item_id = ? AND sense_index = ?", [vocabChitatId, 1]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_senses (vocab_item_id, sense_index, definition, translation, usage_notes, grammar_hint, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-      [vocabChitatId, 1, "To read", "to read", "Imperfective; habitual/ongoing", "Conjugates: читаю, читаешь…", now, now]
-    );
-  }
-
-  const sensePrivetId = await getId("vocab_senses", "vocab_item_id = ? AND sense_index = ?", [vocabPrivetId, 1]);
-  const senseKnigaId = await getId("vocab_senses", "vocab_item_id = ? AND sense_index = ?", [vocabKnigaId, 1]);
-  const senseChitatId = await getId("vocab_senses", "vocab_item_id = ? AND sense_index = ?", [vocabChitatId, 1]);
-
-  // ----------------------------
-  // Vocab forms (guarded)
-  // ----------------------------
-  if (
-    !(await hasRow(
-      "vocab_forms",
-      `vocab_item_id = ? AND surface_form = ? AND number = ? AND gender = ? AND "case" = ?`,
-      [vocabKnigaId, "книга", "singular", "feminine", "nominative"]
-    ))
-  ) {
-    await db.runAsync(
-      `INSERT INTO vocab_forms (vocab_item_id, surface_form, number, gender, "case", is_irregular, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-      [vocabKnigaId, "книга", "singular", "feminine", "nominative", 0, now, now]
-    );
-  }
-
-  if (
-    !(await hasRow(
-      "vocab_forms",
-      `vocab_item_id = ? AND surface_form = ? AND number = ? AND gender = ? AND "case" = ?`,
-      [vocabKnigaId, "книги", "singular", "feminine", "genitive"]
-    ))
-  ) {
-    await db.runAsync(
-      `INSERT INTO vocab_forms (vocab_item_id, surface_form, number, gender, "case", is_irregular, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-      [vocabKnigaId, "книги", "singular", "feminine", "genitive", 0, now, now]
-    );
-  }
-
-  if (
-    !(await hasRow(
-      "vocab_forms",
-      `vocab_item_id = ? AND surface_form = ? AND tense = ? AND person = ? AND number = ? AND aspect = ?`,
-      [vocabChitatId, "читаю", "present", 1, "singular", "imperfective"]
-    ))
-  ) {
-    await db.runAsync(
-      `INSERT INTO vocab_forms (vocab_item_id, surface_form, tense, person, number, aspect, is_irregular, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-      [vocabChitatId, "читаю", "present", 1, "singular", "imperfective", 0, now, now]
-    );
-  }
-
-  const formKnigaNomId = await getId(
-    "vocab_forms",
-    `vocab_item_id = ? AND surface_form = ? AND number = ? AND gender = ? AND "case" = ?`,
-    [vocabKnigaId, "книга", "singular", "feminine", "nominative"]
-  );
-  const formKnigiGenId = await getId(
-    "vocab_forms",
-    `vocab_item_id = ? AND surface_form = ? AND number = ? AND gender = ? AND "case" = ?`,
-    [vocabKnigaId, "книги", "singular", "feminine", "genitive"]
-  );
-  const formChitayuId = await getId(
-    "vocab_forms",
-    `vocab_item_id = ? AND surface_form = ? AND tense = ? AND person = ? AND number = ? AND aspect = ?`,
-    [vocabChitatId, "читаю", "present", 1, "singular", "imperfective"]
-  );
-
-  // ----------------------------
-  // Media (guard by URI)
-  // ----------------------------
-  if (!(await hasRow("vocab_media", "vocab_item_id = ? AND uri = ?", [vocabPrivetId, "app://seed/audio/privet.mp3"]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_media (vocab_item_id, media_type, uri, description, attribution, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [vocabPrivetId, "audio", "app://seed/audio/privet.mp3", "Pronunciation: привет", "seed", now, now]
-    );
-  }
-  if (!(await hasRow("vocab_media", "vocab_item_id = ? AND uri = ?", [vocabKnigaId, "app://seed/img/kniga.png"]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_media (vocab_item_id, media_type, uri, description, attribution, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [vocabKnigaId, "image", "app://seed/img/kniga.png", "Image: a book", "seed", now, now]
-    );
-  }
-
-  const mediaPrivetId = await getId("vocab_media", "vocab_item_id = ? AND uri = ?", [vocabPrivetId, "app://seed/audio/privet.mp3"]);
-  const mediaKnigaId = await getId("vocab_media", "vocab_item_id = ? AND uri = ?", [vocabKnigaId, "app://seed/img/kniga.png"]);
-
-  // ----------------------------
-  // Vocab examples (guard by sense + example_text)
-  // ----------------------------
-  if (!(await hasRow("vocab_examples", "vocab_sense_id = ? AND example_text = ?", [sensePrivetId, "Привет, как дела?"]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_examples (vocab_sense_id, vocab_form_id, example_text, translation_text, media_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [sensePrivetId, null, "Привет, как дела?", "Hi, how are you?", mediaPrivetId, now, now]
-    );
-  }
-  if (!(await hasRow("vocab_examples", "vocab_sense_id = ? AND example_text = ?", [senseKnigaId, "Это моя книга."]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_examples (vocab_sense_id, vocab_form_id, example_text, translation_text, media_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [senseKnigaId, formKnigaNomId, "Это моя книга.", "This is my book.", mediaKnigaId, now, now]
-    );
-  }
-  if (!(await hasRow("vocab_examples", "vocab_sense_id = ? AND example_text = ?", [senseChitatId, "Я читаю книгу."]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_examples (vocab_sense_id, vocab_form_id, example_text, translation_text, media_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [senseChitatId, formChitayuId, "Я читаю книгу.", "I am reading a book.", null, now, now]
-    );
-  }
-
-  // ----------------------------
-  // ✅ Vocab tags (your schema: vocab_tags.name UNIQUE globally)
-  // ----------------------------
-  await db.runAsync(
-    `INSERT OR IGNORE INTO vocab_tags (name, description, created_at) VALUES (?, ?, ?);`,
-    ["CEFR:A1", "CEFR level A1", now]
-  );
-  const vocabA1TagId = await getId("vocab_tags", "name = ?", ["CEFR:A1"]);
-
-  await db.runAsync(`INSERT OR IGNORE INTO vocab_item_tags (vocab_item_id, vocab_tag_id) VALUES (?, ?);`, [vocabPrivetId, vocabA1TagId]);
-  await db.runAsync(`INSERT OR IGNORE INTO vocab_item_tags (vocab_item_id, vocab_tag_id) VALUES (?, ?);`, [vocabKnigaId, vocabA1TagId]);
-  await db.runAsync(`INSERT OR IGNORE INTO vocab_item_tags (vocab_item_id, vocab_tag_id) VALUES (?, ?);`, [vocabChitatId, vocabA1TagId]);
-
+  await importVocabPacks(db, {
+    languageCode: "ru",
+    packs: RU_VOCAB_PACKS,
+    replaceExisting: true, // wipe the dummy seed vocab
+    verbose: true,
+  });
+ 
   // ============================================================
   // GRAMMAR
   // ============================================================
@@ -372,34 +224,34 @@ async function seedPatch_v1(db: SQLiteDatabase) {
     );
   }
 
-  // Link grammar point to vocab form (genitive "книги")
-  if (!(await hasRow("vocab_grammar_links", "grammar_point_id = ? AND vocab_form_id = ?", [gpNomGenId, formKnigiGenId]))) {
-    await db.runAsync(
-      `INSERT INTO vocab_grammar_links (grammar_point_id, vocab_form_id, created_at) VALUES (?, ?, ?);`,
-      [gpNomGenId, formKnigiGenId, now]
-    );
-  }
+  // // Link grammar point to vocab form (genitive "книги")
+  // if (!(await hasRow("vocab_grammar_links", "grammar_point_id = ? AND vocab_form_id = ?", [gpNomGenId, formKnigiGenId]))) {
+  //   await db.runAsync(
+  //     `INSERT INTO vocab_grammar_links (grammar_point_id, vocab_form_id, created_at) VALUES (?, ?, ?);`,
+  //     [gpNomGenId, formKnigiGenId, now]
+  //   );
+  // }
 
   // ============================================================
   // Concepts + Lessons
   // ============================================================
 
   // Concepts (unique(kind, ref_id))
-  if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", sensePrivetId]))) {
-    await db.runAsync(
-      `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      ["vocab_sense", sensePrivetId, RU, "privet-hello", "привет — hello", "Informal greeting", now]
-    );
-  }
+  // if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", sensePrivetId]))) {
+  //   await db.runAsync(
+  //     `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
+  //      VALUES (?, ?, ?, ?, ?, ?, ?);`,
+  //     ["vocab_sense", sensePrivetId, RU, "privet-hello", "привет — hello", "Informal greeting", now]
+  //   );
+  // }
 
-  if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", senseKnigaId]))) {
-    await db.runAsync(
-      `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      ["vocab_sense", senseKnigaId, RU, "kniga-book", "книга — book", "Common noun", now]
-    );
-  }
+  // if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", senseKnigaId]))) {
+  //   await db.runAsync(
+  //     `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
+  //      VALUES (?, ?, ?, ?, ?, ?, ?);`,
+  //     ["vocab_sense", senseKnigaId, RU, "kniga-book", "книга — book", "Common noun", now]
+  //   );
+  // }
 
   if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["grammar_point", gpNomGenId]))) {
     await db.runAsync(
@@ -409,8 +261,8 @@ async function seedPatch_v1(db: SQLiteDatabase) {
     );
   }
 
-  const conceptPrivetId = await getId("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", sensePrivetId]);
-  const conceptKnigaId = await getId("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", senseKnigaId]);
+  // const conceptPrivetId = await getId("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", sensePrivetId]);
+  // const conceptKnigaId = await getId("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", senseKnigaId]);
   const conceptNomGenId = await getId("concepts", "kind = ? AND ref_id = ?", ["grammar_point", gpNomGenId]);
 
   // Lesson (A1)
@@ -421,16 +273,16 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   );
   const lessonId = await getId("lessons", "language_id = ? AND title = ?", [RU, "Greetings & Introductions"]);
 
-  await db.runAsync(
-    `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
-     VALUES (?, ?, ?, ?);`,
-    [lessonId, conceptPrivetId, 1, now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
-     VALUES (?, ?, ?, ?);`,
-    [lessonId, conceptKnigaId, 2, now]
-  );
+  // await db.runAsync(
+  //   `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
+  //    VALUES (?, ?, ?, ?);`,
+  //   [lessonId, conceptPrivetId, 1, now]
+  // );
+  // await db.runAsync(
+  //   `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
+  //    VALUES (?, ?, ?, ?);`,
+  //   [lessonId, conceptKnigaId, 2, now]
+  // );
   await db.runAsync(
     `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
      VALUES (?, ?, ?, ?);`,
@@ -469,15 +321,15 @@ async function seedPatch_v1(db: SQLiteDatabase) {
       ]
     );
   }
-  const attemptId = await getId("practice_attempts", "session_id = ? AND prompt_text = ?", [sessionId, promptText]);
+  // const attemptId = await getId("practice_attempts", "session_id = ? AND prompt_text = ?", [sessionId, promptText]);
 
-  if (!(await hasRow("practice_attempt_concepts", "attempt_id = ? AND concept_id = ?", [attemptId, conceptPrivetId]))) {
-    await db.runAsync(
-      `INSERT INTO practice_attempt_concepts (attempt_id, concept_id, score, is_correct, weight, evidence_json, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [attemptId, conceptPrivetId, 1.0, 1, 1.0, JSON.stringify({ reason: "Correct choice" }), now]
-    );
-  }
+  // if (!(await hasRow("practice_attempt_concepts", "attempt_id = ? AND concept_id = ?", [attemptId, conceptPrivetId]))) {
+  //   await db.runAsync(
+  //     `INSERT INTO practice_attempt_concepts (attempt_id, concept_id, score, is_correct, weight, evidence_json, created_at)
+  //      VALUES (?, ?, ?, ?, ?, ?, ?);`,
+  //     [attemptId, conceptPrivetId, 1.0, 1, 1.0, JSON.stringify({ reason: "Correct choice" }), now]
+  //   );
+  // }
 
   // ============================================================
   // Quests / Achievements / Features (optional pipe test)
@@ -539,21 +391,21 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   }
 
   // user_concept_mastery (optional demo; guard by (user, concept, modality, model_key))
-  const masteryRows: Array<[number, number, string, string, number, number, number, string, string]> = [
-    [userId, conceptPrivetId, "reading", "ema_v1", 0.85, 10, 9, "2026-01-06T14:30:00.000Z", "2026-01-06T15:00:00.000Z"],
-    [userId, conceptPrivetId, "listening", "ema_v1", 0.9, 8, 8, "2026-01-06T14:25:00.000Z", "2026-01-06T15:00:00.000Z"],
-    [userId, conceptPrivetId, "speaking", "ema_v1", 0.55, 6, 4, "2026-01-06T14:20:00.000Z", "2026-01-06T15:00:00.000Z"],
-    [userId, conceptPrivetId, "writing", "ema_v1", 0.6, 5, 4, "2026-01-06T14:15:00.000Z", "2026-01-06T15:00:00.000Z"],
-  ];
+  // const masteryRows: Array<[number, number, string, string, number, number, number, string, string]> = [
+  //   [userId, conceptPrivetId, "reading", "ema_v1", 0.85, 10, 9, "2026-01-06T14:30:00.000Z", "2026-01-06T15:00:00.000Z"],
+  //   [userId, conceptPrivetId, "listening", "ema_v1", 0.9, 8, 8, "2026-01-06T14:25:00.000Z", "2026-01-06T15:00:00.000Z"],
+  //   [userId, conceptPrivetId, "speaking", "ema_v1", 0.55, 6, 4, "2026-01-06T14:20:00.000Z", "2026-01-06T15:00:00.000Z"],
+  //   [userId, conceptPrivetId, "writing", "ema_v1", 0.6, 5, 4, "2026-01-06T14:15:00.000Z", "2026-01-06T15:00:00.000Z"],
+  // ];
 
-  for (const [u, c, modality, modelKey, mastery, attempts, correct, lastAttemptAt, updatedAt] of masteryRows) {
-    if (!(await hasRow("user_concept_mastery", "user_id = ? AND concept_id = ? AND modality = ? AND model_key = ?", [u, c, modality, modelKey]))) {
-      await db.runAsync(
-        `INSERT INTO user_concept_mastery
-          (user_id, concept_id, modality, model_key, mastery, attempts_count, correct_count, last_attempt_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-        [u, c, modality, modelKey, mastery, attempts, correct, lastAttemptAt, updatedAt]
-      );
-    }
-  }
+  // for (const [u, c, modality, modelKey, mastery, attempts, correct, lastAttemptAt, updatedAt] of masteryRows) {
+  //   if (!(await hasRow("user_concept_mastery", "user_id = ? AND concept_id = ? AND modality = ? AND model_key = ?", [u, c, modality, modelKey]))) {
+  //     await db.runAsync(
+  //       `INSERT INTO user_concept_mastery
+  //         (user_id, concept_id, modality, model_key, mastery, attempts_count, correct_count, last_attempt_at, updated_at)
+  //        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+  //       [u, c, modality, modelKey, mastery, attempts, correct, lastAttemptAt, updatedAt]
+  //     );
+  //   }
+  // }
 }

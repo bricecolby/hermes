@@ -3,9 +3,9 @@ import { schemaStatements } from "../../shared/schema";
 import { seedDb } from "./seed";
 
 const DB_NAME = "hermes.db";
-const SCHEMA_VERSION = 5;
+const SCHEMA_VERSION = 6;
 
-const SEED_VERSION = 2;
+export const SEED_VERSION = 4;
 
 let db: SQLiteDatabase | null = null;
 
@@ -102,6 +102,8 @@ async function resetDb(db: SQLiteDatabase) {
 export async function initDb(db: SQLiteDatabase) {
   await db.execAsync(`PRAGMA foreign_keys = ON;`);
   await ensureMetaTable(db);
+  console.log("DB file:", await db.getAllAsync("PRAGMA database_list;"));
+
 
   const currentSchema = await getSchemaVersion(db);
 
@@ -162,6 +164,9 @@ export async function ensureDbReady(): Promise<SQLiteDatabase> {
   try {
     const d = await getDb();
     await pingDb(d);
+
+    await initDb(d);
+
     return d;
   } catch (e: any) {
     if (!isNativePrepareNPE(e)) throw e;

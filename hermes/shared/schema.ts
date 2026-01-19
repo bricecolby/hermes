@@ -57,6 +57,7 @@ export const schemaStatements: string[] = [
     part_of_speech  TEXT NOT NULL,
     frequency_rank  INTEGER,
     frequency_band  INTEGER,
+    lexeme_features TEXT,
     usage_notes     TEXT,
 
     created_at      TEXT NOT NULL,
@@ -94,6 +95,7 @@ export const schemaStatements: string[] = [
     "case"          TEXT,
     aspect          TEXT,
     degree          TEXT,
+    morph_features  TEXT,
     is_irregular    INTEGER DEFAULT 0,
 
     created_at      TEXT NOT NULL,

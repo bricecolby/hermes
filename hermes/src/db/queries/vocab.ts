@@ -33,7 +33,7 @@ export type VocabFormRow = {
   person: number | null;
   number: string | null;
   gender: string | null;
-  case: string | null;
+  case_value?: string | null;
   aspect: string | null;
   degree: string | null;
   is_irregular: number | null;
@@ -94,14 +94,20 @@ export async function getVocabItem(
   db: SQLiteDatabase,
   vocabItemId: number
 ): Promise<VocabItemRow | null> {
-  return db.getFirstAsync<VocabItemRow>(
+  const id = Number.isFinite(vocabItemId) ? vocabItemId : null;
+  if (id === null) return null;
+
+  const rows = await db.getAllAsync<VocabItemRow>(
     `SELECT *
      FROM vocab_items
      WHERE id = ?
      LIMIT 1;`,
-    [vocabItemId]
+    [id]
   );
+
+  return rows[0] ?? null;
 }
+
 
 export async function listSensesForItem(
   db: SQLiteDatabase,
@@ -130,7 +136,7 @@ export async function listFormsForItem(
        person,
        number,
        gender,
-       "case",
+       "case" as case_value,
        aspect,
        degree,
        is_irregular,
