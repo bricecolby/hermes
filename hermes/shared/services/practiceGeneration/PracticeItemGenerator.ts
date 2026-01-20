@@ -13,6 +13,9 @@ export type CompletionFn = (
 
 type GenerateOptions = {
   maxAttempts?: number; // default 3
+  debug?: boolean; // default false
+  timeoutMs?: number; // default 25000
+  logRawChars?: number; // default 500
 };
 
 function extractLikelyJson(text: string): string | null {
@@ -28,6 +31,28 @@ function formatZodError(err: z.ZodError): string {
     .join("\n");
 }
 
+function nowMs() {
+  return typeof performance !== "undefined" && typeof performance.now === "function"
+    ? performance.now()
+    : Date.now();
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+    p.then(
+      (v) => {
+        clearTimeout(id);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(id);
+        reject(e);
+      }
+    );
+  });
+}
+
 export class PracticeItemGenerator {
   constructor(private complete: CompletionFn, private stopWords: StopWords) {}
 
@@ -41,6 +66,9 @@ export class PracticeItemGenerator {
     const { system, user } = spec.buildPrompt(ctx);
 
     const maxAttempts = options.maxAttempts ?? 3;
+    const debug = options.debug ?? false;
+    const timeoutMs = options.timeoutMs ?? 25_000;
+    const logRawChars = options.logRawChars ?? 500;
 
     let rawText = "";
     let timings: any = null;
@@ -48,6 +76,21 @@ export class PracticeItemGenerator {
     let lastError = "";
     let lastQualityIssues: string[] = [];
     let hadParsableJson = false;
+
+    const log = (...args: any[]) => {
+      if (debug) console.log(...args);
+    };
+    const warn = (...args: any[]) => {
+      if (debug) console.warn(...args);
+    };
+
+    log(`[GEN] generate(${type}) start`, {
+      maxAttempts,
+      timeoutMs,
+      stopWords: this.stopWords?.length ?? 0,
+      systemChars: system.length,
+      userChars: user.length,
+    });
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       const messages =
@@ -73,19 +116,50 @@ export class PracticeItemGenerator {
               },
             ];
 
-      const r = await this.complete(
-        {
-          messages,
-          n_predict: 260,
-          temperature: attempt === 1 ? 0.4 : 0.2,
-          stop: this.stopWords,
-        },
-        onPartial
-      );
+      const promptChars =
+        messages.reduce((sum, m: any) => sum + String(m?.content ?? "").length, 0) ?? 0;
 
-      rawText = r.text;
-      timings = r.timings;
+      log(`[GEN] (${type}) attempt ${attempt}/${maxAttempts} start`, {
+        promptChars,
+        temperature: attempt === 1 ? 0.4 : 0.2,
+      });
+
+      const t0 = nowMs();
+
+      let r: { text: string; timings?: any };
+      try {
+        r = await withTimeout(
+          this.complete(
+            {
+              messages,
+              n_predict: 260,
+              temperature: attempt === 1 ? 0.4 : 0.2,
+              stop: this.stopWords,
+            },
+            onPartial
+          ),
+          timeoutMs,
+          `LLM(${type})`
+        );
+      } catch (e: any) {
+        const dur = Math.round(nowMs() - t0);
+        lastQualityIssues = [];
+        lastError = e?.message ?? String(e);
+        warn(`[GEN] (${type}) attempt ${attempt} LLM error after ${dur}ms:`, lastError);
+        continue;
+      }
+
+      const dur = Math.round(nowMs() - t0);
+
+      rawText = r.text ?? "";
+      timings = r.timings ?? null;
       jsonStr = extractLikelyJson(rawText) ?? rawText;
+
+      log(`[GEN] (${type}) attempt ${attempt} LLM ok in ${dur}ms`, {
+        rawChars: rawText.length,
+        hadJsonSlice: extractLikelyJson(rawText) != null,
+        timings: timings ?? undefined,
+      });
 
       let parsed: any;
 
@@ -96,6 +170,8 @@ export class PracticeItemGenerator {
         hadParsableJson = false;
         lastQualityIssues = [];
         lastError = `JSON parse error: ${e?.message ?? String(e)}`;
+        warn(`[GEN] (${type}) attempt ${attempt} parse failed:`, lastError);
+        warn(`[GEN] (${type}) raw snippet:`, rawText.slice(0, logRawChars));
         continue;
       }
 
@@ -104,6 +180,8 @@ export class PracticeItemGenerator {
       } catch (e: any) {
         lastQualityIssues = [];
         lastError = e instanceof z.ZodError ? formatZodError(e) : e?.message ?? String(e);
+        warn(`[GEN] (${type}) attempt ${attempt} schema failed:`, lastError);
+        warn(`[GEN] (${type}) json snippet:`, JSON.stringify(parsed).slice(0, logRawChars));
         continue;
       }
 
@@ -112,13 +190,17 @@ export class PracticeItemGenerator {
       lastQualityIssues = qIssues;
 
       if (qIssues.length === 0) {
+        log(`[GEN] generate(${type}) success on attempt ${attempt}`);
         return { ok: true as const, rawText, parsed, attempts: attempt, timings, qualityIssues: [] };
       }
 
+      warn(`[GEN] (${type}) attempt ${attempt} quality issues:`, qIssues);
       lastError = "";
     }
 
     const error = lastError || (lastQualityIssues.length ? "quality check failed" : "unknown error");
+    warn(`[GEN] generate(${type}) failed`, { error, lastQualityIssues });
+
     return {
       ok: false as const,
       rawText,

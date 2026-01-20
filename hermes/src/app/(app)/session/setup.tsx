@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import { ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { Text, YStack } from "tamagui";
@@ -17,6 +17,8 @@ import { llmClient } from "shared/services/llm/client";
 import { PracticeItemGenerator } from "shared/services/practiceGeneration/PracticeItemGenerator";
 import { buildGenerationContext } from "shared/services/practiceGeneration/context/buildGenerationContext";
 import { registerPracticeItemSpecs } from "shared/services/practiceGeneration/specs/registerPracticeItemSpecs";
+
+import { View } from "tamagui";
 
 const MVP_USERNAME = "default";
 
@@ -40,12 +42,19 @@ export default function SessionSetup() {
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(true);
 
+  const [llmReady, setLlmReady] = useState<boolean>(() => llmClient.isReady());
   const [initializingLlm, setInitializingLlm] = useState(false);
   const [llmError, setLlmError] = useState<string | null>(null);
 
   const [hydratingConcepts, setHydratingConcepts] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
+
+  const initInFlightRef = useRef(false);
+  const genInFlightRef = useRef(false);
+
+  const [genStep, setGenStep] = useState<number | null>(null);
+  const [genTotal, setGenTotal] = useState<number>(0);
 
   const loadProfiles = useCallback(async () => {
     try {
@@ -61,21 +70,37 @@ export default function SessionSetup() {
     loadProfiles();
   }, [loadProfiles]);
 
-  // Step 0: Initialize LLM 
+  const activeProfile = useMemo(() => {
+    if (!activeProfileId) return null;
+    return profiles.find((p) => p.userId === activeProfileId) ?? null;
+  }, [profiles, activeProfileId]);
+
+  const hasVocab = (session?.conceptIds.length ?? 0) > 0;
+  const hasBank = (session?.practiceBank?.length ?? 0) > 0;
+
+  // --- Step 0: Initialize LLM ---
   useEffect(() => {
     let cancelled = false;
 
     async function initLlm() {
       if (!session || !activeLanguageId) return;
-      if (llmClient.isReady() || initializingLlm) return;
+      if (llmReady) return;
+      if (initInFlightRef.current) return;
+
+      initInFlightRef.current = true;
+      setInitializingLlm(true);
+      setLlmError(null);
 
       try {
-        setInitializingLlm(true);
-        setLlmError(null);
         await llmClient.ensureReady();
+        if (!cancelled) setLlmReady(true);
       } catch (e: any) {
-        if (!cancelled) setLlmError(e?.message ?? String(e));
+        if (!cancelled) {
+          setLlmError(e?.message ?? String(e));
+          setLlmReady(false);
+        }
       } finally {
+        initInFlightRef.current = false;
         if (!cancelled) setInitializingLlm(false);
       }
     }
@@ -85,14 +110,15 @@ export default function SessionSetup() {
     return () => {
       cancelled = true;
     };
-  }, [session?.id, activeLanguageId, initializingLlm]);
+  }, [session?.id, activeLanguageId, llmReady]);
 
-  // Step 1: pick 5 random vocab rows (vocab IDs are used as "conceptIds" for MVP).
+
+  // --- Step 1: pick 5 random vocab rows ---
   useEffect(() => {
     let cancelled = false;
 
     async function pickVocab() {
-      if (!db || !activeLanguageId || !session) return;
+      if (!activeLanguageId || !session) return;
       if (session.conceptIds.length > 0) return;
 
       try {
@@ -103,7 +129,6 @@ export default function SessionSetup() {
 
         const vocabIds = rows.map((r) => r.id);
 
-        // AppState ConceptRef shape, but backed by vocab rows for now.
         const refs = rows.map((r) => ({
           conceptId: r.id,
           kind: "vocab" as const,
@@ -126,21 +151,30 @@ export default function SessionSetup() {
     return () => {
       cancelled = true;
     };
-  }, [db, activeLanguageId, session?.id]);
+  }, [
+    db,
+    activeLanguageId,
+    session?.id,
+    session?.conceptIds, 
+    hydrateSessionConceptIds,
+    hydrateSessionConceptRefs,
+  ]);
 
-  // Step 2: generate practice bank once vocab exists AND LLM is ready.
+  // --- Step 2: generate practice bank once vocab exists AND LLM is ready ---
   useEffect(() => {
     if (!session) return;
 
-    const hasVocab = session.conceptIds.length > 0;
-    const hasBank = (session.practiceBank?.length ?? 0) > 0;
+    const hasVocabNow = session.conceptIds.length > 0;
+    const hasBankNow = (session.practiceBank?.length ?? 0) > 0;
 
-    if (!hasVocab || hasBank || generating) return;
-    if (!llmClient.isReady()) return;
+    if (!hasVocabNow || hasBankNow) return;
+    if (!llmReady) return;
+    if (genInFlightRef.current) return;
 
     let cancelled = false;
 
     (async () => {
+      genInFlightRef.current = true;
       setGenerating(true);
       setGenerationError(null);
 
@@ -161,22 +195,52 @@ export default function SessionSetup() {
 
         const types = ["mcq_v1.basic", "cloze_v1.free_fill"] as const;
         const bank: any[] = [];
+        const total = 5;
+        setGenTotal(total);
+        setGenStep(0);
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < total; i++) {
           const type = types[i % types.length];
-          const res = await generator.generate(type, ctx);
+
+          setGenStep(i + 1);
+          console.log(`[GEN] starting item ${i + 1}/${total} (${type})`);
+
+          const start = Date.now();
+
+          const res = await generator.generate(type, ctx, undefined, {
+            debug: true,
+            timeoutMs: 30_000,
+          });
+
+          const dur = Date.now() - start;
+          console.log(`[GEN] finished item ${i + 1}/${total} (${type}) in ${dur}ms`);
+
           if (cancelled) return;
 
-          if (res.ok) bank.push(res.parsed);
-          else console.warn("Generation failed:", res.error, res.rawText);
+          if (res.ok) {
+            console.log(`[GEN] ✓ parsed ${type}`);
+            bank.push(res.parsed);
+          } else {
+            console.warn(`[GEN] ✗ failed ${type}`, res.error);
+          }
         }
 
+
         if (cancelled) return;
+
+        if (bank.length === 0) {
+          setGenerationError("No practice items were generated. Check logs for failures.");
+          return;
+        }
+
         hydrateSessionPracticeBank(bank);
       } catch (e: any) {
         if (!cancelled) setGenerationError(e?.message ?? String(e));
       } finally {
+        genInFlightRef.current = false;
         if (!cancelled) setGenerating(false);
+        setGenStep(null);
+        setGenTotal(0);
       }
     })();
 
@@ -185,24 +249,28 @@ export default function SessionSetup() {
     };
   }, [
     session?.id,
-    session?.conceptIds.join(","),
+    session?.conceptIds,
     session?.practiceBank?.length,
     activeProfileId,
-    generating,
+    llmReady,
+    hydrateSessionPracticeBank,
   ]);
 
-  const activeProfile = useMemo(() => {
-    if (!activeProfileId) return null;
-    return profiles.find((p) => p.userId === activeProfileId) ?? null;
-  }, [profiles, activeProfileId]);
 
   const canStart =
     !!session &&
     !!activeLanguageId &&
+    llmReady &&
     !initializingLlm &&
     !hydratingConcepts &&
     !generating &&
     (session?.practiceBank?.length ?? 0) > 0;
+
+  const genProgressPct =
+    genStep !== null && genTotal > 0
+      ? Math.round((genStep / genTotal) * 100)
+      : 0;
+
 
   return (
     <Screen>
@@ -237,9 +305,16 @@ export default function SessionSetup() {
               {session ? `${session.conceptIds.length} selected` : "0"}
             </Text>
 
+            {/* Status messages */}
             {initializingLlm ? (
               <Text marginTop={10} color="$textMuted" fontSize={12}>
                 Initializing LLM…
+              </Text>
+            ) : null}
+
+            {!initializingLlm && llmReady ? (
+              <Text marginTop={10} color="$green11" fontSize={12}>
+                LLM ready
               </Text>
             ) : null}
 
@@ -255,16 +330,32 @@ export default function SessionSetup() {
               </Text>
             ) : null}
 
-            {generating ? (
-              <Text marginTop={10} color="$textMuted" fontSize={12}>
-                Generating practice…
-              </Text>
-            ) : null}
-
             {generationError ? (
               <Text marginTop={10} color="$red10" fontSize={12}>
                 {generationError}
               </Text>
+            ) : null}
+
+            {generating && genStep !== null ? (
+              <View style={{ marginTop: 8 }}>
+                <Text color="$textMuted" fontSize={12}>
+                  Generating practice item {genStep} of {genTotal}…
+                </Text>
+
+                <View
+                    marginTop={6}
+                    height={6}
+                    borderRadius={999}
+                    backgroundColor="$glassFill"
+                >
+                  <View
+                      width={`${genProgressPct}%`}
+                      height={6}
+                      borderRadius={999}
+                      backgroundColor="$color4"
+                  />
+                </View>
+              </View>
             ) : null}
           </GlassCard>
 
