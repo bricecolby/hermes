@@ -7,5 +7,6 @@ config.transformer.babelTransformerPath = require.resolve('react-native-svg-tran
 config.resolver.assetExts = config.resolver.assetExts.filter((ext) => ext !== 'svg');
 config.resolver.sourceExts.push('svg');
 config.resolver.assetExts.push("jsonl");
+config.resolver.assetExts.push("gguf");
 
 module.exports = config;

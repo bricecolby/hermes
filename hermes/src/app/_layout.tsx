@@ -1,12 +1,10 @@
-// ✅ corrected RootLayout: provider always mounts, UI gates on dbReady/dbError
-
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
-import { Slot, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "react-native-reanimated";
 import * as SplashScreen from "expo-splash-screen";
-import { Alert, View, Text, Button, Appearance } from "react-native";
+import { View, Text, Button, Appearance } from "react-native";
 
 import { TamaguiProvider, Theme } from "tamagui";
 import tamaguiConfig from "../../tamagui.config";
@@ -18,15 +16,24 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SQLiteProvider } from "expo-sqlite";
 import { initDb } from "@/db/index";
 
+import { LlmClient } from "shared/services/llm/LlmClient";
+
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const DB_NAME = "hermes.db";
 
+LlmClient.configureBundledModel(
+  require("../assets/llm/qwen2.5-0.5b-instruct-q5_k_m.gguf")
+);
+
+registerPracticeItems();
+
 export default function RootLayout() {
   const [dbReady, setDbReady] = useState(false);
   const [dbError, setDbError] = useState<string | null>(null);
-
   const [dbInitAttempt, setDbInitAttempt] = useState(0);
+
+  const initStartedRef = useRef(false);
 
   useEffect(() => {
     try {
@@ -40,28 +47,7 @@ export default function RootLayout() {
     }
   }, [dbReady, dbError]);
 
-  useEffect(() => {
-    if (!dbError) return;
-
-    Alert.alert(
-      "Database initialization failed",
-      dbError,
-      [
-        {
-          text: "Retry",
-          onPress: () => {
-            setDbError(null);
-            setDbReady(false);
-            SplashScreen.preventAutoHideAsync().catch(() => {});
-            setDbInitAttempt((x) => x + 1); 
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  }, [dbError]);
-
-  const showApp = dbReady && !dbError;
+  const showRoutes = dbReady && !dbError;
 
   return (
     <SafeAreaProvider>
@@ -72,30 +58,30 @@ export default function RootLayout() {
               key={`sqlite-${dbInitAttempt}`}
               databaseName={DB_NAME}
               onInit={async (db) => {
+                if (initStartedRef.current) return;
+                initStartedRef.current = true;
+
                 try {
-                  registerPracticeItems();
                   await initDb(db);
                   console.log("DB init successful");
                   setDbReady(true);
+                  setDbError(null);
                 } catch (err: any) {
                   console.error("DB init failed", err);
+                  initStartedRef.current = false; // allow retry
                   const msg =
                     err?.message ??
-                    (typeof err === "string"
-                      ? err
-                      : "Unknown DB initialization error");
+                    (typeof err === "string" ? err : "Unknown DB initialization error");
                   setDbError(msg);
+                  setDbReady(false);
                 }
               }}
             >
-              {showApp ? (
+              {showRoutes ? (
                 <AppStateProvider>
-                  <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="(app)" />
-                    <Stack.Screen name="(modals)" options={{ presentation: "modal" }} />
-                  </Stack>
+                  {/* IMPORTANT: let expo-router include index + onboarding */}
+                  <Stack screenOptions={{ headerShown: false }} />
                 </AppStateProvider>
-
               ) : null}
             </SQLiteProvider>
 
@@ -112,23 +98,20 @@ export default function RootLayout() {
                   padding: 24,
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "600",
-                    marginBottom: 12,
-                  }}
-                >
+                <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 12 }}>
                   Can’t start the app
                 </Text>
                 <Text style={{ textAlign: "center", marginBottom: 16 }}>
                   The local database failed to initialize.
+                  {"\n\n"}
+                  {dbError}
                 </Text>
                 <Button
                   title="Retry DB init"
                   onPress={() => {
                     setDbError(null);
                     setDbReady(false);
+                    initStartedRef.current = false;
                     SplashScreen.preventAutoHideAsync().catch(() => {});
                     setDbInitAttempt((x) => x + 1);
                   }}

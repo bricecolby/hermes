@@ -37,6 +37,7 @@ type AppState = {
 
   startSession: (type: SessionType) => void;
 
+  hydrateSessionConceptIds: (conceptIds: number[]) => void;
   hydrateSessionConceptRefs: (conceptRefs: ConceptRef[]) => void;
   hydrateSessionPracticeBank: (practiceBank: any[]) => void;
 
@@ -106,18 +107,22 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const startSession: AppState["startSession"] = (type) => {
     if (!activeLanguageId) return;
 
-    // TODO: replace with real selection/assembly
-    const conceptIds = [1, 2, 3];
-
     setSession({
       id: uid(),
       type,
       languageId: activeLanguageId,
-      conceptIds,
+      conceptIds: [],
       conceptRefs: [],
       practiceBank: [],
       practiceIndex: 0,
       startedAt: Date.now(),
+    });
+  };
+
+  const hydrateSessionConceptIds: AppState["hydrateSessionConceptIds"] = (conceptIds) => {
+    setSession((prev) => {
+      if (!prev) return prev;
+      return { ...prev, conceptIds };
     });
   };
 
@@ -131,7 +136,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const hydrateSessionPracticeBank: AppState["hydrateSessionPracticeBank"] = (practiceBank) => {
     setSession((prev) => {
       if (!prev) return prev;
-      return { ...prev, practiceBank };
+      return { ...prev, practiceBank, practiceIndex: 0 };
     });
   };
 
@@ -152,6 +157,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setActiveProfile,
       setActiveLanguage,
       startSession,
+      hydrateSessionConceptIds,
       hydrateSessionConceptRefs, 
       hydrateSessionPracticeBank,
       advancePractice,

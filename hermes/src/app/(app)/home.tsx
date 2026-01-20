@@ -91,7 +91,7 @@ export default function Home() {
               />
 
               <ActionCard
-                title="Start Learning"
+                title="Practice"
                 subtitle="New concepts"
                 disabled={!activeLanguageId}
                 onPress={() => {
@@ -103,7 +103,7 @@ export default function Home() {
               <ActionCard
                 title="Review"
                 subtitle="Spaced repetition"
-                disabled={!activeLanguageId}
+                disabled={true}
                 onPress={() => {
                   startSession("review");
                   router.push("/(app)/session/setup");
@@ -115,8 +115,6 @@ export default function Home() {
                 subtitle="Choose a different language pack"
                 onPress={() => router.push("/(onboarding)/profile")}
               />
-              <Link href="/dev/llm">LLM Dev</Link>
-
             </>
           )}
         </YStack>

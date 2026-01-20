@@ -23,6 +23,7 @@ const MVP_USERNAME = "default";
 
 export default function AddLanguage() {
   const router = useRouter();
+  const db = SQLite.useSQLiteContext();
 
   const [packs, setPacks] = useState<LanguagePackRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,6 @@ export default function AddLanguage() {
       setErr(null);
       setLoading(true);
 
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
       const rows = await listLanguagePacksNotOwnedByUsername(db, MVP_USERNAME);
 
       setPacks(rows);
@@ -51,11 +51,9 @@ export default function AddLanguage() {
 
   const onPick = async (packId: number) => {
     try {
-      const db = await SQLite.openDatabaseAsync(DB_NAME);
       await createUserProfileForLanguagePack(db, MVP_USERNAME, packId);
       router.back();
     } catch (e: any) {
-      // If it already exists (race condition), just go back.
       const msg = String(e?.message ?? "").toLowerCase();
       if (msg.includes("unique")) {
         router.back();

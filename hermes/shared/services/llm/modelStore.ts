@@ -1,26 +1,44 @@
 // shared/services/llm/modelStore.ts
 import { Directory, File, Paths } from "expo-file-system";
 import * as LegacyFS from "expo-file-system/legacy";
+import * as FileSystem from "expo-file-system";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MODEL_SUBDIR = "models";
 const MIN_MODEL_BYTES = 50_000_000;
 
+// Persisted "active model" pointer (device-specific)
+const ACTIVE_MODEL_URI_KEY = "llm.activeModelUri";
+
+// Dev default model (used by Settings "Download model" button)
+export const DEV_MODEL_URL =
+  "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf";
+export const DEV_MODEL_FILENAME = "qwen2.5-0.5b-instruct-q4_k_m.gguf";
+export const DEV_MIN_FREE_BYTES_FOR_MODEL = 800_000_000;
+
+/**
+ * Ensure a model file exists in the app's document storage under /models.
+ * If the file already exists and looks valid, returns its URI without downloading.
+ * If not, checks free disk space and downloads from modelUrl into /models.
+ */
 export async function ensureModelOnDevice(
   modelUrl: string,
   modelFilename: string,
   minFreeBytes: number
 ): Promise<string> {
-  const free = await LegacyFS.getFreeDiskStorageAsync();
-  if (free < minFreeBytes) {
-    throw new Error("Not enough free disk space for model");
-  }
-
   const dir = new Directory(Paths.document, MODEL_SUBDIR);
   const file = new File(Paths.document, `${MODEL_SUBDIR}/${modelFilename}`);
 
+  // ✅ FIRST: if model already exists and is large enough, use it
   const info = await file.info();
   if (info.exists && typeof info.size === "number" && info.size > MIN_MODEL_BYTES) {
     return file.uri;
+  }
+
+  // ✅ Only require free disk space when we actually need to download
+  const free = await LegacyFS.getFreeDiskStorageAsync();
+  if (free < minFreeBytes) {
+    throw new Error("Not enough free disk space for model");
   }
 
   try {
@@ -38,9 +56,43 @@ export async function ensureModelOnDevice(
 }
 
 export async function deleteModel(modelFilename: string) {
-  const file = new File(Paths.document, `models/${modelFilename}`);
+  const file = new File(Paths.document, `${MODEL_SUBDIR}/${modelFilename}`);
   const info = await file.info();
   if (info.exists) {
     await file.delete();
+  }
+}
+
+/**
+ * Persist which model URI should be used by default on this device.
+ * Call this after a successful download/import.
+ */
+export async function setActiveModelUri(uri: string): Promise<void> {
+  await AsyncStorage.setItem(ACTIVE_MODEL_URI_KEY, uri);
+}
+
+/**
+ * Retrieve the persisted active model URI, if any.
+ */
+export async function getActiveModelUri(): Promise<string | null> {
+  return AsyncStorage.getItem(ACTIVE_MODEL_URI_KEY);
+}
+
+/**
+ * Clear active model selection (e.g., user deletes model).
+ */
+export async function clearActiveModelUri(): Promise<void> {
+  await AsyncStorage.removeItem(ACTIVE_MODEL_URI_KEY);
+}
+
+/**
+ * Verify the model file still exists at the provided URI.
+ */
+export async function modelFileExists(uri: string): Promise<boolean> {
+  try {
+    const info = await FileSystem.getInfoAsync(uri);
+    return !!info.exists;
+  } catch {
+    return false;
   }
 }

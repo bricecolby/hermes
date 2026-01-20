@@ -27,6 +27,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
+
   const load = useCallback(async () => {
     try {
       setErr(null);
@@ -40,11 +41,7 @@ export default function Profile() {
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
+  }, [db]);
 
   useFocusEffect(
     useCallback(() => {

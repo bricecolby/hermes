@@ -1,9 +1,10 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 import { importVocabPacks } from "./importers/vocabPackImporter";
 import { RU_VOCAB_PACKS } from "@/assets/packs/ru/vocab";
-import { SEED_VERSION } from "./index";
 
 type SeedOpts = { fromSeedVersion?: number };
+
+export const SEED_VERSION = 4;
 
 export async function seedDb(db: SQLiteDatabase, opts: SeedOpts = {}) {
   const from = opts.fromSeedVersion ?? 0;
