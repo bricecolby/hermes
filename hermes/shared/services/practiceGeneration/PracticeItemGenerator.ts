@@ -3,6 +3,8 @@ import { z } from "zod";
 import { practiceItemRegistry } from "shared/domain/practice";
 import { getPracticeItemSpec } from "./specs/practiceItemSpecs";
 import { formatBulletIssues } from "./quality/textQualityUtils";
+import { qualityCheckMcq } from "./quality/McqQualityChecker";
+import { qualityCheckCloze } from "./quality/ClozeQualityChecker";
 
 export type StopWords = string[];
 
@@ -11,11 +13,22 @@ export type CompletionFn = (
   onPartial?: (text: string) => void
 ) => Promise<{ text: string; timings?: any }>;
 
+export type FocusSpec = {
+  conceptId: number;
+  target: string; // raw target from DB (may be messy)
+  translation?: string;
+  distractors?: string[];
+};
+
 type GenerateOptions = {
-  maxAttempts?: number; // default 3
-  debug?: boolean; // default false
-  timeoutMs?: number; // default 25000
-  logRawChars?: number; // default 500
+  maxAttempts?: number;
+  debug?: boolean;
+  timeoutMs?: number;
+  logRawChars?: number;
+  focus?: FocusSpec;
+
+  // ✅ new: focus cleaning
+  focusCleanTimeoutMs?: number; // default 4000
 };
 
 function extractLikelyJson(text: string): string | null {
@@ -53,8 +66,153 @@ function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
   });
 }
 
+function safeJsonParse(text: string): any | null {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+function focusInstruction(type: string, focusResolved: string, focus: FocusSpec): string {
+  const distractors = (focus.distractors ?? []).map((d) => d.trim()).filter(Boolean);
+
+  const translationLine = focus.translation
+    ? `- Meaning (for you, not to show in output): ${focus.translation}\n`
+    : "";
+
+  const distractorLine =
+    distractors.length > 0 ? `- Use distractors from this list when possible: ${distrorsToCsv(distractors)}\n` : "";
+
+  if (type === "mcq_v1.basic") {
+    return [
+      "FOCUS WORD (use exactly this surface form in output):",
+      `- conceptId: ${focus.conceptId}`,
+      `- target (raw): ${focus.target}`,
+      `- target (resolved): ${focusResolved}`,
+      translationLine.trimEnd(),
+      distractorLine.trimEnd(),
+      "",
+      "Hard requirements for this item:",
+      `- conceptIds must include ${focus.conceptId}`,
+      `- The correct choice text MUST be exactly "${focusResolved}"`,
+      "- All choices must be in the target language/script (no Latin).",
+      "- The prompt must test understanding/recognition of the focus word.",
+      "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  if (type === "cloze_v1.free_fill") {
+    return [
+      "FOCUS WORD (use exactly this surface form in output):",
+      `- conceptId: ${focus.conceptId}`,
+      `- target (raw): ${focus.target}`,
+      `- target (resolved): ${focusResolved}`,
+      translationLine.trimEnd(),
+      distractorLine.trimEnd(),
+      "",
+      "Hard requirements for this item:",
+      `- conceptIds must include ${focus.conceptId}`,
+      `- Exactly ONE blank (id "b1") and it must correspond to conceptId ${focus.conceptId}`,
+      `- The blank's accepted list MUST include "${focusResolved}"`,
+      "- accepted should include focus + 3–5 distractors (>= 4 total options)",
+      "- The sentence must clearly cue the focus word.",
+      "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  return "";
+}
+
+function distrorsToCsv(arr: string[]) {
+  return arr.join(", ");
+}
+
 export class PracticeItemGenerator {
+  private focusCache = new Map<string, string>();
+
   constructor(private complete: CompletionFn, private stopWords: StopWords) {}
+
+  private focusCacheKey(focus: FocusSpec) {
+    return `${focus.conceptId}::${focus.target}`;
+  }
+
+  private async resolveFocusTarget(
+    focus: FocusSpec,
+    debug: boolean,
+    timeoutMs: number
+  ): Promise<string> {
+    const key = this.focusCacheKey(focus);
+    const cached = this.focusCache.get(key);
+    if (cached) return cached;
+
+    // A tiny, deterministic “clean focus” call
+    // - Strip stress marks if needed
+    // - Choose ONE surface form (no parentheses)
+    // - Return only JSON with { "focus": "..." }
+    const system =
+      'You are a careful text normalizer for a language-learning app. Return ONLY JSON.';
+
+    const user = [
+      "Normalize the focus vocabulary token into ONE surface form the learner should be tested on.",
+      "Rules:",
+      "- Output must be in Russian (Cyrillic). No Latin letters.",
+      "- Remove stress marks/diacritics if present.",
+      "- If parentheses indicate optional letters, choose the most common full form (prefer including the optional part).",
+      "- Remove parentheses from output.",
+      "- Preserve hyphens if they are part of the word/phrase.",
+      "",
+      "Return ONLY JSON:",
+      '{ "focus": "..." }',
+      "",
+      `Raw token: ${JSON.stringify(focus.target)}`,
+      focus.translation ? `Meaning (for you): ${focus.translation}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    try {
+      if (debug) console.log("[GEN][FOCUS] resolving focus", { conceptId: focus.conceptId, raw: focus.target });
+
+      const r = await withTimeout(
+        this.complete(
+          {
+            messages: [
+              { role: "system", content: system },
+              { role: "user", content: user },
+            ],
+            n_predict: 80,
+            temperature: 0.0,
+            stop: this.stopWords,
+          },
+          undefined
+        ),
+        timeoutMs,
+        "focusClean"
+      );
+
+      const slice = extractLikelyJson(r.text ?? "") ?? (r.text ?? "");
+      const obj = safeJsonParse(slice);
+      const resolved = String(obj?.focus ?? "").trim();
+
+      if (!resolved) throw new Error("focusClean returned empty focus");
+
+      this.focusCache.set(key, resolved);
+      if (debug) console.log("[GEN][FOCUS] resolved", { raw: focus.target, resolved });
+
+      return resolved;
+    } catch (e: any) {
+      // If focus cleaning fails, fall back to raw target (better than bricking generation)
+      const fallback = String(focus.target ?? "").replace(/\([^)]*\)/g, "").trim();
+      if (debug) console.warn("[GEN][FOCUS] failed, fallback", { raw: focus.target, fallback, err: e?.message ?? String(e) });
+      this.focusCache.set(key, fallback || String(focus.target ?? "").trim());
+      return this.focusCache.get(key)!;
+    }
+  }
 
   async generate<TContext>(
     type: string,
@@ -63,12 +221,29 @@ export class PracticeItemGenerator {
     options: GenerateOptions = {}
   ) {
     const spec = getPracticeItemSpec(type);
-    const { system, user } = spec.buildPrompt(ctx);
 
     const maxAttempts = options.maxAttempts ?? 3;
     const debug = options.debug ?? false;
     const timeoutMs = options.timeoutMs ?? 25_000;
     const logRawChars = options.logRawChars ?? 500;
+    const focusCleanTimeoutMs = options.focusCleanTimeoutMs ?? 4_000;
+
+    const log = (...args: any[]) => debug && console.log(...args);
+    const warn = (...args: any[]) => debug && console.warn(...args);
+
+    // ✅ Resolve focus via LLM once, use as truth
+    let focusResolved: string | null = null;
+    if (options.focus) {
+      focusResolved = await this.resolveFocusTarget(options.focus, debug, focusCleanTimeoutMs);
+    }
+
+    // Merge focusResolved into ctx so prompt builders can use it if desired
+    const ctxWithFocus: any =
+      options.focus
+        ? { ...(ctx as any), focus: { ...options.focus, resolved: focusResolved } }
+        : ctx;
+
+    const { system, user } = spec.buildPrompt(ctxWithFocus);
 
     let rawText = "";
     let timings: any = null;
@@ -77,27 +252,28 @@ export class PracticeItemGenerator {
     let lastQualityIssues: string[] = [];
     let hadParsableJson = false;
 
-    const log = (...args: any[]) => {
-      if (debug) console.log(...args);
-    };
-    const warn = (...args: any[]) => {
-      if (debug) console.warn(...args);
-    };
-
     log(`[GEN] generate(${type}) start`, {
+      hasFocus: !!options.focus,
       maxAttempts,
       timeoutMs,
-      stopWords: this.stopWords?.length ?? 0,
       systemChars: system.length,
       userChars: user.length,
+      focusResolved: focusResolved ?? undefined,
     });
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const focusBlock =
+        options.focus && focusResolved
+          ? focusInstruction(type, focusResolved, options.focus)
+          : "";
+
+      const baseUser = focusBlock ? `${focusBlock}\n\n${user}` : user;
+
       const messages =
         attempt === 1 || !rawText
           ? [
               { role: "system", content: system },
-              { role: "user", content: user },
+              { role: "user", content: baseUser },
             ]
           : [
               { role: "system", content: system },
@@ -112,6 +288,7 @@ export class PracticeItemGenerator {
                   (lastQualityIssues.length
                     ? `Quality issues:\n${formatBulletIssues(lastQualityIssues)}\n\n`
                     : "") +
+                  (focusBlock ? `\n\n${focusBlock}\n\n` : "") +
                   "Return ONLY corrected JSON.",
               },
             ];
@@ -119,20 +296,16 @@ export class PracticeItemGenerator {
       const promptChars =
         messages.reduce((sum, m: any) => sum + String(m?.content ?? "").length, 0) ?? 0;
 
-      log(`[GEN] (${type}) attempt ${attempt}/${maxAttempts} start`, {
-        promptChars,
-        temperature: attempt === 1 ? 0.4 : 0.2,
-      });
+      log(`[GEN] (${type}) attempt ${attempt}/${maxAttempts} start`, { promptChars });
 
       const t0 = nowMs();
 
-      let r: { text: string; timings?: any };
       try {
-        r = await withTimeout(
+        const r = await withTimeout(
           this.complete(
             {
               messages,
-              n_predict: 260,
+              n_predict: 360,
               temperature: attempt === 1 ? 0.4 : 0.2,
               stop: this.stopWords,
             },
@@ -141,25 +314,22 @@ export class PracticeItemGenerator {
           timeoutMs,
           `LLM(${type})`
         );
+
+        rawText = r.text ?? "";
+        timings = r.timings ?? null;
+        jsonStr = extractLikelyJson(rawText) ?? rawText;
+
+        log(`[GEN] (${type}) attempt ${attempt} LLM ok in ${Math.round(nowMs() - t0)}ms`, {
+          rawChars: rawText.length,
+          hadJsonSlice: extractLikelyJson(rawText) != null,
+          timings: timings ?? undefined,
+        });
       } catch (e: any) {
-        const dur = Math.round(nowMs() - t0);
         lastQualityIssues = [];
         lastError = e?.message ?? String(e);
-        warn(`[GEN] (${type}) attempt ${attempt} LLM error after ${dur}ms:`, lastError);
+        warn(`[GEN] (${type}) attempt ${attempt} LLM error:`, lastError);
         continue;
       }
-
-      const dur = Math.round(nowMs() - t0);
-
-      rawText = r.text ?? "";
-      timings = r.timings ?? null;
-      jsonStr = extractLikelyJson(rawText) ?? rawText;
-
-      log(`[GEN] (${type}) attempt ${attempt} LLM ok in ${dur}ms`, {
-        rawChars: rawText.length,
-        hadJsonSlice: extractLikelyJson(rawText) != null,
-        timings: timings ?? undefined,
-      });
 
       let parsed: any;
 
@@ -170,7 +340,7 @@ export class PracticeItemGenerator {
         hadParsableJson = false;
         lastQualityIssues = [];
         lastError = `JSON parse error: ${e?.message ?? String(e)}`;
-        warn(`[GEN] (${type}) attempt ${attempt} parse failed:`, lastError);
+        warn(`[GEN] (${type}) parse failed:`, lastError);
         warn(`[GEN] (${type}) raw snippet:`, rawText.slice(0, logRawChars));
         continue;
       }
@@ -180,27 +350,39 @@ export class PracticeItemGenerator {
       } catch (e: any) {
         lastQualityIssues = [];
         lastError = e instanceof z.ZodError ? formatZodError(e) : e?.message ?? String(e);
-        warn(`[GEN] (${type}) attempt ${attempt} schema failed:`, lastError);
-        warn(`[GEN] (${type}) json snippet:`, JSON.stringify(parsed).slice(0, logRawChars));
+        warn(`[GEN] (${type}) schema failed:`, lastError);
         continue;
       }
 
       const checks = spec.qualityChecks ?? [];
-      const qIssues = checks.flatMap((fn) => fn(parsed));
-      lastQualityIssues = qIssues;
+      const qIssues: string[] = [];
+      qIssues.push(...checks.flatMap((fn) => fn(parsed)));
 
-      if (qIssues.length === 0) {
-        log(`[GEN] generate(${type}) success on attempt ${attempt}`);
-        return { ok: true as const, rawText, parsed, attempts: attempt, timings, qualityIssues: [] };
+      if (type === "mcq_v1.basic") {
+        qIssues.push(...qualityCheckMcq(parsed, focusResolved ?? undefined));
+      } else if (type === "cloze_v1.free_fill") {
+        qIssues.push(...qualityCheckCloze(parsed, focusResolved ?? undefined, options.focus?.conceptId));
       }
 
-      warn(`[GEN] (${type}) attempt ${attempt} quality issues:`, qIssues);
-      lastError = "";
+      lastQualityIssues = qIssues;
+
+      if (qIssues.length > 0) {
+        warn(`[GEN] (${type}) quality warnings (non-fatal):`, qIssues);
+      }
+
+      log(`[GEN] generate(${type}) success on attempt ${attempt}`);
+      return {
+        ok: true as const,
+        rawText,
+        parsed,
+        attempts: attempt,
+        timings,
+        qualityIssues: qIssues,
+      };
+
     }
 
-    const error = lastError || (lastQualityIssues.length ? "quality check failed" : "unknown error");
-    warn(`[GEN] generate(${type}) failed`, { error, lastQualityIssues });
-
+    const error = lastError || "gen failed (LLM/parse/schema)";
     return {
       ok: false as const,
       rawText,

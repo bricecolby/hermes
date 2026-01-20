@@ -1,9 +1,9 @@
-// shared/services/practiceGeneration/quality/mcqQuality.ts
+// shared/services/practiceGeneration/quality/McqQualityChecker.ts
 import { hasCyrillic, hasLatin, normalizeWhitespace } from "./textQualityUtils";
 
 export type McqChoiceLoose = { id?: unknown; text?: unknown };
 
-export function qualityCheckMcq(parsed: any): string[] {
+export function qualityCheckMcq(parsed: any, focusWord?: string): string[] {
   const issues: string[] = [];
 
   const prompt = normalizeWhitespace(String(parsed?.prompt ?? ""));
@@ -59,6 +59,13 @@ export function qualityCheckMcq(parsed: any): string[] {
 
   if (correctChoice && distractors.some((d: string) => d === correctText)) {
     issues.push("a distractor matches the correct answer text");
+  }
+
+  if (focusWord && focusWord.trim().length > 0) {
+    const fw = normalizeWhitespace(focusWord).toLowerCase();
+    if (correctText !== fw) {
+      issues.push(`correct choice must be the focus word "${focusWord}"`);
+    }
   }
 
   return issues;

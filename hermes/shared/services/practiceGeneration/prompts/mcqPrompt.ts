@@ -1,53 +1,69 @@
 // shared/services/practiceGeneration/prompts/mcqPrompt.ts
 export type PromptPair = { system: string; user: string };
 
-export function buildMcqPrompt(): PromptPair {
+type Focus = {
+  conceptId: number;
+  target: string;
+  resolved?: string;       
+  distractors?: string[];
+};
+
+function pickWordList(focus: Focus | undefined): string[] {
+  const target = (focus?.resolved ?? focus?.target ?? "").trim();
+  const ds = (focus?.distractors ?? []).map((s) => s.trim()).filter(Boolean);
+  const list = [target, ...ds].filter(Boolean);
+
+  return Array.from(new Set(list)).slice(0, 8);
+}
+
+export function buildMcqPrompt(ctx?: any): PromptPair {
+  const focus: Focus | undefined = ctx?.focus;
+
+  const conceptId = focus?.conceptId ?? 123;
+  const target = (focus?.resolved ?? focus?.target ?? "метро").trim();
+  const vocabList = pickWordList(focus);
+
   const system = [
-    "You generate content for a language-learning app.",
-    "Return ONLY valid JSON (no markdown, no commentary).",
-    "All keys and strings must use double quotes.",
-    "No trailing commas.",
+    "Return ONLY valid JSON.",
+    "No markdown. No commentary. No code fences.",
+    "Use double quotes for all strings.",
   ].join(" ");
 
-  const example = [
-    "{",
-    '  "type": "mcq_v1.basic",',
-    '  "mode": "reception",',
-    '  "skills": ["reading"],',
-    '  "conceptIds": [123],',
-    '  "prompt": "Где находится банк?",',
-    '  "choices": [',
-    '    {"id":"A","text":"В школе"},',
-    '    {"id":"B","text":"В банке"},',
-    '    {"id":"C","text":"В парке"},',
-    '    {"id":"D","text":"Дома"}',
-    "  ],",
-    '  "correctChoiceId": "B"',
-    "}",
-  ].join("\n");
-
   const user = [
-    "Generate ONE practice item JSON for this schema:",
+    "TASK: Create ONE multiple-choice question to test ONE Russian word.",
+    "",
+    "Rules (important):",
+    "- Russian only (Cyrillic). No Latin letters.",
+    `- Correct answer MUST be exactly: "${target}"`,
+    "- Use simple A1 language.",
+    "- Use exactly 4 choices with ids A, B, C, D.",
+    "- Do NOT repeat the same word in multiple choices.",
+    "- Choose distractors from the allowed list when possible.",
+    "",
+    "Allowed words for choices (use these; do not invent English):",
+    vocabList.length ? vocabList.join(", ") : "(none)",
+    "",
+    "Output MUST match this JSON template exactly (fill in values):",
     "{",
     '  "type": "mcq_v1.basic",',
     '  "mode": "reception",',
     '  "skills": ["reading"],',
-    '  "conceptIds": [123],',
-    '  "prompt": string,',
-    '  "choices": [{"id":"A","text":string},{"id":"B","text":string},{"id":"C","text":string},{"id":"D","text":string}],',
-    '  "correctChoiceId": "A" | "B" | "C" | "D"',
+    `  "conceptIds": [${conceptId}],`,
+    '  "prompt": "…",',
+    '  "choices": [',
+    '    {"id":"A","text":"…"},',
+    '    {"id":"B","text":"…"},',
+    '    {"id":"C","text":"…"},',
+    '    {"id":"D","text":"…"}',
+    "  ],",
+    '  "correctChoiceId": "A"',
     "}",
     "",
-    "Constraints:",
-    "- Target language: Russian",
-    "- Learner level: A1",
-    "- prompt and choices must be Russian (Cyrillic only; no Latin letters).",
-    '- Use EXACTLY these choice ids: "A","B","C","D".',
-    "- Keep the prompt under 10 words; each choice under 8 words.",
-    "- conceptIds must be [123] exactly.",
+    "Constraints for prompt:",
+    "- Prompt should be a short question or context sentence (5–10 words).",
+    "- The prompt must make sense for the correct word.",
     "",
-    "Example valid output:",
-    example,
+    "Now output ONLY the JSON.",
   ].join("\n");
 
   return { system, user };

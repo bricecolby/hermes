@@ -164,10 +164,10 @@ export default function SessionSetup() {
   useEffect(() => {
     if (!session) return;
 
-    const hasVocabNow = session.conceptIds.length > 0;
-    const hasBankNow = (session.practiceBank?.length ?? 0) > 0;
+    const hasVocab = session.conceptIds.length > 0;
+    const hasBank = (session.practiceBank?.length ?? 0) > 0;
 
-    if (!hasVocabNow || hasBankNow) return;
+    if (!hasVocab || hasBank) return;
     if (!llmReady) return;
     if (genInFlightRef.current) return;
 
@@ -194,22 +194,50 @@ export default function SessionSetup() {
         );
 
         const types = ["mcq_v1.basic", "cloze_v1.free_fill"] as const;
-        const bank: any[] = [];
+
         const total = 5;
         setGenTotal(total);
         setGenStep(0);
 
+        const bank: any[] = [];
+
+        const refs = session.conceptRefs ?? [];
+        if (refs.length === 0) {
+          setGenerationError("No conceptRefs available (missing vocab titles).");
+          return;
+        }
+
         for (let i = 0; i < total; i++) {
           const type = types[i % types.length];
 
+          // pick focus word for this item
+          const focusRef = refs[i % refs.length];
+          const focusWord = (focusRef?.title ?? "").trim();
+          const translation = (focusRef?.description ?? "").trim();
+
+          // distractors: other vocab titles (same session)
+          const distractors = refs
+            .filter((r) => r.conceptId !== focusRef.conceptId)
+            .map((r) => (r.title ?? "").trim())
+            .filter((t) => t.length > 0)
+            .slice(0, 6); 
+
           setGenStep(i + 1);
-          console.log(`[GEN] starting item ${i + 1}/${total} (${type})`);
+          console.log(
+            `[GEN] starting item ${i + 1}/${total} (${type}) focus="${focusWord}"`
+          );
 
           const start = Date.now();
 
           const res = await generator.generate(type, ctx, undefined, {
             debug: true,
             timeoutMs: 30_000,
+            focus: {
+              conceptId: focusRef.conceptId,
+              target: focusWord,
+              translation: translation || undefined,
+              distractors,
+            },
           });
 
           const dur = Date.now() - start;
@@ -224,7 +252,6 @@ export default function SessionSetup() {
             console.warn(`[GEN] ✗ failed ${type}`, res.error);
           }
         }
-
 
         if (cancelled) return;
 
@@ -249,12 +276,13 @@ export default function SessionSetup() {
     };
   }, [
     session?.id,
-    session?.conceptIds,
+    session?.conceptIds, 
+    session?.conceptRefs, 
     session?.practiceBank?.length,
     activeProfileId,
     llmReady,
-    hydrateSessionPracticeBank,
   ]);
+
 
 
   const canStart =
