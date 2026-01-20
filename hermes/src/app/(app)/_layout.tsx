@@ -110,6 +110,14 @@ export default function AppLayout() {
         name="session/results"
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
+      <Drawer.Screen
+        name="memorize/index"
+        options={{ title: "Results", drawerItemStyle: { display: "none" } }}
+      />
+      <Drawer.Screen
+        name="memorize/results"
+        options={{ title: "Results", drawerItemStyle: { display: "none" } }}
+      />
     </Drawer>
   );
 }
