@@ -115,7 +115,7 @@ export default function AppLayout() {
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen
-        name="memorize/results"
+        name="memorize/result"
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
     </Drawer>

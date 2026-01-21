@@ -3,13 +3,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
-import { YStack, Text, ScrollView } from "tamagui";
+import { YStack, XStack, Text, ScrollView } from "tamagui";
 
 import { Screen } from "@/components/ui/Screen";
 import { HermesAccordion } from "@/components/ui/Accordion";
 import { CEFRTabs, type CefrLevel } from "@/components/ui/CEFRTabs";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { useAppState } from "@/state/AppState";
+import { HeaderSearchOverlay } from "@/components/ui/HeaderSearchOverlay";
+
 
 import {
   listVocabItemsByLanguage,
@@ -50,6 +52,10 @@ export default function VocabLibraryScreen() {
   const { activeLanguageId } = useAppState();
 
   const [loading, setLoading] = useState(true);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const hasQuery = query.trim().length > 0;
 
   const [selectedLevel, setSelectedLevel] = useState<CefrLevel>("A1");
   const [levelCounts, setLevelCounts] = useState<Partial<Record<CefrLevel, number>>>({});
@@ -126,6 +132,23 @@ export default function VocabLibraryScreen() {
   const hasSelected = (levelCounts[selectedLevel] ?? 0) > 0;
 
   const filteredGroups = useMemo(() => {
+
+    if (hasQuery) {
+      const q = query.trim().toLowerCase();
+      return groups
+        .map((g) => ({
+          ...g,
+          items: g.items.filter((it) => {
+            const base = it.base_form.toLowerCase();
+            const notes = (it.usage_notes ?? "").toLowerCase();
+            const pos = (it.part_of_speech ?? "").toLowerCase();
+            return base.includes(q) || notes.includes(q) || pos.includes(q);
+          }),
+        }))
+        .filter((g) => g.items.length > 0);
+    }
+
+
     if (!hasAnythingAtAll) return groups;
 
     return groups
@@ -134,7 +157,8 @@ export default function VocabLibraryScreen() {
         items: g.items.filter((it) => itemLevels[it.id]?.has(selectedLevel)),
       }))
       .filter((g) => g.items.length > 0);
-  }, [groups, itemLevels, selectedLevel, hasAnythingAtAll]);
+  }, [groups, itemLevels, selectedLevel, hasAnythingAtAll, hasQuery, query]);
+
 
   if (loading) {
     return (
@@ -149,10 +173,33 @@ export default function VocabLibraryScreen() {
   return (
     <Screen noPad>
       <YStack flex={1} backgroundColor="$background">
-        <YStack padding="$4" paddingBottom="$2" gap="$2">
-          <AppHeader title="Vocab" />
-          <CEFRTabs value={selectedLevel} onChange={setSelectedLevel} />
+      <YStack padding="$4" paddingBottom="$2" gap="$2">
+        <YStack height={44} justifyContent="center">
+          {searchOpen ? (
+            <HeaderSearchOverlay
+              open={searchOpen}
+              onOpenChange={setSearchOpen}
+              value={query}
+              onChange={setQuery}
+              placeholder="Search vocab"
+            />
+          ) : (
+          <XStack alignItems="center" justifyContent="space-between" paddingRight="$2">
+            <XStack flex={1} justifyContent="center">
+              <AppHeader title="Vocab" />
+            </XStack>
+
+            <XStack paddingLeft="$2">   
+              <HeaderSearchOverlay open={false} onOpenChange={setSearchOpen} value={query} onChange={setQuery} />
+            </XStack>
+          </XStack>
+
+          )}
         </YStack>
+
+        <CEFRTabs value={selectedLevel} onChange={setSelectedLevel} />
+      </YStack>
+
 
         {!hasAnythingAtAll ? (
           <YStack flex={1} padding="$4" gap="$3" backgroundColor="$glassFill">
