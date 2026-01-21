@@ -5,36 +5,6 @@ function nowISO() {
   return new Date().toISOString();
 }
 
-export async function createPracticeSession(params: {
-  db: SQLiteDatabase;
-  languageId: number;
-  userId: number;
-  modality?: string | null;
-  source?: string | null;
-  notes?: string | null;
-}) {
-  const { db, languageId, userId, modality = null, source = null, notes = null } = params;
-
-  const res = await db.runAsync(
-    `INSERT INTO practice_sessions (language_id, user_id, started_at, modality, source, notes)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [languageId, userId, nowISO(), modality, source, notes]
-  );
-
-  return Number(res.lastInsertRowId);
-}
-
-export async function markPracticeSessionComplete(params: {
-  db: SQLiteDatabase;
-  sessionId: number;
-}) {
-  const { db, sessionId } = params;
-  await db.runAsync(
-    `UPDATE practice_sessions SET completed_at = ? WHERE id = ?`,
-    [nowISO(), sessionId]
-  );
-}
-
 export async function insertPracticeAttempt(params: {
   db: SQLiteDatabase;
   sessionId: number;
@@ -47,6 +17,7 @@ export async function insertPracticeAttempt(params: {
   questionJson: unknown;
   userResponseJson?: unknown;
   evaluationJson?: unknown;
+  createdAtIso?: string;
 }) {
   const {
     db,
@@ -58,6 +29,7 @@ export async function insertPracticeAttempt(params: {
     questionJson,
     userResponseJson = null,
     evaluationJson = null,
+    createdAtIso,
   } = params;
 
   const res = await db.runAsync(
@@ -74,7 +46,7 @@ export async function insertPracticeAttempt(params: {
       JSON.stringify(questionJson),
       userResponseJson ? JSON.stringify(userResponseJson) : null,
       evaluationJson ? JSON.stringify(evaluationJson) : null,
-      nowISO(),
+      createdAtIso ?? nowISO(),
     ]
   );
 
@@ -85,13 +57,14 @@ export async function insertAttemptConceptResults(params: {
   db: SQLiteDatabase;
   attemptId: number;
   conceptResults: EvaluationResult["conceptResults"];
-  createdAt?: string;
+  createdAtIso?: string;
 }) {
   const { db, attemptId, conceptResults } = params;
-  const createdAt = params.createdAt ?? nowISO();
+  const createdAt = params.createdAtIso ?? nowISO();
 
-  // Weighting MVP: normalize across concept results
-  const weight = conceptResults.length ? 1 / conceptResults.length : 1;
+  if (!conceptResults?.length) return;
+
+  const weight = 1;
 
   for (const cr of conceptResults) {
     await db.runAsync(
@@ -101,10 +74,10 @@ export async function insertAttemptConceptResults(params: {
       [
         attemptId,
         cr.conceptId,
-        cr.score,
+        cr.score ?? null,
         cr.isCorrect ? 1 : 0,
         weight,
-        JSON.stringify(cr.evidence ?? null),
+        cr.evidence ? JSON.stringify(cr.evidence) : null,
         createdAt,
       ]
     );

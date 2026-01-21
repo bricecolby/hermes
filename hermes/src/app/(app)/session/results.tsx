@@ -1,117 +1,244 @@
-import React, { useMemo } from "react";
-import { useRouter } from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
+import { Stack, useRouter } from "expo-router";
+import { ActivityIndicator } from "react-native";
 import { Text, XStack, YStack } from "tamagui";
+import { useSQLiteContext } from "expo-sqlite";
 
 import { Screen } from "../../../components/ui/Screen";
-import { GlassCard } from "../../../components/ui/GlassCard";
-import { H1, SectionTitle, Muted } from "../../../components/ui/Typography";
+import { AppHeader } from "../../../components/ui/AppHeader";
 import { HermesButton } from "../../../components/ui/HermesButton";
+import { GlassCard } from "../../../components/ui/GlassCard";
+import { Muted } from "../../../components/ui/Typography";
 import { useAppState } from "../../../state/AppState";
 
-type ConceptResultVM = {
-  conceptId: number;
-  label: string;
-  correct: number;
-  total: number;
+type Summary = {
+  totalAttempts: number;
+  totalConceptGraded: number;
+  correctConcept: number;
+  percentCorrect: number; // concept-level
+  avgMs: number | null;
+  xpEarned: number;
 };
+
+function safeParseJson<T = any>(raw: unknown): T | null {
+  if (typeof raw !== "string") return null;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
 
 export default function Results() {
   const router = useRouter();
-  const { endSession } = useAppState();
+  const db = useSQLiteContext();
+  const { activeProfileId, activeLanguageId, endSession } = useAppState();
 
-  const summary = useMemo(() => {
-    return {
-      total: 5,
-      correct: 4,
-      xpEarned: 10,
-      concepts: [
-        { conceptId: 123, label: "Basic location words", correct: 3, total: 3 },
-        { conceptId: 456, label: "Introducing yourself", correct: 1, total: 2 },
-      ] as ConceptResultVM[],
+  const userId = activeProfileId ?? null;
+  const languageId = activeLanguageId ?? null;
+
+  const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState<Summary | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        setLoading(true);
+
+        if (!userId || !languageId) {
+          if (!cancelled) setSummary(null);
+          return;
+        }
+
+        // Most recent practice session for this user + language
+        const sess = await db.getFirstAsync<{ id: number }>(
+          `
+          SELECT id
+          FROM practice_sessions
+          WHERE user_id = ?
+            AND language_id = ?
+            AND (modality = 'practice' OR source = 'practice' OR source = 'session')
+          ORDER BY id DESC
+          LIMIT 1;
+          `,
+          [userId, languageId]
+        );
+
+        if (!sess?.id) {
+          if (!cancelled) setSummary(null);
+          return;
+        }
+
+        const sessionId = sess.id;
+
+        // Attempt count
+        const attemptsCount = await db.getFirstAsync<{ n: number }>(
+          `SELECT COUNT(*) AS n FROM practice_attempts WHERE session_id = ?;`,
+          [sessionId]
+        );
+
+        // Concept correctness count (concept-level grading)
+        const conceptAgg = await db.getFirstAsync<{ total: number; correct: number }>(
+          `
+          SELECT
+            COUNT(*) AS total,
+            SUM(CASE WHEN is_correct = 1 THEN 1 ELSE 0 END) AS correct
+          FROM practice_attempt_concepts pac
+          JOIN practice_attempts pa ON pa.id = pac.attempt_id
+          WHERE pa.session_id = ?;
+          `,
+          [sessionId]
+        );
+
+        const msRows = await db.getAllAsync<{ user_response_json: string | null }>(
+          `SELECT user_response_json FROM practice_attempts WHERE session_id = ?;`,
+          [sessionId]
+        );
+
+        const msValues = msRows
+          .map((r) => safeParseJson<{ ms?: number }>(r.user_response_json)?.ms)
+          .filter((x): x is number => typeof x === "number" && Number.isFinite(x) && x > 0);
+
+        const avgMs =
+          msValues.length > 0
+            ? Math.round(msValues.reduce((a, b) => a + b, 0) / msValues.length)
+            : null;
+
+        const totalConcept = Number(conceptAgg?.total ?? 0);
+        const correctConcept = Number(conceptAgg?.correct ?? 0);
+        const percentCorrect = totalConcept > 0 ? Math.round((correctConcept / totalConcept) * 100) : 0;
+
+        // Simple XP rule for now (MVP): 2 XP per correct concept
+        const xpEarned = correctConcept * 2;
+
+        const nextSummary: Summary = {
+          totalAttempts: Number(attemptsCount?.n ?? 0),
+          totalConceptGraded: totalConcept,
+          correctConcept,
+          percentCorrect,
+          avgMs,
+          xpEarned,
+        };
+
+        if (!cancelled) setSummary(nextSummary);
+      } catch (e) {
+        console.error("[results] load failed", e);
+        if (!cancelled) setSummary(null);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
     };
-  }, []);
+  }, [db, userId, languageId]);
 
-  const accuracy = Math.round((summary.correct / summary.total) * 100);
-  const strengths = summary.concepts.filter((c) => c.correct === c.total);
-  const weaknesses = summary.concepts.filter((c) => c.correct < c.total);
+  const fluencyLabel = useMemo(() => {
+    if (summary?.avgMs == null) return "—";
+    const ms = summary.avgMs;
+    return ms < 1200 ? "Fast" : ms < 2000 ? "Good" : "Developing";
+  }, [summary?.avgMs]);
 
   return (
     <Screen>
-      <H1>Session Complete</H1>
+      <Stack.Screen options={{ headerShown: false }} />
 
-      <YStack marginTop={14} gap={14}>
-        <GlassCard>
-          <SectionTitle>Performance</SectionTitle>
+      <YStack paddingTop={6} gap={14}>
+        <AppHeader title="Results" />
 
-          <XStack justifyContent="space-between">
-            <Muted>Accuracy</Muted>
-            <Text color="$color" fontWeight="900">
-              {accuracy}%
+        {loading ? (
+          <YStack paddingTop={40} alignItems="center" justifyContent="center">
+            <ActivityIndicator />
+          </YStack>
+        ) : !summary ? (
+          <GlassCard>
+            <Text fontSize={18} fontWeight="900">
+              Session Complete
             </Text>
-          </XStack>
+            <Muted marginTop={6}>
+              No results found yet for this session.
+            </Muted>
 
-          <XStack justifyContent="space-between" marginTop={6}>
-            <Muted>Questions</Muted>
-            <Text color="$color" fontWeight="900">
-              {summary.correct} / {summary.total}
+            <HermesButton
+              marginTop={12}
+              label="Back to Home"
+              onPress={() => {
+                endSession();
+                router.replace("/(app)/home");
+              }}
+            />
+          </GlassCard>
+        ) : (
+          <YStack gap={10} marginTop={10}>
+            <Text fontSize={22} fontWeight="900">
+              Practice Complete
             </Text>
-          </XStack>
 
-          <XStack justifyContent="space-between" marginTop={6}>
-            <Muted>XP earned</Muted>
-            <Text color="$color" fontWeight="900">
-              +{summary.xpEarned}
-            </Text>
-          </XStack>
-        </GlassCard>
+            <YStack
+              borderWidth={1}
+              borderColor="rgba(255,255,255,0.08)"
+              borderRadius={16}
+              padding={14}
+              gap={10}
+            >
+              <XStack justifyContent="space-between">
+                <Text color="$textMuted">Percent correct</Text>
+                <Text fontWeight="900">{summary.percentCorrect}%</Text>
+              </XStack>
 
-        <GlassCard>
-          <SectionTitle>What you did well</SectionTitle>
-          {strengths.length === 0 ? (
-            <Muted>No concepts mastered yet — keep going.</Muted>
-          ) : (
-            strengths.map((c) => (
-              <Text key={c.conceptId} color="$green10" fontWeight="800">
-                ✓ {c.label}
-              </Text>
-            ))
-          )}
-        </GlassCard>
+              <XStack justifyContent="space-between">
+                <Text color="$textMuted">Items attempted</Text>
+                <Text fontWeight="900">{summary.totalAttempts}</Text>
+              </XStack>
 
-        <GlassCard>
-          <SectionTitle>Needs a bit more practice</SectionTitle>
-          {weaknesses.length === 0 ? (
-            <Text color="$green10" fontWeight="800">
-              ✓ No weak spots this session
-            </Text>
-          ) : (
-            weaknesses.map((c) => (
-              <Text key={c.conceptId} color="$yellow10" fontWeight="800">
-                • {c.label} ({c.correct}/{c.total})
-              </Text>
-            ))
-          )}
-        </GlassCard>
+              <XStack justifyContent="space-between">
+                <Text color="$textMuted">Concept accuracy</Text>
+                <Text fontWeight="900">
+                  {summary.correctConcept}/{summary.totalConceptGraded}
+                </Text>
+              </XStack>
 
-        <GlassCard>
-          <SectionTitle>Suggested next steps</SectionTitle>
-          <Text color="$color" lineHeight={20}>
-            Nice work overall! You’re clearly comfortable with basic location words. Next, spend a
-            little more time practicing short self-introductions so they feel automatic.
-          </Text>
-          <Muted marginTop={10}>
-            (In future sessions, this feedback will be personalized based on your mistakes and goals.)
-          </Muted>
-        </GlassCard>
+              <XStack justifyContent="space-between">
+                <Text color="$textMuted">Fluency</Text>
+                <Text fontWeight="900">
+                  {fluencyLabel}
+                  {summary.avgMs != null ? ` (${summary.avgMs}ms avg)` : ""}
+                </Text>
+              </XStack>
 
-        <HermesButton
-          label="Back to Home"
-          variant="secondary"
-          onPress={() => {
-            endSession();
-            router.replace("/(app)/home");
-          }}
-        />
+              <XStack justifyContent="space-between">
+                <Text color="$textMuted">XP earned</Text>
+                <Text fontWeight="900">+{summary.xpEarned}</Text>
+              </XStack>
+            </YStack>
+
+            <YStack
+              borderWidth={1}
+              borderColor="rgba(255,255,255,0.08)"
+              borderRadius={16}
+              padding={14}
+              gap={8}
+            >
+              <Text fontWeight="900">Next steps</Text>
+              <Text color="$textMuted">• Re-run Practice to tighten weak spots</Text>
+              <Text color="$textMuted">• Jump to Memorize for fast reps</Text>
+              <Text color="$textMuted">• Check Analytics for session history</Text>
+            </YStack>
+
+            <HermesButton
+              marginTop={6}
+              label="Back to Home"
+              onPress={() => {
+                endSession();
+                router.replace("/(app)/home");
+              }}
+            />
+          </YStack>
+        )}
       </YStack>
     </Screen>
   );

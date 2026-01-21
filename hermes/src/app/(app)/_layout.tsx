@@ -9,7 +9,7 @@ import {
 import { View } from "react-native";
 import { Text } from "tamagui";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Home, WholeWord, NotepadText, Settings } from "@tamagui/lucide-icons";
+import { Home, WholeWord, NotepadText, Settings, BarChart } from "@tamagui/lucide-icons";
 
 function HermesDrawerContent(props: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
@@ -84,6 +84,16 @@ export default function AppLayout() {
           drawerIcon: ({ color, size }) => <NotepadText color={color as any} size={size} />,
         }}
       />
+      <Drawer.Screen
+        name="analytics/index"
+        options={{
+          title: "Analytics",
+          drawerIcon: ({ color, size }) => (
+            <BarChart color={color as any} size={size} />
+          ),
+        }}
+      />
+
 
       <Drawer.Screen
         name="settings"

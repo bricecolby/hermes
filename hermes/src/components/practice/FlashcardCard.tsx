@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 export type FlashcardViewModel = {
+  conceptId: number,
   front: string;
   back: string;
 };

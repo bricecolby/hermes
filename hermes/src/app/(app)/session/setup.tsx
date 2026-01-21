@@ -11,12 +11,13 @@ import { HermesButton } from "../../../components/ui/HermesButton";
 import { useAppState } from "../../../state/AppState";
 
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../../db/queries/users";
-import { getRandomVocab } from "@/db/queries/vocab";
+import { getRandomVocabConceptRefs } from "@/db/queries/concepts";
 
 import { llmClient } from "shared/services/llm/client";
 import { PracticeItemGenerator } from "shared/services/practiceGeneration/PracticeItemGenerator";
 import { buildGenerationContext } from "shared/services/practiceGeneration/context/buildGenerationContext";
 import { registerPracticeItemSpecs } from "shared/services/practiceGeneration/specs/registerPracticeItemSpecs";
+import { startPracticeSession } from "@/db/queries/sessions";
 
 import { View } from "tamagui";
 
@@ -37,6 +38,7 @@ export default function SessionSetup() {
     hydrateSessionConceptIds,
     hydrateSessionConceptRefs,
     hydrateSessionPracticeBank,
+    setSessionDbId,
   } = useAppState();
 
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
@@ -113,7 +115,7 @@ export default function SessionSetup() {
   }, [session?.id, activeLanguageId, llmReady]);
 
 
-  // --- Step 1: pick 5 random vocab rows ---
+  // --- Step 1: pick 5 random concepts ---
   useEffect(() => {
     let cancelled = false;
 
@@ -124,21 +126,14 @@ export default function SessionSetup() {
       try {
         setHydratingConcepts(true);
 
-        const rows = await getRandomVocab(db, activeLanguageId, 5);
+        const refs = await getRandomVocabConceptRefs(db, activeLanguageId, 5);
         if (cancelled) return;
 
-        const vocabIds = rows.map((r) => r.id);
+        const conceptIds = refs.map((r) => r.conceptId);
 
-        const refs = rows.map((r) => ({
-          conceptId: r.id,
-          kind: "vocab" as const,
-          refId: r.id,
-          title: r.base_form ?? null,
-          description: r.translation ?? null,
-        }));
-
-        hydrateSessionConceptIds(vocabIds);
+        hydrateSessionConceptIds(conceptIds);
         hydrateSessionConceptRefs(refs);
+
       } catch (e) {
         console.error(e);
       } finally {
@@ -246,11 +241,15 @@ export default function SessionSetup() {
           if (cancelled) return;
 
           if (res.ok) {
-            console.log(`[GEN] ✓ parsed ${type}`);
-            bank.push(res.parsed);
+            const stamped = {
+              ...res.parsed,
+              conceptIds: [focusRef.conceptId],
+            };
+            bank.push(stamped);
           } else {
             console.warn(`[GEN] ✗ failed ${type}`, res.error);
           }
+
         }
 
         if (cancelled) return;
@@ -261,6 +260,21 @@ export default function SessionSetup() {
         }
 
         hydrateSessionPracticeBank(bank);
+
+        if (!activeLanguageId || !activeProfileId) {
+          console.warn("[setup] missing activeLanguageId/activeProfileId; cannot create practice session row");
+        } else {
+          startPracticeSession(db, {
+            languageId: activeLanguageId,
+            userId: activeProfileId,
+            startedAtIso: new Date().toISOString(),
+            modality: "practice",
+            source: "session",
+          })
+            .then((newSessionId) => setSessionDbId(newSessionId))
+            .catch((e) => console.error("[setup] startPracticeSession failed", e));
+        }
+
       } catch (e: any) {
         if (!cancelled) setGenerationError(e?.message ?? String(e));
       } finally {
@@ -281,9 +295,8 @@ export default function SessionSetup() {
     session?.practiceBank?.length,
     activeProfileId,
     llmReady,
+    setSessionDbId,
   ]);
-
-
 
   const canStart =
     !!session &&

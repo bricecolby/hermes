@@ -1,6 +1,7 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 import { importVocabPacks } from "./importers/vocabPackImporter";
 import { RU_VOCAB_PACKS } from "@/assets/packs/ru/vocab";
+import { ensureCoreConcepts } from "./importers/conceptsImporter";
 
 type SeedOpts = { fromSeedVersion?: number };
 
@@ -237,58 +238,33 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   // Concepts + Lessons
   // ============================================================
 
-  // Concepts (unique(kind, ref_id))
-  // if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", sensePrivetId]))) {
-  //   await db.runAsync(
-  //     `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
-  //      VALUES (?, ?, ?, ?, ?, ?, ?);`,
-  //     ["vocab_sense", sensePrivetId, RU, "privet-hello", "привет — hello", "Informal greeting", now]
-  //   );
-  // }
+  // Ensure concepts exist for vocab_items + grammar_points
+  await ensureCoreConcepts(db, RU);
 
-  // if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", senseKnigaId]))) {
-  //   await db.runAsync(
-  //     `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
-  //      VALUES (?, ?, ?, ?, ?, ?, ?);`,
-  //     ["vocab_sense", senseKnigaId, RU, "kniga-book", "книга — book", "Common noun", now]
-  //   );
-  // }
-
-  if (!(await hasRow("concepts", "kind = ? AND ref_id = ?", ["grammar_point", gpNomGenId]))) {
-    await db.runAsync(
-      `INSERT INTO concepts (kind, ref_id, language_id, slug, title, description, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      ["grammar_point", gpNomGenId, RU, "nom-vs-gen-a1", "Nominative vs Genitive (A1)", "Basic case contrast", now]
-    );
-  }
-
-  // const conceptPrivetId = await getId("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", sensePrivetId]);
-  // const conceptKnigaId = await getId("concepts", "kind = ? AND ref_id = ?", ["vocab_sense", senseKnigaId]);
-  const conceptNomGenId = await getId("concepts", "kind = ? AND ref_id = ?", ["grammar_point", gpNomGenId]);
+  // Fetch the concept id for the grammar point you want in the lesson
+  const conceptNomGenId = await getId("concepts", "kind = ? AND ref_id = ?", [
+    "grammar_point",
+    gpNomGenId,
+  ]);
 
   // Lesson (A1)
   await db.runAsync(
     `INSERT OR IGNORE INTO lessons (language_id, title, description, cefr_level_id, sort_order, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
+    VALUES (?, ?, ?, ?, ?, ?, ?);`,
     [RU, "Greetings & Introductions", "Core greeting vocab + basic grammar", cefrA1Id, 1, now, now]
   );
-  const lessonId = await getId("lessons", "language_id = ? AND title = ?", [RU, "Greetings & Introductions"]);
 
-  // await db.runAsync(
-  //   `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
-  //    VALUES (?, ?, ?, ?);`,
-  //   [lessonId, conceptPrivetId, 1, now]
-  // );
-  // await db.runAsync(
-  //   `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
-  //    VALUES (?, ?, ?, ?);`,
-  //   [lessonId, conceptKnigaId, 2, now]
-  // );
+  const lessonId = await getId("lessons", "language_id = ? AND title = ?", [
+    RU,
+    "Greetings & Introductions",
+  ]);
+
   await db.runAsync(
     `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
-     VALUES (?, ?, ?, ?);`,
+    VALUES (?, ?, ?, ?);`,
     [lessonId, conceptNomGenId, 3, now]
   );
+
 
   // ============================================================
   // Practice session + attempts (optional pipe test)

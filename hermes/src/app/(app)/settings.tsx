@@ -20,10 +20,6 @@ import {
   modelFileExists,
 } from "shared/services/llm/modelStore";
 
-function mb(bytes: number) {
-  return Math.round(bytes / 1e6);
-}
-
 export default function Settings() {
   const router = useRouter();
   const { setActiveLanguage } = useAppState();
@@ -31,7 +27,10 @@ export default function Settings() {
   const [activeUri, setActiveUri] = useState<string | null>(null);
   const [activeUriExists, setActiveUriExists] = useState<boolean | null>(null);
 
-  const [busy, setBusy] = useState<null | "init" | "download" | "delete" | "clear">(null);
+  const [busy, setBusy] = useState<
+    null | "init" | "download" | "delete" | "clear"
+  >(null);
+
   const [llmError, setLlmError] = useState<string | null>(null);
 
   const llmStatus = llmClient.getStatus();
@@ -63,7 +62,7 @@ export default function Settings() {
     if (llmStatus.state === "resolving_model") return "resolving model…";
     if (llmStatus.state === "error") return `error ❌: ${llmStatus.message}`;
     return "idle";
-  }, [llmStatus, llmClient.isReady()]);
+  }, [llmStatus, llmClient]);
 
   async function onInitLlm() {
     if (!canInit) return;
@@ -98,10 +97,7 @@ export default function Settings() {
       await setActiveModelUri(uri);
       await refresh();
 
-      Alert.alert(
-        "Model downloaded",
-        `Saved model and set active.\n\nURI:\n${uri}`
-      );
+      Alert.alert("Model downloaded", `Saved model and set active.\n\nURI:\n${uri}`);
     } catch (e: any) {
       const msg = e?.message ?? String(e);
       setLlmError(msg);
@@ -114,42 +110,38 @@ export default function Settings() {
   async function onDeleteDevModel() {
     if (!canDelete) return;
 
-    Alert.alert(
-      "Delete dev model?",
-      "This deletes the dev model file from local storage.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            setBusy("delete");
-            setLlmError(null);
+    Alert.alert("Delete dev model?", "This deletes the dev model file from local storage.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          setBusy("delete");
+          setLlmError(null);
 
-            try {
-              await deleteModel(DEV_MODEL_FILENAME);
+          try {
+            await deleteModel(DEV_MODEL_FILENAME);
 
-              // if active uri was the dev model path, clear it
-              const uri = await getActiveModelUri();
-              if (uri && uri.includes(DEV_MODEL_FILENAME)) {
-                await clearActiveModelUri();
-              }
-
-              llmClient.reset();
-              await refresh();
-
-              Alert.alert("Deleted", "Dev model deleted and LLM reset.");
-            } catch (e: any) {
-              const msg = e?.message ?? String(e);
-              setLlmError(msg);
-              Alert.alert("Delete failed", msg);
-            } finally {
-              setBusy(null);
+            // if active uri was the dev model path, clear it
+            const uri = await getActiveModelUri();
+            if (uri && uri.includes(DEV_MODEL_FILENAME)) {
+              await clearActiveModelUri();
             }
-          },
+
+            llmClient.reset();
+            await refresh();
+
+            Alert.alert("Deleted", "Dev model deleted and LLM reset.");
+          } catch (e: any) {
+            const msg = e?.message ?? String(e);
+            setLlmError(msg);
+            Alert.alert("Delete failed", msg);
+          } finally {
+            setBusy(null);
+          }
         },
-      ]
-    );
+      },
+    ]);
   }
 
   async function onClearActiveModel() {
@@ -204,6 +196,7 @@ export default function Settings() {
             <Text fontSize={12} color="$textMuted">
               Active model URI:
             </Text>
+
             <Text selectable fontSize={12} fontFamily="$mono" color="$color">
               {activeUri ?? "(none set)"}
             </Text>
@@ -241,11 +234,6 @@ export default function Settings() {
               {busy === "clear" ? "Clearing…" : "Clear active model"}
             </Button>
           </XStack>
-
-          <Text fontSize={12} color="$textMuted">
-            Goal: users never touch this. If the app can’t init the LLM (Expo Go / missing model),
-            you can download a dev model here.
-          </Text>
         </YStack>
       </YStack>
     </Screen>

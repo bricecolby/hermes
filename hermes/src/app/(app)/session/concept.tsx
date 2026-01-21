@@ -9,8 +9,19 @@ import { VocabRow, StackRow } from "../../../components/ui/ListRow";
 import { HermesButton } from "../../../components/ui/HermesButton";
 import { useAppState } from "../../../state/AppState";
 
-type VocabVM = { id: number; target: string; native: string };
-type GrammarVM = { id: number; title: string; summary: string };
+type VocabVM = {
+  conceptId: number;
+  vocabItemId: number;
+  target: string;
+  native: string;
+};
+
+type GrammarVM = {
+  conceptId: number;
+  grammarItemId: number;
+  title: string;
+  summary: string;
+};
 
 export default function Concept() {
   const router = useRouter();
@@ -19,9 +30,10 @@ export default function Concept() {
   const vocab = useMemo<VocabVM[]>(() => {
     const refs = session?.conceptRefs ?? [];
     return refs
-      .filter((r) => r.kind === "vocab")
+      .filter((r) => r.kind === "vocab_item")
       .map((r) => ({
-        id: r.conceptId,
+        conceptId: r.conceptId,
+        vocabItemId: r.refId,
         target: r.title ?? "",
         native: r.description ?? "",
       }));
@@ -30,9 +42,10 @@ export default function Concept() {
   const grammar = useMemo<GrammarVM[]>(() => {
     const refs = session?.conceptRefs ?? [];
     return refs
-      .filter((r) => r.kind === "grammar")
+      .filter((r) => r.kind === "grammar_item")
       .map((r) => ({
-        id: r.conceptId,
+        conceptId: r.conceptId,
+        grammarItemId: r.refId,
         title: r.title ?? "",
         summary: r.description ?? "",
       }));
@@ -61,11 +74,11 @@ export default function Concept() {
           ) : (
             vocab.map((v) => (
               <VocabRow
-                key={v.id}
+                key={v.conceptId}
                 onPress={() =>
                   router.push({
                     pathname: "/(modals)/vocab/[id]",
-                    params: { id: String(v.id), returnTo: "/(app)/session/concept" },
+                    params: { id: String(v.vocabItemId), returnTo: "/(app)/session/concept" },
                   })
                 }
                 left={
@@ -91,11 +104,11 @@ export default function Concept() {
           ) : (
             grammar.map((g) => (
               <StackRow
-                key={g.id}
+                key={g.conceptId}
                 onPress={() =>
                   router.push({
                     pathname: "/(modals)/grammar/[id]",
-                    params: { id: String(g.id), returnTo: "/(app)/session/concept" },
+                    params: { id: String(g.grammarItemId), returnTo: "/(app)/session/concept" },
                   })
                 }
                 title={

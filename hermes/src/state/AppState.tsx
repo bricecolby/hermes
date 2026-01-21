@@ -31,11 +31,12 @@ type AppState = {
   activeLanguageId: number | null;
 
   session: UISession | null;
-
+  sessionDbId: number | null;
   setActiveProfile: (params: { profileId: number; learningLangId: number } | null) => Promise<void>;
   setActiveLanguage: (id: number | null) => Promise<void>;
 
   startSession: (type: SessionType) => void;
+  setSessionDbId: (id: number | null) => void;
 
   hydrateSessionConceptIds: (conceptIds: number[]) => void;
   hydrateSessionConceptRefs: (conceptRefs: ConceptRef[]) => void;
@@ -60,6 +61,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
   const [activeLanguageId, setActiveLanguageId] = useState<number | null>(null);
   const [session, setSession] = useState<UISession | null>(null);
+  const [sessionDbId, setSessionDbId] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -147,23 +149,28 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const endSession = () => setSession(null);
+  const endSession = () => {
+    setSession(null);
+    setSessionDbId(null);
+  };
 
   const value = useMemo<AppState>(
     () => ({
       activeProfileId,
       activeLanguageId,
       session,
+      sessionDbId,
       setActiveProfile,
       setActiveLanguage,
       startSession,
+      setSessionDbId,
       hydrateSessionConceptIds,
       hydrateSessionConceptRefs, 
       hydrateSessionPracticeBank,
       advancePractice,
       endSession,
     }),
-    [activeProfileId, activeLanguageId, session]
+    [activeProfileId, activeLanguageId, session, sessionDbId]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
