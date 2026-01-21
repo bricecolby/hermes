@@ -112,10 +112,10 @@ export default function AppLayout() {
       />
       <Drawer.Screen
         name="memorize/index"
-        options={{ title: "Results", drawerItemStyle: { display: "none" } }}
+        options={{ title: "Index", drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen
-        name="memorize/result"
+        name="memorize/results"
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
     </Drawer>

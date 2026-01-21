@@ -1,13 +1,16 @@
 // src/app/(app)/vocab/[id].tsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
 import { ScrollView, Separator, XStack, YStack, Text } from "tamagui";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Screen } from "@/components/ui/Screen";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { GradientTabs } from "@/components/ui/GradientTabs";
+
+import { Pencil } from "@tamagui/lucide-icons";
 
 import {
   getVocabItem,
@@ -45,7 +48,10 @@ export default function VocabDetailScreen() {
   const [tags, setTags] = useState<VocabTagRow[]>([]);
   const [examplesBySense, setExamplesBySense] = useState<Record<number, VocabExampleRow[]>>({});
   const [error, setError] = useState<string | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
 
+  const sense1 = senses.find((s) => s.sense_index === 1) ?? null;
+  const loadSeq = useRef(0)
 
   const [tab, setTab] = useState<TabKey>("meaning");
   const scrollRef = useRef<ScrollView>(null);
@@ -58,68 +64,75 @@ export default function VocabDetailScreen() {
     scrollRef.current?.scrollTo({ y: Math.max(0, y - 8), animated: true });
   };
 
-  useEffect(() => {
-    let cancelled = false;
+  const load = useCallback(async (opts?: { reset?: boolean }) => {
+    if (!Number.isFinite(vocabItemId)) return;
 
-    async function load() {
-      if (!Number.isFinite(vocabItemId)) return;
+    const seq = ++loadSeq.current; // each call gets a unique id
+    const reset = opts?.reset ?? true;
 
-      setLoading(true);
+    setLoading(true);
+
+    if (reset) {
       setItem(null);
       setSenses([]);
       setForms([]);
       setTags([]);
       setExamplesBySense({});
-
-      const mark = (label: string) => console.log(`[vocab detail] ${label}`);
-
-      try {
-        mark(`start id=${vocabItemId}`);
-
-        mark("getVocabItem");
-        const it = await getVocabItem(db, vocabItemId);
-
-        mark("listSensesForItem");
-        const ss = await listSensesForItem(db, vocabItemId);
-
-        mark("listFormsForItem");
-        const ff = await listFormsForItem(db, vocabItemId);
-
-        mark("listTagsForItem");
-        const tg = await listTagsForItem(db, vocabItemId);
-
-        mark(`listExamplesForSense x${ss.length}`);
-        const exPairs = await Promise.all(
-          ss.map(async (s) => {
-            const ex = await listExamplesForSense(db, s.id);
-            return [s.id, ex] as const;
-          })
-        );
-
-        const exMap: Record<number, VocabExampleRow[]> = {};
-        for (const [senseId, ex] of exPairs) exMap[senseId] = ex;
-
-        if (!cancelled) {
-          setItem(it ?? null);
-          setSenses(ss);
-          setForms(ff);
-          setTags(tg);
-          setExamplesBySense(exMap);
-          setLoading(false);
-        }
-
-        mark("done");
-      } catch (e: any) {
-        console.error("[vocab detail] load failed", e);
-        if (!cancelled) setLoading(false);
-      }
     }
 
-    load();
-    return () => {
-      cancelled = true;
-    };
+    const mark = (label: string) => console.log(`[vocab detail] ${label}`);
+
+    try {
+      mark(`start id=${vocabItemId}`);
+
+      mark("getVocabItem");
+      const it = await getVocabItem(db, vocabItemId);
+
+      mark("listSensesForItem");
+      const ss = await listSensesForItem(db, vocabItemId);
+
+      mark("listFormsForItem");
+      const ff = await listFormsForItem(db, vocabItemId);
+
+      mark("listTagsForItem");
+      const tg = await listTagsForItem(db, vocabItemId);
+
+      mark(`listExamplesForSense x${ss.length}`);
+      const exPairs = await Promise.all(
+        ss.map(async (s) => {
+          const ex = await listExamplesForSense(db, s.id);
+          return [s.id, ex] as const;
+        })
+      );
+
+      const exMap: Record<number, VocabExampleRow[]> = {};
+      for (const [senseId, ex] of exPairs) exMap[senseId] = ex;
+
+      if (seq !== loadSeq.current) return;
+
+      setItem(it ?? null);
+      setSenses(ss);
+      setForms(ff);
+      setTags(tg);
+      setExamplesBySense(exMap);
+      setLoading(false);
+
+      mark("done");
+    } catch (e: any) {
+      console.error("[vocab detail] load failed", e);
+      if (seq === loadSeq.current) setLoading(false);
+    }
   }, [db, vocabItemId]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useFocusEffect(
+    useCallback(() => {
+      load({ reset: false });
+    }, [load])
+  )
 
 
   const primaryTranslation = useMemo(() => {
@@ -207,9 +220,20 @@ export default function VocabDetailScreen() {
           stickyHeaderIndices={[1]}
           contentContainerStyle={{ paddingBottom: 32 }}
         >
-          {/* Top header block */}
           <YStack padding="$4" paddingBottom="$2" gap="$2">
-            <AppHeader title="Vocab Info" subtitle={item.base_form} />
+            <XStack alignItems="center" justifyContent="space-between" paddingRight="$5">
+              <AppHeader title="Vocab Info" subtitle={item.base_form} />
+
+              <TouchableOpacity 
+              onPress={() => router.push({ 
+                pathname: "/(modals)/vocab/edit", 
+                params: { id: String(vocabItemId) },
+              }) 
+              } activeOpacity={0.7}>
+                <Pencil size={18} color="$color4" />
+              </TouchableOpacity>
+            </XStack>
+
 
             <YStack alignItems="center" paddingVertical="$4" gap="$2">
               <Text fontSize="$8" fontWeight="900" color="$color">
@@ -234,7 +258,6 @@ export default function VocabDetailScreen() {
             ) : null}
           </YStack>
 
-          {/* Sticky tabs bar */}
           <YStack
             paddingHorizontal="$4"
             paddingBottom="$2"
@@ -434,7 +457,7 @@ function MeaningSection({
           </XStack>
 
           <XStack justifyContent="space-between">
-            <Text color="$color11">Ghost Slayed</Text>
+            <Text color="$color11">Ghosts Slayed</Text>
             <Text color="$color11">{progress.ghostSlayed}</Text>
           </XStack>
 

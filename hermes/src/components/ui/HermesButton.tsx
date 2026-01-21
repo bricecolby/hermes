@@ -34,7 +34,8 @@ export function HermesButton({
       >
         <GradientBorderCard borderRadius={14} borderWidth={1.6} padding={0}>
           <YStack
-            paddingVertical={14}
+            paddingVertical={8}
+            paddingHorizontal={16}
             borderRadius={12}
             alignItems="center"
             justifyContent="center"
@@ -60,7 +61,8 @@ export function HermesButton({
         borderWidth={1}
         borderColor={outline}
         borderRadius={14}
-        paddingVertical={14}
+        paddingVertical={10}
+        paddingHorizontal={16}
         alignItems="center"
       >
         <Text color="$color" fontWeight="900" fontSize={15}>

@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
 import { YStack, XStack, Text, ScrollView } from "tamagui";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Screen } from "@/components/ui/Screen";
 import { HermesAccordion } from "@/components/ui/Accordion";
@@ -12,6 +13,7 @@ import { AppHeader } from "@/components/ui/AppHeader";
 import { useAppState } from "@/state/AppState";
 import { HeaderSearchOverlay } from "@/components/ui/HeaderSearchOverlay";
 
+import { Plus } from "@tamagui/lucide-icons";
 
 import {
   listVocabItemsByLanguage,
@@ -62,6 +64,15 @@ export default function VocabLibraryScreen() {
   const [itemLevels, setItemLevels] = useState<Record<number, Set<CefrLevel>>>({});
 
   const [groups, setGroups] = useState<GroupVM[]>([]);
+
+  const [refreshNonce, setRefreshNonce] = useState(0);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setRefreshNonce((prev) => prev + 1);
+    }, [])
+  )
+
 
   useEffect(() => {
     let cancelled = false;
@@ -122,7 +133,7 @@ export default function VocabLibraryScreen() {
     return () => {
       cancelled = true;
     };
-  }, [db, activeLanguageId]);
+  }, [db, activeLanguageId, refreshNonce]);
 
   const hasAnythingAtAll = useMemo(
     () => Object.values(levelCounts).some((c) => (c ?? 0) > 0),
@@ -189,9 +200,27 @@ export default function VocabLibraryScreen() {
               <AppHeader title="Vocab" />
             </XStack>
 
-            <XStack paddingLeft="$2">   
-              <HeaderSearchOverlay open={false} onOpenChange={setSearchOpen} value={query} onChange={setQuery} />
+            <XStack
+              paddingLeft="$2"
+              gap="$3"
+              alignItems="center"
+            >
+              <TouchableOpacity
+                onPress={() => router.push("/(modals)/vocab/edit")}
+                activeOpacity={0.7}
+                hitSlop={10}
+              >
+                <Plus size={20} color="$color4" />
+              </TouchableOpacity>
+
+              <HeaderSearchOverlay
+                open={false}
+                onOpenChange={setSearchOpen}
+                value={query}
+                onChange={setQuery}
+              />
             </XStack>
+
           </XStack>
 
           )}
@@ -260,6 +289,7 @@ export default function VocabLibraryScreen() {
           </ScrollView>
         )}
       </YStack>
+
     </Screen>
   );
 }

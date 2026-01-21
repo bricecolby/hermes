@@ -213,3 +213,210 @@ export async function listTagsForItem(
     [vocabItemId]
   );
 }
+
+
+type UpsertVocabPayload = {
+  languageId: number;
+  baseForm: string;
+  partOfSpeech: string;
+  usageNotes?: string | null;
+
+  translation?: string | null;
+  definition?: string | null;
+};
+
+function nowIso() {
+  return new Date().toISOString();
+}
+
+export async function createVocabItem(
+  db: SQLiteDatabase,
+  payload: UpsertVocabPayload
+): Promise<number> {
+  const ts = nowIso();
+
+  await db.execAsync("BEGIN;");
+  try {
+    await db.runAsync(
+      `
+      INSERT INTO vocab_items (
+        language_id, base_form, part_of_speech,
+        frequency_rank, frequency_band,
+        usage_notes, created_at, updated_at
+      )
+      VALUES (?, ?, ?, NULL, NULL, ?, ?, ?);
+      `,
+      [
+        payload.languageId,
+        payload.baseForm.trim(),
+        payload.partOfSpeech.trim(),
+        payload.usageNotes ?? null,
+        ts,
+        ts,
+      ]
+    );
+
+    const row = await db.getFirstAsync<{ id: number }>(
+      `SELECT last_insert_rowid() as id;`
+    );
+    const vocabItemId = row?.id ?? 0;
+    if (!vocabItemId) throw new Error("Failed to create vocab item (no id).");
+
+    const hasSense =
+      (payload.translation?.trim() ?? "") !== "" ||
+      (payload.definition?.trim() ?? "") !== "";
+
+    if (hasSense) {
+      await db.runAsync(
+        `
+        INSERT INTO vocab_senses (
+          vocab_item_id, sense_index,
+          definition, translation, usage_notes, grammar_hint,
+          created_at, updated_at
+        )
+        VALUES (?, 1, ?, ?, NULL, NULL, ?, ?);
+        `,
+        [
+          vocabItemId,
+          payload.definition?.trim() ?? null,
+          payload.translation?.trim() ?? null,
+          ts,
+          ts,
+        ]
+      );
+    }
+
+    await db.execAsync("COMMIT;");
+    return vocabItemId;
+  } catch (e) {
+    await db.execAsync("ROLLBACK;");
+    throw e;
+  }
+}
+
+export async function updateVocabItem(
+  db: SQLiteDatabase,
+  vocabItemId: number,
+  payload: Omit<UpsertVocabPayload, "languageId">
+): Promise<void> {
+  const ts = nowIso();
+
+  await db.execAsync("BEGIN;");
+  try {
+    await db.runAsync(
+      `
+      UPDATE vocab_items
+      SET base_form = ?,
+          part_of_speech = ?,
+          usage_notes = ?,
+          updated_at = ?
+      WHERE id = ?;
+      `,
+      [
+        payload.baseForm.trim(),
+        payload.partOfSpeech.trim(),
+        payload.usageNotes ?? null,
+        ts,
+        vocabItemId,
+      ]
+    );
+
+    const existing = await db.getFirstAsync<{ id: number }>(
+      `SELECT id FROM vocab_senses WHERE vocab_item_id = ? AND sense_index = 1 LIMIT 1;`,
+      [vocabItemId]
+    );
+
+    const translation = payload.translation?.trim() ?? null;
+    const definition = payload.definition?.trim() ?? null;
+
+    if (existing?.id) {
+      await db.runAsync(
+        `
+        UPDATE vocab_senses
+        SET definition = ?,
+            translation = ?,
+            updated_at = ?
+        WHERE id = ?;
+        `,
+        [definition, translation, ts, existing.id]
+      );
+    } else if (translation || definition) {
+      await db.runAsync(
+        `
+        INSERT INTO vocab_senses (
+          vocab_item_id, sense_index, definition, translation,
+          usage_notes, grammar_hint, created_at, updated_at
+        )
+        VALUES (?, 1, ?, ?, NULL, NULL, ?, ?);
+        `,
+        [vocabItemId, definition, translation, ts, ts]
+      );
+    }
+
+    await db.execAsync("COMMIT;");
+  } catch (e) {
+    await db.execAsync("ROLLBACK;");
+    throw e;
+  }
+}
+
+export async function deleteVocabItem(db: SQLiteDatabase, vocabItemId: number) {
+  await db.runAsync(`DELETE FROM vocab_items WHERE id = ?;`, [vocabItemId]);
+}
+
+function normalizeTagName(raw: string) {
+  return raw.trim().replace(/\s+/g, " ");
+}
+
+async function upsertVocabTagId(db: SQLiteDatabase, name: string): Promise<number> {
+  const n = normalizeTagName(name);
+  if (!n) throw new Error("Tag name is empty.");
+  
+  await db.runAsync(
+    `INSERT OR IGNORE INTO vocab_tags (name, description, created_at)
+     VALUES (?, NULL, datetime('now'));`,
+    [n]
+  );
+
+  const row = await db.getFirstAsync<{ id: number }>(
+    `SELECT id FROM vocab_tags WHERE name = ? LIMIT 1;`,
+    [n]
+  );
+
+  const id = row?.id ?? 0;
+  if (!id) throw new Error(`Failed to upsert vocab tag: ${n}`);
+  return id;
+}
+
+
+export async function replaceTagsForItem(
+  db: SQLiteDatabase,
+  vocabItemId: number,
+  tagNames: string[]
+): Promise<void> {
+  const cleaned = Array.from(
+    new Set(tagNames.map(normalizeTagName).filter(Boolean))
+  );
+
+  await db.execAsync("BEGIN;");
+  try {
+    await db.runAsync(
+      `DELETE FROM vocab_item_tags WHERE vocab_item_id = ?;`,
+      [vocabItemId]
+    );
+
+    for (const name of cleaned) {
+      const tagId = await upsertVocabTagId(db, name);
+      await db.runAsync(
+        `INSERT OR IGNORE INTO vocab_item_tags (vocab_item_id, vocab_tag_id)
+         VALUES (?, ?);`,
+        [vocabItemId, tagId]
+      );
+    }
+
+    await db.execAsync("COMMIT;");
+  } catch (e) {
+    await db.execAsync("ROLLBACK;");
+    throw e;
+  }
+}
