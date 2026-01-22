@@ -3,9 +3,11 @@
   "mode": "production",
   "skills": ["writing"],
   "conceptIds": [401, 402],
-  "text": "I ___ coffee. She ___ tea.",
-  "blanks": [
-    { "accepted": ["like", "love"], "conceptId": 401 },
-    { "accepted": ["likes", "loves"], "conceptId": 402 }
+  "parts": [
+    { "type": "text", "value": "I " },
+    { "type": "blank", "id": "b1", "accepted": ["like", "love"], "conceptId": 401 },
+    { "type": "text", "value": " coffee. She " },
+    { "type": "blank", "id": "b2", "accepted": ["likes", "loves"], "conceptId": 402 },
+    { "type": "text", "value": " tea." }
   ]
 }
