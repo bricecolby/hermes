@@ -44,3 +44,6 @@ app-example
 /android
 
 .venv
+# Lage local artifacts
+*.gguf
+hermes-capstone.zip
