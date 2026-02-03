@@ -4,7 +4,7 @@
 export const tokens = {
   colors: {
     bg0: "#06101C",
-    text: "#E6EBFF",
+    text: "#a3b0d0",
     textMuted: "#9BA3B4",
     textFaint: "#5E6C8A",
 
