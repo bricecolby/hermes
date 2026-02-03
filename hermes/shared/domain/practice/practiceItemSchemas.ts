@@ -8,7 +8,7 @@ export const PracticeModeSchema = z.enum([
   "mediation",
 ]);
 
-export const AtomicSkillSchema = z.enum([
+export const PracticeSkillSchema = z.enum([
   "reading",
   "listening",
   "writing",
@@ -18,8 +18,10 @@ export const AtomicSkillSchema = z.enum([
 export const PracticeItemBaseSchema = z.object({
   type: z.string().min(1),
   mode: PracticeModeSchema,
-  skills: z.array(AtomicSkillSchema).min(1),
+  skills: z.array(PracticeSkillSchema).min(1),
   conceptIds: z.array(z.number().finite()).min(1),
 });
 
 export type PracticeItemBaseJSON = z.infer<typeof PracticeItemBaseSchema>;
+export type PracticeSkill = z.infer<typeof PracticeSkillSchema>;
+export type PracticeMode = z.infer<typeof PracticeModeSchema>;

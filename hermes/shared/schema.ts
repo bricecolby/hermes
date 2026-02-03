@@ -350,11 +350,13 @@ export const schemaStatements: string[] = [
     user_id             INTEGER NOT NULL,
 
     modality            TEXT,
-    type                TEXT,
+    skill               TEXT,
+    item_type           TEXT,
     prompt_text         TEXT,
     question_json       TEXT NOT NULL,
     user_response_json  TEXT,
     evaluation_json     TEXT,
+    response_ms         INTEGER,
 
     created_at          TEXT NOT NULL,
 
@@ -462,7 +464,13 @@ export const schemaStatements: string[] = [
     modality        TEXT NOT NULL,            
 
     model_key       TEXT NOT NULL,           
-    mastery         REAL NOT NULL,             
+    mastery         REAL NOT NULL,
+    
+    rt_avg_ms       REAL,
+    rt_norm         REAL,
+
+    half_life_days  REAL,
+    due_at          TEXT,
 
     attempts_count  INTEGER NOT NULL DEFAULT 0,
     correct_count   INTEGER NOT NULL DEFAULT 0,
@@ -473,6 +481,21 @@ export const schemaStatements: string[] = [
     PRIMARY KEY (user_id, concept_id, modality, model_key),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (concept_id) REFERENCES concepts(id) ON DELETE CASCADE
+  );`,
+
+  `CREATE TABLE IF NOT EXISTS user_rt_baseline (
+    user_id     INTEGER NOT NULL,
+    item_type   TEXT NOT NULL,
+    skill       TEXT,
+    modality    TEXT,
+
+    rt_avg_ms   REAL,
+    samples     INTEGER NOT NULL DEFAULT 0,
+
+    updated_at  TEXT NOT NULL,
+
+    PRIMARY KEY (user_id, item_type, skill, modality),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   );`,
 
   `CREATE INDEX IF NOT EXISTS idx_ucm_user_model
@@ -504,4 +527,16 @@ export const schemaStatements: string[] = [
 
   `CREATE INDEX IF NOT EXISTS idx_attempts_user_time
     ON practice_attempts(user_id, created_at);`,
+
+  `CREATE INDEX IF NOT EXISTS idx_concepts_lang_kind_ref
+    ON concepts(language_id, kind, ref_id);`,
+
+  `CREATE INDEX IF NOT EXISTS idx_vit_vocab_item
+    ON vocab_item_tags(vocab_item_id);`,
+
+  `CREATE INDEX IF NOT EXISTS idx_git_grammar_item
+    ON grammar_point_tags(grammar_point_id);`,
+
+  `CREATE INDEX IF NOT EXISTS idx_ucm_user_concept_model
+    ON user_concept_mastery(user_id, concept_id, model_key);`,
 ];

@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useResponseTimer } from "@/hooks/responseTimer";
+import { ResponseTimer } from "@/components/ui/ResponseTimer";
 
 export type FlashcardViewModel = {
   conceptId: number,
@@ -17,8 +19,9 @@ export type FlashcardViewModel = {
 type Props = {
   item: FlashcardViewModel;
   locked?: boolean;
-  onSubmit: (payload: { isCorrect: boolean }) => void | Promise<void>;
+  onSubmit: (payload: { isCorrect: boolean; responseMs: number }) => void | Promise<void>;
   fullScreen?: boolean;
+  showTimer?: boolean;
 };
 
 const NEUTRAL_BORDER = "rgba(255,255,255,0.08)";
@@ -30,9 +33,12 @@ export function FlashcardCard({
   locked = false,
   onSubmit,
   fullScreen = false,
+  showTimer = false,
 }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [isBack, setIsBack] = useState(false);
+
+  const { reset, elapsedMs, startAtMs } = useResponseTimer();
 
   const translateX = useRef(new Animated.Value(0)).current;
 
@@ -76,12 +82,14 @@ export function FlashcardCard({
     setIsBack(false);
     translateX.setValue(0);
     flip.setValue(0);
-  }, [item.front, item.back, translateX, flip]);
+    reset();
+  }, [item.conceptId, translateX, flip, reset]);
 
   function commit(isCorrect: boolean) {
     if (locked || submitted) return;
     setSubmitted(true);
-    onSubmit({ isCorrect });
+    const responseMs = elapsedMs();
+    onSubmit({ isCorrect, responseMs });
   }
 
   function toggleFlip() {
@@ -130,6 +138,7 @@ export function FlashcardCard({
 
   return (
     <View style={[styles.wrap, fullScreen && styles.wrapFull]}>
+      {showTimer ? <ResponseTimer startAtMs={startAtMs()} /> : null}
       <Animated.View
         {...panResponder.panHandlers}
         style={[

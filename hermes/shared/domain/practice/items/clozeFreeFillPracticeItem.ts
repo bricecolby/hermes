@@ -1,7 +1,7 @@
-// shared/domain/practice/items/clozeFreeFillPracticeItem.ts
 import { z } from "zod";
 import { PracticeItemBaseSchema } from "../practiceItemSchemas";
-import { PracticeItem, EvaluationResult } from "../practiceItem";
+import type { EvaluationResult } from "../practiceItem";
+import { PracticeItem } from "../practiceItem";
 
 const ClozeTextPartSchema = z.object({
   type: z.literal("text"),
@@ -12,115 +12,81 @@ const ClozeBlankPartSchema = z.object({
   type: z.literal("blank"),
   id: z.string().min(1),
   accepted: z.array(z.string().min(1)).min(1),
-  conceptId: z.number().int().positive().optional(),
 });
 
 export const ClozeFreeFillSchema = PracticeItemBaseSchema.extend({
   type: z.literal("cloze_v1.free_fill"),
   parts: z.array(z.union([ClozeTextPartSchema, ClozeBlankPartSchema])).min(1),
-}).superRefine((val, ctx) => {
-  const blanks = val.parts.filter((p) => (p as any).type === "blank");
-  if (blanks.length < 1) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["parts"],
-      message: "Cloze must include at least one blank part.",
-    });
-  }
 });
 
 export type ClozeFreeFillJSON = z.infer<typeof ClozeFreeFillSchema>;
 
-type ClozePart = z.infer<typeof ClozeTextPartSchema> | z.infer<typeof ClozeBlankPartSchema>;
-type ClozeBlankPart = z.infer<typeof ClozeBlankPartSchema>;
+export type ClozeUserResponse = {
+  responses: Record<string, string>;
+};
 
-function normalizeAnswer(s: unknown): string {
-  return String(s ?? "")
-    .trim()
-    .toLowerCase();
+function norm(s: string) {
+  return s.trim().toLowerCase();
 }
 
 export class ClozeFreeFillPracticeItem extends PracticeItem {
-  private readonly parts: ClozePart[];
+  public readonly parts: ClozeFreeFillJSON["parts"];
 
   constructor(json: ClozeFreeFillJSON) {
-    super(json);
+    super({
+      type: json.type,
+      mode: json.mode,
+      skills: json.skills,
+      conceptIds: json.conceptIds,
+    });
     this.parts = json.parts;
   }
 
-  override evaluate(userResponse: unknown): EvaluationResult {
+  evaluate(userResponse: unknown): EvaluationResult {
+    const resp = userResponse as Partial<ClozeUserResponse> | null;
+    const responses = resp?.responses && typeof resp.responses === "object" ? resp.responses : {};
 
-    const responses = (userResponse as any)?.responses;
-    const safeResponses: Record<string, unknown> =
-      responses && typeof responses === "object" ? responses : {};
+    const blanks = this.parts.filter((p) => p.type === "blank") as Array<z.infer<typeof ClozeBlankPartSchema>>;
+    const total = blanks.length;
 
-    const blanks: ClozeBlankPart[] = this.parts.filter(
-      (p): p is ClozeBlankPart => p.type === "blank"
-    );
+    let correct = 0;
+    const evidence: Record<string, unknown> = {};
 
-    const perBlank = blanks.map((b, idx) => {
-      const response = normalizeAnswer(safeResponses[b.id]);
-      const accepted = b.accepted.map(normalizeAnswer);
+    for (const b of blanks) {
+      const givenRaw = typeof responses[b.id] === "string" ? responses[b.id] : "";
+      const given = norm(givenRaw);
+      const accepted = b.accepted.map(norm);
+      const ok = accepted.includes(given);
 
-      const isCorrect = response.length > 0 && accepted.includes(response);
-      const score = isCorrect ? 1 : 0;
+      if (ok) correct += 1;
 
-      const conceptId = b.conceptId ?? (this.conceptIds.length ? this.conceptIds[0] : 0);
-
-      return {
-        conceptId,
-        score,
-        maxScore: 1,
-        isCorrect,
-        evidence: {
-          index: idx,
-          blankId: b.id,
-          response,
-          accepted: b.accepted,
-        },
+      evidence[b.id] = {
+        given: givenRaw,
+        accepted: b.accepted,
+        isCorrect: ok,
       };
-    });
-
-    const total = perBlank.length;
-    const correct = perBlank.reduce((acc, r) => acc + r.score, 0);
-    const score = total > 0 ? correct / total : 0;
-
-    const byConcept = new Map<number, { s: number; m: number; anyWrong: boolean; evid: any[] }>();
-
-    for (const r of perBlank) {
-      const cur = byConcept.get(r.conceptId) ?? { s: 0, m: 0, anyWrong: false, evid: [] };
-      cur.s += r.score;
-      cur.m += r.maxScore;
-      cur.anyWrong = cur.anyWrong || !r.isCorrect;
-      cur.evid.push(r.evidence);
-      byConcept.set(r.conceptId, cur);
     }
 
-    const conceptResults = Array.from(byConcept.entries()).map(([conceptId, v]) => ({
+    const score = total === 0 ? 0 : correct / total;
+    const isCorrect = total > 0 ? correct === total : false;
+
+    const conceptResults = this.conceptIds.map((conceptId) => ({
       conceptId,
-      score: v.s,
-      maxScore: v.m,
-      isCorrect: !v.anyWrong,
-      evidence: v.evid,
+      score,
+      maxScore: 1,
+      isCorrect,
+      evidence,
     }));
 
     return {
       type: this.type,
       mode: this.mode,
       skills: this.skills,
+      isCorrect,
       score,
-      isCorrect: score === 1,
       conceptResults,
-      feedback: score === 1 ? "All blanks correct." : "Some blanks incorrect.",
-      meta: { parts: this.parts },
-    };
-  }
-
-  override toJSON(): ClozeFreeFillJSON {
-    return {
-      ...super.toJSON(),
-      type: "cloze_v1.free_fill",
-      parts: this.parts,
+      feedback: isCorrect ? "Correct." : "Not quite.",
+      meta: { correct, total },
     };
   }
 }

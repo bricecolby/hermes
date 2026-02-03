@@ -5,6 +5,14 @@ import { tokens as hermesTokens } from "./tamagui.tokens";
 const appConfig = createTamagui({
   ...config,
 
+  tokens: {
+    ...config.tokens,
+    color: {
+      ...config.tokens.color,
+      ...hermesTokens.colors,
+    },
+  },
+
   themes: {
     ...config.themes,
 

@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Stack, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { YStack, Text, XStack } from "tamagui";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Screen } from "@/components/ui/Screen";
 import { AppHeader } from "@/components/ui/AppHeader";
@@ -22,7 +23,7 @@ export default function MemorizeResults() {
 
   const { sessionDbId } = useAppState();
 
-  const finalizedRef = useRef(false);
+  const finalizedSessionRef = useRef<number | null>(null);
 
   const [stats, setStats] = useState<SessionStats>({
     attempts: 0,
@@ -30,61 +31,73 @@ export default function MemorizeResults() {
     avgMs: null,
   });
 
-  useEffect(() => {
-    if (!sessionDbId) return;
-    if (finalizedRef.current) return;
-    finalizedRef.current = true;
+  async function loadStats(sessionId: number) {
+    const a = await db.getFirstAsync<{ attempts: number }>(
+      `SELECT COUNT(*) AS attempts
+       FROM practice_attempts
+       WHERE session_id = ?;`,
+      [sessionId]
+    );
 
-    finalizePracticeSession(db, sessionDbId).catch((e) => {
-      console.warn("[memorize results] finalizePracticeSession failed", e);
+    const c = await db.getFirstAsync<{ correct: number }>(
+      `SELECT COALESCE(SUM(CASE WHEN is_correct = 1 THEN 1 ELSE 0 END), 0) AS correct
+       FROM practice_attempt_concepts pac
+       JOIN practice_attempts pa ON pa.id = pac.attempt_id
+       WHERE pa.session_id = ?;`,
+      [sessionId]
+    );
+
+    const ms = await db.getFirstAsync<{ avgMs: number | null }>(
+      `
+      SELECT
+        AVG(CAST(pa.response_ms AS REAL)) as avgMs
+      FROM practice_attempts pa
+      WHERE pa.session_id = ?
+        AND pa.user_response_json IS NOT NULL;
+      `,
+      [sessionId]
+    );
+
+    setStats({
+      attempts: Number(a?.attempts ?? 0),
+      correct: Number(c?.correct ?? 0),
+      avgMs: ms?.avgMs == null ? null : Number(ms.avgMs),
     });
-  }, [db, sessionDbId]);
+  }
 
-  useEffect(() => {
-    if (!sessionDbId) return;
+  // Because this screen does not unmount, refresh results each time it gains focus.
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!sessionDbId) return;
 
-    (async () => {
-      // Attempts in this session
-      const a = await db.getFirstAsync<{ attempts: number }>(
-        `SELECT COUNT(*) AS attempts
-         FROM practice_attempts
-         WHERE session_id = ?;`,
-        [sessionDbId]
-      );
+      let cancelled = false;
 
-      const c = await db.getFirstAsync<{ correct: number }>(
-        `SELECT COALESCE(SUM(CASE WHEN is_correct = 1 THEN 1 ELSE 0 END), 0) AS correct
-         FROM practice_attempt_concepts pac
-         JOIN practice_attempts pa ON pa.id = pac.attempt_id
-         WHERE pa.session_id = ?;`,
-        [sessionDbId]
-      );
+      (async () => {
+        setStats({ attempts: 0, correct: 0, avgMs: null });
 
-      const ms = await db.getFirstAsync<{ avgMs: number | null }>(
-        `
-        SELECT
-          AVG(
-            CAST(
-              json_extract(pa.user_response_json, '$.ms')
-              AS REAL
-            )
-          ) AS avgMs
-        FROM practice_attempts pa
-        WHERE pa.session_id = ?
-          AND pa.user_response_json IS NOT NULL;
-        `,
-        [sessionDbId]
-      );
+        if (finalizedSessionRef.current !== sessionDbId) {
+          finalizedSessionRef.current = sessionDbId;
+          try {
+            await finalizePracticeSession(db, sessionDbId);
+          } catch (e) {
+            console.warn("[memorize results] finalizePracticeSession failed", e);
+          }
+        }
 
-      setStats({
-        attempts: Number(a?.attempts ?? 0),
-        correct: Number(c?.correct ?? 0),
-        avgMs: ms?.avgMs == null ? null : Number(ms.avgMs),
-      });
-    })().catch((e) => {
-      console.warn("[memorize results] stats load failed", e);
-    });
-  }, [db, sessionDbId]);
+        if (!cancelled) {
+          try {
+            await loadStats(sessionDbId);
+          } catch (e) {
+            console.warn("[memorize results] stats load failed", e);
+          }
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [db, sessionDbId])
+  );
 
   const percentCorrect = useMemo(() => {
     if (stats.attempts <= 0) return 0;

@@ -10,6 +10,8 @@ import { AppHeader } from "../../components/ui/AppHeader";
 import { ActionCard } from "../../components/ui/ActionCard";
 import { useAppState } from "../../state/AppState";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
+import { CefrProgressWidget } from "@/components/ui/CefrProgressWidget";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MVP_USERNAME = "default";
 
@@ -21,6 +23,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   const db = SQLite.useSQLiteContext();
+
+  const [cefrNonce, setCefrNonce] = useState(0);
 
   const loadProfiles = useCallback(async () => {
     try {
@@ -36,10 +40,13 @@ export default function Home() {
     loadProfiles();
   }, [loadProfiles]);
 
-  const activeProfile = useMemo(() => {
-    if (!activeProfileId) return null;
-    return profiles.find((p) => p.userId === activeProfileId) ?? null;
-  }, [profiles, activeProfileId]);
+  useFocusEffect(
+    useCallback(() => {
+      setCefrNonce((n) => n + 1);
+      loadProfiles();
+    }, [loadProfiles])
+  );
+
 
   useEffect(() => {
     if (!activeProfileId) router.replace("/(onboarding)/profile");
@@ -52,22 +59,15 @@ export default function Home() {
       <YStack paddingTop={6}>
         <AppHeader title="Home" />
 
-        {loading ? (
-          <YStack marginTop={10} alignItems="center" justifyContent="center">
-            <ActivityIndicator />
-          </YStack>
-        ) : (
-          <Text color="$textMuted" marginTop={6}>
-            Active Profile:{" "}
-            {activeProfile ? `${activeProfile.learningName} (${activeProfile.learningCode})` : "None"}
-          </Text>
-        )}
-
-        {!!activeLanguageId && (
-          <Text color="$textFaint" marginTop={8} fontSize={12}>
-            activeLanguageId: {activeLanguageId}
-          </Text>
-        )}
+        {!loading && activeProfileId ? (
+          <CefrProgressWidget
+            db={db}
+            userId={activeProfileId}
+            languageId={activeLanguageId ?? null}
+            modelKey="ema_v1"
+            refreshNonce={cefrNonce}
+          />
+        ) : null}
 
         <YStack marginTop={18} gap={12}>
           {session ? (

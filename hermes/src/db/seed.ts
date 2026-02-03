@@ -270,34 +270,34 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   // Practice session + attempts (optional pipe test)
   // ============================================================
 
-  const sessionKey = "Seeded practice session";
-  if (!(await hasRow("practice_sessions", "user_id = ? AND source = ? AND notes = ?", [userId, "seed", sessionKey]))) {
-    await db.runAsync(
-      `INSERT INTO practice_sessions (language_id, user_id, started_at, completed_at, modality, source, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [RU, userId, now, now, "quiz", "seed", sessionKey]
-    );
-  }
-  const sessionId = await getId("practice_sessions", "user_id = ? AND source = ? AND notes = ?", [userId, "seed", sessionKey]);
+  // const sessionKey = "Seeded practice session";
+  // if (!(await hasRow("practice_sessions", "user_id = ? AND source = ? AND notes = ?", [userId, "seed", sessionKey]))) {
+  //   await db.runAsync(
+  //     `INSERT INTO practice_sessions (language_id, user_id, started_at, completed_at, modality, source, notes)
+  //      VALUES (?, ?, ?, ?, ?, ?, ?);`,
+  //     [RU, userId, now, now, "quiz", "seed", sessionKey]
+  //   );
+  // }
+  // const sessionId = await getId("practice_sessions", "user_id = ? AND source = ? AND notes = ?", [userId, "seed", sessionKey]);
 
-  const promptText = 'Translate: "привет"';
-  if (!(await hasRow("practice_attempts", "session_id = ? AND prompt_text = ?", [sessionId, promptText]))) {
-    await db.runAsync(
-      `INSERT INTO practice_attempts (session_id, user_id, modality, type, prompt_text, question_json, user_response_json, evaluation_json, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-      [
-        sessionId,
-        userId,
-        "reading",
-        "mcq",
-        promptText,
-        JSON.stringify({ question: "Translate: привет", choices: ["Hello", "Goodbye", "Please"], answerIndex: 0 }),
-        JSON.stringify({ choiceIndex: 0 }),
-        JSON.stringify({ isCorrect: true, score: 1 }),
-        now,
-      ]
-    );
-  }
+  // const promptText = 'Translate: "привет"';
+  // if (!(await hasRow("practice_attempts", "session_id = ? AND prompt_text = ?", [sessionId, promptText]))) {
+  //   await db.runAsync(
+  //     `INSERT INTO practice_attempts (session_id, user_id, modality, type, prompt_text, question_json, user_response_json, evaluation_json, created_at)
+  //      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+  //     [
+  //       sessionId,
+  //       userId,
+  //       "reading",
+  //       "mcq",
+  //       promptText,
+  //       JSON.stringify({ question: "Translate: привет", choices: ["Hello", "Goodbye", "Please"], answerIndex: 0 }),
+  //       JSON.stringify({ choiceIndex: 0 }),
+  //       JSON.stringify({ isCorrect: true, score: 1 }),
+  //       now,
+  //     ]
+  //   );
+  // }
   // const attemptId = await getId("practice_attempts", "session_id = ? AND prompt_text = ?", [sessionId, promptText]);
 
   // if (!(await hasRow("practice_attempt_concepts", "attempt_id = ? AND concept_id = ?", [attemptId, conceptPrivetId]))) {

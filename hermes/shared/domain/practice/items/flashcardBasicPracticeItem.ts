@@ -1,77 +1,54 @@
 import { z } from "zod";
-import { PracticeItem, EvaluationResult } from "../practiceItem";
 import { PracticeItemBaseSchema } from "../practiceItemSchemas";
-
-export type FlashcardConfidence = "easy" | "hard" | "forgot" | "unknown";
+import type { EvaluationResult } from "../practiceItem";
+import { PracticeItem } from "../practiceItem";
 
 export const FlashcardBasicSchema = PracticeItemBaseSchema.extend({
   type: z.literal("flashcard_v1.basic"),
   front: z.string().min(1),
   back: z.string().min(1),
-  example: z.string().optional(),
 });
 
 export type FlashcardBasicJSON = z.infer<typeof FlashcardBasicSchema>;
 
-export type FlashcardSubmission = {
-  revealed?: boolean;
-  confidence?: FlashcardConfidence;
+export type FlashcardUserResponse = {
+  isCorrect: boolean;
 };
 
 export class FlashcardBasicPracticeItem extends PracticeItem {
-  private readonly front: string;
-  private readonly back: string;
-  private readonly example?: string;
+  public readonly front: string;
+  public readonly back: string;
 
   constructor(json: FlashcardBasicJSON) {
-    super(json);
+    super({
+      type: json.type,
+      mode: json.mode,
+      skills: json.skills,
+      conceptIds: json.conceptIds,
+    });
     this.front = json.front;
     this.back = json.back;
-    this.example = json.example;
   }
 
-  override evaluate(userResponse: unknown): EvaluationResult {
-    const submission = (userResponse ?? {}) as FlashcardSubmission;
-    const confidence: FlashcardConfidence = submission.confidence ?? "unknown";
+  evaluate(userResponse: unknown): EvaluationResult {
+    const resp = userResponse as Partial<FlashcardUserResponse> | null;
+    const isCorrect = resp?.isCorrect === true;
 
-    const isCorrect = confidence !== "forgot" && confidence !== "unknown";
-
-    const score =
-      confidence === "easy"
-        ? 1
-        : confidence === "hard"
-        ? 0.5
-        : confidence === "forgot"
-        ? 0
-        : 0.25;
+    const conceptResults = this.conceptIds.map((conceptId) => ({
+      conceptId,
+      score: isCorrect ? 1 : 0,
+      maxScore: 1,
+      isCorrect,
+    }));
 
     return {
       type: this.type,
       mode: this.mode,
       skills: this.skills,
       isCorrect,
-      score,
-      conceptResults: this.conceptIds.map((conceptId) => ({
-        conceptId,
-        isCorrect,
-        score,
-        maxScore: 1,
-        evidence: {
-          revealed: submission.revealed ?? false,
-          confidence,
-        },
-      })),
-      feedback: "Flashcard reviewed.",
-    };
-  }
-
-  override toJSON(): FlashcardBasicJSON {
-    return {
-      ...super.toJSON(),
-      type: "flashcard_v1.basic",
-      front: this.front,
-      back: this.back,
-      example: this.example,
+      score: isCorrect ? 1 : 0,
+      conceptResults,
+      feedback: isCorrect ? "Correct." : "Incorrect.",
     };
   }
 }

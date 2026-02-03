@@ -1,17 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Easing, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useResponseTimer } from "@/hooks/responseTimer";
 
 type Choice = { id: string; text: string };
 
 export type McqViewModel = {
   prompt: string;
   choices: Choice[];
-  correctChoiceId: string; // for reveal styling only (driver still evaluates!)
+  correctChoiceId: string;
 };
 
 export type McqSubmitPayload = {
   choiceId: string;
+  responseMs: number;
 };
 
 type Props = {
@@ -25,6 +27,8 @@ export function McqCard({ item, locked = false, onSubmit, feedback }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
+  const { reset, elapsedMs } = useResponseTimer();
+
   const reveal = useRef(new Animated.Value(0)).current;
   const shake = useRef(new Animated.Value(0)).current;
 
@@ -35,14 +39,13 @@ export function McqCard({ item, locked = false, onSubmit, feedback }: Props) {
 
   const canInteract = useMemo(() => !locked && !submitted, [locked, submitted]);
 
-  // ✅ Critical: when the item changes, reset internal component state.
-  // This prevents prior selection/submitted state from leaking into the next question.
   useEffect(() => {
     setSelected(null);
     setSubmitted(false);
     reveal.setValue(0);
     shake.setValue(0);
-  }, [item.prompt, item.correctChoiceId, item.choices, reveal, shake]);
+    reset();
+  }, [item.prompt, item.correctChoiceId, item.choices, reveal, shake, reset]);
 
   function runReveal() {
     reveal.setValue(0);
@@ -68,7 +71,7 @@ export function McqCard({ item, locked = false, onSubmit, feedback }: Props) {
     if (!selected || locked || submitted) return;
 
     setSubmitted(true);
-    await onSubmit({ choiceId: selected });
+    await onSubmit({ choiceId: selected, responseMs: elapsedMs() });
 
     runReveal();
     if (feedback && !feedback.isCorrect) runShake();
@@ -128,7 +131,6 @@ export function McqCard({ item, locked = false, onSubmit, feedback }: Props) {
               );
             }
 
-            // Correct: blue -> green gradient
             if (showCorrect) {
               return (
                 <View key={c.id}>
@@ -218,7 +220,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.06)",
   },
 
-  // Borders for gradient states
   choiceSelectedBorder: {
     borderColor: "rgba(124,200,255,0.90)",
   },
@@ -226,7 +227,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(34,197,94,0.75)",
   },
 
-  // Wrong: slightly lighter red/pink for dark theme
   choiceWrong: {
     borderColor: "rgba(251,113,133,0.78)",
     backgroundColor: "rgba(251,113,133,0.14)",
@@ -237,7 +237,6 @@ const styles = StyleSheet.create({
   choiceId: { color: "#9BA3B4", fontWeight: "900", width: 18 },
   choiceText: { color: "#E6EBFF", fontSize: 15, fontWeight: "700", flex: 1 },
 
-  // Gradient button wrapper (so opacity affects whole thing)
   checkBtnWrap: {
     borderRadius: 14,
     overflow: "hidden",

@@ -19,8 +19,9 @@ import { FlashcardCard, type FlashcardViewModel } from "../../../components/prac
 import { ClozeCard, type ClozeFreeFillViewModel as ClozeViewModel } from "../../../components/practice/ClozeCard";
 
 import { useSQLiteContext } from "expo-sqlite";
-import { insertPracticeAttempt, insertAttemptConceptResults } from "@/db/queries/practice";
+import { recordPracticeAttemptTx } from "@/db/queries/practice";
 import { finalizePracticeSession } from "@/analytics/finalize";
+
 
 type FeedbackVM = { isCorrect: boolean; correctChoiceId: string; message: string } | null;
 
@@ -87,7 +88,7 @@ export default function Practice() {
   const json = currentJson;
   const item = currentItem;
 
-  async function submitAny(payload: any, correctChoiceIdForFeedback: string) {
+  async function submitAny(payload: any, correctChoiceIdForFeedback: string, responseMs: number) {
     if (locked) return;
     setLocked(true);
 
@@ -104,39 +105,28 @@ export default function Practice() {
           (json as any).front ??
           (typeof (json as any).promptText === "string" ? (json as any).promptText : null) ??
           null;
+        const modality = typeof(json as any).mode === "string" ? (json as any).mode: "reception";
+        const skills = (json as any).skills;
+        const skill = Array.isArray(skills) && typeof skills[0] === "string" ? skills[0] : null;
 
-        const attemptId = await insertPracticeAttempt({
+        await recordPracticeAttemptTx({
           db,
           sessionId: sid,
           userId,
-          modality: "practice",
-          type: json.type,
+          modality,
+          skill,
+          itemType: json.type,
           promptText: promptText ?? "",
           questionJson: json,
           userResponseJson: payload,
-          evaluationJson: evaluation,
+          evaluation,
+          responseMs,
         });
-
-        const conceptIds: number[] = Array.isArray((json as any).conceptIds) ? (json as any).conceptIds : [];
-
-        if (conceptIds.length > 0) {
-          await insertAttemptConceptResults({
-            db,
-            attemptId,
-            conceptResults: conceptIds.map((conceptId) => ({
-              conceptId,
-              isCorrect,
-              score: isCorrect ? 1 : 0,
-              maxScore: 1,
-              evidence: { source: "practice", itemType: json.type },
-            })),
-          });
-        }
       } else {
-        console.warn("[practice] missing sessionDbId or activeProfileId; skipping DB logging");
+        console.warn("[practice] skipping attempt recording, missing sessionDbId or activeProfileId");
       }
     } catch (e) {
-      console.error("[practice] logging failed", e);
+      console.error("[practice] attempt recording failed", e);  
     }
 
     // --- UI feedback ---
@@ -148,16 +138,16 @@ export default function Practice() {
   }
 
 
-  async function handleMcqSubmit(payload: { choiceId: string }) {
-    await submitAny(payload, mcqVm?.correctChoiceId ?? "");
+  async function handleMcqSubmit(payload: { choiceId: string; responseMs: number }) {
+    await submitAny({ choiceId: payload.choiceId }, mcqVm?.correctChoiceId ?? "", payload.responseMs);
   }
 
-  async function handleFlashcardSubmit(payload: { isCorrect: boolean }) {
-    await submitAny(payload, "");
+  async function handleFlashcardSubmit(payload: { isCorrect: boolean; responseMs: number }) {
+    await submitAny({ isCorrect: payload.isCorrect }, "", payload.responseMs);
   }
-
-  async function handleClozeSubmit(payload: { responses: Record<string, string> }) {
-    await submitAny(payload, "");
+  
+  async function handleClozeSubmit(payload: { responses: Record<string, string>; responseMs: number }) {
+    await submitAny({ responses: payload.responses }, "", payload.responseMs);
   }
 
   async function onContinue() {
@@ -201,6 +191,7 @@ export default function Practice() {
             item={flashcardVm}
             locked={locked}
             onSubmit={handleFlashcardSubmit}
+            showTimer={true}
           />
         ) : null;
 

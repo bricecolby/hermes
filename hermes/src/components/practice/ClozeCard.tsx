@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useResponseTimer } from "@/hooks/responseTimer";
 
 type ClozeTextPart = { type: "text"; value: string };
 type ClozeBlankPart = { type: "blank"; id: string; accepted: string[]; conceptId?: number };
@@ -13,16 +14,18 @@ export type ClozeFreeFillViewModel = {
 type Props = {
   item: ClozeFreeFillViewModel;
   locked?: boolean;
-  onSubmit: (payload: { responses: Record<string, string> }) => void | Promise<void>;
+  onSubmit: (payload: { responses: Record<string, string>; responseMs: number }) => void | Promise<void>;
   feedback?: { isCorrect: boolean } | null;
 };
 
 export function ClozeCard({ item, locked = false, onSubmit }: Props) {
   const [filled, setFilled] = useState<Record<string, string>>({});
-
+  const { reset, elapsedMs } = useResponseTimer();
+  
   useEffect(() => {
     setFilled({});
-  }, [item.parts]);
+    reset();
+  }, [item.parts, reset]);
 
   const wordBank = useMemo(() => {
     const all = item.parts.flatMap((p) => (p.type === "blank" ? p.accepted : []));
@@ -69,7 +72,7 @@ export function ClozeCard({ item, locked = false, onSubmit }: Props) {
 
       <TouchableOpacity
         disabled={!allFilled || locked}
-        onPress={() => onSubmit({ responses: filled })}
+        onPress={() => onSubmit({ responses: filled, responseMs: elapsedMs() })}
         style={[styles.checkWrap, (!allFilled || locked) && { opacity: 0.5 }]}
       >
         <LinearGradient colors={["#7CC8FF", "#1971FF"]} style={styles.checkBtn}>
