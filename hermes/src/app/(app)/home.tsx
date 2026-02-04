@@ -115,11 +115,13 @@ export default function Home() {
                 <ActionCard
                   title="Review"
                   subtitle="Spaced repetition"
-                  disabled={true}
-                  onPress={() => {
-                    startSession("review");
-                    router.push("/(app)/session/setup");
-                  }}
+                  disabled={!activeLanguageId}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(app)/review",
+                      params: { run: String(Date.now()) },
+                    })
+                  }
                 />
 
                 <ActionCard

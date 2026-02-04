@@ -13,6 +13,11 @@ export type ConceptRefRow = {
   description: string | null;
 };
 
+export type DueConceptRefRow = ConceptRefRow & {
+  modality: string;
+  dueAt: string | null;
+};
+
 export type CefrProgressRow = {
   cefr: CefrLevel;
   total: number;
@@ -266,6 +271,48 @@ export async function getFreshVocabConceptRefsForMemorize(
     LIMIT ?;
     `,
     [languageId, userId, modelKey, limit]
+  );
+}
+
+/**
+ * Review selector for any concepts:
+ * - any concept kind (vocab or grammar)
+ * - only concepts with due_at in the past (per modality)
+ */
+export async function getDueConceptRefsForReview(
+  db: SQLiteDatabase,
+  args: {
+    userId: number;
+    languageId: number;
+    modelKey: string;
+    limit: number;
+    dueBeforeIso: string;
+  }
+): Promise<DueConceptRefRow[]> {
+  const { userId, languageId, modelKey, limit, dueBeforeIso } = args;
+
+  return db.getAllAsync<DueConceptRefRow>(
+    `
+    SELECT
+      c.id           AS conceptId,
+      c.kind         AS kind,
+      c.ref_id       AS refId,
+      c.title        AS title,
+      c.description  AS description,
+      ucm.modality   AS modality,
+      ucm.due_at     AS dueAt
+    FROM user_concept_mastery ucm
+    JOIN concepts c
+      ON c.id = ucm.concept_id
+     AND c.language_id = ?
+    WHERE ucm.user_id = ?
+      AND ucm.model_key = ?
+      AND ucm.due_at IS NOT NULL
+      AND ucm.due_at <= ?
+    ORDER BY ucm.due_at ASC
+    LIMIT ?;
+    `,
+    [languageId, userId, modelKey, dueBeforeIso, limit]
   );
 }
 
