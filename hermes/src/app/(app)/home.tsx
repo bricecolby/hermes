@@ -54,8 +54,7 @@ export default function Home() {
       return;
     }
 
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
+    const nowIso = new Date().toISOString();
 
     try {
       setReviewLoading(true);
@@ -69,10 +68,10 @@ export default function Home() {
         WHERE ucm.user_id = ?
           AND ucm.model_key = ?
           AND ucm.due_at IS NOT NULL
-          AND ucm.due_at <= ?
+          AND ucm.due_at < ?
         GROUP BY c.kind;
         `,
-        [activeLanguageId, activeProfileId, "ema_v1", end.toISOString()]
+        [activeLanguageId, activeProfileId, "ema_v1", nowIso]
       );
 
       const next = { total: 0, vocab: 0, grammar: 0 };
@@ -141,12 +140,12 @@ export default function Home() {
             ) : (
               <>
                 <ActionCard
-                  title="Memorize"
+                  title="Learn"
                   subtitle="Vocab and Grammar"
                   disabled={!activeLanguageId}
                   onPress={() =>
                     router.push({
-                      pathname: "/(app)/memorize",
+                      pathname: "/(app)/learn",
                       params: { run: String(Date.now()) },
                     })
                   }
@@ -168,8 +167,8 @@ export default function Home() {
                     reviewLoading
                       ? "Loading reviews…"
                       : reviewCounts.total > 0
-                        ? `You have ${reviewCounts.total} reviews ready today.`
-                        : "You have no pending reviews right now."
+                        ? `You have ${reviewCounts.total} reviews overdue.`
+                        : "No reviews are overdue right now."
                   }
                   disabled={!activeLanguageId}
                   onPress={() =>
@@ -193,7 +192,7 @@ export default function Home() {
                       <Text color="$textMuted" fontSize={12} fontWeight="800">
                         {reviewLoading ? "…" : `${reviewCounts.total}`}
                       </Text>
-                  </YStack>
+                    </YStack>
                   }
 
                   footer={
@@ -209,7 +208,7 @@ export default function Home() {
                               Grammar
                             </Text>
                             <Text color="$textMuted" fontSize={12}>
-                              {reviewCounts.grammar > 0 ? "Ready to review" : "No reviews yet."}
+                              {reviewCounts.grammar > 0 ? "Overdue" : "No overdue reviews."}
                             </Text>
                           </YStack>
                           <YStack
@@ -236,7 +235,7 @@ export default function Home() {
                               Vocab
                             </Text>
                             <Text color="$textMuted" fontSize={12}>
-                              {reviewCounts.vocab > 0 ? "Ready to review" : "No reviews yet."}
+                              {reviewCounts.vocab > 0 ? "Overdue" : "No overdue reviews."}
                             </Text>
                           </YStack>
                           <YStack

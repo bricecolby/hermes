@@ -225,7 +225,7 @@ export default function Results() {
             >
               <Text fontWeight="900">Next steps</Text>
               <Text color="$textMuted">• Re-run Practice to tighten weak spots</Text>
-              <Text color="$textMuted">• Jump to Memorize for fast reps</Text>
+              <Text color="$textMuted">• Jump to Learn for fast reps</Text>
               <Text color="$textMuted">• Check Analytics for session history</Text>
             </YStack>
 

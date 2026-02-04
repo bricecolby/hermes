@@ -220,12 +220,12 @@ function cefrRankCaseSql(tagAlias: string) {
 }
 
 /**
- * Memorize selector for vocab concepts:
+ * Learn selector for vocab concepts:
  * - only vocab concepts
  * - exclude concepts that already exist in user_concept_mastery (any modality)
  * - optionally filter by CEFR tags (vt.name)
  */
-export async function getFreshVocabConceptRefsForMemorize(
+export async function getFreshVocabConceptRefsForLearn(
   db: SQLiteDatabase,
   args: {
     userId: number;
@@ -434,12 +434,12 @@ export async function getCefrProgress(
 
 
 /**
- * Memorize selector for grammar concepts:
+ * Learn selector for grammar concepts:
  * - only grammar concepts
  * - exclude concepts that already exist in user_concept_mastery (any modality)
  * - optionally filter by CEFR tags (vt.name)
  */
-export async function getFreshGrammarConceptRefsForMemorize(
+export async function getFreshGrammarConceptRefsForLearn(
   db: SQLiteDatabase,
   args: {
     userId: number;

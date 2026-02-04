@@ -210,7 +210,7 @@ export default function Review() {
 
     const nextIdx = idx + 1;
     if (nextIdx >= cards.length) {
-      router.replace("/memorize/results");
+      router.replace("/learn/results");
       return;
     }
 

@@ -11,7 +11,7 @@ import { useAppState } from "@/state/AppState";
 
 import { startPracticeSession } from "@/db/queries/sessions";
 import { recordPracticeAttemptTx } from "@/db/queries/practice";
-import { getFreshVocabConceptRefsForMemorize } from "@/db/queries/concepts";
+import { getFreshVocabConceptRefsForLearn } from "@/db/queries/concepts";
 
 type RunStats = {
   correct: number;
@@ -40,7 +40,7 @@ async function loadMemorizeFlashcards(
   // Each vocab concept becomes TWO cards (reception + production)
   const conceptLimit = Math.ceil(totalCards / 2);
 
-  const refs = await getFreshVocabConceptRefsForMemorize(db, {
+  const refs = await getFreshVocabConceptRefsForLearn(db, {
     userId,
     languageId,
     modelKey,
@@ -227,7 +227,7 @@ export default function Memorize() {
 
     const nextIdx = idx + 1;
     if (nextIdx >= cards.length) {
-      router.replace("/memorize/results");
+      router.replace("/learn/results");
       return;
     }
 
@@ -239,7 +239,7 @@ export default function Memorize() {
     <Screen>
       <Stack.Screen options={{ headerShown: false }} />
       <YStack flex={1} paddingTop={6}>
-        <AppHeader title="Memorize" />
+        <AppHeader title="Learn" />
 
         {loading ? (
           <YStack flex={1} alignItems="center" justifyContent="center">

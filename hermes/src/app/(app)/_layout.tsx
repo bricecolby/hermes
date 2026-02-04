@@ -121,11 +121,11 @@ export default function AppLayout() {
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen
-        name="memorize/index"
+        name="learn/index"
         options={{ title: "Index", drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen
-        name="memorize/results"
+        name="learn/results"
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen
