@@ -9,6 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Screen } from "@/components/ui/Screen";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { GradientTabs } from "@/components/ui/GradientTabs";
+import { useAppState } from "@/state/AppState";
 
 import { Pencil } from "@tamagui/lucide-icons";
 
@@ -24,6 +25,8 @@ import {
   type VocabTagRow,
   type VocabExampleRow,
 } from "@/db/queries/vocab";
+import { getConceptMetaByRef } from "@/db/queries/concepts";
+import { ConceptProgress } from "@/components/ui/ConceptProgress";
 
 type TabKey = "meaning" | "examples" | "resources";
 
@@ -36,6 +39,7 @@ const TABS: { key: TabKey; label: string }[] = [
 export default function VocabDetailScreen() {
   const router = useRouter();
   const db = SQLite.useSQLiteContext();
+  const { activeProfileId } = useAppState();
 
   const params = useLocalSearchParams<{ id?: string }>();
   const vocabItemId = useMemo(() => Number(params.id), [params.id]);
@@ -49,6 +53,8 @@ export default function VocabDetailScreen() {
   const [examplesBySense, setExamplesBySense] = useState<Record<number, VocabExampleRow[]>>({});
   const [error, setError] = useState<string | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [conceptId, setConceptId] = useState<number | null>(null);
+  const [conceptCreatedAt, setConceptCreatedAt] = useState<string | null>(null);
 
   const sense1 = senses.find((s) => s.sense_index === 1) ?? null;
   const loadSeq = useRef(0)
@@ -105,6 +111,8 @@ export default function VocabDetailScreen() {
         })
       );
 
+      const conceptMeta = await getConceptMetaByRef(db, { kind: "vocab_item", refId: vocabItemId });
+
       const exMap: Record<number, VocabExampleRow[]> = {};
       for (const [senseId, ex] of exPairs) exMap[senseId] = ex;
 
@@ -115,6 +123,8 @@ export default function VocabDetailScreen() {
       setForms(ff);
       setTags(tg);
       setExamplesBySense(exMap);
+      setConceptId(conceptMeta?.conceptId ?? null);
+      setConceptCreatedAt(conceptMeta?.createdAt ?? null);
       setLoading(false);
 
       mark("done");
@@ -139,17 +149,6 @@ export default function VocabDetailScreen() {
     const first = senses[0];
     return first?.translation ?? first?.definition ?? null;
   }, [senses]);
-
-  // stub analytics for now
-  const progress = useMemo(() => {
-    return {
-      addedOn: item?.created_at ?? null,
-      timesStudied: 0,
-      accuracyPct: 0,
-      stageLabel: "Novice",
-      ghostSlayed: 0,
-    };
-  }, [item]);
 
   // stub resources for now
   const resources = useMemo(() => {
@@ -277,7 +276,18 @@ export default function VocabDetailScreen() {
                 sectionY.current.meaning = e.nativeEvent.layout.y;
               }}
             >
-              <MeaningSection item={item} senses={senses} forms={forms} tags={tags} progress={progress} />
+              <MeaningSection
+                item={item}
+                senses={senses}
+                forms={forms}
+                tags={tags}
+                progressMeta={{
+                  db,
+                  userId: activeProfileId ?? null,
+                  conceptId,
+                  addedOn: conceptCreatedAt ?? item?.created_at ?? null,
+                }}
+              />
             </YStack>
 
             <Separator />
@@ -313,20 +323,21 @@ function MeaningSection({
   senses,
   forms,
   tags,
-  progress,
+  progressMeta,
 }: {
   item: VocabItemRow;
   senses: VocabSenseRow[];
   forms: VocabFormRow[];
   tags: VocabTagRow[];
-  progress: {
+  progressMeta: {
+    db: SQLite.SQLiteDatabase;
+    userId: number | null;
+    conceptId: number | null;
     addedOn: string | null;
-    timesStudied: number;
-    accuracyPct: number;
-    stageLabel: string;
-    ghostSlayed: number;
   };
 }) {
+  const { db, userId, conceptId, addedOn } = progressMeta;
+
   return (
     <YStack gap="$4">
       {/* Meaning / senses */}
@@ -432,48 +443,22 @@ function MeaningSection({
         </YStack>
       ) : null}
 
-      {/* Progress (stub) */}
-      <YStack gap="$2">
-        <Text fontSize="$7" fontWeight="900" color="$color">
-          Progress
-        </Text>
-
-        <YStack
-          padding="$3"
-          borderRadius="$5"
-          backgroundColor="$glassFill"
-          borderWidth={1}
-          borderColor="$borderColor"
-          gap="$2"
-        >
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Added On</Text>
-            <Text color="$color11">{progress.addedOn ? progress.addedOn.slice(0, 10) : "—"}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Times Studied</Text>
-            <Text color="$color11">{progress.timesStudied}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Ghosts Slayed</Text>
-            <Text color="$color11">{progress.ghostSlayed}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Current Stage</Text>
-            <Text color="$color11">{progress.stageLabel}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Accuracy</Text>
-            <Text color="$color11">{progress.accuracyPct}%</Text>
-          </XStack>
+      {/* Progress */}
+      {conceptId && userId ? (
+        <ConceptProgress
+          db={db}
+          userId={userId}
+          conceptId={conceptId}
+          addedOn={addedOn}
+        />
+      ) : (
+        <YStack gap="$2">
+          <Text fontSize="$7" fontWeight="900" color="$color">
+            Progress
+          </Text>
+          <Text color="$color11">No progress data yet.</Text>
         </YStack>
-
-        <Text color="$color11">(Stub) Later this will pull from practice attempts / mastery model.</Text>
-      </YStack>
+      )}
     </YStack>
   );
 }

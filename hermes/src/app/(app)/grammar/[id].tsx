@@ -7,6 +7,9 @@ import { ScrollView, Separator, XStack, YStack, Text } from "tamagui";
 import { Screen } from "@/components/ui/Screen";
 import { AppHeader } from "@/components/ui/AppHeader";
 import { GradientTabs } from "@/components/ui/GradientTabs";
+import { ConceptProgress } from "@/components/ui/ConceptProgress";
+import { getConceptMetaByRef } from "@/db/queries/concepts";
+import { useAppState } from "@/state/AppState";
 
 import {
   getGrammarPoint,
@@ -30,6 +33,7 @@ const TABS: { key: TabKey; label: string }[] = [
 export default function GrammarPointDetailScreen() {
   const router = useRouter();
   const db = SQLite.useSQLiteContext();
+  const { activeProfileId } = useAppState();
 
   const params = useLocalSearchParams<{ id?: string }>();
   const grammarPointId = useMemo(() => Number(params.id), [params.id]);
@@ -39,6 +43,8 @@ export default function GrammarPointDetailScreen() {
   const [examples, setExamples] = useState<GrammarExampleRow[]>([]);
   const [tags, setTags] = useState<GrammarTagRow[]>([]);
   const [vocabLinks, setVocabLinks] = useState<VocabGrammarLinkRow[]>([]);
+  const [conceptId, setConceptId] = useState<number | null>(null);
+  const [conceptCreatedAt, setConceptCreatedAt] = useState<string | null>(null);
 
   const [tab, setTab] = useState<TabKey>("meaning");
   const scrollRef = useRef<ScrollView>(null);
@@ -59,16 +65,21 @@ export default function GrammarPointDetailScreen() {
 
       setLoading(true);
 
-      const point = await getGrammarPoint(db, grammarPointId);
-      const ex = await listExamplesForGrammarPoint(db, grammarPointId);
-      const tg = await listTagsForGrammarPoint(db, grammarPointId);
-      const links = await listVocabLinksForGrammarPoint(db, grammarPointId);
+      const [point, ex, tg, links, conceptMeta] = await Promise.all([
+        getGrammarPoint(db, grammarPointId),
+        listExamplesForGrammarPoint(db, grammarPointId),
+        listTagsForGrammarPoint(db, grammarPointId),
+        listVocabLinksForGrammarPoint(db, grammarPointId),
+        getConceptMetaByRef(db, { kind: "grammar_point", refId: grammarPointId }),
+      ]);
 
       if (!cancelled) {
         setGp(point ?? null);
         setExamples(ex);
         setTags(tg);
         setVocabLinks(links);
+        setConceptId(conceptMeta?.conceptId ?? null);
+        setConceptCreatedAt(conceptMeta?.createdAt ?? null);
         setLoading(false);
       }
     }
@@ -78,16 +89,6 @@ export default function GrammarPointDetailScreen() {
       cancelled = true;
     };
   }, [db, grammarPointId]);
-
-  const progress = useMemo(() => {
-    return {
-      addedOn: gp?.created_at ?? null,
-      timesStudied: 0,
-      accuracyPct: 0,
-      stageLabel: "Novice",
-      ghostSlayed: 0,
-    };
-  }, [gp]);
 
   const resources = useMemo(() => {
     return [] as Array<{ id: string; title: string; subtitle?: string }>;
@@ -189,7 +190,17 @@ export default function GrammarPointDetailScreen() {
                 sectionY.current.meaning = e.nativeEvent.layout.y;
               }}
             >
-              <MeaningSection gp={gp} tags={tags} progress={progress} vocabLinks={vocabLinks} />
+              <MeaningSection
+                gp={gp}
+                tags={tags}
+                vocabLinks={vocabLinks}
+                progressMeta={{
+                  db,
+                  userId: activeProfileId ?? null,
+                  conceptId,
+                  addedOn: conceptCreatedAt ?? gp?.created_at ?? null,
+                }}
+              />
             </YStack>
 
             <Separator />
@@ -223,20 +234,20 @@ export default function GrammarPointDetailScreen() {
 function MeaningSection({
   gp,
   tags,
-  progress,
   vocabLinks,
+  progressMeta,
 }: {
   gp: GrammarPointRow;
   tags: GrammarTagRow[];
-  progress: {
-    addedOn: string | null;
-    timesStudied: number;
-    accuracyPct: number;
-    stageLabel: string;
-    ghostSlayed: number;
-  };
   vocabLinks: VocabGrammarLinkRow[];
+  progressMeta: {
+    db: SQLite.SQLiteDatabase;
+    userId: number | null;
+    conceptId: number | null;
+    addedOn: string | null;
+  };
 }) {
+  const { db, userId, conceptId, addedOn } = progressMeta;
   return (
     <YStack gap="$4">
       <YStack gap="$2">
@@ -271,47 +282,21 @@ function MeaningSection({
         </YStack>
       ) : null}
 
-      <YStack gap="$2">
-        <Text fontSize="$7" fontWeight="900" color="$color">
-          Progress
-        </Text>
-
-        <YStack
-          padding="$3"
-          borderRadius="$5"
-          backgroundColor="$glassFill"
-          borderWidth={1}
-          borderColor="$borderColor"
-          gap="$2"
-        >
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Added On</Text>
-            <Text color="$color11">{progress.addedOn ? progress.addedOn.slice(0, 10) : "—"}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Times Studied</Text>
-            <Text color="$color11">{progress.timesStudied}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Ghost Slayed</Text>
-            <Text color="$color11">{progress.ghostSlayed}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Current Stage</Text>
-            <Text color="$color11">{progress.stageLabel}</Text>
-          </XStack>
-
-          <XStack justifyContent="space-between">
-            <Text color="$color11">Accuracy</Text>
-            <Text color="$color11">{progress.accuracyPct}%</Text>
-          </XStack>
+      {conceptId && userId ? (
+        <ConceptProgress
+          db={db}
+          userId={userId}
+          conceptId={conceptId}
+          addedOn={addedOn}
+        />
+      ) : (
+        <YStack gap="$2">
+          <Text fontSize="$7" fontWeight="900" color="$color">
+            Progress
+          </Text>
+          <Text color="$color11">No progress data yet.</Text>
         </YStack>
-
-        <Text color="$color11">(Stub) Later this will pull from practice attempts / mastery model.</Text>
-      </YStack>
+      )}
 
       {vocabLinks.length ? (
         <YStack gap="$2">

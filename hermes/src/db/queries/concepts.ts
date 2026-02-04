@@ -178,6 +178,21 @@ export async function getConceptRefsByConceptIds(
   return conceptIds.map((id) => byId.get(id)).filter((x): x is ConceptRefRow => !!x);
 }
 
+export async function getConceptMetaByRef(
+  db: SQLiteDatabase,
+  args: { kind: ConceptKind; refId: number }
+): Promise<{ conceptId: number; createdAt: string } | null> {
+  const { kind, refId } = args;
+
+  return db.getFirstAsync<{ conceptId: number; createdAt: string }>(
+    `SELECT id AS conceptId, created_at AS createdAt
+     FROM concepts
+     WHERE kind = ? AND ref_id = ?
+     LIMIT 1;`,
+    [kind, refId]
+  );
+}
+
 export async function getRandomVocabConceptRefs(
   db: SQLiteDatabase,
   languageId: number,

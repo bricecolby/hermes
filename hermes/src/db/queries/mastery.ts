@@ -276,3 +276,40 @@ export async function applyAttemptToMasteryForConcepts(
     );
   }
 }
+
+export type ConceptMasteryRow = {
+  modality: string;
+  mastery: number;
+  rt_avg_ms: number | null;
+  rt_norm: number | null;
+  half_life_days: number | null;
+  due_at: string | null;
+  attempts_count: number;
+  correct_count: number;
+  last_attempt_at: string | null;
+  updated_at: string;
+};
+
+export async function listMasteryForConcept(
+  db: SQLiteDatabase,
+  args: { userId: number; conceptId: number; modelKey?: string }
+): Promise<ConceptMasteryRow[]> {
+  const { userId, conceptId, modelKey = MODEL_KEY } = args;
+
+  return db.getAllAsync<ConceptMasteryRow>(
+    `SELECT
+       modality,
+       mastery,
+       rt_avg_ms,
+       rt_norm,
+       half_life_days,
+       due_at,
+       attempts_count,
+       correct_count,
+       last_attempt_at,
+       updated_at
+     FROM user_concept_mastery
+     WHERE user_id = ? AND concept_id = ? AND model_key = ?;`,
+    [userId, conceptId, modelKey]
+  );
+}
