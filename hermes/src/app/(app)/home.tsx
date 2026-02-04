@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, TouchableOpacity } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
 
-import { YStack, Text, ScrollView, XStack } from "tamagui";
+import { YStack, Text, ScrollView, XStack, useTheme } from "tamagui";
 
 import { Screen } from "../../components/ui/Screen";
 import { AppHeader } from "../../components/ui/AppHeader";
@@ -13,8 +13,62 @@ import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../
 import { CefrProgressWidget } from "@/components/ui/CefrProgressWidget";
 import { useFocusEffect } from "@react-navigation/native";
 import { ReviewForecast } from "@/components/ui/ReviewForecast";
+import { IconSymbol } from "@/components/ui/icon-symbol";
+import {
+  getLearnSettings,
+  getLearnCompletedTodayByKind,
+  getLearnChunkProgressByKind,
+  type LearnSettings,
+} from "@/db/queries/learn";
 
 const MVP_USERNAME = "default";
+
+type LearnStats = {
+  chunkCompleted: number;
+  chunkTarget: number;
+  vocabCompletedToday: number;
+  grammarCompletedToday: number;
+};
+
+function startOfDayIso() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+}
+
+function PillRow({ total, filled }: { total: number; filled: number }) {
+  const theme = useTheme();
+  const safeFilled = Math.min(Math.max(filled, 0), total);
+  const [width, setWidth] = useState(0);
+  const minPillWidth = 2;
+  const gap = Math.max(1, Math.floor(minPillWidth / 2));
+  const maxPillsForWidth = width > 0 ? Math.floor((width + gap) / (minPillWidth + gap)) : total;
+  const count = width > 0 ? Math.min(total, maxPillsForWidth) : total;
+  const pillWidth =
+    width > 0 && count > 0
+      ? Math.max(minPillWidth, Math.floor((width - gap * (count - 1)) / count))
+      : minPillWidth;
+  const pillHeight = Math.max(3, Math.floor(pillWidth * 0.6));
+  const fillColor = String(theme.gradB?.val ?? "rgba(215, 255, 235, 0.9)");
+
+  return (
+    <YStack
+      onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+    >
+      <XStack gap={gap} flexWrap="nowrap">
+        {Array.from({ length: count }).map((_, i) => (
+          <YStack
+            key={i}
+            width={pillWidth}
+            height={pillHeight}
+            borderRadius={999}
+            backgroundColor={i < safeFilled ? fillColor : "rgba(255,255,255,0.12)"}
+          />
+        ))}
+      </XStack>
+    </YStack>
+  );
+}
 
 export default function Home() {
   const router = useRouter();
@@ -32,6 +86,15 @@ export default function Home() {
     total: 0,
     vocab: 0,
     grammar: 0,
+  });
+  const [learnExpanded, setLearnExpanded] = useState(false);
+  const [learnLoading, setLearnLoading] = useState(false);
+  const [learnSettings, setLearnSettings] = useState<LearnSettings | null>(null);
+  const [learnStats, setLearnStats] = useState<LearnStats>({
+    chunkCompleted: 0,
+    chunkTarget: 0,
+    vocabCompletedToday: 0,
+    grammarCompletedToday: 0,
   });
 
   const loadProfiles = useCallback(async () => {
@@ -89,12 +152,75 @@ export default function Home() {
     }
   }, [activeLanguageId, activeProfileId, db]);
 
+  const loadLearnStats = useCallback(async () => {
+    if (!activeProfileId || !activeLanguageId) {
+      setLearnSettings(null);
+      setLearnStats({
+        chunkCompleted: 0,
+        chunkTarget: 0,
+        vocabCompletedToday: 0,
+        grammarCompletedToday: 0,
+      });
+      return;
+    }
+
+    try {
+      setLearnLoading(true);
+      const settings = await getLearnSettings(db, {
+        userId: activeProfileId,
+        languageId: activeLanguageId,
+      });
+      setLearnSettings(settings);
+
+      const [vocabProgress, grammarProgress] = await Promise.all([
+        getLearnChunkProgressByKind(db, {
+          userId: activeProfileId,
+          languageId: activeLanguageId,
+          kind: "vocab_item",
+        }),
+        getLearnChunkProgressByKind(db, {
+          userId: activeProfileId,
+          languageId: activeLanguageId,
+          kind: "grammar_point",
+        }),
+      ]);
+
+      const sinceIso = startOfDayIso();
+      const [vocabToday, grammarToday] = await Promise.all([
+        getLearnCompletedTodayByKind(db, {
+          userId: activeProfileId,
+          languageId: activeLanguageId,
+          kind: "vocab_item",
+          sinceIso,
+        }),
+        getLearnCompletedTodayByKind(db, {
+          userId: activeProfileId,
+          languageId: activeLanguageId,
+          kind: "grammar_point",
+          sinceIso,
+        }),
+      ]);
+
+      setLearnStats({
+        chunkCompleted: vocabToday + grammarToday,
+        chunkTarget: settings.vocabDailyTarget + settings.grammarDailyTarget,
+        vocabCompletedToday: vocabToday,
+        grammarCompletedToday: grammarToday,
+      });
+    } catch (e) {
+      console.warn("[home] learn stats failed", e);
+    } finally {
+      setLearnLoading(false);
+    }
+  }, [activeLanguageId, activeProfileId, db]);
+
   useFocusEffect(
     useCallback(() => {
       setCefrNonce((n) => n + 1);
       loadProfiles();
       loadReviewCounts();
-    }, [loadProfiles, loadReviewCounts])
+      loadLearnStats();
+    }, [loadProfiles, loadReviewCounts, loadLearnStats])
   );
 
 
@@ -141,13 +267,130 @@ export default function Home() {
               <>
                 <ActionCard
                   title="Learn"
-                  subtitle="Vocab and Grammar"
+                  subtitle={
+                    learnLoading ? "Loading learn queue…" : undefined
+                  }
                   disabled={!activeLanguageId}
                   onPress={() =>
                     router.push({
-                      pathname: "/(app)/learn",
+                      pathname: "/(app)/learn/concept",
                       params: { run: String(Date.now()) },
                     })
+                  }
+                  showChevron
+                  chevronOpen={learnExpanded}
+                  onChevronPress={() => setLearnExpanded((v) => !v)}
+                  rightSlot={
+                    <Text color="$textMuted" fontSize={12} fontWeight="800">
+                      {learnLoading
+                        ? "…"
+                        : `${learnStats.chunkCompleted}/${learnStats.chunkTarget}`}
+                    </Text>
+                  }
+                  footer={
+                    <YStack gap={12}>
+                      <PillRow
+                        total={learnStats.chunkTarget}
+                        filled={learnStats.chunkCompleted}
+                      />
+
+                      {learnExpanded ? (
+                        <YStack gap={12}>
+                          <XStack
+                            alignItems="center"
+                            justifyContent="space-between"
+                            paddingVertical={6}
+                          >
+                            <YStack gap={4} flex={1}>
+                              <XStack alignItems="center" justifyContent="space-between">
+                                <Text fontSize={14} fontWeight="800" color="$color">
+                                  Vocab
+                                </Text>
+                                <Text color="$textMuted" fontSize={12} fontWeight="800">
+                                  {learnSettings
+                                    ? `${learnStats.vocabCompletedToday}/${learnSettings.vocabDailyTarget}`
+                                    : "—"}
+                                </Text>
+                              </XStack>
+                              <PillRow
+                                total={learnSettings?.vocabDailyTarget ?? 0}
+                                filled={learnStats.vocabCompletedToday}
+                              />
+                            </YStack>
+                            <YStack alignItems="center" marginLeft={10}>
+                              <TouchableOpacity
+                                onPress={() => router.push("/(modals)/learn-settings")}
+                                activeOpacity={0.8}
+                              >
+                                <IconSymbol
+                                  name="ellipsis"
+                                  size={18}
+                                  weight="medium"
+                                  color="rgba(255,255,255,0.7)"
+                                />
+                              </TouchableOpacity>
+                            </YStack>
+                          </XStack>
+
+                          <XStack
+                            alignItems="center"
+                            justifyContent="space-between"
+                            paddingVertical={6}
+                          >
+                            <YStack gap={4} flex={1}>
+                              <XStack alignItems="center" justifyContent="space-between">
+                                <Text fontSize={14} fontWeight="800" color="$color">
+                                  Grammar
+                                </Text>
+                                <Text color="$textMuted" fontSize={12} fontWeight="800">
+                                  {learnSettings
+                                    ? `${learnStats.grammarCompletedToday}/${learnSettings.grammarDailyTarget}`
+                                    : "—"}
+                                </Text>
+                              </XStack>
+                              <PillRow
+                                total={learnSettings?.grammarDailyTarget ?? 0}
+                                filled={learnStats.grammarCompletedToday}
+                              />
+                            </YStack>
+                            <YStack alignItems="center" marginLeft={10}>
+                              <TouchableOpacity
+                                onPress={() => router.push("/(modals)/learn-settings")}
+                                activeOpacity={0.8}
+                              >
+                                <IconSymbol
+                                  name="ellipsis"
+                                  size={18}
+                                  weight="medium"
+                                  color="rgba(255,255,255,0.7)"
+                                />
+                              </TouchableOpacity>
+                            </YStack>
+                          </XStack>
+
+                          <TouchableOpacity
+                            onPress={() => router.push("/(modals)/learn-settings")}
+                            activeOpacity={0.8}
+                          >
+                            <XStack
+                              alignItems="center"
+                              justifyContent="space-between"
+                              paddingVertical={6}
+                            >
+                              <Text fontSize={14} fontWeight="800" color="$color">
+                                Learn Queue Settings
+                              </Text>
+                              <IconSymbol
+                                name="gearshape"
+                                size={18}
+                                weight="medium"
+                                color="rgba(255,255,255,0.7)"
+                              />
+                            </XStack>
+                          </TouchableOpacity>
+                        </YStack>
+                      ) : null}
+                    </YStack>
                   }
                 />
 

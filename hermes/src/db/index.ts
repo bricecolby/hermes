@@ -3,7 +3,7 @@ import { schemaStatements } from "../../shared/schema";
 import { seedDb, SEED_VERSION } from "./seed";
 
 const DB_NAME = "hermes.db";
-const SCHEMA_VERSION = 8;
+const SCHEMA_VERSION = 9;
 
 let db: SQLiteDatabase | null = null;
 

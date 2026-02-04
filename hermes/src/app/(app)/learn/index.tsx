@@ -11,7 +11,13 @@ import { useAppState } from "@/state/AppState";
 
 import { startPracticeSession } from "@/db/queries/sessions";
 import { recordPracticeAttemptTx } from "@/db/queries/practice";
-import { getFreshVocabConceptRefsForLearn } from "@/db/queries/concepts";
+import { getConceptRefsByConceptIds } from "@/db/queries/concepts";
+import {
+  ensureLearnQueueForKind,
+  getLearnSettings,
+  listLearnQueueRows,
+  markLearnQueueCorrect,
+} from "@/db/queries/learn";
 
 type RunStats = {
   correct: number;
@@ -19,76 +25,92 @@ type RunStats = {
   ms: number[];
 };
 
-type MemorizeCardVM = FlashcardViewModel & {
+type LearnCardVM = FlashcardViewModel & {
+  kind: "vocab_item" | "grammar_point";
   mode: "reception" | "production";
   skill: "reading" | "writing";
   itemType: "flashcard_v1.basic";
 };
 
-async function loadMemorizeFlashcards(
+async function loadLearnFlashcards(
   db: SQLite.SQLiteDatabase,
   args: {
     userId: number;
     languageId: number;
     modelKey: string;
-    totalCards: number;
-    allowedCefr?: ("A1" | "A2" | "B1" | "B2")[];
+    vocabChunkSize: number;
+    grammarChunkSize: number;
   }
-): Promise<MemorizeCardVM[]> {
-  const { userId, languageId, modelKey, totalCards, allowedCefr } = args;
+): Promise<LearnCardVM[]> {
+  const { userId, languageId, modelKey, vocabChunkSize, grammarChunkSize } = args;
 
-  // Each vocab concept becomes TWO cards (reception + production)
-  const conceptLimit = Math.ceil(totalCards / 2);
-
-  const refs = await getFreshVocabConceptRefsForLearn(db, {
+  await ensureLearnQueueForKind(db, {
     userId,
     languageId,
+    kind: "vocab_item",
+    chunkSize: vocabChunkSize,
     modelKey,
-    limit: conceptLimit,
   });
 
-  // Assumption (based on your existing behavior):
-  // - title is the L2 string
-  // - description is the L1 gloss/meaning
-  // If your real “meaning” lives elsewhere, we can swap this mapping later.
-  const cards: MemorizeCardVM[] = [];
-  for (const r of refs) {
-    const l2 = (r.title ?? "").trim();
-    const l1 = (r.description ?? "").trim();
+  await ensureLearnQueueForKind(db, {
+    userId,
+    languageId,
+    kind: "grammar_point",
+    chunkSize: grammarChunkSize,
+    modelKey,
+  });
+
+  const queueRows = await listLearnQueueRows(db, { userId, languageId });
+  const pending = queueRows.filter((r) => r.correctOnce === 0);
+
+  const conceptIds = Array.from(new Set(pending.map((r) => r.conceptId)));
+  const refs = await getConceptRefsByConceptIds(db, conceptIds);
+  const byId = new Map(refs.map((r) => [r.conceptId, r]));
+
+  const cards: LearnCardVM[] = [];
+  for (const r of pending) {
+    const ref = byId.get(r.conceptId);
+    if (!ref) continue;
+
+    const l2 = (ref.title ?? "").trim();
+    const l1 = (ref.description ?? "").trim();
 
     if (!l2 || !l1) continue;
 
-    // Reception: L2 -> L1
-    cards.push({
-      conceptId: r.conceptId,
-      front: l2,
-      back: l1,
-      mode: "reception",
-      skill: "reading",
-      itemType: "flashcard_v1.basic",
-    });
-
-    // Production: L1 -> L2
-    cards.push({
-      conceptId: r.conceptId,
-      front: l1,
-      back: l2,
-      mode: "production",
-      skill: "writing",
-      itemType: "flashcard_v1.basic",
-    });
+    if (ref.kind === "vocab_item") {
+      const mode = r.modality === "production" ? "production" : "reception";
+      cards.push({
+        conceptId: ref.conceptId,
+        kind: "vocab_item",
+        front: mode === "reception" ? l2 : l1,
+        back: mode === "reception" ? l1 : l2,
+        mode,
+        skill: mode === "production" ? "writing" : "reading",
+        itemType: "flashcard_v1.basic",
+      });
+    } else {
+      cards.push({
+        conceptId: ref.conceptId,
+        kind: "grammar_point",
+        front: l2,
+        back: l1,
+        mode: "reception",
+        skill: "reading",
+        itemType: "flashcard_v1.basic",
+      });
+    }
   }
 
-  // Shuffle so the user doesn't always see reception then production back-to-back.
+  // Shuffle so the user doesn't always see the same ordering.
   for (let i = cards.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [cards[i], cards[j]] = [cards[j], cards[i]];
   }
 
-  return cards.slice(0, totalCards);
+  return cards;
 }
 
-export default function Memorize() {
+export default function Learn() {
   const router = useRouter();
   const db = SQLite.useSQLiteContext();
   const { activeLanguageId, activeProfileId, setSessionDbId, sessionDbId } = useAppState();
@@ -98,7 +120,7 @@ export default function Memorize() {
   const userId = activeProfileId ?? (() => { throw new Error("No active profile"); })();
 
   const [loading, setLoading] = useState(true);
-  const [cards, setCards] = useState<MemorizeCardVM[]>([]);
+  const [cards, setCards] = useState<LearnCardVM[]>([]);
   const [idx, setIdx] = useState(0);
   const [locked, setLocked] = useState(false);
 
@@ -108,8 +130,8 @@ export default function Memorize() {
   const [localSessionId, setLocalSessionId] = useState<number | null>(null);
 
   useEffect(() => {
-    console.log("[Memorize] mount");
-    return () => console.log("[Memorize] unmount");
+    console.log("[Learn] mount");
+    return () => console.log("[Learn] unmount");
   }, []);
 
 
@@ -125,18 +147,20 @@ export default function Memorize() {
           userId,
           startedAtIso: new Date().toISOString(),
           modality: null,
-          source: "memorize",
+          source: "learn",
         });
 
         setSessionDbId(newSessionId);
         setLocalSessionId(newSessionId);
 
-        const nextCards = await loadMemorizeFlashcards(db, {
+        const settings = await getLearnSettings(db, { userId, languageId });
+
+        const nextCards = await loadLearnFlashcards(db, {
           userId,
           languageId,
           modelKey: "ema_v1",
-          totalCards: 20,
-          allowedCefr: ["A1"],
+          vocabChunkSize: settings.vocabChunkSize,
+          grammarChunkSize: settings.grammarChunkSize,
         });
 
         if (cancelled) return;
@@ -146,7 +170,7 @@ export default function Memorize() {
         setIdx(0);
         setLocked(false);
       } catch (e) {
-        console.error("[memorize] load failed", e);
+        console.error("[learn] load failed", e);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -161,11 +185,11 @@ export default function Memorize() {
   async function handleSubmit(payload: { isCorrect: boolean; responseMs: number }) {
     if (!current) return;
 
-    console.log("[memorize] logging attempt", { sessionDbId, localSessionId, current, payload });
+    console.log("[learn] logging attempt", { sessionDbId, localSessionId, current, payload });
 
     const sid = localSessionId ?? sessionDbId;
     if (!sid) {
-      console.warn("[memorize] missing session id; cannot log attempt");
+      console.warn("[learn] missing session id; cannot log attempt");
       return;
     }
 
@@ -196,7 +220,7 @@ export default function Memorize() {
             score: isCorrect ? 1 : 0,
             maxScore: 1,
             isCorrect,
-            evidence: { source: "memorize" },
+            evidence: { source: "learn" },
           },
         ],
         feedback: isCorrect ? "Correct." : "Incorrect.",
@@ -216,7 +240,7 @@ export default function Memorize() {
         responseMs,
       });
     } catch (e) {
-      console.error("[memorize] attempt logging failed", e);
+      console.error("[learn] attempt logging failed", e);
     }
 
     setStats((s) => ({
@@ -225,13 +249,38 @@ export default function Memorize() {
       ms: [...s.ms, responseMs],
     }));
 
-    const nextIdx = idx + 1;
-    if (nextIdx >= cards.length) {
+    if (isCorrect) {
+      try {
+        await markLearnQueueCorrect(db, {
+          userId,
+          languageId,
+          conceptId: current.conceptId,
+          modality: current.mode,
+        });
+      } catch (e) {
+        console.warn("[learn] failed to mark learn queue correct", e);
+      }
+    }
+
+    if (!isCorrect) {
+      setCards((prev) => {
+        const next = prev.slice();
+        const item = next.splice(idx, 1)[0];
+        next.push(item);
+        return next;
+      });
+      setLocked(false);
+      return;
+    }
+
+    const remaining = cards.filter((_, i) => i !== idx);
+    if (remaining.length === 0) {
       router.replace("/learn/results");
       return;
     }
 
-    setIdx(nextIdx);
+    setCards(remaining);
+    setIdx((prevIdx) => Math.min(prevIdx, remaining.length - 1));
     setLocked(false);
   }
 
@@ -247,8 +296,8 @@ export default function Memorize() {
           </YStack>
         ) : !current ? (
           <YStack flex={1} alignItems="center" justifyContent="center" gap={8}>
-            <Text color="$textMuted">No cards available.</Text>
-          </YStack>
+          <Text color="$textMuted">No cards available.</Text>
+        </YStack>
         ) : (
           <YStack flex={1} marginTop={10} gap={12}>
             <XStack justifyContent="space-between" paddingHorizontal={4}>

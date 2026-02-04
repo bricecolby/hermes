@@ -49,6 +49,42 @@ export const schemaStatements: string[] = [
     FOREIGN KEY (language_pack_id) REFERENCES language_packs(id) ON DELETE CASCADE
   );`,
 
+  `CREATE TABLE IF NOT EXISTS user_learn_settings (
+    user_id                 INTEGER NOT NULL,
+    language_id             INTEGER NOT NULL,
+
+    vocab_daily_target      INTEGER NOT NULL DEFAULT 20,
+    vocab_chunk_size        INTEGER NOT NULL DEFAULT 5,
+
+    grammar_daily_target    INTEGER NOT NULL DEFAULT 5,
+    grammar_chunk_size      INTEGER NOT NULL DEFAULT 2,
+
+    updated_at              TEXT NOT NULL,
+
+    PRIMARY KEY (user_id, language_id),
+
+    FOREIGN KEY (user_id)     REFERENCES users(id)     ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES languages(id) ON DELETE CASCADE
+  );`,
+
+  `CREATE TABLE IF NOT EXISTS user_learn_queue (
+    user_id         INTEGER NOT NULL,
+    language_id     INTEGER NOT NULL,
+    concept_id      INTEGER NOT NULL,
+    kind            TEXT NOT NULL,
+    modality        TEXT NOT NULL,
+
+    correct_once    INTEGER NOT NULL DEFAULT 0,
+    added_at        TEXT NOT NULL,
+    last_attempt_at TEXT,
+
+    PRIMARY KEY (user_id, language_id, concept_id, modality),
+
+    FOREIGN KEY (user_id)     REFERENCES users(id)     ON DELETE CASCADE,
+    FOREIGN KEY (language_id) REFERENCES languages(id) ON DELETE CASCADE,
+    FOREIGN KEY (concept_id)  REFERENCES concepts(id)  ON DELETE CASCADE
+  );`,
+
   `CREATE TABLE IF NOT EXISTS vocab_items (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     language_id     INTEGER NOT NULL,

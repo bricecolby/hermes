@@ -125,6 +125,10 @@ export default function AppLayout() {
         options={{ title: "Index", drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen
+        name="learn/concept"
+        options={{ title: "Concept", drawerItemStyle: { display: "none" } }}
+      />
+      <Drawer.Screen
         name="learn/results"
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />

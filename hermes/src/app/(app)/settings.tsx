@@ -2,9 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { Button, Text, YStack, XStack } from "tamagui";
+import { useSQLiteContext } from "expo-sqlite";
 
 import { Screen } from "../../components/ui/Screen";
 import { useAppState } from "../../state/AppState";
+import { LearnSettingsEditor } from "@/components/ui/LearnSettingsEditor";
+import { getLearnSettings, upsertLearnSettings, type LearnSettings } from "@/db/queries/learn";
 
 import { llmClient } from "shared/services/llm/client";
 
@@ -22,7 +25,8 @@ import {
 
 export default function Settings() {
   const router = useRouter();
-  const { setActiveLanguage } = useAppState();
+  const db = useSQLiteContext();
+  const { setActiveLanguage, activeProfileId, activeLanguageId } = useAppState();
 
   const [activeUri, setActiveUri] = useState<string | null>(null);
   const [activeUriExists, setActiveUriExists] = useState<boolean | null>(null);
@@ -32,6 +36,8 @@ export default function Settings() {
   >(null);
 
   const [llmError, setLlmError] = useState<string | null>(null);
+  const [learnSettings, setLearnSettings] = useState<LearnSettings | null>(null);
+  const [learnSettingsLoading, setLearnSettingsLoading] = useState(false);
 
   const llmStatus = llmClient.getStatus();
 
@@ -50,6 +56,31 @@ export default function Settings() {
   useEffect(() => {
     refresh().catch(() => {});
   }, [refresh]);
+
+  useEffect(() => {
+    if (!activeProfileId || !activeLanguageId) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        setLearnSettingsLoading(true);
+        const s = await getLearnSettings(db, {
+          userId: activeProfileId,
+          languageId: activeLanguageId,
+        });
+        if (!cancelled) setLearnSettings(s);
+      } catch (e) {
+        console.warn("[settings] learn settings load failed", e);
+        if (!cancelled) setLearnSettings(null);
+      } finally {
+        if (!cancelled) setLearnSettingsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [db, activeProfileId, activeLanguageId]);
 
   const canInit = busy === null;
   const canDownload = busy === null;
@@ -182,6 +213,31 @@ export default function Settings() {
           >
             Switch language (back to profile)
           </Button>
+        </YStack>
+
+        {/* Learn settings */}
+        <YStack gap="$2" paddingTop="$2">
+          <Text color="$textMuted">Learn</Text>
+
+          {learnSettingsLoading || !learnSettings ? (
+            <Text color="$textMuted" fontSize={12}>
+              {learnSettingsLoading ? "Loading learn settings…" : "No learn settings yet."}
+            </Text>
+          ) : (
+            <LearnSettingsEditor
+              initial={learnSettings}
+              onSave={async (next) => {
+                if (!activeProfileId || !activeLanguageId) return;
+                await upsertLearnSettings(db, {
+                  userId: activeProfileId,
+                  languageId: activeLanguageId,
+                  ...next,
+                });
+                setLearnSettings(next);
+                Alert.alert("Learn settings saved");
+              }}
+            />
+          )}
         </YStack>
 
         {/* LLM settings */}
