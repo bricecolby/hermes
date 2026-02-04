@@ -128,6 +128,10 @@ export default function AppLayout() {
         name="memorize/results"
         options={{ title: "Results", drawerItemStyle: { display: "none" } }}
       />
+      <Drawer.Screen
+        name="review/index"
+        options={{ title: "Index", drawerItemStyle: { display: "none" } }}
+      />
     </Drawer>
   );
 }

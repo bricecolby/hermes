@@ -152,7 +152,7 @@ export function ReviewForecast({
           Reviews
         </Text>
         <Text fontSize={12} color="$textMuted">
-          {loading ? "Loading…" : `${dueNow} due now`}
+          {loading ? "Loading…" : `${dueNow} due today`}
         </Text>
       </XStack>
 
