@@ -383,39 +383,7 @@ function MeaningSection({
         {!forms.length ? (
           <Text color="$color11">No forms yet.</Text>
         ) : (
-          <YStack gap="$2">
-            {forms.map((f) => (
-              <YStack
-                key={f.id}
-                padding="$3"
-                borderRadius="$5"
-                backgroundColor="$glassFill"
-                borderWidth={1}
-                borderColor="$borderColor"
-                gap="$1"
-              >
-                <Text fontSize="$6" fontWeight="800" color="$color">
-                  {f.surface_form}
-                </Text>
-
-                <Text color="$color11">
-                  {[
-                    f.tense ? `tense=${f.tense}` : null,
-                    f.mood ? `mood=${f.mood}` : null,
-                    f.person != null ? `person=${f.person}` : null,
-                    f.number ? `number=${f.number}` : null,
-                    f.gender ? `gender=${f.gender}` : null,
-                    (f as any).case_value ? `case=${(f as any).case_value}` : null,
-                    f.aspect ? `aspect=${f.aspect}` : null,
-                    f.degree ? `degree=${f.degree}` : null,
-                    f.is_irregular ? `irregular` : null,
-                  ]
-                    .filter(Boolean)
-                    .join(" • ") || "—"}
-                </Text>
-              </YStack>
-            ))}
-          </YStack>
+          <FormsTable partOfSpeech={item.part_of_speech} forms={forms} />
         )}
       </YStack>
 
@@ -461,6 +429,367 @@ function MeaningSection({
       )}
     </YStack>
   );
+}
+
+function getCaseValue(f: VocabFormRow): string | null {
+  return (f as any).case_value ?? (f as any).case ?? null;
+}
+
+function TableCell({
+  value,
+  header,
+  align = "left",
+}: {
+  value: string | null;
+  header?: boolean;
+  align?: "left" | "center" | "right";
+}) {
+  return (
+    <YStack
+      minWidth={110}
+      paddingVertical="$2"
+      paddingHorizontal="$2"
+      borderRightWidth={1}
+      borderColor="$borderColor"
+      backgroundColor={header ? "$glassFill" : "transparent"}
+    >
+      <Text
+        color={header ? "$color" : "$color11"}
+        fontWeight={header ? "900" : "700"}
+        textAlign={align}
+      >
+        {value ?? "—"}
+      </Text>
+    </YStack>
+  );
+}
+
+function TableRow({
+  cells,
+  header,
+}: {
+  cells: Array<string | null>;
+  header?: boolean;
+}) {
+  return (
+    <XStack borderBottomWidth={1} borderColor="$borderColor">
+      {cells.map((c, i) => (
+        <TableCell key={i} value={c} header={header} />
+      ))}
+    </XStack>
+  );
+}
+
+function TableBlock({
+  title,
+  header,
+  rows,
+}: {
+  title?: string;
+  header: string[];
+  rows: Array<Array<string | null>>;
+}) {
+  return (
+    <YStack gap="$2">
+      {title ? (
+        <Text fontSize="$5" fontWeight="800" color="$color">
+          {title}
+        </Text>
+      ) : null}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <YStack
+          borderWidth={1}
+          borderColor="$borderColor"
+          borderRadius="$5"
+          overflow="hidden"
+        >
+          <TableRow cells={header} header />
+          {rows.map((r, i) => (
+            <TableRow key={i} cells={r} />
+          ))}
+        </YStack>
+      </ScrollView>
+    </YStack>
+  );
+}
+
+function FormsTable({
+  partOfSpeech,
+  forms,
+}: {
+  partOfSpeech: string;
+  forms: VocabFormRow[];
+}) {
+  const pos = partOfSpeech.toLowerCase();
+  const isVerb = pos === "verb";
+  const isAdjective = pos === "adjective";
+
+  if (isVerb) {
+    return <VerbFormsTable forms={forms} />;
+  }
+
+  if (isAdjective) {
+    return <AdjectiveNominativeTable forms={forms} />;
+  }
+
+  const hasCase = forms.some((f) => !!getCaseValue(f) && f.number);
+  if (hasCase) {
+    return <DeclensionTable forms={forms} />;
+  }
+
+  return (
+    <YStack gap="$2">
+      {forms.map((f) => (
+        <YStack
+          key={f.id}
+          padding="$3"
+          borderRadius="$5"
+          backgroundColor="$glassFill"
+          borderWidth={1}
+          borderColor="$borderColor"
+          gap="$1"
+        >
+          <Text fontSize="$6" fontWeight="800" color="$color">
+            {f.surface_form}
+          </Text>
+          <Text color="$color11">
+            {[
+              f.tense ? `tense=${f.tense}` : null,
+              f.mood ? `mood=${f.mood}` : null,
+              f.person != null ? `person=${f.person}` : null,
+              f.number ? `number=${f.number}` : null,
+              f.gender ? `gender=${f.gender}` : null,
+              getCaseValue(f) ? `case=${getCaseValue(f)}` : null,
+              f.aspect ? `aspect=${f.aspect}` : null,
+              f.degree ? `degree=${f.degree}` : null,
+              f.is_irregular ? `irregular` : null,
+            ]
+              .filter(Boolean)
+              .join(" • ") || "—"}
+          </Text>
+        </YStack>
+      ))}
+    </YStack>
+  );
+}
+
+function VerbFormsTable({ forms }: { forms: VocabFormRow[] }) {
+  const aspects = Array.from(new Set(forms.map((f) => f.aspect).filter(Boolean))) as string[];
+  const aspectOrder = aspects.length > 1 ? aspects : [aspects[0] ?? "base"];
+
+  return (
+    <YStack gap="$3">
+      {aspectOrder.map((aspect) => {
+        const scoped = aspect === "base" ? forms : forms.filter((f) => f.aspect === aspect);
+        const label =
+          aspect === "impf"
+            ? "Imperfective"
+            : aspect === "pf"
+              ? "Perfective"
+              : null;
+
+        return (
+          <YStack key={aspect} gap="$3">
+            {label ? (
+              <Text fontSize="$5" fontWeight="800" color="$color">
+                {label}
+              </Text>
+            ) : null}
+
+            {buildPresentTable(scoped)}
+            {buildPastTable(scoped)}
+            {buildFutureTable(scoped)}
+            {buildImperativeTable(scoped)}
+
+            {buildOtherForms(scoped)}
+          </YStack>
+        );
+      })}
+    </YStack>
+  );
+}
+
+function buildPresentTable(forms: VocabFormRow[]) {
+  const rows = [
+    ["1-е лицо", formBy(forms, { tense: "pres", mood: "ind", person: 1, number: "sg" }), formBy(forms, { tense: "pres", mood: "ind", person: 1, number: "pl" })],
+    ["2-е лицо", formBy(forms, { tense: "pres", mood: "ind", person: 2, number: "sg" }), formBy(forms, { tense: "pres", mood: "ind", person: 2, number: "pl" })],
+    ["3-е лицо", formBy(forms, { tense: "pres", mood: "ind", person: 3, number: "sg" }), formBy(forms, { tense: "pres", mood: "ind", person: 3, number: "pl" })],
+  ];
+
+  if (!rows.some((r) => r[1] || r[2])) return null;
+
+  return (
+    <TableBlock
+      title="Present"
+      header={["", "ед. ч.", "мн. ч."]}
+      rows={rows}
+    />
+  );
+}
+
+function buildFutureTable(forms: VocabFormRow[]) {
+  const rows = [
+    ["1-е лицо", formBy(forms, { tense: "fut", mood: "ind", person: 1, number: "sg" }), formBy(forms, { tense: "fut", mood: "ind", person: 1, number: "pl" })],
+    ["2-е лицо", formBy(forms, { tense: "fut", mood: "ind", person: 2, number: "sg" }), formBy(forms, { tense: "fut", mood: "ind", person: 2, number: "pl" })],
+    ["3-е лицо", formBy(forms, { tense: "fut", mood: "ind", person: 3, number: "sg" }), formBy(forms, { tense: "fut", mood: "ind", person: 3, number: "pl" })],
+  ];
+
+  if (!rows.some((r) => r[1] || r[2])) return null;
+
+  return (
+    <TableBlock
+      title="Future"
+      header={["", "ед. ч.", "мн. ч."]}
+      rows={rows}
+    />
+  );
+}
+
+function buildPastTable(forms: VocabFormRow[]) {
+  const rows = [
+    ["м. р.", formBy(forms, { tense: "past", mood: "ind", gender: "m", number: "sg" }), null],
+    ["ж. р.", formBy(forms, { tense: "past", mood: "ind", gender: "f", number: "sg" }), null],
+    ["с. р.", formBy(forms, { tense: "past", mood: "ind", gender: "n", number: "sg" }), null],
+    ["мн. ч.", null, formBy(forms, { tense: "past", mood: "ind", number: "pl" })],
+  ];
+
+  if (!rows.some((r) => r[1] || r[2])) return null;
+
+  return (
+    <TableBlock
+      title="Past"
+      header={["", "ед. ч.", "мн. ч."]}
+      rows={rows}
+    />
+  );
+}
+
+function buildImperativeTable(forms: VocabFormRow[]) {
+  const rows = [
+    ["2-е лицо", formBy(forms, { mood: "imp", number: "sg" }), formBy(forms, { mood: "imp", number: "pl" })],
+  ];
+
+  if (!rows.some((r) => r[1] || r[2])) return null;
+
+  return (
+    <TableBlock
+      title="Imperative"
+      header={["", "ед. ч.", "мн. ч."]}
+      rows={rows}
+    />
+  );
+}
+
+function buildOtherForms(forms: VocabFormRow[]) {
+  const known = new Set<string>();
+  for (const f of forms) {
+    if (f.mood === "ind" && (f.tense === "pres" || f.tense === "past" || f.tense === "fut")) {
+      known.add(String(f.id));
+    }
+    if (f.mood === "imp") {
+      known.add(String(f.id));
+    }
+  }
+
+  return null;
+}
+
+function DeclensionTable({ forms }: { forms: VocabFormRow[] }) {
+  const cases = [
+    { key: "nom", label: "Им." },
+    { key: "gen", label: "Р." },
+    { key: "dat", label: "Д." },
+    { key: "acc", label: "В." },
+    { key: "ins", label: "Тв." },
+    { key: "loc", label: "Пр." },
+  ];
+
+  const rows: Array<Array<string | null>> = cases.map((c) => [
+    c.label,
+    declForm(forms, c.key, "sg"),
+    declForm(forms, c.key, "pl"),
+  ]);
+
+  return <TableBlock header={["падеж", "ед. ч.", "мн. ч."]} rows={rows} />;
+}
+
+function AdjectiveNominativeTable({ forms }: { forms: VocabFormRow[] }) {
+  const header = ["падеж", "ед. ч.", "мн. ч."];
+  const nomSg = [
+    adjCaseForm(forms, "nom", "sg", "m"),
+    adjCaseForm(forms, "nom", "sg", "f"),
+    adjCaseForm(forms, "nom", "sg", "n"),
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const nomPl = adjCaseForm(forms, "nom", "pl");
+
+  const rows: Array<Array<string | null>> = [
+    ["Им.", nomSg || null, nomPl],
+    ["Р.", adjCaseForm(forms, "gen", "sg", "m"), adjCaseForm(forms, "gen", "pl")],
+    ["Д.", adjCaseForm(forms, "dat", "sg", "m"), adjCaseForm(forms, "dat", "pl")],
+    ["В.", adjCaseForm(forms, "acc", "sg", "m"), adjCaseForm(forms, "acc", "pl")],
+    ["Тв.", adjCaseForm(forms, "ins", "sg", "m"), adjCaseForm(forms, "ins", "pl")],
+    ["Пр.", adjCaseForm(forms, "loc", "sg", "m"), adjCaseForm(forms, "loc", "pl")],
+  ];
+
+  return <TableBlock header={header} rows={rows} />;
+}
+
+function adjCaseForm(
+  forms: VocabFormRow[],
+  caseKey: string,
+  number: "sg" | "pl",
+  gender?: string
+) {
+  const f = forms.find((row) => {
+    if (getCaseValue(row) !== caseKey) return false;
+    if (number === "pl") return row.number === "pl";
+    return row.number === "sg" && row.gender === (gender ?? "m");
+  });
+  return f?.surface_form ?? null;
+}
+
+function formBy(
+  forms: VocabFormRow[],
+  criteria: {
+    tense?: string;
+    mood?: string;
+    person?: number;
+    number?: string;
+    gender?: string;
+  }
+): string | null {
+  const f = forms.find((row) => {
+    if (criteria.tense != null && row.tense !== criteria.tense) return false;
+    if (criteria.mood != null && row.mood !== criteria.mood) return false;
+    if (criteria.person != null && row.person !== criteria.person) return false;
+    if (criteria.number != null && row.number !== criteria.number) return false;
+    if (criteria.gender != null && row.gender !== criteria.gender) return false;
+    return true;
+  });
+  return f?.surface_form ?? null;
+}
+
+function declForm(forms: VocabFormRow[], caseKey: string, number: "sg" | "pl") {
+  const options =
+    number === "sg"
+      ? ["m", "f", "n", null]
+      : [null];
+
+  for (const g of options) {
+    const f = forms.find((row) => {
+      return (
+        getCaseValue(row) === caseKey &&
+        row.number === number &&
+        (g === null ? true : row.gender === g)
+      );
+    });
+    if (f) return f.surface_form;
+  }
+
+  return null;
 }
 
 function ExamplesSection({

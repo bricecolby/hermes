@@ -108,120 +108,109 @@ export function ConceptProgress({ db, userId, conceptId, addedOn }: Props) {
         Progress
       </Text>
 
-      <YStack
-        padding="$3"
-        borderRadius="$5"
-        backgroundColor="$glassFill"
-        borderWidth={1}
-        borderColor="$borderColor"
-        gap="$2"
-      >
-        <XStack justifyContent="space-between">
-          <Text color="$color11">Added On</Text>
-          <Text color="$color11">{fmtDate(addedOn)}</Text>
-        </XStack>
-
-        <XStack justifyContent="space-between">
-          <Text color="$color11">Attempts</Text>
-          <Text color="$color11">{overall.attempts}</Text>
-        </XStack>
-
-        <XStack justifyContent="space-between">
-          <Text color="$color11">Accuracy</Text>
-          <Text color="$color11">{overall.accuracy == null ? "—" : `${overall.accuracy}%`}</Text>
-        </XStack>
-
-        <XStack justifyContent="space-between">
-          <Text color="$color11">Last Attempt</Text>
-          <Text color="$color11">{fmtDate(overall.lastAttempt)}</Text>
-        </XStack>
-      </YStack>
-
       {loading ? (
         <Text color="$color11">Loading mastery…</Text>
       ) : (
-        modalities.map((m) => {
-          const row = byModality.get(m);
-          const attempts = Number(row?.attempts_count ?? 0);
-          const correct = Number(row?.correct_count ?? 0);
-          const accuracy = pct(correct, attempts);
-          const mastery = row?.mastery ?? null;
-          const rtNorm = row?.rt_norm ?? null;
-
-          return (
-            <YStack
-              key={m}
-              padding="$3"
-              borderRadius="$5"
-              backgroundColor="$glassFill"
-              borderWidth={1}
-              borderColor="$borderColor"
-              gap="$2"
-            >
-              <Text fontWeight="800" color="$color">
-                {formatModalityLabel(m)}
-              </Text>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Attempts</Text>
-                <Text color="$color11">{attempts}</Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Accuracy</Text>
-                <Text color="$color11">{accuracy == null ? "—" : `${accuracy}%`}</Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Level</Text>
-                <Text color="$color11">
-                  {stageLabel(mastery, rtNorm, attempts)}
-                </Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Mastery</Text>
-                <Text color="$color11">
-                  {mastery == null ? "—" : mastery.toFixed(2)}
-                </Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">RT Avg</Text>
-                <Text color="$color11">
-                  {row?.rt_avg_ms == null ? "—" : `${Math.round(row.rt_avg_ms)}ms`}
-                </Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">RT Norm</Text>
-                <Text color="$color11">
-                  {row?.rt_norm == null ? "—" : row.rt_norm.toFixed(2)}
-                </Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Half-life</Text>
-                <Text color="$color11">
-                  {row?.half_life_days == null
-                    ? "—"
-                    : `${row.half_life_days.toFixed(2)}d`}
-                </Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Due</Text>
-                <Text color="$color11">{fmtDate(row?.due_at)}</Text>
-              </XStack>
-
-              <XStack justifyContent="space-between">
-                <Text color="$color11">Last Attempt</Text>
-                <Text color="$color11">{fmtDate(row?.last_attempt_at)}</Text>
-              </XStack>
-            </YStack>
-          );
-        })
+        <ProgressTable
+          reception={byModality.get("reception") ?? null}
+          production={byModality.get("production") ?? null}
+        />
       )}
+    </YStack>
+  );
+}
+
+function ProgressTable({
+  reception,
+  production,
+}: {
+  reception: ConceptMasteryRow | null;
+  production: ConceptMasteryRow | null;
+}) {
+  const recAttempts = Number(reception?.attempts_count ?? 0);
+  const recCorrect = Number(reception?.correct_count ?? 0);
+  const recAccuracy = pct(recCorrect, recAttempts);
+  const recMastery = reception?.mastery ?? null;
+  const recRtNorm = reception?.rt_norm ?? null;
+
+  const prodAttempts = Number(production?.attempts_count ?? 0);
+  const prodCorrect = Number(production?.correct_count ?? 0);
+  const prodAccuracy = pct(prodCorrect, prodAttempts);
+  const prodMastery = production?.mastery ?? null;
+  const prodRtNorm = production?.rt_norm ?? null;
+
+  const rows: Array<[string, string, string]> = [
+    ["Attempts", String(recAttempts), String(prodAttempts)],
+    ["Accuracy", recAccuracy == null ? "—" : `${recAccuracy}%`, prodAccuracy == null ? "—" : `${prodAccuracy}%`],
+    [
+      "Level",
+      stageLabel(recMastery, recRtNorm, recAttempts),
+      stageLabel(prodMastery, prodRtNorm, prodAttempts),
+    ],
+    [
+      "Mastery",
+      recMastery == null ? "—" : recMastery.toFixed(2),
+      prodMastery == null ? "—" : prodMastery.toFixed(2),
+    ],
+    [
+      "RT Avg",
+      reception?.rt_avg_ms == null ? "—" : `${Math.round(reception.rt_avg_ms)}ms`,
+      production?.rt_avg_ms == null ? "—" : `${Math.round(production.rt_avg_ms)}ms`,
+    ],
+    [
+      "RT Norm",
+      reception?.rt_norm == null ? "—" : reception.rt_norm.toFixed(2),
+      production?.rt_norm == null ? "—" : production.rt_norm.toFixed(2),
+    ],
+    [
+      "Half-life",
+      reception?.half_life_days == null ? "—" : `${reception.half_life_days.toFixed(2)}d`,
+      production?.half_life_days == null ? "—" : `${production.half_life_days.toFixed(2)}d`,
+    ],
+    ["Due", fmtDate(reception?.due_at), fmtDate(production?.due_at)],
+    ["Last Attempt", fmtDate(reception?.last_attempt_at), fmtDate(production?.last_attempt_at)],
+  ];
+
+  return (
+    <YStack
+      padding="$3"
+      borderRadius="$5"
+      backgroundColor="$glassFill"
+      borderWidth={1}
+      borderColor="$borderColor"
+      gap="$2"
+    >
+      <XStack borderBottomWidth={1} borderColor="$borderColor">
+        <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
+          <Text color="$color11" fontWeight="800">
+            Metric
+          </Text>
+        </YStack>
+        <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
+          <Text color="$color11" fontWeight="800">
+            Reception
+          </Text>
+        </YStack>
+        <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
+          <Text color="$color11" fontWeight="800">
+            Production
+          </Text>
+        </YStack>
+      </XStack>
+
+      {rows.map((r) => (
+        <XStack key={r[0]} borderBottomWidth={1} borderColor="$borderColor">
+          <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
+            <Text color="$color11">{r[0]}</Text>
+          </YStack>
+          <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
+            <Text color="$color11">{r[1]}</Text>
+          </YStack>
+          <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
+            <Text color="$color11">{r[2]}</Text>
+          </YStack>
+        </XStack>
+      ))}
     </YStack>
   );
 }
