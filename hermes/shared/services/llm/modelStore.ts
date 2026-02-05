@@ -10,11 +10,6 @@ const MIN_MODEL_BYTES = 50_000_000;
 // Persisted "active model" pointer (device-specific)
 const ACTIVE_MODEL_URI_KEY = "llm.activeModelUri";
 
-// Dev default model (used by Settings "Download model" button)
-export const DEV_MODEL_URL =
-  "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf";
-export const DEV_MODEL_FILENAME = "qwen2.5-0.5b-instruct-q4_k_m.gguf";
-export const DEV_MIN_FREE_BYTES_FOR_MODEL = 800_000_000;
 
 /**
  * Ensure a model file exists in the app's document storage under /models.
@@ -53,6 +48,21 @@ export async function ensureModelOnDevice(
   }
 
   return file.uri;
+}
+
+export function getModelFileUri(modelFilename: string): string {
+  const file = new File(Paths.document, `${MODEL_SUBDIR}/${modelFilename}`);
+  return file.uri;
+}
+
+export async function modelFileInfo(modelFilename: string) {
+  const file = new File(Paths.document, `${MODEL_SUBDIR}/${modelFilename}`);
+  return file.info();
+}
+
+export async function modelIsDownloaded(modelFilename: string): Promise<boolean> {
+  const info = await modelFileInfo(modelFilename);
+  return !!(info.exists && typeof info.size === "number" && info.size > MIN_MODEL_BYTES);
 }
 
 export async function deleteModel(modelFilename: string) {

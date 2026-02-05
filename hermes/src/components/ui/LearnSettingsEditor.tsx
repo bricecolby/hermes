@@ -67,9 +67,6 @@ export function LearnSettingsEditor({
             />
           </YStack>
         </XStack>
-        <Text fontSize={11} color="$textMuted">
-          Targets are in concepts (20 vocab = 40 cards).
-        </Text>
       </YStack>
 
       <YStack gap={10}>
