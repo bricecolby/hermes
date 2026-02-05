@@ -2,7 +2,7 @@
 import { initLlama } from "llama.rn";
 import { Asset } from "expo-asset";
 
-import { getActiveModelUri, modelFileExists } from "./modelStore";
+import { getActiveModelUri, modelFileExists, findFirstDownloadedModelUri } from "./modelStore";
 
 export type LlmCompletionParams = {
   messages: { role: "system" | "user"; content: string }[];
@@ -71,6 +71,11 @@ export class LlmClient {
     const activeUri = await getActiveModelUri();
     if (activeUri && (await modelFileExists(activeUri))) {
       return activeUri;
+    }
+
+    const downloadedUri = await findFirstDownloadedModelUri();
+    if (downloadedUri && (await modelFileExists(downloadedUri))) {
+      return downloadedUri;
     }
 
     const bundledUri = await this.getBundledModelUri();

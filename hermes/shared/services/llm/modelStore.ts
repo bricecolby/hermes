@@ -3,6 +3,7 @@ import { Directory, File, Paths } from "expo-file-system";
 import * as LegacyFS from "expo-file-system/legacy";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MODEL_CATALOG } from "./modelCatalog";
 
 const MODEL_SUBDIR = "models";
 const MIN_MODEL_BYTES = 50_000_000;
@@ -40,7 +41,7 @@ export async function ensureModelOnDevice(
     await dir.create();
   } catch {}
 
-  const downloaded = await File.downloadFileAsync(modelUrl, dir);
+  const downloaded = await File.downloadFileAsync(modelUrl, file);
   const post = await downloaded.info();
 
   if (!post.exists || (post.size ?? 0) < MIN_MODEL_BYTES) {
@@ -105,4 +106,13 @@ export async function modelFileExists(uri: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+export async function findFirstDownloadedModelUri(): Promise<string | null> {
+  for (const m of MODEL_CATALOG) {
+    if (await modelIsDownloaded(m.filename)) {
+      return getModelFileUri(m.filename);
+    }
+  }
+  return null;
 }

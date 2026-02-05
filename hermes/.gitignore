@@ -47,3 +47,5 @@ app-example
 # Lage local artifacts
 *.gguf
 hermes-capstone.zip
+
+*.ipa
