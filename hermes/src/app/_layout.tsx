@@ -22,9 +22,9 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const DB_NAME = "hermes.db";
 
-LlmClient.configureBundledModel(
-  require("../assets/llm/qwen2.5-0.5b-instruct-q5_k_m.gguf")
-);
+// LlmClient.configureBundledModel(
+//   require("../assets/llm/qwen2.5-0.5b-instruct-q5_k_m.gguf")
+// );
 
 registerPracticeItems();
 
