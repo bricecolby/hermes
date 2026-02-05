@@ -405,6 +405,13 @@ export default function Home() {
                 />
 
                 <ActionCard
+                  title="Apply"
+                  subtitle="Freeform chat practice"
+                  disabled={!activeLanguageId}
+                  onPress={() => router.push("/(app)/apply")}
+                />
+
+                <ActionCard
                   title="Review"
                   subtitle={
                     reviewLoading

@@ -18,6 +18,8 @@ export type DueConceptRefRow = ConceptRefRow & {
   dueAt: string | null;
 };
 
+export type MasteryOrder = "asc" | "desc";
+
 export type CefrProgressRow = {
   cefr: CefrLevel;
   total: number;
@@ -178,6 +180,41 @@ export async function getConceptRefsByConceptIds(
   return conceptIds.map((id) => byId.get(id)).filter((x): x is ConceptRefRow => !!x);
 }
 
+export async function getConceptRefsByMastery(
+  db: SQLiteDatabase,
+  args: {
+    userId: number;
+    languageId: number;
+    modelKey: string;
+    limit: number;
+    order?: MasteryOrder;
+  }
+): Promise<ConceptRefRow[]> {
+  const { userId, languageId, modelKey, limit, order = "desc" } = args;
+  const dir = order === "asc" ? "ASC" : "DESC";
+
+  return db.getAllAsync<ConceptRefRow>(
+    `
+    SELECT
+      c.id           AS conceptId,
+      c.kind         AS kind,
+      c.ref_id       AS refId,
+      c.title        AS title,
+      c.description  AS description
+    FROM user_concept_mastery ucm
+    JOIN concepts c
+      ON c.id = ucm.concept_id
+     AND c.language_id = ?
+    WHERE ucm.user_id = ?
+      AND ucm.model_key = ?
+    GROUP BY c.id
+    ORDER BY MAX(ucm.mastery) ${dir}, RANDOM()
+    LIMIT ?;
+    `,
+    [languageId, userId, modelKey, limit]
+  );
+}
+
 export async function getConceptMetaByRef(
   db: SQLiteDatabase,
   args: { kind: ConceptKind; refId: number }
@@ -322,6 +359,44 @@ export async function getDueConceptRefsForReview(
      AND c.language_id = ?
     WHERE ucm.user_id = ?
       AND ucm.model_key = ?
+      AND ucm.due_at IS NOT NULL
+      AND ucm.due_at <= ?
+    ORDER BY ucm.due_at ASC
+    LIMIT ?;
+    `,
+    [languageId, userId, modelKey, dueBeforeIso, limit]
+  );
+}
+
+export async function getDueConceptRefsForApply(
+  db: SQLiteDatabase,
+  args: {
+    userId: number;
+    languageId: number;
+    modelKey: string;
+    limit: number;
+    dueBeforeIso: string;
+  }
+): Promise<DueConceptRefRow[]> {
+  const { userId, languageId, modelKey, limit, dueBeforeIso } = args;
+
+  return db.getAllAsync<DueConceptRefRow>(
+    `
+    SELECT
+      c.id           AS conceptId,
+      c.kind         AS kind,
+      c.ref_id       AS refId,
+      c.title        AS title,
+      c.description  AS description,
+      ucm.modality   AS modality,
+      ucm.due_at     AS dueAt
+    FROM user_concept_mastery ucm
+    JOIN concepts c
+      ON c.id = ucm.concept_id
+     AND c.language_id = ?
+    WHERE ucm.user_id = ?
+      AND ucm.model_key = ?
+      AND ucm.modality = 'production'
       AND ucm.due_at IS NOT NULL
       AND ucm.due_at <= ?
     ORDER BY ucm.due_at ASC

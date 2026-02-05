@@ -136,6 +136,10 @@ export default function AppLayout() {
         name="review/index"
         options={{ title: "Index", drawerItemStyle: { display: "none" } }}
       />
+      <Drawer.Screen
+        name="apply/index"
+        options={{ title: "Apply", drawerItemStyle: { display: "none" } }}
+      />
     </Drawer>
   );
 }
