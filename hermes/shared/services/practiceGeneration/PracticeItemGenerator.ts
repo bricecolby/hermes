@@ -27,7 +27,6 @@ type GenerateOptions = {
   logRawChars?: number;
   focus?: FocusSpec;
 
-  // ✅ new: focus cleaning
   focusCleanTimeoutMs?: number; // default 4000
 };
 

@@ -92,14 +92,21 @@ export default function SessionSetup() {
       initInFlightRef.current = true;
       setInitializingLlm(true);
       setLlmError(null);
+      console.log("[practice] init LLM start", {
+        activeLanguageId,
+        sessionId: session?.id,
+        status: llmClient.getStatus(),
+      });
 
       try {
         await llmClient.ensureReady();
+        console.log("[practice] LLM ready", llmClient.getStatus());
         if (!cancelled) setLlmReady(true);
       } catch (e: any) {
         if (!cancelled) {
           setLlmError(e?.message ?? String(e));
           setLlmReady(false);
+          console.warn("[practice] LLM init error", e?.message ?? String(e));
         }
       } finally {
         initInFlightRef.current = false;

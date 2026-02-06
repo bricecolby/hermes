@@ -69,16 +69,21 @@ export class LlmClient {
     this.status = { state: "resolving_model" };
 
     const activeUri = await getActiveModelUri();
+    console.log("[llm] activeUri", activeUri);
     if (activeUri && (await modelFileExists(activeUri))) {
+      console.log("[llm] using activeUri");
       return activeUri;
     }
 
     const downloadedUri = await findFirstDownloadedModelUri();
+    console.log("[llm] downloadedUri", downloadedUri);
     if (downloadedUri && (await modelFileExists(downloadedUri))) {
+      console.log("[llm] using downloadedUri");
       return downloadedUri;
     }
 
     const bundledUri = await this.getBundledModelUri();
+    console.log("[llm] bundledUri", bundledUri);
     if (bundledUri) return bundledUri;
 
     throw new Error(
@@ -99,12 +104,14 @@ export class LlmClient {
     this.initPromise = (async () => {
       try {
         const modelUri = await this.resolveModelUri();
+        console.log("[llm] resolved model uri", modelUri);
 
         this.status = { state: "initializing" };
         await this.init(modelUri);
 
         this.status = { state: "ready" };
       } catch (e: any) {
+        console.warn("[llm] init failed", e?.message ?? String(e));
         this.status = { state: "error", message: e?.message ?? String(e) };
         throw e;
       } finally {

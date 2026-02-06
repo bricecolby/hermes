@@ -236,14 +236,21 @@ export default function Apply() {
       initInFlightRef.current = true;
       setInitializingLlm(true);
       setLlmError(null);
+      console.log("[apply] init LLM start", {
+        activeLanguageId,
+        activeProfileId,
+        status: llmClient.getStatus(),
+      });
 
       try {
         await llmClient.ensureReady();
+        console.log("[apply] LLM ready", llmClient.getStatus());
         if (!cancelled) setLlmReady(true);
       } catch (e: any) {
         if (!cancelled) {
           setLlmError(e?.message ?? String(e));
           setLlmReady(false);
+          console.warn("[apply] LLM init error", e?.message ?? String(e));
         }
       } finally {
         initInFlightRef.current = false;

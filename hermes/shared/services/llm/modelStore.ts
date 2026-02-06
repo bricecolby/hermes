@@ -1,7 +1,6 @@
 // shared/services/llm/modelStore.ts
 import { Directory, File, Paths } from "expo-file-system";
 import * as LegacyFS from "expo-file-system/legacy";
-import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MODEL_CATALOG } from "./modelCatalog";
 
@@ -101,7 +100,7 @@ export async function clearActiveModelUri(): Promise<void> {
  */
 export async function modelFileExists(uri: string): Promise<boolean> {
   try {
-    const info = await FileSystem.getInfoAsync(uri);
+    const info = await LegacyFS.getInfoAsync(uri);
     return !!info.exists;
   } catch {
     return false;
