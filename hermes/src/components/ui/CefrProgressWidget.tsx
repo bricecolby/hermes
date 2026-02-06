@@ -3,9 +3,14 @@ import { Pressable } from "react-native";
 import { XStack, YStack, Text, useTheme } from "tamagui";
 import type { SQLiteDatabase } from "expo-sqlite";
 import { LinearGradient } from "expo-linear-gradient";
-import { ArrowLeftRight } from "lucide-react-native";
+import { ArrowLeftRight, Ear, MessageCircle } from "lucide-react-native";
 
-import { getCefrProgress, type CefrProgressRow, type ProgressMode } from "../../db/queries/concepts";
+import {
+  getCefrProgressByModality,
+  type CefrProgressByModalityRow,
+  type CefrProgressRow,
+} from "../../db/queries/mastery";
+import type { ProgressMode } from "../../db/queries/concepts";
 import { GlassCard } from "../../components/ui/GlassCard";
 import { resolveThemeColor } from "./themeColor";
 
@@ -38,7 +43,7 @@ export function CefrProgressWidget({ db, userId, languageId, modelKey = "ema_v1"
   const theme = useTheme();
 
   const [mode, setMode] = useState<ProgressMode>("both");
-  const [rows, setRows] = useState<CefrProgressRow[]>([]);
+  const [rows, setRows] = useState<CefrProgressByModalityRow[]>([]);
   const [loading, setLoading] = useState(false);
 
   const load = useCallback(async () => {
@@ -48,7 +53,7 @@ export function CefrProgressWidget({ db, userId, languageId, modelKey = "ema_v1"
     }
     setLoading(true);
     try {
-      const r = await getCefrProgress(db, { userId, languageId, modelKey, mode });
+      const r = await getCefrProgressByModality(db, { userId, languageId, modelKey, mode });
       setRows(r);
     } finally {
       setLoading(false);
@@ -145,6 +150,7 @@ export function CefrProgressWidget({ db, userId, languageId, modelKey = "ema_v1"
                 tier1={tier1}
                 tier2={tier2}
                 tier3={tier3}
+                iconColor={iconColor}
                 />
             ))}
             </YStack>
@@ -162,20 +168,82 @@ function CefrRow({
   tier1,
   tier2,
   tier3,
+  iconColor,
 }: {
-  row: CefrProgressRow;
+  row: CefrProgressByModalityRow;
   trackColor: string;
   tier0: string;
   tier1: string;
   tier2: string;
   tier3: string;
+  iconColor: string;
 }) {
-  const total = row.total || 0;
+  return (
+    <XStack alignItems="center" gap={8}>
+      <Text width={32} fontSize={16} fontWeight="700" color="$textMuted">
+        {row.cefr.replace("CEFR:", "")}
+      </Text>
 
-  const exposed = row.exposed || 0;
-  const mastery = row.mastery || 0;
-  const fluency = row.fluency || 0;
-  const auto = row.automaticity || 0;
+      <YStack flex={1} gap={2}>
+        <CefrMiniBar
+          stats={row.reception}
+          icon={Ear}
+          trackColor={trackColor}
+          tier0={tier0}
+          tier1={tier1}
+          tier2={tier2}
+          tier3={tier3}
+          iconColor={iconColor}
+        />
+        <CefrMiniBar
+          stats={row.production}
+          icon={MessageCircle}
+          trackColor={trackColor}
+          tier0={tier0}
+          tier1={tier1}
+          tier2={tier2}
+          tier3={tier3}
+          iconColor={iconColor}
+        />
+      </YStack>
+
+      <YStack width={64} alignItems="flex-end" gap={2}>
+        <Text textAlign="right" fontSize={12} fontWeight="700" color="$textMuted">
+          {row.reception.exposed}/{row.reception.total}
+        </Text>
+        <Text textAlign="right" fontSize={12} fontWeight="700" color="$textMuted">
+          {row.production.exposed}/{row.production.total}
+        </Text>
+      </YStack>
+    </XStack>
+  );
+}
+
+function CefrMiniBar({
+  stats,
+  icon: Icon,
+  trackColor,
+  tier0,
+  tier1,
+  tier2,
+  tier3,
+  iconColor,
+}: {
+  stats: CefrProgressRow;
+  icon: typeof Ear;
+  trackColor: string;
+  tier0: string;
+  tier1: string;
+  tier2: string;
+  tier3: string;
+  iconColor: string;
+}) {
+  const total = stats.total || 0;
+
+  const exposed = stats.exposed || 0;
+  const mastery = stats.mastery || 0;
+  const fluency = stats.fluency || 0;
+  const auto = stats.automaticity || 0;
 
   // Enforce nesting: auto ⊆ fluency ⊆ mastery ⊆ exposed
   const autoN = Math.min(auto, fluency, mastery, exposed);
@@ -198,61 +266,51 @@ function CefrRow({
   const left3 = p0 + p1 + p2;
 
   return (
-    <XStack alignItems="center" gap={10}>
-      <Text width={32} fontSize={16} fontWeight="700" color="$textMuted">
-        {row.cefr.replace("CEFR:", "")}
-      </Text>
-
-      <YStack flex={1}>
-        <YStack
-          height={18}
-          borderRadius={10}
-          overflow="hidden"
-          backgroundColor={trackColor}
-          position="relative"
-        >
-          {/* Tier 0: exposed-only */}
-          <YStack 
-            height="100%" 
-            width={`${p0 * 100}%`} 
-            backgroundColor={tier0} 
-          />
-
-          {/* Tier 1: mastery-only */}
-          <YStack
-            position="absolute"
-            top={0}
-            left={`${left1 * 100}%`}
-            height="100%"
-            width={`${p1 * 100}%`}
-            backgroundColor={tier1}
-          />
-
-          {/* Tier 2: fluency-only */}
-          <YStack
-            position="absolute"
-            top={0}
-            left={`${left2 * 100}%`}
-            height="100%"
-            width={`${p2 * 100}%`}
-            backgroundColor={tier2}
-          />
-
-          {/* Tier 3: automaticity-only */}
-          <YStack
-            position="absolute"
-            top={0}
-            left={`${left3 * 100}%`}
-            height="100%"
-            width={`${p3 * 100}%`}
-            backgroundColor={tier3}
-          />
-        </YStack>
+    <XStack alignItems="center" height={8} gap={4}>
+      <YStack width={10} alignItems="center" justifyContent="center">
+        <Icon size={9} color={iconColor} />
       </YStack>
+      <YStack
+        flex={1}
+        height={8}
+        borderRadius={6}
+        overflow="hidden"
+        backgroundColor={trackColor}
+        position="relative"
+      >
+        {/* Tier 0: exposed-only */}
+        <YStack height="100%" width={`${p0 * 100}%`} backgroundColor={tier0} />
 
-      <Text width={84} textAlign="right" fontSize={16} fontWeight="700" color="$textMuted">
-        {exposed}/{total}
-      </Text>
+        {/* Tier 1: mastery-only */}
+        <YStack
+          position="absolute"
+          top={0}
+          left={`${left1 * 100}%`}
+          height="100%"
+          width={`${p1 * 100}%`}
+          backgroundColor={tier1}
+        />
+
+        {/* Tier 2: fluency-only */}
+        <YStack
+          position="absolute"
+          top={0}
+          left={`${left2 * 100}%`}
+          height="100%"
+          width={`${p2 * 100}%`}
+          backgroundColor={tier2}
+        />
+
+        {/* Tier 3: automaticity-only */}
+        <YStack
+          position="absolute"
+          top={0}
+          left={`${left3 * 100}%`}
+          height="100%"
+          width={`${p3 * 100}%`}
+          backgroundColor={tier3}
+        />
+      </YStack>
     </XStack>
   );
 }

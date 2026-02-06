@@ -12,6 +12,7 @@ import { useAppState } from "../../state/AppState";
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
 import { CefrProgressWidget } from "@/components/ui/CefrProgressWidget";
 import { useFocusEffect } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ReviewForecast } from "@/components/ui/ReviewForecast";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { resolveThemeColor } from "@/components/ui/themeColor";
@@ -74,6 +75,7 @@ function PillRow({ total, filled }: { total: number; filled: number }) {
 export default function Home() {
   const router = useRouter();
   const { activeProfileId, activeLanguageId, session, startSession } = useAppState();
+  const insets = useSafeAreaInsets();
 
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -232,7 +234,7 @@ export default function Home() {
   return (
     <Screen>
       <Stack.Screen options={{ headerShown: false }} />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}>
         <YStack paddingTop={6}>
           <AppHeader title="Home" />
 
