@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { XStack, YStack, Text, useTheme } from "tamagui";
+import { resolveThemeColor } from "./themeColor";
 
 type BaseRowProps = {
   onPress?: () => void;
@@ -9,8 +10,8 @@ type BaseRowProps = {
 
 function RowShell({ onPress, children }: BaseRowProps) {
   const theme = useTheme();
-  const fill = String(theme.glassFill?.val ?? "rgba(70, 90, 129, 0.55)");
-  const outline = String(theme.glassOutline?.val ?? "rgba(230, 235, 255, 0.12)");
+  const fill = resolveThemeColor(theme.glassFill, "rgba(70, 90, 129, 0.55)");
+  const outline = resolveThemeColor(theme.glassOutline, "rgba(230, 235, 255, 0.12)");
 
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress}>

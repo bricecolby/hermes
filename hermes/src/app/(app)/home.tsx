@@ -14,6 +14,7 @@ import { CefrProgressWidget } from "@/components/ui/CefrProgressWidget";
 import { useFocusEffect } from "@react-navigation/native";
 import { ReviewForecast } from "@/components/ui/ReviewForecast";
 import { IconSymbol } from "@/components/ui/icon-symbol";
+import { resolveThemeColor } from "@/components/ui/themeColor";
 import {
   getLearnSettings,
   getLearnCompletedTodayByKind,
@@ -49,7 +50,7 @@ function PillRow({ total, filled }: { total: number; filled: number }) {
       ? Math.max(minPillWidth, Math.floor((width - gap * (count - 1)) / count))
       : minPillWidth;
   const pillHeight = Math.max(3, Math.floor(pillWidth * 0.6));
-  const fillColor = String(theme.gradB?.val ?? "rgba(215, 255, 235, 0.9)");
+  const fillColor = resolveThemeColor(theme.gradB, "rgba(215, 255, 235, 0.9)");
 
   return (
     <YStack

@@ -3,6 +3,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { XStack, YStack, Text, useTheme } from "tamagui";
+import { resolveThemeColor } from "./themeColor";
 
 type TabKey = string;
 
@@ -22,8 +23,8 @@ const BORDER_W = 1;
 
 export function GradientTabs({ tabs, value, onChange }: Props) {
   const theme = useTheme();
-  const gradA = theme.gradA?.val;
-  const gradB = theme.gradB?.val;
+  const gradA = resolveThemeColor(theme.gradA, "#1971FF");
+  const gradB = resolveThemeColor(theme.gradB, "#1EE6A8");
 
   return (
     <XStack gap="$2">

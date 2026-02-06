@@ -1,6 +1,7 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { YStack, type YStackProps, useTheme } from "tamagui";
+import { resolveThemeColor } from "./themeColor";
 
 type GradientBorderCardProps = YStackProps & {
   borderRadius?: number;
@@ -15,14 +16,14 @@ export function GradientBorderCard({
 }: GradientBorderCardProps) {
   const theme = useTheme();
 
-  const gradA = String(theme.gradA?.val ?? "#1971FF");
-  const gradB = String(theme.gradB?.val ?? "#1EE6A8");
+  const gradA = resolveThemeColor(theme.gradA, "#1971FF");
+  const gradB = resolveThemeColor(theme.gradB, "#1EE6A8");
 
   // tinted inner “glass but gradient”
-  const tintA = String(theme.gradTintA?.val ?? "rgba(25, 113, 255, 0.14)");
-  const tintB = String(theme.gradTintB?.val ?? "rgba(30, 230, 168, 0.10)");
+  const tintA = resolveThemeColor(theme.gradTintA, "rgba(25, 113, 255, 0.14)");
+  const tintB = resolveThemeColor(theme.gradTintB, "rgba(30, 230, 168, 0.10)");
 
-  const outline = String(theme.glassOutline?.val ?? "rgba(230, 235, 255, 0.12)");
+  const outline = resolveThemeColor(theme.glassOutline, "rgba(230, 235, 255, 0.12)");
 
   return (
     <LinearGradient

@@ -7,6 +7,7 @@ import { ArrowLeftRight } from "lucide-react-native";
 
 import { getCefrProgress, type CefrProgressRow, type ProgressMode } from "../../db/queries/concepts";
 import { GlassCard } from "../../components/ui/GlassCard";
+import { resolveThemeColor } from "./themeColor";
 
 type Props = {
   db: SQLiteDatabase;
@@ -31,15 +32,6 @@ function subtitleForMode(mode: ProgressMode) {
   if (mode === "both") return "Grammar & Vocab";
   if (mode === "vocab") return "Vocab";
   return "Grammar";
-}
-
-function tokenToColor(val: any, fallback: string) {
-  try {
-    if (val?.get) return String(val.get());
-    if (val?.val) return String(val.val);
-    if (typeof val === "string") return val;
-  } catch {}
-  return fallback;
 }
 
 export function CefrProgressWidget({ db, userId, languageId, modelKey = "ema_v1", refreshNonce }: Props) {
@@ -69,23 +61,28 @@ export function CefrProgressWidget({ db, userId, languageId, modelKey = "ema_v1"
 
   const subtitle = subtitleForMode(mode);
 
-  const trackColor = tokenToColor(theme.bg0, "rgba(0,0,0,0.35)");
+  const trackColor = resolveThemeColor(
+    theme.glassFillStrong ?? theme.glassFill ?? theme.background,
+    "rgba(6, 16, 28, 0.55)"
+  );
 
   const tier0 = "rgba(33, 186, 212, 0.8)";
   const tier1 =  "rgba(24, 224, 255, 0.8)"; 
   const tier2 = "rgba(121, 251, 255, 0.8)";  
   const tier3 = "rgba(175, 252, 255, 0.8)";     
 
-  const iconBg = tokenToColor(theme.glassBg, "rgba(18, 26, 42, 0.70)");
-  const iconOutline = tokenToColor(theme.glassOutline, "rgba(255,255,255,0.10)");
+  const iconBg = resolveThemeColor(theme.glassFill, "rgba(18, 26, 42, 0.70)");
+  const iconOutline = resolveThemeColor(theme.glassOutline, "rgba(255,255,255,0.10)");
 
-  const iconColor = tokenToColor(theme.textMuted, "rgba(240,248,255,0.78)");
+  const iconColor = resolveThemeColor(theme.textMuted, "rgba(240,248,255,0.78)");
 
-  const gradA = tokenToColor(theme.gradA, "#2BCEFB");
-  const gradB = tokenToColor(theme.gradB, "#2CD1AA");
+  const gradA = resolveThemeColor(theme.gradA, "#2BCEFB");
+  const gradB = resolveThemeColor(theme.gradB, "#2CD1AA");
 
-  const cardBaseBg =
-  tokenToColor(theme.bg1, tokenToColor(theme.background, "rgba(8, 18, 30, 1)"));
+  const cardBaseBg = resolveThemeColor(
+    theme.background ?? theme.glassFill,
+    "rgba(8, 18, 30, 1)"
+  );
 
 
   return (

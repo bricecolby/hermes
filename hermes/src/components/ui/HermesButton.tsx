@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Text, YStack, useTheme } from "tamagui";
 import { GradientBorderCard } from "./GradientBorderCard";
+import { resolveThemeColor } from "./themeColor";
 
 type Props = {
   label: string;
@@ -21,8 +22,8 @@ export function HermesButton({
   size = "md",
 }: Props) {
   const theme = useTheme();
-  const fill = String(theme.glassFill?.val ?? "rgba(70, 90, 129, 0.55)");
-  const outline = String(theme.glassOutline?.val ?? "rgba(230, 235, 255, 0.12)");
+  const fill = resolveThemeColor(theme.glassFill, "rgba(70, 90, 129, 0.55)");
+  const outline = resolveThemeColor(theme.glassOutline, "rgba(230, 235, 255, 0.12)");
 
   const opacity = disabled ? 0.55 : 1;
   const paddingY = size === "sm" ? 6 : 8;

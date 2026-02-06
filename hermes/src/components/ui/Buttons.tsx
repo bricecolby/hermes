@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, useTheme } from "tamagui";
+import { resolveThemeColor } from "./themeColor";
 
 type Props = {
   label: string;
@@ -12,10 +13,10 @@ type Props = {
 
 export function HermesButton({ label, onPress, disabled, variant = "primary" }: Props) {
   const theme = useTheme();
-  const gradA = String(theme.gradA?.val ?? "#1971FF");
-  const gradB = String(theme.gradB?.val ?? "#1EE6A8");
-  const outline = String(theme.glassOutline?.val ?? "rgba(230, 235, 255, 0.12)");
-  const fill = String(theme.glassFill?.val ?? "rgba(70, 90, 129, 0.55)");
+  const gradA = resolveThemeColor(theme.gradA, "#1971FF");
+  const gradB = resolveThemeColor(theme.gradB, "#1EE6A8");
+  const outline = resolveThemeColor(theme.glassOutline, "rgba(230, 235, 255, 0.12)");
+  const fill = resolveThemeColor(theme.glassFill, "rgba(70, 90, 129, 0.55)");
 
   if (variant === "primary") {
     return (

@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import { TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { XStack, YStack, Text, ScrollView, useTheme } from "tamagui";
+import { resolveThemeColor } from "./themeColor";
 
 export type CefrLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 
@@ -21,8 +22,8 @@ const SELECTED_BORDER_W = 1;
 export function CEFRTabs({ value, onChange }: Props) {
   const theme = useTheme();
 
-  const gradA = theme.gradA?.val;
-  const gradB = theme.gradB?.val;
+  const gradA = resolveThemeColor(theme.gradA, "#1971FF");
+  const gradB = resolveThemeColor(theme.gradB, "#1EE6A8");
 
   const selectedIdx = useMemo(() => LEVELS.indexOf(value), [value]);
 

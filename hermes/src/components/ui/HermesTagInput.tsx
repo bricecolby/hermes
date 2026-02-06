@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Pressable } from "react-native";
 import { Input, Text, XStack, YStack, useTheme } from "tamagui";
 import { X } from "@tamagui/lucide-icons";
+import { resolveThemeColor } from "./themeColor";
 
 type Props = {
   label?: string;
@@ -16,8 +17,8 @@ function normalizeTag(s: string) {
 
 export function HermesTagInput({ label, tags, onTagsChange, placeholder }: Props) {
   const theme = useTheme();
-  const fill = String(theme.glassFill?.val ?? "rgba(70, 90, 129, 0.55)");
-  const outline = String(theme.glassOutline?.val ?? "rgba(230, 235, 255, 0.12)");
+  const fill = resolveThemeColor(theme.glassFill, "rgba(70, 90, 129, 0.55)");
+  const outline = resolveThemeColor(theme.glassOutline, "rgba(230, 235, 255, 0.12)");
 
   const [draft, setDraft] = useState("");
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { YStack, type YStackProps, useTheme } from "tamagui";
+import { resolveThemeColor } from "./themeColor";
 
 type GlassCardProps = YStackProps & {
   strong?: boolean;
@@ -8,12 +9,12 @@ type GlassCardProps = YStackProps & {
 export function GlassCard({ strong, children, ...props }: GlassCardProps) {
   const theme = useTheme();
 
-  const fill = String(
-    (strong ? theme.glassFillStrong?.val : theme.glassFill?.val) ??
-      "rgba(70, 90, 129, 0.55)"
+  const fill = resolveThemeColor(
+    strong ? theme.glassFillStrong : theme.glassFill,
+    "rgba(70, 90, 129, 0.55)"
   );
 
-  const outline = String(theme.glassOutline?.val ?? "rgba(230, 235, 255, 0.12)");
+  const outline = resolveThemeColor(theme.glassOutline, "rgba(230, 235, 255, 0.12)");
 
   return (
     <YStack

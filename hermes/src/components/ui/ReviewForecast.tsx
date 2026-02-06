@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ScrollView } from "react-native";
+import { Platform, ScrollView } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useFocusEffect } from "@react-navigation/native";
 import { XStack, YStack, Text } from "tamagui";
@@ -146,6 +146,7 @@ export function ReviewForecast({
       borderRadius={18}
       padding={14}
       gap={10}
+      overflow="visible"
     >
       <XStack justifyContent="space-between" alignItems="center">
         <Text fontSize={16} fontWeight="900" color="$text">
@@ -156,8 +157,12 @@ export function ReviewForecast({
         </Text>
       </XStack>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <XStack gap={12} paddingRight={6} alignItems="flex-end">
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingRight: 6, paddingTop: 6, paddingBottom: 2 }}
+      >
+        <XStack gap={12} alignItems="flex-end" overflow="visible">
           {points.map((p) => {
             const h =
               p.count === 0
@@ -171,8 +176,8 @@ export function ReviewForecast({
 
             const barGlow =
               p.tone === "overdue"
-                ? "rgba(255, 150, 170, 0.22)"
-                : "rgba(80, 220, 230, 0.18)";
+                ? "rgba(255, 150, 170, 0.14)"
+                : "rgba(80, 220, 230, 0.12)";
 
             return (
               <YStack key={p.key} width={44} alignItems="center" gap={6}>
@@ -186,9 +191,10 @@ export function ReviewForecast({
                   borderColor="rgba(255,255,255,0.10)"
                   style={{
                     shadowColor: barGlow,
-                    shadowOpacity: 1,
-                    shadowRadius: 10,
+                    shadowOpacity: 0.7,
+                    shadowRadius: 8,
                     shadowOffset: { width: 0, height: 0 },
+                    ...(Platform.OS === "android" ? { elevation: 6 } : null),
                   }}
                 />
 

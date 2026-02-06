@@ -93,7 +93,7 @@ export default function Settings() {
           borderRadius="$5"
           backgroundColor="$glassFill"
           borderWidth={1}
-          borderColor="$borderColor"
+          borderColor="$glassOutline"
         >
           <Text color="$textMuted">Learn</Text>
 
@@ -125,7 +125,7 @@ export default function Settings() {
           borderRadius="$5"
           backgroundColor="$glassFill"
           borderWidth={1}
-          borderColor="$borderColor"
+          borderColor="$glassOutline"
         >
           <XStack alignItems="center" justifyContent="space-between">
             <YStack>
@@ -145,7 +145,7 @@ export default function Settings() {
 
           <YStack
             borderWidth={1}
-            borderColor="$borderColor"
+            borderColor="$glassOutline"
             borderRadius="$5"
             overflow="hidden"
           >
@@ -164,7 +164,7 @@ export default function Settings() {
                 justifyContent="space-between"
                 padding="$3"
                 borderBottomWidth={idx === 2 ? 0 : 1}
-                borderColor="$borderColor"
+                borderColor="$glassOutline"
                 backgroundColor="rgba(255,255,255,0.03)"
               >
                 <YStack>
