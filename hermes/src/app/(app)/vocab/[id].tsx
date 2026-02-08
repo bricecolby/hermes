@@ -147,7 +147,7 @@ export default function VocabDetailScreen() {
 
   const primaryTranslation = useMemo(() => {
     const first = senses[0];
-    return first?.translation ?? first?.definition ?? null;
+    return first?.definition ?? null;
   }, [senses]);
 
   // stub resources for now
@@ -221,7 +221,7 @@ export default function VocabDetailScreen() {
         >
           <YStack padding="$4" paddingBottom="$2" gap="$2">
             <XStack alignItems="center" justifyContent="space-between" paddingRight="$5">
-              <AppHeader title="Vocab Info" subtitle={item.base_form} />
+              <AppHeader title="Vocab Info" />
 
               <TouchableOpacity 
               onPress={() => router.push({ 
@@ -280,13 +280,6 @@ export default function VocabDetailScreen() {
                 item={item}
                 senses={senses}
                 forms={forms}
-                tags={tags}
-                progressMeta={{
-                  db,
-                  userId: activeProfileId ?? null,
-                  conceptId,
-                  addedOn: conceptCreatedAt ?? item?.created_at ?? null,
-                }}
               />
             </YStack>
 
@@ -311,6 +304,19 @@ export default function VocabDetailScreen() {
             >
               <ResourcesSection resources={resources} />
             </YStack>
+
+            <Separator />
+
+            <ProgressSection
+              db={db}
+              userId={activeProfileId ?? null}
+              conceptId={conceptId}
+              addedOn={conceptCreatedAt ?? item?.created_at ?? null}
+            />
+
+            <Separator />
+
+            <TagsSection tags={tags} />
           </YStack>
         </ScrollView>
       </YStack>
@@ -322,22 +328,11 @@ function MeaningSection({
   item,
   senses,
   forms,
-  tags,
-  progressMeta,
 }: {
   item: VocabItemRow;
   senses: VocabSenseRow[];
   forms: VocabFormRow[];
-  tags: VocabTagRow[];
-  progressMeta: {
-    db: SQLite.SQLiteDatabase;
-    userId: number | null;
-    conceptId: number | null;
-    addedOn: string | null;
-  };
 }) {
-  const { db, userId, conceptId, addedOn } = progressMeta;
-
   return (
     <YStack gap="$4">
       {/* Meaning / senses */}
@@ -349,23 +344,34 @@ function MeaningSection({
         {!senses.length ? (
           <Text color="$color11">No senses yet.</Text>
         ) : (
-          <YStack gap="$3">
-            {senses.map((s) => (
+          <YStack
+            padding="$3"
+            borderRadius="$5"
+            backgroundColor="$glassFill"
+            borderWidth={1}
+            borderColor="$borderColor"
+            gap="$3"
+          >
+            <Text fontSize="$5" fontWeight="800" color="$color">
+              {item.part_of_speech}
+            </Text>
+
+            {senses.map((s, idx) => (
               <YStack
                 key={s.id}
-                padding="$3"
-                borderRadius="$5"
-                backgroundColor="$glassFill"
-                borderWidth={1}
+                gap="$1.5"
+                paddingTop={idx === 0 ? "$0" : "$2"}
+                borderTopWidth={idx === 0 ? 0 : 1}
                 borderColor="$borderColor"
-                gap="$2"
               >
-                <Text fontSize="$5" fontWeight="800" color="$color">
-                  Sense {s.sense_index}
-                </Text>
-
-                {s.translation ? <Text color="$color11">Translation: {s.translation}</Text> : null}
-                {s.definition ? <Text color="$color11">Definition: {s.definition}</Text> : null}
+                <XStack gap="$2" alignItems="flex-start">
+                  <Text color="$color" fontWeight="800">
+                    {s.sense_index}.
+                  </Text>
+                  <Text color="$color11" flex={1}>
+                    {s.definition ?? "—"}
+                  </Text>
+                </XStack>
                 {s.grammar_hint ? <Text color="$color11">• {s.grammar_hint}</Text> : null}
                 {s.usage_notes ? <Text color="$color11">• {s.usage_notes}</Text> : null}
               </YStack>
@@ -386,47 +392,65 @@ function MeaningSection({
           <FormsTable partOfSpeech={item.part_of_speech} forms={forms} />
         )}
       </YStack>
+    </YStack>
+  );
+}
 
-      {/* Tags */}
-      {tags.length ? (
-        <YStack gap="$2">
-          <Text fontSize="$7" fontWeight="900" color="$color">
-            Tags
-          </Text>
-          <XStack flexWrap="wrap" gap="$2">
-            {tags.map((t) => (
-              <YStack
-                key={t.id}
-                paddingHorizontal="$3"
-                paddingVertical="$2"
-                borderRadius="$4"
-                backgroundColor="$glassFill"
-                borderWidth={1}
-                borderColor="$borderColor"
-              >
-                <Text color="$color11">{t.name}</Text>
-              </YStack>
-            ))}
-          </XStack>
-        </YStack>
-      ) : null}
+function ProgressSection({
+  db,
+  userId,
+  conceptId,
+  addedOn,
+}: {
+  db: SQLite.SQLiteDatabase;
+  userId: number | null;
+  conceptId: number | null;
+  addedOn: string | null;
+}) {
+  if (conceptId && userId) {
+    return (
+      <ConceptProgress
+        db={db}
+        userId={userId}
+        conceptId={conceptId}
+        addedOn={addedOn}
+      />
+    );
+  }
 
-      {/* Progress */}
-      {conceptId && userId ? (
-        <ConceptProgress
-          db={db}
-          userId={userId}
-          conceptId={conceptId}
-          addedOn={addedOn}
-        />
-      ) : (
-        <YStack gap="$2">
-          <Text fontSize="$7" fontWeight="900" color="$color">
-            Progress
-          </Text>
-          <Text color="$color11">No progress data yet.</Text>
-        </YStack>
-      )}
+  return (
+    <YStack gap="$2">
+      <Text fontSize="$7" fontWeight="900" color="$color">
+        Progress
+      </Text>
+      <Text color="$color11">No progress data yet.</Text>
+    </YStack>
+  );
+}
+
+function TagsSection({ tags }: { tags: VocabTagRow[] }) {
+  if (!tags.length) return null;
+
+  return (
+    <YStack gap="$2">
+      <Text fontSize="$7" fontWeight="900" color="$color">
+        Tags
+      </Text>
+      <XStack flexWrap="wrap" gap="$2">
+        {tags.map((t) => (
+          <YStack
+            key={t.id}
+            paddingHorizontal="$3"
+            paddingVertical="$2"
+            borderRadius="$4"
+            backgroundColor="$glassFill"
+            borderWidth={1}
+            borderColor="$borderColor"
+          >
+            <Text color="$color11">{t.name}</Text>
+          </YStack>
+        ))}
+      </XStack>
     </YStack>
   );
 }
@@ -826,11 +850,11 @@ function ExamplesSection({
             borderColor="$borderColor"
             gap="$2"
           >
-            <Text fontSize="$4" fontWeight="800" color="$color11">
+            <Text fontSize="$2" fontWeight="800" color="$color11">
               Sense {sense.sense_index}
             </Text>
 
-            <Text fontSize="$6" fontWeight="800" color="$color">
+            <Text fontSize="$4" fontWeight="800" color="$color">
               {ex.example_text}
             </Text>
 

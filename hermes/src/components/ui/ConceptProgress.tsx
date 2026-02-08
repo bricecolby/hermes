@@ -40,12 +40,6 @@ function stageLabel(mastery: number | null, rtNorm: number | null, attempts: num
   return "Exposed";
 }
 
-function formatModalityLabel(m: string) {
-  if (m === "reception") return "Reception";
-  if (m === "production") return "Production";
-  return m.charAt(0).toUpperCase() + m.slice(1);
-}
-
 type Props = {
   db: SQLiteDatabase;
   userId: number;
@@ -84,27 +78,9 @@ export function ConceptProgress({ db, userId, conceptId, addedOn }: Props) {
     return map;
   }, [rows]);
 
-  const overall = useMemo(() => {
-    let attempts = 0;
-    let correct = 0;
-    let lastAttempt: string | null = null;
-
-    for (const r of rows) {
-      attempts += Number(r.attempts_count ?? 0);
-      correct += Number(r.correct_count ?? 0);
-      if (!lastAttempt || (r.last_attempt_at && r.last_attempt_at > lastAttempt)) {
-        lastAttempt = r.last_attempt_at ?? lastAttempt;
-      }
-    }
-
-    return { attempts, correct, accuracy: pct(correct, attempts), lastAttempt };
-  }, [rows]);
-
-  const modalities = ["reception", "production"] as const;
-
   return (
-    <YStack gap="$2">
-      <Text fontSize="$7" fontWeight="900" color="$color">
+    <YStack gap="$1.5">
+      <Text fontSize="$6" fontWeight="900" color="$color">
         Progress
       </Text>
 
@@ -152,62 +128,57 @@ function ProgressTable({
       recMastery == null ? "—" : recMastery.toFixed(2),
       prodMastery == null ? "—" : prodMastery.toFixed(2),
     ],
-    [
-      "RT Avg",
-      reception?.rt_avg_ms == null ? "—" : `${Math.round(reception.rt_avg_ms)}ms`,
-      production?.rt_avg_ms == null ? "—" : `${Math.round(production.rt_avg_ms)}ms`,
-    ],
-    [
-      "RT Norm",
-      reception?.rt_norm == null ? "—" : reception.rt_norm.toFixed(2),
-      production?.rt_norm == null ? "—" : production.rt_norm.toFixed(2),
-    ],
-    [
-      "Half-life",
-      reception?.half_life_days == null ? "—" : `${reception.half_life_days.toFixed(2)}d`,
-      production?.half_life_days == null ? "—" : `${production.half_life_days.toFixed(2)}d`,
-    ],
     ["Due", fmtDate(reception?.due_at), fmtDate(production?.due_at)],
     ["Last Attempt", fmtDate(reception?.last_attempt_at), fmtDate(production?.last_attempt_at)],
   ];
 
   return (
     <YStack
-      padding="$3"
-      borderRadius="$5"
+      padding="$2"
+      borderRadius="$4"
       backgroundColor="$glassFill"
       borderWidth={1}
       borderColor="$borderColor"
-      gap="$2"
+      gap="$1"
     >
       <XStack borderBottomWidth={1} borderColor="$borderColor">
-        <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
-          <Text color="$color11" fontWeight="800">
+        <YStack flex={1} paddingVertical="$1" paddingHorizontal="$1">
+          <Text color="$color11" fontWeight="800" fontSize="$2">
             Metric
           </Text>
         </YStack>
-        <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
-          <Text color="$color11" fontWeight="800">
+        <YStack flex={1} paddingVertical="$1" paddingHorizontal="$1">
+          <Text color="$color11" fontWeight="800" fontSize="$2">
             Reception
           </Text>
         </YStack>
-        <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
-          <Text color="$color11" fontWeight="800">
+        <YStack flex={1} paddingVertical="$1" paddingHorizontal="$1">
+          <Text color="$color11" fontWeight="800" fontSize="$2">
             Production
           </Text>
         </YStack>
       </XStack>
 
-      {rows.map((r) => (
-        <XStack key={r[0]} borderBottomWidth={1} borderColor="$borderColor">
-          <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
-            <Text color="$color11">{r[0]}</Text>
+      {rows.map((r, idx) => (
+        <XStack
+          key={r[0]}
+          borderBottomWidth={idx === rows.length - 1 ? 0 : 1}
+          borderColor="$borderColor"
+        >
+          <YStack flex={1} paddingVertical="$1" paddingHorizontal="$1">
+            <Text color="$color11" fontSize="$2">
+              {r[0]}
+            </Text>
           </YStack>
-          <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
-            <Text color="$color11">{r[1]}</Text>
+          <YStack flex={1} paddingVertical="$1" paddingHorizontal="$1">
+            <Text color="$color11" fontSize="$2">
+              {r[1]}
+            </Text>
           </YStack>
-          <YStack flex={1} paddingVertical="$2" paddingHorizontal="$2">
-            <Text color="$color11">{r[2]}</Text>
+          <YStack flex={1} paddingVertical="$1" paddingHorizontal="$1">
+            <Text color="$color11" fontSize="$2">
+              {r[2]}
+            </Text>
           </YStack>
         </XStack>
       ))}

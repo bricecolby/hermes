@@ -25,8 +25,8 @@ export type HermesVocabJson = {
     updated_at?: string;
 
     examples?: {
-      example_text: string;
-      translation_text?: string | null;
+      ru: string;
+      en?: string | null;
       surface_form?: string | null; // optional link to vocab_forms
       media_uri?: string | null;    // optional link to vocab_media
       created_at?: string;
@@ -256,7 +256,7 @@ export async function importVocabPacks(db: SQLiteDatabase, opts: ImportOptions) 
 
         const examples = s.examples ?? [];
         for (const ex of examples) {
-          const exText = (ex.example_text ?? "").trim();
+          const exText = (ex.ru ?? "").trim();
           if (!exText) continue;
 
           let vocabFormId: number | null = null;
@@ -275,7 +275,7 @@ export async function importVocabPacks(db: SQLiteDatabase, opts: ImportOptions) 
               vocabSenseId,
               vocabFormId,
               exText,
-              ex.translation_text ?? null,
+              ex.en ?? null,
               mediaId,
               ex.created_at ?? ts,
               ex.updated_at ?? ts,

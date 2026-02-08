@@ -193,10 +193,6 @@ def extract_russian_section_senses(html: str) -> Tuple[Optional[str], List[WikiS
 
                 senses.append(WikiSense(definition=def_text, examples_ru=examples_ru, examples_en=examples_en))
 
-            # stop after first definition list to avoid huge pulls
-            if senses:
-                break
-
     return wik_pos, senses
 
 # ----------------------------
@@ -476,7 +472,7 @@ def llm_enrich(
             "usage_notes": "Short learner-friendly notes (English).",
             "grammar_hint": "Short grammar hint (English).",
             "tags": "List 0-5 tags, lowercase, single words if possible.",
-            "examples": "Provide 2 examples per sense. Russian + English translation. Keep them short and natural."
+            "examples": "Provide 3 examples per sense. Russian + English translation. Keep them short and natural."
         },
         "required_output_schema": {
             "usage_notes": "string|null",

@@ -5,7 +5,7 @@ import { ensureCoreConcepts } from "./importers/conceptsImporter";
 
 type SeedOpts = { fromSeedVersion?: number };
 
-export const SEED_VERSION = 4;
+export const SEED_VERSION = 8;
 
 export async function seedDb(db: SQLiteDatabase, opts: SeedOpts = {}) {
   const from = opts.fromSeedVersion ?? 0;
