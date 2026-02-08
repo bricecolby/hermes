@@ -463,27 +463,42 @@ function TableCell({
   value,
   header,
   align = "left",
+  isLast = false,
 }: {
   value: string | null;
   header?: boolean;
   align?: "left" | "center" | "right";
+  isLast?: boolean;
 }) {
+  const lines = (value ?? "—").split("\n");
+
   return (
     <YStack
-      minWidth={110}
+      flex={1}
+      minWidth={0}
       paddingVertical="$2"
       paddingHorizontal="$2"
-      borderRightWidth={1}
+      borderRightWidth={isLast ? 0 : 1}
       borderColor="$borderColor"
       backgroundColor={header ? "$glassFill" : "transparent"}
+      justifyContent="center"
     >
-      <Text
-        color={header ? "$color" : "$color11"}
-        fontWeight={header ? "900" : "700"}
-        textAlign={align}
-      >
-        {value ?? "—"}
-      </Text>
+      <YStack gap="$1">
+        {lines.map((line, idx) => (
+          <Text
+            key={`${line}-${idx}`}
+            color={header ? "$color" : "$color11"}
+            fontWeight={header ? "900" : "700"}
+            textAlign={align}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.6}
+            ellipsizeMode="tail"
+          >
+            {line || "—"}
+          </Text>
+        ))}
+      </YStack>
     </YStack>
   );
 }
@@ -498,7 +513,12 @@ function TableRow({
   return (
     <XStack borderBottomWidth={1} borderColor="$borderColor">
       {cells.map((c, i) => (
-        <TableCell key={i} value={c} header={header} />
+        <TableCell
+          key={i}
+          value={c}
+          header={header}
+          isLast={i === cells.length - 1}
+        />
       ))}
     </XStack>
   );
@@ -520,19 +540,18 @@ function TableBlock({
           {title}
         </Text>
       ) : null}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <YStack
-          borderWidth={1}
-          borderColor="$borderColor"
-          borderRadius="$5"
-          overflow="hidden"
-        >
-          <TableRow cells={header} header />
-          {rows.map((r, i) => (
-            <TableRow key={i} cells={r} />
-          ))}
-        </YStack>
-      </ScrollView>
+      <YStack
+        width="100%"
+        borderWidth={1}
+        borderColor="$borderColor"
+        borderRadius="$5"
+        overflow="hidden"
+      >
+        <TableRow cells={header} header />
+        {rows.map((r, i) => (
+          <TableRow key={i} cells={r} />
+        ))}
+      </YStack>
     </YStack>
   );
 }
