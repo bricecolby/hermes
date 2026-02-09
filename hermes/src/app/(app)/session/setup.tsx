@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState, useRef } from "react"
 import { ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { Text, YStack } from "tamagui";
+import { Text, View, YStack } from "tamagui";
 
 import { Screen } from "../../../components/ui/Screen";
 import { GlassCard } from "../../../components/ui/GlassCard";
@@ -11,7 +11,7 @@ import { HermesButton } from "../../../components/ui/HermesButton";
 import { useAppState } from "../../../state/AppState";
 
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../../db/queries/users";
-import { getRandomVocabConceptRefs } from "@/db/queries/concepts";
+import { getKnownVocabForGeneration, getRandomVocabConceptRefs } from "@/db/queries/concepts";
 
 import { llmClient } from "shared/services/llm/client";
 import { PracticeItemGenerator } from "shared/services/practiceGeneration/PracticeItemGenerator";
@@ -19,13 +19,21 @@ import { buildGenerationContext } from "shared/services/practiceGeneration/conte
 import { registerPracticeItemSpecs } from "shared/services/practiceGeneration/specs/registerPracticeItemSpecs";
 import { startPracticeSession } from "@/db/queries/sessions";
 
-import { View } from "tamagui";
-
 const MVP_USERNAME = "default";
 
 registerPracticeItemSpecs();
 
 const STOP_WORDS = ["```", "\n```", "\n\n```", "</s>"];
+
+function primaryGloss(raw: string): string {
+  const cleaned = String(raw ?? "").replace(/\s+/g, " ").trim();
+  if (!cleaned) return "";
+  return cleaned
+    .split(/[;|]/)[0]
+    .split(/\s[—-]\s/)[0]
+    .replace(/^[\s,;:.-]+|[\s,;:.-]+$/g, "")
+    .slice(0, 80);
+}
 
 export default function SessionSetup() {
   const router = useRouter();
@@ -76,9 +84,6 @@ export default function SessionSetup() {
     if (!activeProfileId) return null;
     return profiles.find((p) => p.userId === activeProfileId) ?? null;
   }, [profiles, activeProfileId]);
-
-  const hasVocab = (session?.conceptIds.length ?? 0) > 0;
-  const hasBank = (session?.practiceBank?.length ?? 0) > 0;
 
   // --- Step 0: Initialize LLM ---
   useEffect(() => {
@@ -182,20 +187,37 @@ export default function SessionSetup() {
 
       try {
         const userId = String(activeProfileId ?? "default");
+        const knownVocab =
+          activeProfileId && activeLanguageId
+            ? await getKnownVocabForGeneration(db, {
+                userId: activeProfileId,
+                languageId: activeLanguageId,
+                modelKey: "ema_v1",
+                limit: 50,
+                masteryMin: 0,
+              })
+            : [];
 
         const ctx = await buildGenerationContext({
           userId,
-          mode: "reception",
-          skills: ["reading"],
+          mode: "production",
+          skills: ["writing"],
           conceptIds: session.conceptIds,
+          learner: {
+            cefr: "A1",
+            nativeLanguage: activeProfile?.nativeName ?? "English",
+            targetLanguage: activeProfile?.learningName ?? "Russian",
+          },
+          vocab: knownVocab.map((row) => ({
+            lemma: row.lemma,
+            mastery: row.mastery,
+          })),
         });
 
         const generator = new PracticeItemGenerator(
           llmClient.complete.bind(llmClient),
           STOP_WORDS
         );
-
-        const types = ["mcq_v1.basic", "cloze_v1.free_fill"] as const;
 
         const total = 5;
         setGenTotal(total);
@@ -210,7 +232,7 @@ export default function SessionSetup() {
         }
 
         for (let i = 0; i < total; i++) {
-          const type = types[i % types.length];
+          const type = "cloze_v1.free_fill";
 
           // pick focus word for this item
           const focusRef = refs[i % refs.length];
@@ -230,10 +252,17 @@ export default function SessionSetup() {
           );
 
           const start = Date.now();
+          const itemCtx = {
+            ...ctx,
+            targets: {
+              ...(ctx.targets ?? {}),
+              conceptIds: [focusRef.conceptId],
+            },
+          };
 
-          const res = await generator.generate(type, ctx, undefined, {
+          const res = await generator.generate(type, itemCtx, undefined, {
             debug: true,
-            timeoutMs: 30_000,
+            timeoutMs: 90_000,
             focus: {
               conceptId: focusRef.conceptId,
               target: focusWord,
@@ -248,10 +277,19 @@ export default function SessionSetup() {
           if (cancelled) return;
 
           if (res.ok) {
+            const targetNative = primaryGloss(translation);
             const stamped = {
               ...res.parsed,
               conceptIds: [focusRef.conceptId],
+              mode: "production",
+              skills: ["writing"],
+              inputLanguageCode: activeProfile?.learningCode ?? "ru",
+              targetNative: targetNative || translation || focusWord,
             };
+            console.log(
+              `[GEN] item ${i + 1}/${total} parsed JSON`,
+              JSON.stringify(stamped, null, 2)
+            );
             bank.push(stamped);
           } else {
             console.warn(`[GEN] ✗ failed ${type}`, res.error);
@@ -296,11 +334,16 @@ export default function SessionSetup() {
       cancelled = true;
     };
   }, [
+    db,
     session?.id,
     session?.conceptIds, 
     session?.conceptRefs, 
     session?.practiceBank?.length,
+    activeLanguageId,
     activeProfileId,
+    activeProfile?.nativeName,
+    activeProfile?.learningName,
+    activeProfile?.learningCode,
     llmReady,
     setSessionDbId,
   ]);

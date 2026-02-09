@@ -72,7 +72,11 @@ export default function Practice() {
   const clozeVm = useMemo<ClozeViewModel | null>(() => {
     if (!currentJson || currentJson.type !== "cloze_v1.free_fill") return null;
     const parsed = ClozeFreeFillSchema.parse(currentJson);
-    return { parts: parsed.parts };
+    return {
+      parts: parsed.parts,
+      inputLanguageCode: parsed.inputLanguageCode,
+      targetNative: parsed.targetNative,
+    };
   }, [currentJson]);
 
 
@@ -92,7 +96,20 @@ export default function Practice() {
     if (locked) return;
     setLocked(true);
 
-    const evaluation = item.evaluate(payload);
+    let evaluation;
+    try {
+      evaluation = item.evaluate(payload);
+    } catch (e) {
+      console.error("[practice] evaluate failed", e);
+      setFeedback({
+        isCorrect: false,
+        correctChoiceId: correctChoiceIdForFeedback,
+        message: "Couldn't evaluate this answer. Try again.",
+      });
+      setLocked(false);
+      return;
+    }
+
     const isCorrect = evaluation.isCorrect === true;
 
     try {
@@ -104,6 +121,12 @@ export default function Practice() {
           (json as any).prompt ??
           (json as any).front ??
           (typeof (json as any).promptText === "string" ? (json as any).promptText : null) ??
+          ((json as any).type === "cloze_v1.free_fill" && Array.isArray((json as any).parts)
+            ? (json as any).parts
+                .map((p: any) => (p?.type === "text" ? String(p.value ?? "") : "____"))
+                .join("")
+                .trim()
+            : null) ??
           null;
         const modality = typeof(json as any).mode === "string" ? (json as any).mode: "reception";
         const skills = (json as any).skills;
@@ -197,7 +220,13 @@ export default function Practice() {
 
       case "cloze_v1.free_fill":
         return clozeVm ? (
-          <ClozeCard key={`${idx}-cloze`} item={clozeVm} locked={locked} onSubmit={handleClozeSubmit} />
+          <ClozeCard
+            key={`${idx}-cloze`}
+            item={clozeVm}
+            locked={locked}
+            feedback={feedback}
+            onSubmit={handleClozeSubmit}
+          />
         ) : null;
 
       default:
@@ -220,7 +249,7 @@ export default function Practice() {
 
       {feedback ? (
         <GlassCard marginTop={14}>
-          <Muted marginBottom={10}>Ready?</Muted>
+          <Muted marginBottom={10}>{feedback.message ?? "Ready?"}</Muted>
           <HermesButton label="Continue →" variant="primary" marginTop={0} onPress={onContinue} />
         </GlassCard>
       ) : null}

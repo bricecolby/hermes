@@ -12,11 +12,32 @@ const ClozeBlankPartSchema = z.object({
   type: z.literal("blank"),
   id: z.string().min(1),
   accepted: z.array(z.string().min(1)).min(1),
+  conceptId: z.number().finite().optional(),
 });
 
 export const ClozeFreeFillSchema = PracticeItemBaseSchema.extend({
   type: z.literal("cloze_v1.free_fill"),
   parts: z.array(z.union([ClozeTextPartSchema, ClozeBlankPartSchema])).min(1),
+  inputLanguageCode: z.string().min(2).optional(),
+  targetNative: z.string().min(1).optional(),
+}).superRefine((value, ctx) => {
+  const blanks = value.parts.filter((p) => p.type === "blank");
+  if (blanks.length !== 1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "parts must contain exactly one blank.",
+      path: ["parts"],
+    });
+    return;
+  }
+
+  if (blanks[0]?.id !== "b1") {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'blank id must be "b1".',
+      path: ["parts"],
+    });
+  }
 });
 
 export type ClozeFreeFillJSON = z.infer<typeof ClozeFreeFillSchema>;
@@ -26,7 +47,12 @@ export type ClozeUserResponse = {
 };
 
 function norm(s: string) {
-  return s.trim().toLowerCase();
+  return s
+    .trim()
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/^[\s.,!?;:()[\]{}"']+|[\s.,!?;:()[\]{}"']+$/g, "")
+    .replace(/\s+/g, " ");
 }
 
 export class ClozeFreeFillPracticeItem extends PracticeItem {
@@ -46,7 +72,7 @@ export class ClozeFreeFillPracticeItem extends PracticeItem {
     const resp = userResponse as Partial<ClozeUserResponse> | null;
     const responses = resp?.responses && typeof resp.responses === "object" ? resp.responses : {};
 
-    const blanks = this.parts.filter((p) => p.type === "blank") as Array<z.infer<typeof ClozeBlankPartSchema>>;
+    const blanks = this.parts.filter((p) => p.type === "blank") as z.infer<typeof ClozeBlankPartSchema>[];
     const total = blanks.length;
 
     let correct = 0;

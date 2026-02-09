@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useResponseTimer } from "@/hooks/responseTimer";
 
@@ -9,43 +9,44 @@ type ClozePart = ClozeTextPart | ClozeBlankPart;
 
 export type ClozeFreeFillViewModel = {
   parts: ClozePart[];
+  inputLanguageCode?: string;
+  targetNative?: string;
 };
 
 type Props = {
   item: ClozeFreeFillViewModel;
   locked?: boolean;
   onSubmit: (payload: { responses: Record<string, string>; responseMs: number }) => void | Promise<void>;
-  feedback?: { isCorrect: boolean } | null;
+  feedback?: { isCorrect: boolean; message?: string } | null;
 };
 
-export function ClozeCard({ item, locked = false, onSubmit }: Props) {
+export function ClozeCard({ item, locked = false, onSubmit, feedback }: Props) {
   const [filled, setFilled] = useState<Record<string, string>>({});
   const { reset, elapsedMs } = useResponseTimer();
-  
+
   useEffect(() => {
     setFilled({});
     reset();
   }, [item.parts, reset]);
 
-  const wordBank = useMemo(() => {
-    const all = item.parts.flatMap((p) => (p.type === "blank" ? p.accepted : []));
-    return Array.from(new Set(all));
-  }, [item.parts]);
+  const blankIds = useMemo(
+    () => item.parts.filter((p) => p.type === "blank").map((p) => p.id),
+    [item.parts]
+  );
 
   const allFilled = useMemo(() => {
-    const ids = item.parts.filter((p) => p.type === "blank").map((p) => p.id);
-    return ids.every((id) => !!filled[id]?.trim());
-  }, [item.parts, filled]);
+    return blankIds.every((id) => !!filled[id]?.trim());
+  }, [blankIds, filled]);
+
+  const keyboardHint = useMemo(() => {
+    const code = (item.inputLanguageCode ?? "").toLowerCase();
+    if (code.startsWith("ru")) return "Switch to Russian keyboard for best results.";
+    return null;
+  }, [item.inputLanguageCode]);
 
   function setBlank(id: string, word: string) {
     if (locked) return;
     setFilled((prev) => ({ ...prev, [id]: word }));
-  }
-
-  function fillNextEmpty(word: string) {
-    if (locked) return;
-    const next = item.parts.find((p) => p.type === "blank" && !filled[p.id]);
-    if (next && next.type === "blank") setBlank(next.id, word);
   }
 
   return (
@@ -61,14 +62,45 @@ export function ClozeCard({ item, locked = false, onSubmit }: Props) {
           )
         )}
       </Text>
+      {item.targetNative ? (
+        <Text style={styles.targetHint}>
+          Target: <Text style={styles.targetHintValue}>{item.targetNative}</Text>
+        </Text>
+      ) : null}
 
-      <View style={styles.bank}>
-        {wordBank.map((w) => (
-          <TouchableOpacity key={w} style={styles.word} onPress={() => fillNextEmpty(w)} disabled={locked}>
-            <Text style={styles.wordText}>{w}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {blankIds.map((id, i) => (
+        <View key={id} style={styles.inputWrap}>
+          <TextInput
+            value={filled[id] ?? ""}
+            editable={!locked}
+            autoCapitalize="none"
+            autoCorrect={false}
+            spellCheck={false}
+            keyboardType="default"
+            returnKeyType="done"
+            placeholder={item.inputLanguageCode?.toLowerCase().startsWith("ru") ? "Введите ответ" : "Type your answer"}
+            placeholderTextColor="#8A94B8"
+            onChangeText={(text) => setBlank(id, text)}
+            style={styles.input}
+          />
+        </View>
+      ))}
+
+      {keyboardHint ? <Text style={styles.hint}>{keyboardHint}</Text> : null}
+
+      {feedback ? (
+        <View
+          style={[
+            styles.feedbackWrap,
+            feedback.isCorrect ? styles.feedbackOk : styles.feedbackBad,
+          ]}
+        >
+          <Text style={styles.feedbackTitle}>
+            {feedback.isCorrect ? "Correct" : "Incorrect"}
+          </Text>
+          {feedback.message ? <Text style={styles.feedbackMsg}>{feedback.message}</Text> : null}
+        </View>
+      ) : null}
 
       <TouchableOpacity
         disabled={!allFilled || locked}
@@ -102,22 +134,60 @@ const styles = StyleSheet.create({
     color: "#7CC8FF",
     fontWeight: "900",
   },
-  bank: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
+  inputWrap: {
+    gap: 8,
   },
-  word: {
-    backgroundColor: "rgba(255,255,255,0.06)",
+  input: {
+    backgroundColor: "rgba(255,255,255,0.04)",
     borderRadius: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-  },
-  wordText: {
+    borderColor: "rgba(255,255,255,0.12)",
     color: "#E6EBFF",
-    fontWeight: "800",
+    paddingHorizontal: 12,
+    paddingVertical: 11,
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  hint: {
+    color: "#8A94B8",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  targetHint: {
+    color: "#AFC2EA",
+    fontSize: 13,
+    fontWeight: "700",
+    paddingLeft: 2,
+    marginTop: -6,
+  },
+  targetHintValue: {
+    color: "#00D2FF",
+    fontWeight: "900",
+  },
+  feedbackWrap: {
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    gap: 4,
+  },
+  feedbackOk: {
+    borderColor: "rgba(112, 219, 168, 0.7)",
+    backgroundColor: "rgba(21, 58, 44, 0.55)",
+  },
+  feedbackBad: {
+    borderColor: "rgba(255, 119, 119, 0.7)",
+    backgroundColor: "rgba(77, 24, 24, 0.55)",
+  },
+  feedbackTitle: {
+    color: "#E6EBFF",
+    fontWeight: "900",
+    fontSize: 14,
+  },
+  feedbackMsg: {
+    color: "#D3D9EE",
+    fontSize: 13,
+    fontWeight: "600",
   },
   checkWrap: { borderRadius: 14, overflow: "hidden" },
   checkBtn: { paddingVertical: 14, alignItems: "center" },

@@ -13,6 +13,17 @@ export type ModelCard = {
 
 export const MODEL_CATALOG: ModelCard[] = [
   {
+    id: "qwen2.5-0.5b-instruct-q4_k_m",
+    name: "Qwen 2.5 0.5B Instruct (Q4_K_M)",
+    description:
+      "Smallest local instruct model option for low-memory devices and emulators.",
+    sizeLabel: "≈ 0.5–0.7 GB",
+    url: "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    filename: "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    minFreeBytes: 1_500_000_000,
+    purposes: ["chat"],
+  },
+  {
     id: "qwen2.5-3b-instruct-q4_k_m",
     name: "Qwen 2.5 3B Instruct (Q4_K_M)",
     description:

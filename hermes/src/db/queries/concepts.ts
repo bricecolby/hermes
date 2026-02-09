@@ -19,6 +19,11 @@ export type DueConceptRefRow = ConceptRefRow & {
 };
 
 export type MasteryOrder = "asc" | "desc";
+export type KnownVocabForGenerationRow = {
+  conceptId: number;
+  lemma: string;
+  mastery: number;
+};
 
 export type CefrProgressRow = {
   cefr: CefrLevel;
@@ -212,6 +217,42 @@ export async function getConceptRefsByMastery(
     LIMIT ?;
     `,
     [languageId, userId, modelKey, limit]
+  );
+}
+
+export async function getKnownVocabForGeneration(
+  db: SQLiteDatabase,
+  args: {
+    userId: number;
+    languageId: number;
+    modelKey: string;
+    limit: number;
+    masteryMin?: number;
+  }
+): Promise<KnownVocabForGenerationRow[]> {
+  const { userId, languageId, modelKey, limit, masteryMin = 0 } = args;
+
+  return db.getAllAsync<KnownVocabForGenerationRow>(
+    `
+    SELECT
+      c.id             AS conceptId,
+      c.title          AS lemma,
+      MAX(ucm.mastery) AS mastery
+    FROM user_concept_mastery ucm
+    JOIN concepts c
+      ON c.id = ucm.concept_id
+    WHERE ucm.user_id = ?
+      AND ucm.model_key = ?
+      AND c.language_id = ?
+      AND c.kind = 'vocab_item'
+      AND c.title IS NOT NULL
+      AND TRIM(c.title) <> ''
+    GROUP BY c.id, c.title
+    HAVING MAX(ucm.mastery) >= ?
+    ORDER BY MAX(ucm.mastery) DESC, RANDOM()
+    LIMIT ?;
+    `,
+    [userId, modelKey, languageId, masteryMin, limit]
   );
 }
 

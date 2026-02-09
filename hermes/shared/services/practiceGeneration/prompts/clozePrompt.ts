@@ -5,64 +5,92 @@ type Focus = {
   conceptId: number;
   target: string;
   resolved?: string;
-  distractors?: string[];
 };
 
-function pickAccepted(focus: Focus | undefined): string[] {
-  const target = (focus?.resolved ?? focus?.target ?? "").trim();
-  const ds = (focus?.distractors ?? []).map((s) => s.trim()).filter(Boolean);
-
-  const list = [target, ...ds].filter(Boolean);
-  const uniq = Array.from(new Set(list));
-
-  const out = uniq.slice(0, 4);
-  while (out.length < 4) out.push("парк");
-  return out;
+function scriptConstraintLine(ctx?: any): string | null {
+  if (ctx?.constraints?.requireScript === "cyrillic") {
+    return "- Use Cyrillic only (no Latin letters).";
+  }
+  if (ctx?.constraints?.forbidLatin) {
+    return "- Do not use Latin letters.";
+  }
+  return null;
 }
 
 export function buildClozePrompt(ctx?: any): PromptPair {
   const focus: Focus | undefined = ctx?.focus;
 
   const conceptId = focus?.conceptId ?? 123;
-  const target = (focus?.resolved ?? focus?.target ?? "метро").trim();
-  const accepted = pickAccepted(focus);
+  const target = (focus?.resolved ?? focus?.target ?? "читать").trim();
+  const mode = ctx?.session?.mode ?? "production";
+  const skills = Array.isArray(ctx?.session?.skills) && ctx.session.skills.length > 0
+    ? ctx.session.skills
+    : ["writing"];
+
+  const familiarVocab = (Array.isArray(ctx?.targets?.vocab) ? ctx.targets.vocab : [])
+    .slice(0, 40)
+    .map((v: any) => `${String(v?.lemma ?? "").trim()} (${Number(v?.mastery ?? 0).toFixed(2)})`)
+    .filter((s: string) => !s.startsWith(" ("));
+
+  const constraints = [
+    `- conceptIds must be [${conceptId}].`,
+    `- Mode must be "${mode}".`,
+    `- Skills must be ${JSON.stringify(skills)}.`,
+    "- Keep it short (<= 12 words total).",
+    '- Use exactly ONE blank with id "b1".',
+    "- The blank accepted list must include all valid answer forms for this exact sentence context.",
+    "- Do not include distractors in accepted.",
+    "- If there is only one valid form, accepted should have exactly one value.",
+    "- If multiple forms are valid (e.g., gender variants), include each valid form.",
+    "- Keep accepted to 1-4 concise forms.",
+    "- The blank conceptId must equal the target conceptId.",
+    `- The blank should test this target word family when natural: "${target}".`,
+  ];
+  const scriptLine = scriptConstraintLine(ctx);
+  if (scriptLine) constraints.splice(1, 0, scriptLine);
 
   const system = [
+    "You generate content for a language-learning app.",
     "Return ONLY valid JSON.",
     "No markdown. No commentary.",
     "Use double quotes for all strings.",
+    "No trailing commas.",
   ].join(" ");
 
   const user = [
-    "TASK: Create ONE cloze (fill-in-the-blank) sentence for ONE Russian word.",
-    "",
-    "Rules (important):",
-    "- Russian only (Cyrillic). No Latin letters.",
-    `- The correct missing word MUST be exactly: "${target}"`,
-    "- Use simple A1 language.",
-    "- You MUST output parts as EXACTLY 3 elements: text, blank, text.",
-    '- The blank MUST have id "b1".',
-    `- conceptIds MUST be [${conceptId}]`,
-    `- The blank accepted list MUST be exactly 4 options and MUST include "${target}".`,
-    "",
-    "Output MUST match this JSON template exactly (fill in values):",
+    "Generate ONE practice item JSON for this schema:",
     "{",
     '  "type": "cloze_v1.free_fill",',
-    '  "mode": "reception",',
-    '  "skills": ["reading"],',
+    `  "mode": "${mode}",`,
+    `  "skills": ${JSON.stringify(skills)},`,
     `  "conceptIds": [${conceptId}],`,
-    '  "parts": [',
-    '    { "type": "text", "value": "…" },',
-    `    { "type": "blank", "id": "b1", "accepted": ${JSON.stringify(accepted)}, "conceptId": ${conceptId} },`,
-    '    { "type": "text", "value": "…" }',
-    "  ]",
+    '  "parts": Array<',
+    '    | { "type":"text",  "value": string }',
+    '    | { "type":"blank", "id": string, "accepted": string[], "conceptId": number }',
+    "  >",
     "}",
     "",
-    "Constraints for the sentence:",
-    "- Total sentence should be <= 10 words.",
-    "- The sentence must clearly fit the missing word.",
+    "Constraints:",
+    ...constraints,
     "",
-    "Now output ONLY the JSON.",
+    "Preferred familiarity guidance (soft constraint):",
+    familiarVocab.length > 0
+      ? `- Prefer using familiar vocabulary for non-blank words when natural: ${familiarVocab.join(", ")}`
+      : "- No familiarity list available. Use level-appropriate words.",
+    "- This is guidance, not a hard rule.",
+    "",
+    "Example valid output:",
+    "{",
+    '  "type": "cloze_v1.free_fill",',
+    `  "mode": "${mode}",`,
+    `  "skills": ${JSON.stringify(skills)},`,
+    `  "conceptIds": [${conceptId}],`,
+    '  "parts": [',
+    '    { "type": "text", "value": "Ты " },',
+    `    { "type": "blank", "id": "b1", "accepted": ["читаешь"], "conceptId": ${conceptId} },`,
+    '    { "type": "text", "value": " (читать)." }',
+    "  ]",
+    "}",
   ].join("\n");
 
   return { system, user };

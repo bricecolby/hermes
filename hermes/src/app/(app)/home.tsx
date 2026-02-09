@@ -74,7 +74,7 @@ function PillRow({ total, filled }: { total: number; filled: number }) {
 
 export default function Home() {
   const router = useRouter();
-  const { activeProfileId, activeLanguageId, session, startSession } = useAppState();
+  const { activeProfileId, activeLanguageId, session, startSession, endSession } = useAppState();
   const insets = useSafeAreaInsets();
 
   const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
@@ -231,6 +231,38 @@ export default function Home() {
     if (!activeProfileId) router.replace("/(onboarding)/profile");
   }, [activeProfileId, router]);
 
+  const canResumeSession =
+    !!session &&
+    !!activeLanguageId &&
+    session.languageId === activeLanguageId &&
+    session.practiceIndex < Math.max(1, session.practiceBank.length);
+
+  const hasPracticeReady = !!session && session.practiceBank.length > 0;
+
+  const practiceSubtitle = canResumeSession
+    ? hasPracticeReady
+      ? `Resume • item ${Math.min(session.practiceIndex + 1, session.practiceBank.length)} of ${session.practiceBank.length}`
+      : "Resume setup"
+    : "New concepts";
+
+  function handlePracticePress() {
+    if (canResumeSession && session) {
+      if (session.practiceBank.length > 0) {
+        router.push("/(app)/session/practice");
+        return;
+      }
+      router.push("/(app)/session/setup");
+      return;
+    }
+
+    if (session) {
+      endSession();
+    }
+
+    startSession("learn");
+    router.push("/(app)/session/setup");
+  }
+
   return (
     <Screen>
       <Stack.Screen options={{ headerShown: false }} />
@@ -260,14 +292,7 @@ export default function Home() {
           ) : null}
 
           <YStack marginTop={18} gap={12}>
-            {session ? (
-              <ActionCard
-                title="Continue Session"
-                subtitle={`${session.type} • step ${session.practiceIndex + 1}`}
-                onPress={() => router.push("/(app)/session/concept")}
-              />
-            ) : (
-              <>
+            <>
                 <ActionCard
                   title="Learn"
                   subtitle={
@@ -399,12 +424,10 @@ export default function Home() {
 
                 <ActionCard
                   title="Practice"
-                  subtitle="New concepts"
+                  subtitle={practiceSubtitle}
+                  highlight={canResumeSession}
                   disabled={!activeLanguageId}
-                  onPress={() => {
-                    startSession("learn");
-                    router.push("/(app)/session/setup");
-                  }}
+                  onPress={handlePracticePress}
                 />
 
                 <ActionCard
@@ -514,8 +537,7 @@ export default function Home() {
                   subtitle="Choose a different language pack"
                   onPress={() => router.push("/(onboarding)/profile")}
                 />
-              </>
-            )}
+            </>
           </YStack>
         </YStack>
       </ScrollView>

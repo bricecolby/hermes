@@ -146,13 +146,19 @@ export class LlmClient {
     }
 
     let built = "";
+    const callback =
+      typeof onPartial === "function"
+        ? (data: any) => {
+            if (data?.token) {
+              built += data.token;
+              onPartial(built);
+            }
+          }
+        : undefined;
 
-    const result = await this.ctx.completion(params, (data: any) => {
-      if (data?.token) {
-        built += data.token;
-        onPartial?.(built);
-      }
-    });
+    const result = callback
+      ? await this.ctx.completion(params, callback)
+      : await this.ctx.completion(params);
 
     return {
       text: String(result?.text ?? built ?? ""),

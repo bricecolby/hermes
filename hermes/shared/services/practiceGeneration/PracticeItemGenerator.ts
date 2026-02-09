@@ -49,6 +49,10 @@ function nowMs() {
     : Date.now();
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise((resolve, reject) => {
     const id = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
@@ -65,12 +69,16 @@ function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
   });
 }
 
-function safeJsonParse(text: string): any | null {
-  try {
-    return JSON.parse(text);
-  } catch {
-    return null;
-  }
+function sanitizeFocusToken(raw: string): string {
+  return String(raw ?? "")
+    .normalize("NFD")
+    // Strip stress marks, but keep other combining marks (e.g. breve in "й").
+    .replace(/[\u0300\u0301\u0341]/g, "")
+    .replace(/\([^)]*\)/g, "")
+    .replace(/[«»"'`]/g, "")
+    .replace(/\s+/g, " ")
+    .normalize("NFC")
+    .trim();
 }
 
 function focusInstruction(type: string, focusResolved: string, focus: FocusSpec): string {
@@ -105,7 +113,7 @@ function focusInstruction(type: string, focusResolved: string, focus: FocusSpec)
 
   if (type === "cloze_v1.free_fill") {
     return [
-      "FOCUS WORD (use exactly this surface form in output):",
+      "FOCUS TARGET (blank should test this lemma/word family):",
       `- conceptId: ${focus.conceptId}`,
       `- target (raw): ${focus.target}`,
       `- target (resolved): ${focusResolved}`,
@@ -115,9 +123,9 @@ function focusInstruction(type: string, focusResolved: string, focus: FocusSpec)
       "Hard requirements for this item:",
       `- conceptIds must include ${focus.conceptId}`,
       `- Exactly ONE blank (id "b1") and it must correspond to conceptId ${focus.conceptId}`,
-      `- The blank's accepted list MUST include "${focusResolved}"`,
-      "- accepted should include focus + 3–5 distractors (>= 4 total options)",
-      "- The sentence must clearly cue the focus word.",
+      "- accepted must include all valid forms for the sentence context, and no distractors",
+      "- If only one form is valid, include only that form",
+      "- The sentence must clearly cue the target form(s) from context",
       "",
     ]
       .filter(Boolean)
@@ -143,74 +151,20 @@ export class PracticeItemGenerator {
   private async resolveFocusTarget(
     focus: FocusSpec,
     debug: boolean,
-    timeoutMs: number
+    _timeoutMs: number
   ): Promise<string> {
     const key = this.focusCacheKey(focus);
     const cached = this.focusCache.get(key);
     if (cached) return cached;
 
-    // A tiny, deterministic “clean focus” call
-    // - Strip stress marks if needed
-    // - Choose ONE surface form (no parentheses)
-    // - Return only JSON with { "focus": "..." }
-    const system =
-      'You are a careful text normalizer for a language-learning app. Return ONLY JSON.';
+    const resolved = sanitizeFocusToken(focus.target);
+    const fallback = String(focus.target ?? "").trim();
+    const finalValue = resolved || fallback;
 
-    const user = [
-      "Normalize the focus vocabulary token into ONE surface form the learner should be tested on.",
-      "Rules:",
-      "- Output must be in Russian (Cyrillic). No Latin letters.",
-      "- Remove stress marks/diacritics if present.",
-      "- If parentheses indicate optional letters, choose the most common full form (prefer including the optional part).",
-      "- Remove parentheses from output.",
-      "- Preserve hyphens if they are part of the word/phrase.",
-      "",
-      "Return ONLY JSON:",
-      '{ "focus": "..." }',
-      "",
-      `Raw token: ${JSON.stringify(focus.target)}`,
-      focus.translation ? `Meaning (for you): ${focus.translation}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
+    this.focusCache.set(key, finalValue);
+    if (debug) console.log("[GEN][FOCUS] resolved (local)", { raw: focus.target, resolved: finalValue });
 
-    try {
-      if (debug) console.log("[GEN][FOCUS] resolving focus", { conceptId: focus.conceptId, raw: focus.target });
-
-      const r = await withTimeout(
-        this.complete(
-          {
-            messages: [
-              { role: "system", content: system },
-              { role: "user", content: user },
-            ],
-            n_predict: 80,
-            temperature: 0.0,
-            stop: this.stopWords,
-          },
-          undefined
-        ),
-        timeoutMs,
-        "focusClean"
-      );
-
-      const slice = extractLikelyJson(r.text ?? "") ?? (r.text ?? "");
-      const obj = safeJsonParse(slice);
-      const resolved = String(obj?.focus ?? "").trim();
-
-      if (!resolved) throw new Error("focusClean returned empty focus");
-
-      this.focusCache.set(key, resolved);
-      if (debug) console.log("[GEN][FOCUS] resolved", { raw: focus.target, resolved });
-
-      return resolved;
-    } catch (e: any) {
-      // If focus cleaning fails, fall back to raw target (better than bricking generation)
-      const fallback = String(focus.target ?? "").replace(/\([^)]*\)/g, "").trim();
-      if (debug) console.warn("[GEN][FOCUS] failed, fallback", { raw: focus.target, fallback, err: e?.message ?? String(e) });
-      this.focusCache.set(key, fallback || String(focus.target ?? "").trim());
-      return this.focusCache.get(key)!;
-    }
+    return finalValue;
   }
 
   async generate<TContext>(
@@ -304,7 +258,7 @@ export class PracticeItemGenerator {
           this.complete(
             {
               messages,
-              n_predict: 360,
+              n_predict: type === "cloze_v1.free_fill" ? 140 : 220,
               temperature: attempt === 1 ? 0.4 : 0.2,
               stop: this.stopWords,
             },
@@ -327,6 +281,12 @@ export class PracticeItemGenerator {
         lastQualityIssues = [];
         lastError = e?.message ?? String(e);
         warn(`[GEN] (${type}) attempt ${attempt} LLM error:`, lastError);
+        if (
+          /context is busy/i.test(lastError) ||
+          /timed out/i.test(lastError)
+        ) {
+          await delay(1500);
+        }
         continue;
       }
 
@@ -367,6 +327,10 @@ export class PracticeItemGenerator {
 
       if (qIssues.length > 0) {
         warn(`[GEN] (${type}) quality warnings (non-fatal):`, qIssues);
+        if (type === "cloze_v1.free_fill") {
+          lastError = `quality issues:\n${formatBulletIssues(qIssues)}`;
+          continue;
+        }
       }
 
       log(`[GEN] generate(${type}) success on attempt ${attempt}`);
