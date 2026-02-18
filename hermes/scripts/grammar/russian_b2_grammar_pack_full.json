@@ -1,0 +1,2958 @@
+{
+  "meta": {
+    "schema_version": "hermes-grammar-pack.v1",
+    "pack_id": "ru_grammar_b2_v1",
+    "language": "Russian",
+    "native_language": "English",
+    "cefr_level": "B2",
+    "title": "Russian B2 Grammar Pack",
+    "description": "Structurally measurable B2 grammar objectives, aligned to communicative competence and formal written style.",
+    "generated_at": "2026-02-18T20:47:25.554104+00:00",
+    "source_notes": "Derived from a structurally measurable B2 grammar list; designed to avoid abstract-only descriptors by tying each item to observable production or transformation behavior.",
+    "functional_discourse_goals": [
+      "Sustain and develop an argument with concessions, causes, and consequences",
+      "Write structured formal texts (reports, essays, professional emails) with appropriate register",
+      "Report and attribute others’ statements (including distance/skepticism) without losing clarity",
+      "Express nuanced stance: probability, obligation, criticism, and polite softening",
+      "Compress and expand information (clauses ↔ nominalizations) for clarity and style",
+      "Use passive/impersonal strategies to manage focus and responsibility",
+      "Interpret and produce dense written syntax (participles, gerunds, noun chains)"
+    ]
+  },
+  "sections": [
+    {
+      "slug": "b2",
+      "title": "B2 Grammar",
+      "description": "B2 grammar pack (structurally measurable objectives).",
+      "parent_slug": null,
+      "sort_order": 0
+    },
+    {
+      "slug": "b2/functional-discourse",
+      "title": "Functional discourse goals",
+      "description": "What learners should be able to do communicatively at B2.",
+      "parent_slug": "b2",
+      "sort_order": 1
+    },
+    {
+      "slug": "b2/clauses",
+      "title": "Deep clause embedding",
+      "description": "Complex multi-clause syntax and restructuring between clauses and noun phrases.",
+      "parent_slug": "b2",
+      "sort_order": 10
+    },
+    {
+      "slug": "b2/conditionals",
+      "title": "Advanced conditional structures",
+      "description": "Counterfactuals, mixed-time conditionals, and pragmatic softening.",
+      "parent_slug": "b2",
+      "sort_order": 20
+    },
+    {
+      "slug": "b2/modal-aspect",
+      "title": "Modal–aspect interaction",
+      "description": "Nuanced meaning with modals and aspect choice.",
+      "parent_slug": "b2",
+      "sort_order": 30
+    },
+    {
+      "slug": "b2/participle-gerund",
+      "title": "Participles and gerunds in dense syntax",
+      "description": "Compression/expansion with participles and deverbals; gerund correctness.",
+      "parent_slug": "b2",
+      "sort_order": 40
+    },
+    {
+      "slug": "b2/nominalization",
+      "title": "Nominalization and information packaging",
+      "description": "Deverbal nouns, genitive chains, and formal compression/expansion.",
+      "parent_slug": "b2",
+      "sort_order": 50
+    },
+    {
+      "slug": "b2/passive-impersonal",
+      "title": "Passive and impersonal strategy",
+      "description": "Voice choices, agent suppression, and impersonal generalization.",
+      "parent_slug": "b2",
+      "sort_order": 60
+    },
+    {
+      "slug": "b2/negation",
+      "title": "Advanced negation",
+      "description": "Emphatic and scoped negation in complex sentences.",
+      "parent_slug": "b2",
+      "sort_order": 70
+    },
+    {
+      "slug": "b2/evaluation-comparison",
+      "title": "Advanced evaluation and comparison",
+      "description": "High-register superlatives and implicit comparison/contrast.",
+      "parent_slug": "b2",
+      "sort_order": 80
+    },
+    {
+      "slug": "b2/formal-prep-case",
+      "title": "Formal prepositions and advanced case use",
+      "description": "Register-specific prepositions and metaphorical case mapping.",
+      "parent_slug": "b2",
+      "sort_order": 90
+    },
+    {
+      "slug": "b2/abstract-verbs",
+      "title": "Abstract verb usage",
+      "description": "Metaphorical motion and productive prefix meaning in abstract contexts.",
+      "parent_slug": "b2",
+      "sort_order": 100
+    },
+    {
+      "slug": "b2/particles-discourse",
+      "title": "Particles and discourse nuance",
+      "description": "Particles that manage stance and discourse pragmatics.",
+      "parent_slug": "b2",
+      "sort_order": 110
+    },
+    {
+      "slug": "b2/register",
+      "title": "Register transformation",
+      "description": "Controlled movement between colloquial and formal syntax.",
+      "parent_slug": "b2",
+      "sort_order": 120
+    },
+    {
+      "slug": "b2/argumentation",
+      "title": "Argumentation structuring",
+      "description": "Grammar-driven argumentation and stance attribution.",
+      "parent_slug": "b2",
+      "sort_order": 130
+    }
+  ],
+  "tags": [
+    {
+      "name": "topic:clauses",
+      "description": "Clause structure, subordination, and embedding."
+    },
+    {
+      "name": "topic:conditionals",
+      "description": "Conditional and counterfactual constructions."
+    },
+    {
+      "name": "topic:modality",
+      "description": "Modal verbs and modality markers."
+    },
+    {
+      "name": "topic:aspect",
+      "description": "Aspect choice and aspectual meaning."
+    },
+    {
+      "name": "topic:participles",
+      "description": "Participles (active/passive, present/past) and related syntax."
+    },
+    {
+      "name": "topic:gerunds",
+      "description": "Gerunds (adverbial participles) and constraints."
+    },
+    {
+      "name": "topic:nominalization",
+      "description": "Deverbal nouns and information packaging."
+    },
+    {
+      "name": "topic:passive",
+      "description": "Passive voice and voice alternations."
+    },
+    {
+      "name": "topic:impersonal",
+      "description": "Impersonal constructions and generalization strategies."
+    },
+    {
+      "name": "topic:negation",
+      "description": "Negation patterns and scope."
+    },
+    {
+      "name": "topic:comparison",
+      "description": "Comparison, contrast, and evaluative structures."
+    },
+    {
+      "name": "topic:cases",
+      "description": "Case functions and preposition+case pairings."
+    },
+    {
+      "name": "topic:prefixes",
+      "description": "Verbal prefix semantics and productivity."
+    },
+    {
+      "name": "topic:particles",
+      "description": "Particles and pragmatic markers."
+    },
+    {
+      "name": "topic:register",
+      "description": "Formal vs colloquial register and style shifts."
+    },
+    {
+      "name": "topic:argumentation",
+      "description": "Discourse/argumentation structures encoded grammatically."
+    },
+    {
+      "name": "df:argue-and-justify",
+      "description": "Make and defend arguments with concessions, evidence, and hedging."
+    },
+    {
+      "name": "df:formal-writing",
+      "description": "Write formal, structured texts (reports, essays, emails)."
+    },
+    {
+      "name": "df:report-and-attribute",
+      "description": "Report others’ claims and attribute stance appropriately."
+    },
+    {
+      "name": "df:hedge-and-evaluate",
+      "description": "Express nuanced evaluation, uncertainty, and probability."
+    }
+  ],
+  "grammar_points": [
+    {
+      "slug": "b2/clauses/001-nested-subordination-clause-inside-clause",
+      "title": "Embed a subordinate clause inside another subordinate clause.",
+      "summary": "Nested subordination (clause inside clause)",
+      "explanation": "At B2 you should be able to **nest** one subordinate clause inside another without losing clarity.\n\n**Pattern:** `Main clause + [Subordinate clause + (embedded subordinate clause)]`.\n\nKeep comma placement consistent and make sure the embedded clause answers a question inside the first subordinate clause (e.g., *что? почему? когда?*).",
+      "usage_notes": "- Avoid stacking more than 2–3 levels unless the sentence stays readable.\n- If the sentence becomes heavy, prefer nominalization (see Section E).",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 1,
+        "b2/clauses": 1
+      },
+      "examples": [
+        {
+          "example_text": "Я понял, что он ушёл, потому что увидел, как дверь закрылась.",
+          "translation_text": "I understood that he left because I saw how the door closed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она сказала, что останется дома, если почувствует, что ей становится хуже.",
+          "translation_text": "She said she would stay home if she feels that she is getting worse.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили, почему проект задержался, когда выяснили, что данные были неполными.",
+          "translation_text": "We discussed why the project was delayed when we found out the data were incomplete.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/clauses/002-relative-clause-embedded-in-causal-temporal-clause",
+      "title": "Embed a relative clause inside a causal or temporal clause.",
+      "summary": "Relative clause embedded in causal/temporal clause",
+      "explanation": "You can place a **relative clause with `который`** inside another subordinate clause (causal/temporal).\n\nThis is common in written Russian when you want to specify an entity *while* giving a reason or time frame.\n\n**Tip:** Keep the antecedent (the noun the relative clause refers to) close to `который`.",
+      "usage_notes": "- Check case agreement on `который` based on its role inside the relative clause.",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 2,
+        "b2/clauses": 2
+      },
+      "examples": [
+        {
+          "example_text": "Я ушёл раньше, потому что встретил человека, который меня знал.",
+          "translation_text": "I left earlier because I met a person who knew me.",
+          "notes": ""
+        },
+        {
+          "example_text": "Когда я нашёл книгу, которую ты советовал, я сразу её купил.",
+          "translation_text": "When I found the book you recommended, I bought it immediately.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы не поехали, потому что дорога, которая ведёт туда, была закрыта.",
+          "translation_text": "We didn’t go because the road that leads there was closed.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/clauses/003-three-clause-types-in-one-sentence",
+      "title": "Combine three clause types (e.g., concessive + relative + causal) into one sentence.",
+      "summary": "Three clause types in one sentence",
+      "explanation": "B2 writing often requires **multi-function** sentences (e.g., concession + cause + relative).\n\nBuild them in layers: start with the main clause, add one subordinate clause, then attach the next with clear connectors.\n\nAlways verify commas: each finite clause boundary typically needs a comma.",
+      "usage_notes": "- If you get lost, split into two sentences, then recombine.\n- Use discourse connectors to keep logic explicit.",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 3,
+        "b2/clauses": 3
+      },
+      "examples": [
+        {
+          "example_text": "Хотя погода была плохая, мы пошли туда, потому что это был единственный день, когда все могли.",
+          "translation_text": "Although the weather was bad, we went there because it was the only day when everyone could.",
+          "notes": ""
+        },
+        {
+          "example_text": "Несмотря на то что отчёт был длинный, я прочитал его, потому что в нём были данные, которые нам нужны.",
+          "translation_text": "Despite the report being long, I read it because it had data that we need.",
+          "notes": ""
+        },
+        {
+          "example_text": "Когда я увидел письмо, которое ты отправил, я понял, что мы успеем, хотя времени было мало.",
+          "translation_text": "When I saw the letter you sent, I understood we would make it, although there was little time.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/clauses/004-clause-nominalization-compression",
+      "title": "Reduce a subordinate clause into a nominalized noun phrase.",
+      "summary": "Clause → nominalization (compression)",
+      "explanation": "Russian formal style often **compresses** subordinate clauses into noun phrases.\n\n**Transform:** `clause` → `deverbal noun phrase / prepositional phrase`.\n\nUse this to make writing denser and more formal, but keep readability in mind.",
+      "usage_notes": "- Nominalization is useful in reports and academic writing.\n- Avoid excessive chains that hide the actor.",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 4,
+        "b2/clauses": 4
+      },
+      "examples": [
+        {
+          "example_text": "То, что он отказался, удивило всех. → Его отказ удивил всех.",
+          "translation_text": "That he refused surprised everyone. → His refusal surprised everyone.",
+          "notes": ""
+        },
+        {
+          "example_text": "Потому что сроки изменились, мы перенесли встречу. → Из‑за изменения сроков мы перенесли встречу.",
+          "translation_text": "Because the deadlines changed, we moved the meeting. → Due to the change in deadlines we moved the meeting.",
+          "notes": ""
+        },
+        {
+          "example_text": "Когда договор был подписан, началась работа. → После подписания договора началась работа.",
+          "translation_text": "When the contract was signed, work began. → After the signing of the contract, work began.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/clauses/005-nominalization-full-clause-expansion-for-clarity",
+      "title": "Expand a nominalized noun phrase into a full subordinate clause.",
+      "summary": "Nominalization → full clause (expansion for clarity)",
+      "explanation": "You should also be able to **decompress** formal noun phrases into clear subordinate clauses.\n\nThis is a practical editing skill: expand when you need to show who did what, or when the noun phrase is too dense.",
+      "usage_notes": "- Add explicit subject/agent if it is implicit in the noun phrase.",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 5,
+        "b2/clauses": 5
+      },
+      "examples": [
+        {
+          "example_text": "После обсуждения вопроса мы приняли решение. → После того как мы обсудили вопрос, мы приняли решение.",
+          "translation_text": "After discussing the issue we made a decision. → After we discussed the issue, we made a decision.",
+          "notes": ""
+        },
+        {
+          "example_text": "Вследствие задержки поставки проект остановился. → Проект остановился, потому что поставку задержали.",
+          "translation_text": "As a result of a delayed delivery, the project stopped. → The project stopped because they delayed the delivery.",
+          "notes": ""
+        },
+        {
+          "example_text": "Из‑за отказа клиента мы изменили план. → Мы изменили план, потому что клиент отказался.",
+          "translation_text": "Because of the client’s refusal we changed the plan. → We changed the plan because the client refused.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/clauses/006-fronting-a-subordinate-clause-for-emphasis",
+      "title": "Front a subordinate clause for contrast or emphasis.",
+      "summary": "Fronting a subordinate clause for emphasis",
+      "explanation": "Fronting puts the subordinate clause first to set up contrast/time/reason.\n\n**Pattern:** `Subordinate clause, main clause.`",
+      "usage_notes": "- Fronting is strong framing; mix with neutral order for natural style.",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 6,
+        "b2/clauses": 6
+      },
+      "examples": [
+        {
+          "example_text": "Хотя я и устал, я закончу работу сегодня.",
+          "translation_text": "Although I’m tired, I’ll finish the work today.",
+          "notes": ""
+        },
+        {
+          "example_text": "Когда мы закончим, мы обсудим детали.",
+          "translation_text": "When we finish, we’ll discuss the details.",
+          "notes": ""
+        },
+        {
+          "example_text": "Поскольку времени мало, начнём сразу.",
+          "translation_text": "Since time is short, let’s start immediately.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/clauses/007-dash-detachment-for-explanatory-clause",
+      "title": "Use dash detachment to separate an explanatory clause.",
+      "summary": "Dash detachment for explanatory clause",
+      "explanation": "A dash (—) can detach an explanation or clarification with a strong break.\n\nUse it to add an afterthought, apposition, or explanation that feels heavier than a comma.",
+      "usage_notes": "- In highly formal academic style, commas/parentheses may be preferred; in essays, dashes are common.",
+      "section_slugs": [
+        "b2",
+        "b2/clauses"
+      ],
+      "tag_names": [
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 7,
+        "b2/clauses": 7
+      },
+      "examples": [
+        {
+          "example_text": "Я принял решение — и, честно говоря, не пожалел.",
+          "translation_text": "I made the decision—and honestly, I didn’t regret it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он выбрал самый простой путь — отказаться.",
+          "translation_text": "He chose the simplest path—to refuse.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы встретились поздно — после того как все разошлись.",
+          "translation_text": "We met late—after everyone had left.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/conditionals/008-unreal-conditionals-aspect-contrast-если-бы",
+      "title": "Contrast perfective vs imperfective in unreal conditionals.",
+      "summary": "Unreal conditionals: aspect contrast (если бы …)",
+      "explanation": "In unreal conditionals (`если бы …`), **aspect choice** changes meaning:\n\n- **Imperfective** often frames the action as a process/attempt (*делал бы*).\n- **Perfective** highlights a completed/result action (*сделал бы*).\n\nAt B2 you should be able to choose the aspect that matches intention (process vs result).",
+      "usage_notes": "- In the result clause, the past tense + `бы` is typical.\n- In spoken language, `бы` may be reduced/shifted but the meaning stays conditional.",
+      "section_slugs": [
+        "b2",
+        "b2/conditionals"
+      ],
+      "tag_names": [
+        "topic:conditionals",
+        "topic:aspect",
+        "topic:modality",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 8,
+        "b2/conditionals": 8
+      },
+      "examples": [
+        {
+          "example_text": "Если бы я больше учил русский, я говорил бы увереннее.",
+          "translation_text": "If I studied Russian more, I would speak more confidently.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы я выучил русский раньше, я бы уже работал в России.",
+          "translation_text": "If I had learned Russian earlier, I would already be working in Russia.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы он не опоздал, мы бы успели закончить.",
+          "translation_text": "If he hadn’t been late, we would have managed to finish.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/conditionals/009-past-counterfactual-correct-aspect",
+      "title": "Form a past counterfactual using correct aspect choice.",
+      "summary": "Past counterfactual: correct aspect",
+      "explanation": "Past counterfactuals describe an unreal past scenario and its hypothetical result.\n\nUse **perfective** when you mean a *completed* alternative action; use **imperfective** when you emphasize the *process/attempt*.",
+      "usage_notes": "- Typical pattern: `Если бы + past, (то) + past + бы`.",
+      "section_slugs": [
+        "b2",
+        "b2/conditionals"
+      ],
+      "tag_names": [
+        "topic:conditionals",
+        "topic:aspect",
+        "topic:modality",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 9,
+        "b2/conditionals": 9
+      },
+      "examples": [
+        {
+          "example_text": "Если бы я прочитал письмо, я бы не сделал эту ошибку.",
+          "translation_text": "If I had read the letter, I wouldn’t have made this mistake.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы мы обсуждали это раньше, мы бы нашли решение.",
+          "translation_text": "If we had been discussing this earlier, we would have found a solution.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы она позвонила, мы бы встретились.",
+          "translation_text": "If she had called, we would have met.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/conditionals/010-conditional-modal-verb",
+      "title": "Combine conditional clause with modal verb correctly.",
+      "summary": "Conditional + modal verb",
+      "explanation": "When a conditional clause combines with a modal, keep the logic clear:\n\n- Modal in the result clause (should/could/would like).\n- Aspect choice after the modal still matters (see Section C).",
+      "usage_notes": "- Keep `бы` near the element you want to highlight (`я бы мог`, `мог бы я`).",
+      "section_slugs": [
+        "b2",
+        "b2/conditionals"
+      ],
+      "tag_names": [
+        "topic:conditionals",
+        "topic:aspect",
+        "topic:modality",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 10,
+        "b2/conditionals": 10
+      },
+      "examples": [
+        {
+          "example_text": "Если бы было время, я бы мог помочь.",
+          "translation_text": "If there were time, I could help.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы ты сказал раньше, мы бы должны были изменить план.",
+          "translation_text": "If you had said it earlier, we would have had to change the plan.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы они согласились, нам пришлось бы начать заново.",
+          "translation_text": "If they agreed, we would have had to start over.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/conditionals/011-colloquial-conditional-omitting-бы",
+      "title": "Omit бы in colloquial conditional where appropriate.",
+      "summary": "Colloquial conditional: omitting бы",
+      "explanation": "In colloquial speech, `бы` can be **dropped** when the conditional meaning is supported by intonation/context, especially in short suggestions.\n\nThis is stylistic and should be used cautiously; in writing, keep `бы`.",
+      "usage_notes": "- This is most natural in spoken Russian and fixed patterns.",
+      "section_slugs": [
+        "b2",
+        "b2/conditionals"
+      ],
+      "tag_names": [
+        "topic:conditionals",
+        "topic:aspect",
+        "topic:modality",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 11,
+        "b2/conditionals": 11
+      },
+      "examples": [
+        {
+          "example_text": "Я на твоём месте не делал этого. (≈ не делал бы)",
+          "translation_text": "If I were you, I wouldn’t do that.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тебе лучше уйти сейчас. (≈ тебе лучше бы уйти)",
+          "translation_text": "You’d better leave now.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тут бы потише. → Тут потише.",
+          "translation_text": "It would be quieter here. → Quieter here.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/conditionals/012-softening-hypothetical-suggestion",
+      "title": "Reformulate direct statement into softened hypothetical suggestion.",
+      "summary": "Softening: hypothetical suggestion",
+      "explanation": "B2 learners should soften direct commands into polite/hypothetical suggestions using conditional forms.\n\nCommon tools: `я бы + past`, `можно было бы`, `не мог бы ты…`.",
+      "usage_notes": "- Keep the tone polite: add `пожалуйста`, `может быть`, `наверное` when appropriate.",
+      "section_slugs": [
+        "b2",
+        "b2/conditionals"
+      ],
+      "tag_names": [
+        "topic:conditionals",
+        "topic:aspect",
+        "topic:modality",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 12,
+        "b2/conditionals": 12
+      },
+      "examples": [
+        {
+          "example_text": "Сделай это. → Я бы сделал это так: сначала…",
+          "translation_text": "Do it. → I would do it like this: first…",
+          "notes": ""
+        },
+        {
+          "example_text": "Дай мне отчёт. → Не мог бы ты прислать отчёт?",
+          "translation_text": "Give me the report. → Could you send the report?",
+          "notes": ""
+        },
+        {
+          "example_text": "Иди туда. → Можно было бы сходить туда завтра.",
+          "translation_text": "Go there. → We could go there tomorrow.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/conditionals/013-mixed-time-conditionals",
+      "title": "Use mixed-time reference in conditional sentences.",
+      "summary": "Mixed-time conditionals",
+      "explanation": "Mixed-time conditionals combine an unreal past with a present consequence, or a present condition with a past consequence.\n\nYou must align tense and aspect in each clause to match the time reference.",
+      "usage_notes": "- Don’t force symmetry: the clauses can reference different times.",
+      "section_slugs": [
+        "b2",
+        "b2/conditionals"
+      ],
+      "tag_names": [
+        "topic:conditionals",
+        "topic:aspect",
+        "topic:modality",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 13,
+        "b2/conditionals": 13
+      },
+      "examples": [
+        {
+          "example_text": "Если бы я тогда согласился, сейчас у меня была бы другая работа.",
+          "translation_text": "If I had agreed then, I would have a different job now.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы он был более внимательным, он бы не потерял документы вчера.",
+          "translation_text": "If he were more attentive, he wouldn’t have lost the documents yesterday.",
+          "notes": ""
+        },
+        {
+          "example_text": "Если бы мы начали раньше, сейчас уже заканчивали бы.",
+          "translation_text": "If we had started earlier, we would be finishing now.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/014-должен-vs-должен-был-present-obligation-vs-past-failed-obligation",
+      "title": "Choose between должен and должен был in context.",
+      "summary": "должен vs должен был (present obligation vs past/failed obligation)",
+      "explanation": "`Должен` expresses current obligation/necessity; `должен был` frames it as **past obligation** (often implying it was expected and may or may not have happened).\n\nB2 control means you can express: obligation now, obligation in the past, regret/criticism, and polite distancing.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 14,
+        "b2/modal-aspect": 14
+      },
+      "examples": [
+        {
+          "example_text": "Я должен закончить сегодня.",
+          "translation_text": "I have to finish today.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я должен был закончить вчера, но не успел.",
+          "translation_text": "I was supposed to finish yesterday, but I didn’t manage.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ты должен был предупредить нас заранее.",
+          "translation_text": "You should have warned us in advance.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/015-мог-vs-смог-ability-vs-successful-outcome",
+      "title": "Choose between мог and смог based on outcome.",
+      "summary": "мог vs смог (ability vs successful outcome)",
+      "explanation": "`Мог` = had the ability/opportunity; `смог` = **managed to** (successful result).\n\nUse `смог` when the outcome happened, especially after effort or obstacles.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 15,
+        "b2/modal-aspect": 15
+      },
+      "examples": [
+        {
+          "example_text": "Я мог прийти, но не захотел.",
+          "translation_text": "I could have come, but I didn’t want to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я смог прийти только вечером.",
+          "translation_text": "I managed to come only in the evening.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он мог решить задачу, но времени не было.",
+          "translation_text": "He was able to solve the problem, but there was no time.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/016-удалось-vs-смог-success-as-circumstance-vs-effort",
+      "title": "Choose between удалось and смог based on nuance.",
+      "summary": "удалось vs смог (success as circumstance vs effort)",
+      "explanation": "`Удалось` highlights success as something that **worked out** (often thanks to circumstances), and commonly appears in impersonal constructions.\n\n`Смог` is more agent-focused: the person managed through ability/effort.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 16,
+        "b2/modal-aspect": 16
+      },
+      "examples": [
+        {
+          "example_text": "Мне удалось купить билеты.",
+          "translation_text": "I managed to buy the tickets (it worked out for me).",
+          "notes": ""
+        },
+        {
+          "example_text": "Я смог купить билеты после работы.",
+          "translation_text": "I managed to buy the tickets after work.",
+          "notes": ""
+        },
+        {
+          "example_text": "Нам удалось договориться.",
+          "translation_text": "We managed to reach an agreement.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/017-aspect-after-modals-pfv-vs-ipfv-infinitive",
+      "title": "Select perfective vs imperfective infinitive after modal verb.",
+      "summary": "Aspect after modals (PFV vs IPFV infinitive)",
+      "explanation": "After modals (мочь/должен/нужно/можно), choose the infinitive aspect to match meaning:\n\n- **IPFV**: general, process, repeated (`могу читать`).\n- **PFV**: single result (`могу прочитать`).",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 17,
+        "b2/modal-aspect": 17
+      },
+      "examples": [
+        {
+          "example_text": "Я могу читать по-русски, но медленно.",
+          "translation_text": "I can read in Russian, but slowly.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я могу прочитать этот текст за час.",
+          "translation_text": "I can read (finish) this text in an hour.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тебе нужно писать аккуратнее.",
+          "translation_text": "You need to write more neatly (process/habit).",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/018-epistemic-uncertainty-grammatical-hedging",
+      "title": "Express epistemic uncertainty using grammatical markers.",
+      "summary": "Epistemic uncertainty: grammatical hedging",
+      "explanation": "B2 requires expressing uncertainty not only with adverbs, but with structured hedges:\n\n`кажется, что…`, `может быть…`, `похоже, что…`, `вероятно…` and impersonal evaluations (`не исключено, что…`).",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 18,
+        "b2/modal-aspect": 18
+      },
+      "examples": [
+        {
+          "example_text": "Кажется, что он уже ушёл.",
+          "translation_text": "It seems that he has already left.",
+          "notes": ""
+        },
+        {
+          "example_text": "Не исключено, что встречу перенесут.",
+          "translation_text": "It’s not excluded that they’ll move the meeting.",
+          "notes": ""
+        },
+        {
+          "example_text": "Похоже, что данные неполные.",
+          "translation_text": "It looks like the data are incomplete.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/019-softened-obligation-distancing",
+      "title": "Reformulate direct obligation into softened modal structure.",
+      "summary": "Softened obligation: distancing",
+      "explanation": "Soften obligation by shifting from direct `ты должен` to impersonal or conditional structures:\n\n`нужно/следует/пришлось бы`, `не мог бы ты…`, `было бы хорошо…`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 19,
+        "b2/modal-aspect": 19
+      },
+      "examples": [
+        {
+          "example_text": "Ты должен прийти. → Было бы хорошо, если бы ты пришёл.",
+          "translation_text": "You must come. → It would be good if you came.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ты должен отправить файл. → Не мог бы ты отправить файл?",
+          "translation_text": "You must send the file. → Could you send the file?",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы должны решить это. → Нам нужно/следует это решить.",
+          "translation_text": "We must solve this. → We need/should solve this.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/modal-aspect/020-probability-structured-modal-phrases",
+      "title": "Express probability using structured modal phrases.",
+      "summary": "Probability: structured modal phrases",
+      "explanation": "Use multi-word probability frames for nuanced stance:\n\n`скорее всего`, `вполне возможно`, `маловероятно, что…`, `вероятнее всего`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/modal-aspect"
+      ],
+      "tag_names": [
+        "topic:modality",
+        "topic:aspect",
+        "df:hedge-and-evaluate"
+      ],
+      "section_sort_order": {
+        "b2": 20,
+        "b2/modal-aspect": 20
+      },
+      "examples": [
+        {
+          "example_text": "Скорее всего, он согласится.",
+          "translation_text": "Most likely, he’ll agree.",
+          "notes": ""
+        },
+        {
+          "example_text": "Маловероятно, что они успеют.",
+          "translation_text": "It’s unlikely that they’ll make it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Вполне возможно, что это ошибка.",
+          "translation_text": "It’s quite possible that this is a mistake.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/021-relative-clause-active-participle-который-v-v-щий-вший",
+      "title": "Replace a relative clause with an active participle.",
+      "summary": "Relative clause → active participle (который + V → V-щий/вший)",
+      "explanation": "Replace `который`-clauses with **active participles** to make text denser.\n\n**Example idea:** `человек, который работает` → `человек, работающий`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 21,
+        "b2/participle-gerund": 21
+      },
+      "examples": [
+        {
+          "example_text": "Студент, который учится здесь, мой друг. → Студент, учащийся здесь, мой друг.",
+          "translation_text": "The student who studies here is my friend. → The student studying here is my friend.",
+          "notes": ""
+        },
+        {
+          "example_text": "Люди, которые приехали вчера, уже уехали. → Люди, приехавшие вчера, уже уехали.",
+          "translation_text": "The people who arrived yesterday have already left. → The people arrived yesterday have already left.",
+          "notes": ""
+        },
+        {
+          "example_text": "Компания, которая выпускает это, известна. → Компания, выпускающая это, известна.",
+          "translation_text": "The company that produces this is famous. → The company producing this is famous.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/022-relative-clause-passive-participle",
+      "title": "Replace a relative clause with a passive participle.",
+      "summary": "Relative clause → passive participle",
+      "explanation": "Use **passive participles** to focus on the object/result: `который был + V` → `V-нный/тый`.\n\nThis is common in technical and academic descriptions.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 22,
+        "b2/participle-gerund": 22
+      },
+      "examples": [
+        {
+          "example_text": "Документ, который был подписан вчера, уже отправили. → Подписанный вчера документ уже отправили.",
+          "translation_text": "The document that was signed yesterday was already sent. → The document signed yesterday was already sent.",
+          "notes": ""
+        },
+        {
+          "example_text": "Метод, который был разработан в 2020 году, используется до сих пор. → Разработанный в 2020 году метод используется до сих пор.",
+          "translation_text": "The method developed in 2020 is still used.",
+          "notes": ""
+        },
+        {
+          "example_text": "Книга, которая была переведена на русский, стала популярной. → Переведённая на русский книга стала популярной.",
+          "translation_text": "The book translated into Russian became popular.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/023-stack-two-participial-modifiers",
+      "title": "Stack two participial modifiers correctly.",
+      "summary": "Stack two participial modifiers",
+      "explanation": "You can attach **two participial phrases** to one noun. Keep order logical: closer modifier = more defining.\n\nEnsure agreement (gender/number/case) and avoid ambiguity.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 23,
+        "b2/participle-gerund": 23
+      },
+      "examples": [
+        {
+          "example_text": "Мы обсудили план, предложенный командой и одобренный руководством.",
+          "translation_text": "We discussed the plan proposed by the team and approved by management.",
+          "notes": ""
+        },
+        {
+          "example_text": "Это данные, собранные вчера и обработанные сегодня.",
+          "translation_text": "These are data collected yesterday and processed today.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я прочитал статью, написанную учёным, работающим в этом институте.",
+          "translation_text": "I read an article written by a scientist working at that institute.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/024-participial-phrase-finite-clause",
+      "title": "Rewrite a participial phrase into a full finite clause.",
+      "summary": "Participial phrase → finite clause",
+      "explanation": "Reverse transformation: turn participial modifiers into explicit clauses when clarity matters.\n\nThis is essential in speaking and for simplifying formal writing.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 24,
+        "b2/participle-gerund": 24
+      },
+      "examples": [
+        {
+          "example_text": "Подписанный вчера документ уже отправили. → Документ, который подписали вчера, уже отправили.",
+          "translation_text": "The document signed yesterday was already sent. → The document that they signed yesterday was already sent.",
+          "notes": ""
+        },
+        {
+          "example_text": "Данные, собранные в ходе эксперимента, оказались неполными. → Данные, которые собрали во время эксперимента, оказались неполными.",
+          "translation_text": "The data collected during the experiment turned out incomplete. → The data that they collected during the experiment turned out incomplete.",
+          "notes": ""
+        },
+        {
+          "example_text": "Человек, работающий здесь, мой друг. → Человек, который работает здесь, мой друг.",
+          "translation_text": "The person working here is my friend. → The person who works here is my friend.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/025-gerund-for-two-actions-with-shared-subject",
+      "title": "Combine two actions using a gerund with shared subject.",
+      "summary": "Gerund for two actions with shared subject",
+      "explanation": "Gerunds (`деепричастия`) combine actions when **the subject is the same**.\n\nUse them to show background action or sequence: `делая` (simultaneous), `сделав` (prior).",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 25,
+        "b2/participle-gerund": 25
+      },
+      "examples": [
+        {
+          "example_text": "Читая отчёт, я делал заметки.",
+          "translation_text": "While reading the report, I took notes.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сделав работу, он ушёл домой.",
+          "translation_text": "Having done the work, he went home.",
+          "notes": ""
+        },
+        {
+          "example_text": "Думая об этом, я понял свою ошибку.",
+          "translation_text": "Thinking about it, I realized my mistake.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/026-avoid-dangling-gerunds-subject-mismatch",
+      "title": "Identify and correct dangling gerund errors.",
+      "summary": "Avoid dangling gerunds (subject mismatch)",
+      "explanation": "A dangling gerund happens when the gerund implies one subject, but the main clause has another.\n\nAt B2 you should spot and fix it by changing the subject or rewriting as a full clause.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 26,
+        "b2/participle-gerund": 26
+      },
+      "examples": [
+        {
+          "example_text": "❌ Прочитав письмо, мне стало ясно… → ✅ Когда я прочитал письмо, мне стало ясно…",
+          "translation_text": "❌ Having read the letter, it became clear to me… → ✅ When I read the letter, it became clear to me…",
+          "notes": ""
+        },
+        {
+          "example_text": "❌ Едя в метро, у меня украли телефон. → ✅ Пока я ехал в метро, у меня украли телефон.",
+          "translation_text": "❌ While riding the metro, my phone was stolen from me. → ✅ While I was riding the metro, my phone was stolen.",
+          "notes": ""
+        },
+        {
+          "example_text": "❌ Подходя к дому, начался дождь. → ✅ Когда я подходил к дому, начался дождь.",
+          "translation_text": "❌ Approaching the house, rain started. → ✅ When I was approaching the house, rain started.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/participle-gerund/027-gerund-prior-vs-simultaneous",
+      "title": "Use a gerund to express prior vs simultaneous action correctly.",
+      "summary": "Gerund: prior vs simultaneous",
+      "explanation": "Choose the gerund form to mark time relation:\n\n- **Imperfective** gerund `-я/-а` = simultaneous.\n- **Perfective** gerund `-в/-вши` = prior (completed first).",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/participle-gerund"
+      ],
+      "tag_names": [
+        "topic:participles",
+        "topic:gerunds",
+        "topic:clauses",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 27,
+        "b2/participle-gerund": 27
+      },
+      "examples": [
+        {
+          "example_text": "Слушая лекцию, я записывал примеры.",
+          "translation_text": "While listening to the lecture, I wrote down examples.",
+          "notes": ""
+        },
+        {
+          "example_text": "Прочитав статью, я изменил мнение.",
+          "translation_text": "After reading the article, I changed my opinion.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сделав паузу, он продолжил.",
+          "translation_text": "After making a pause, he continued.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/nominalization/028-deverbal-nouns-ние-ция",
+      "title": "Form deverbal nouns from verbs (-ние, -ция).",
+      "summary": "Deverbal nouns: -ние / -ция",
+      "explanation": "Form common deverbal nouns to talk about actions as concepts: `решать → решение`, `обсуждать → обсуждение`, `организовать → организация`.\n\nThis supports formal writing and nominalization.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/nominalization"
+      ],
+      "tag_names": [
+        "topic:nominalization",
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 28,
+        "b2/nominalization": 28
+      },
+      "examples": [
+        {
+          "example_text": "Решить вопрос → решение вопроса",
+          "translation_text": "to solve an issue → the solution/decision on the issue",
+          "notes": ""
+        },
+        {
+          "example_text": "Обсуждать проблему → обсуждение проблемы",
+          "translation_text": "to discuss a problem → discussion of the problem",
+          "notes": ""
+        },
+        {
+          "example_text": "Модернизировать систему → модернизация системы",
+          "translation_text": "to modernize a system → modernization of the system",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/nominalization/029-clause-deverbal-noun-construction",
+      "title": "Replace a subordinate clause with a deverbal noun construction.",
+      "summary": "Clause → deverbal noun construction",
+      "explanation": "Replace `что/когда` clauses with deverbal nouns to package information:\n\n`Мы обсудили, что…` → `Мы обсудили … (обсуждение + Genitive)`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/nominalization"
+      ],
+      "tag_names": [
+        "topic:nominalization",
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 29,
+        "b2/nominalization": 29
+      },
+      "examples": [
+        {
+          "example_text": "То, что проект задержался, стало проблемой. → Задержка проекта стала проблемой.",
+          "translation_text": "That the project was delayed became a problem. → The project delay became a problem.",
+          "notes": ""
+        },
+        {
+          "example_text": "Когда они согласились, всё изменилось. → После их согласия всё изменилось.",
+          "translation_text": "When they agreed, everything changed. → After their agreement, everything changed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы выяснили, почему система упала. → Мы выяснили причину падения системы.",
+          "translation_text": "We found out why the system crashed. → We found out the reason for the system crash.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/nominalization/030-multi-genitive-noun-chain",
+      "title": "Create a multi-genitive noun chain correctly.",
+      "summary": "Multi-genitive noun chain",
+      "explanation": "At B2 you should handle chains like `план развития проекта` and understand which noun modifies which.\n\nBuild chains step-by-step from the head noun outward.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/nominalization"
+      ],
+      "tag_names": [
+        "topic:nominalization",
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 30,
+        "b2/nominalization": 30
+      },
+      "examples": [
+        {
+          "example_text": "анализ качества данных",
+          "translation_text": "analysis of data quality",
+          "notes": ""
+        },
+        {
+          "example_text": "план улучшения процесса обучения",
+          "translation_text": "plan for improving the learning process",
+          "notes": ""
+        },
+        {
+          "example_text": "обсуждение результатов эксперимента",
+          "translation_text": "discussion of experiment results",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/nominalization/031-expand-genitive-chain-for-clarity",
+      "title": "Expand a genitive chain into a full clause for clarity.",
+      "summary": "Expand genitive chain for clarity",
+      "explanation": "When a genitive chain becomes ambiguous, expand it into a clause or add prepositions.\n\nThis is a key editing skill at B2.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/nominalization"
+      ],
+      "tag_names": [
+        "topic:nominalization",
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 31,
+        "b2/nominalization": 31
+      },
+      "examples": [
+        {
+          "example_text": "оценка эффективности обучения → оценка того, насколько эффективно люди учатся",
+          "translation_text": "assessment of training effectiveness → assessment of how effectively people learn",
+          "notes": ""
+        },
+        {
+          "example_text": "причина изменения плана → причина того, что мы изменили план",
+          "translation_text": "reason for the plan change → reason that we changed the plan",
+          "notes": ""
+        },
+        {
+          "example_text": "обсуждение внедрения системы → обсуждение того, как внедрять систему",
+          "translation_text": "discussion of system implementation → discussion of how to implement the system",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/nominalization/032-verb-heavy-noun-compressed",
+      "title": "Reformulate a verb-heavy sentence into a noun-compressed structure.",
+      "summary": "Verb-heavy → noun-compressed",
+      "explanation": "Rewrite sentences to a more formal, noun-centered style (common in reports).\n\nGoal: fewer finite verbs, more noun phrases and participles—without losing clarity.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/nominalization"
+      ],
+      "tag_names": [
+        "topic:nominalization",
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 32,
+        "b2/nominalization": 32
+      },
+      "examples": [
+        {
+          "example_text": "Мы проверили данные и сравнили результаты. → Мы провели проверку данных и сравнение результатов.",
+          "translation_text": "We checked the data and compared the results. → We carried out a data check and a comparison of results.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили, как улучшить процесс. → Мы обсудили улучшение процесса.",
+          "translation_text": "We discussed how to improve the process. → We discussed process improvement.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы решили сократить расходы. → Было принято решение о сокращении расходов.",
+          "translation_text": "We decided to cut costs. → A decision was made to cut costs.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/nominalization/033-interpret-compressed-academic-noun-phrase",
+      "title": "Interpret a compressed academic-style noun phrase.",
+      "summary": "Interpret compressed academic noun phrase",
+      "explanation": "You should be able to **unpack** dense noun phrases by identifying the head noun and dependencies.\n\nStrategy: find the main noun, then ask 'of what?' (genitive), 'which?' (adjectives/participles), 'where/when?' (prepositional).",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/nominalization"
+      ],
+      "tag_names": [
+        "topic:nominalization",
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 33,
+        "b2/nominalization": 33
+      },
+      "examples": [
+        {
+          "example_text": "оценка влияния изменения условий на результаты",
+          "translation_text": "assessment of the impact of changing conditions on results",
+          "notes": ""
+        },
+        {
+          "example_text": "анализ причин снижения качества обслуживания",
+          "translation_text": "analysis of reasons for a decrease in service quality",
+          "notes": ""
+        },
+        {
+          "example_text": "планирование оптимизации процессов обработки данных",
+          "translation_text": "planning of optimization of data-processing processes",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/passive-impersonal/034-active-participial-passive-быть-short-participle-participial-phrase",
+      "title": "Convert an active sentence into a participial passive.",
+      "summary": "Active → participial passive (быть + short participle / participial phrase)",
+      "explanation": "Convert active clauses into passive using participles to shift focus to the object/result.\n\nCommon patterns: `X был сделан` / `сделанный X`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/passive-impersonal"
+      ],
+      "tag_names": [
+        "topic:passive",
+        "topic:impersonal",
+        "df:formal-writing",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 34,
+        "b2/passive-impersonal": 34
+      },
+      "examples": [
+        {
+          "example_text": "Компания подписала договор. → Договор был подписан компанией.",
+          "translation_text": "The company signed the contract. → The contract was signed by the company.",
+          "notes": ""
+        },
+        {
+          "example_text": "Они подготовили отчёт. → Отчёт был подготовлен.",
+          "translation_text": "They prepared the report. → The report was prepared.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обновили систему. → Обновлённая система работает лучше.",
+          "translation_text": "We updated the system. → The updated system works better.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/passive-impersonal/035-active-ся-passive",
+      "title": "Convert an active sentence into a -ся passive.",
+      "summary": "Active → -ся passive",
+      "explanation": "Use **-ся** passive for general, process-like, or institutional actions, common in instructions and descriptions.\n\nOften no agent is expressed.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/passive-impersonal"
+      ],
+      "tag_names": [
+        "topic:passive",
+        "topic:impersonal",
+        "df:formal-writing",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 35,
+        "b2/passive-impersonal": 35
+      },
+      "examples": [
+        {
+          "example_text": "Здесь продают билеты. → Здесь продаются билеты.",
+          "translation_text": "They sell tickets here. → Tickets are sold here.",
+          "notes": ""
+        },
+        {
+          "example_text": "В статье обсуждают проблему. → В статье обсуждается проблема.",
+          "translation_text": "They discuss the problem in the article. → The problem is discussed in the article.",
+          "notes": ""
+        },
+        {
+          "example_text": "В лаборатории проводят эксперименты. → В лаборатории проводятся эксперименты.",
+          "translation_text": "They conduct experiments in the lab. → Experiments are conducted in the lab.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/passive-impersonal/036-agent-suppression-in-passive-drop-agent",
+      "title": "Remove the agent from a passive where context allows.",
+      "summary": "Agent suppression in passive (drop agent)",
+      "explanation": "Remove the agent when it’s obvious, irrelevant, or intentionally backgrounded.\n\nThis is measurable: can you produce a grammatical passive **without** naming who did it?",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/passive-impersonal"
+      ],
+      "tag_names": [
+        "topic:passive",
+        "topic:impersonal",
+        "df:formal-writing",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 36,
+        "b2/passive-impersonal": 36
+      },
+      "examples": [
+        {
+          "example_text": "Документы были отправлены утром.",
+          "translation_text": "The documents were sent in the morning.",
+          "notes": ""
+        },
+        {
+          "example_text": "Решение было принято быстро.",
+          "translation_text": "The decision was made quickly.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ошибка была обнаружена во время проверки.",
+          "translation_text": "The error was discovered during the check.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/passive-impersonal/037-choose-active-vs-passive-by-discourse-focus",
+      "title": "Decide between active and passive based on discourse focus.",
+      "summary": "Choose active vs passive by discourse focus",
+      "explanation": "Pick voice based on what you want to foreground:\n- Active: agent/action.\n- Passive: object/result/topic continuity.\n\nTask: rewrite the same meaning both ways and explain which is better for the context.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/passive-impersonal"
+      ],
+      "tag_names": [
+        "topic:passive",
+        "topic:impersonal",
+        "df:formal-writing",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 37,
+        "b2/passive-impersonal": 37
+      },
+      "examples": [
+        {
+          "example_text": "Мы обсуждаем проблему. / Проблема обсуждается на встрече.",
+          "translation_text": "We are discussing the problem. / The problem is being discussed at the meeting.",
+          "notes": ""
+        },
+        {
+          "example_text": "Инженеры исправили ошибку. / Ошибка была исправлена.",
+          "translation_text": "Engineers fixed the error. / The error was fixed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Команда подготовила отчёт. / Отчёт был подготовлен командой.",
+          "translation_text": "The team prepared the report. / The report was prepared by the team.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/passive-impersonal/038-impersonal-plural-говорят-считают-делают",
+      "title": "Use impersonal plural to generalize a statement.",
+      "summary": "Impersonal plural (говорят, считают, делают)",
+      "explanation": "Impersonal plural generalizes: it reports what people say/do without specifying who.\n\nIt’s a common strategy for neutral tone and softening claims.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/passive-impersonal"
+      ],
+      "tag_names": [
+        "topic:passive",
+        "topic:impersonal",
+        "df:formal-writing",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 38,
+        "b2/passive-impersonal": 38
+      },
+      "examples": [
+        {
+          "example_text": "Говорят, что завтра будет снег.",
+          "translation_text": "They say it will snow tomorrow.",
+          "notes": ""
+        },
+        {
+          "example_text": "Считают, что это лучший вариант.",
+          "translation_text": "They consider it the best option.",
+          "notes": ""
+        },
+        {
+          "example_text": "В таких случаях делают так.",
+          "translation_text": "In such cases they do it like this.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/passive-impersonal/039-personal-impersonal-opinion",
+      "title": "Reformulate a personal opinion into an impersonal construction.",
+      "summary": "Personal → impersonal opinion",
+      "explanation": "Transform `я думаю/я считаю` into impersonal or object-centered constructions to sound more formal:\n\n`кажется`, `можно считать`, `представляется`, `есть основания полагать`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/passive-impersonal"
+      ],
+      "tag_names": [
+        "topic:passive",
+        "topic:impersonal",
+        "df:formal-writing",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 39,
+        "b2/passive-impersonal": 39
+      },
+      "examples": [
+        {
+          "example_text": "Я думаю, что это ошибка. → Кажется, это ошибка.",
+          "translation_text": "I think this is a mistake. → It seems this is a mistake.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я считаю, что план реалистичный. → Можно считать, что план реалистичный.",
+          "translation_text": "I consider the plan realistic. → One can consider the plan realistic.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я уверен, что это важно. → Есть основания полагать, что это важно.",
+          "translation_text": "I’m sure it’s important. → There are grounds to believe it’s important.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/negation/040-emphatic-negation-ни-малейшего-genitive",
+      "title": "Use ни малейшего + genitive correctly.",
+      "summary": "Emphatic negation: ни малейшего + Genitive",
+      "explanation": "`ни малейшего` intensifies negation and requires **genitive**.\n\nPattern: `не иметь + ни малейшего + Gen` / `не понимать + ни малейшего + Gen`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:clauses",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 40,
+        "b2/negation": 40
+      },
+      "examples": [
+        {
+          "example_text": "Я не имею ни малейшего понятия.",
+          "translation_text": "I have not the slightest idea.",
+          "notes": ""
+        },
+        {
+          "example_text": "У него нет ни малейшего желания спорить.",
+          "translation_text": "He has not the slightest desire to argue.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы не увидели ни малейшего признака ошибки.",
+          "translation_text": "We didn’t see the slightest sign of an error.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/negation/041-вовсе-не-not-at-all-soft-neutral",
+      "title": "Use вовсе не to soften categorical negation.",
+      "summary": "вовсе не (not at all; soft/neutral)",
+      "explanation": "`вовсе не` can mean 'not at all', but often it **softens** or politely contradicts.\n\nIt’s common in discussions: correcting without sounding harsh.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:clauses",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 41,
+        "b2/negation": 41
+      },
+      "examples": [
+        {
+          "example_text": "Это вовсе не сложно.",
+          "translation_text": "It’s not difficult at all.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я вовсе не против.",
+          "translation_text": "I’m not against it at all.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он вовсе не хотел обидеть.",
+          "translation_text": "He didn’t mean to offend at all.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/negation/042-далеко-не-far-from-evaluative-limitation",
+      "title": "Use далеко не to express evaluative limitation.",
+      "summary": "далеко не (far from; evaluative limitation)",
+      "explanation": "`далеко не` means 'far from' and marks partial/insufficient quality.\n\nIt’s stronger than `не очень`, but still nuanced.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:clauses",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 42,
+        "b2/negation": 42
+      },
+      "examples": [
+        {
+          "example_text": "Это далеко не идеальное решение.",
+          "translation_text": "This is far from an ideal solution.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он далеко не эксперт.",
+          "translation_text": "He is far from an expert.",
+          "notes": ""
+        },
+        {
+          "example_text": "Результаты далеко не очевидны.",
+          "translation_text": "The results are far from obvious.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/negation/043-negation-across-embedded-clauses",
+      "title": "Combine negation across two embedded clauses.",
+      "summary": "Negation across embedded clauses",
+      "explanation": "In complex sentences, keep the scope of negation clear: which clause is negated?\n\nPractice: rewrite so that the reader can’t misinterpret what is negated.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:clauses",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 43,
+        "b2/negation": 43
+      },
+      "examples": [
+        {
+          "example_text": "Я не думаю, что он прав.",
+          "translation_text": "I don’t think he is right.",
+          "notes": ""
+        },
+        {
+          "example_text": "Не исключено, что он не придёт.",
+          "translation_text": "It’s possible that he won’t come.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я не уверен, что мы не опоздаем.",
+          "translation_text": "I’m not sure that we won’t be late.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/negation/044-affirmation-contrastive-negation",
+      "title": "Reformulate an affirmative evaluation into contrastive negation.",
+      "summary": "Affirmation → contrastive negation",
+      "explanation": "Turn a positive evaluation into a contrastive negative to create rhetorical balance:\n\n`Это хорошо` → `Это не плохо, но…` / `Это не так просто`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:clauses",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 44,
+        "b2/negation": 44
+      },
+      "examples": [
+        {
+          "example_text": "Это полезно. → Это не бесполезно, но нужно время.",
+          "translation_text": "It’s useful. → It’s not useless, but it takes time.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он умный. → Он не глупый, просто невнимательный.",
+          "translation_text": "He’s smart. → He’s not stupid, just inattentive.",
+          "notes": ""
+        },
+        {
+          "example_text": "Решение простое. → Решение не такое простое, как кажется.",
+          "translation_text": "The solution is simple. → The solution isn’t as simple as it seems.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/evaluation-comparison/045-absolute-superlative-наи",
+      "title": "Form an absolute superlative using наи-.",
+      "summary": "Absolute superlative: наи-",
+      "explanation": "The prefix `наи-` forms an **absolute** (very high) superlative, mostly in formal/written style.\n\nIt often sounds bookish: `наиболее` is more neutral.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/evaluation-comparison"
+      ],
+      "tag_names": [
+        "topic:comparison",
+        "df:hedge-and-evaluate",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 45,
+        "b2/evaluation-comparison": 45
+      },
+      "examples": [
+        {
+          "example_text": "Это наиважнейший вопрос.",
+          "translation_text": "This is the most important question.",
+          "notes": ""
+        },
+        {
+          "example_text": "Наша наипервейшая задача — безопасность.",
+          "translation_text": "Our topmost task is safety.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он сделал наилучший выбор.",
+          "translation_text": "He made the best possible choice.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/evaluation-comparison/046-comparison-without-explicit-comparative-marker",
+      "title": "Express comparison without an explicit comparative marker.",
+      "summary": "Comparison without explicit comparative marker",
+      "explanation": "You can compare without `чем` or comparative forms using structures like:\n\n`по сравнению с`, `в отличие от`, or parallel clauses with contrastive focus.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/evaluation-comparison"
+      ],
+      "tag_names": [
+        "topic:comparison",
+        "df:hedge-and-evaluate",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 46,
+        "b2/evaluation-comparison": 46
+      },
+      "examples": [
+        {
+          "example_text": "По сравнению с прошлым годом результаты лучше.",
+          "translation_text": "Compared to last year, the results are better.",
+          "notes": ""
+        },
+        {
+          "example_text": "В отличие от тебя он предпочитает риск.",
+          "translation_text": "Unlike you, he prefers risk.",
+          "notes": ""
+        },
+        {
+          "example_text": "У нас один подход, у них — другой.",
+          "translation_text": "We have one approach; they have another.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/evaluation-comparison/047-explicit-implicit-evaluative-contrast",
+      "title": "Reformulate explicit comparison into implicit evaluative contrast.",
+      "summary": "Explicit → implicit evaluative contrast",
+      "explanation": "Turn 'X is better than Y' into a subtler contrast using lexical choice and structure:\n\n`X выглядит убедительнее, тогда как Y вызывает сомнения`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/evaluation-comparison"
+      ],
+      "tag_names": [
+        "topic:comparison",
+        "df:hedge-and-evaluate",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 47,
+        "b2/evaluation-comparison": 47
+      },
+      "examples": [
+        {
+          "example_text": "Этот вариант лучше, чем тот. → Этот вариант выглядит более надёжным, а тот — рискованным.",
+          "translation_text": "This option is better than that. → This option looks more reliable, and that one is risky.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она быстрее, чем он. → Она работает в более высоком темпе, а он — медленнее.",
+          "translation_text": "She is faster than him. → She works at a higher pace, and he slower.",
+          "notes": ""
+        },
+        {
+          "example_text": "Наш план лучше. → Наш план реалистичнее, тогда как альтернативный слишком общий.",
+          "translation_text": "Our plan is better. → Our plan is more realistic, whereas the alternative is too general.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/evaluation-comparison/048-evaluative-contrast-inside-subordinate-clause",
+      "title": "Embed evaluative contrast inside a subordinate clause.",
+      "summary": "Evaluative contrast inside subordinate clause",
+      "explanation": "Embed evaluation inside a subordinate clause to make arguments more natural and B2-like.\n\nTypical frames: `хотя`, `несмотря на то что`, `тогда как`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/evaluation-comparison"
+      ],
+      "tag_names": [
+        "topic:comparison",
+        "df:hedge-and-evaluate",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 48,
+        "b2/evaluation-comparison": 48
+      },
+      "examples": [
+        {
+          "example_text": "Хотя идея кажется простой, реализация требует времени.",
+          "translation_text": "Although the idea seems simple, implementation takes time.",
+          "notes": ""
+        },
+        {
+          "example_text": "Несмотря на то что результат неплохой, риск остаётся.",
+          "translation_text": "Despite the result being not bad, the risk remains.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тогда как первый подход даёт стабильность, второй даёт скорость.",
+          "translation_text": "Whereas the first approach gives stability, the second gives speed.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/formal-prep-case/049-согласно-dative",
+      "title": "Use согласно + dative correctly in a formal sentence.",
+      "summary": "согласно + Dative",
+      "explanation": "`согласно` is a formal preposition meaning 'according to' and requires the **dative**.\n\nIt’s common in official writing.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/formal-prep-case"
+      ],
+      "tag_names": [
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 49,
+        "b2/formal-prep-case": 49
+      },
+      "examples": [
+        {
+          "example_text": "Согласно договору, оплата производится до пятницы.",
+          "translation_text": "According to the contract, payment is made by Friday.",
+          "notes": ""
+        },
+        {
+          "example_text": "Согласно данным отчёта, спрос вырос.",
+          "translation_text": "According to the report data, demand increased.",
+          "notes": ""
+        },
+        {
+          "example_text": "Согласно правилам, вход запрещён.",
+          "translation_text": "According to the rules, entry is prohibited.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/formal-prep-case/050-вследствие-genitive-as-a-result-of",
+      "title": "Use вследствие + genitive correctly.",
+      "summary": "вследствие + Genitive (as a result of)",
+      "explanation": "`вследствие` is formal 'as a consequence of' and takes **genitive**.\n\nIt often replaces `из‑за` in formal style.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/formal-prep-case"
+      ],
+      "tag_names": [
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 50,
+        "b2/formal-prep-case": 50
+      },
+      "examples": [
+        {
+          "example_text": "Вследствие аварии движение остановилось.",
+          "translation_text": "As a result of the accident, traffic stopped.",
+          "notes": ""
+        },
+        {
+          "example_text": "Вследствие задержки поставки сроки изменились.",
+          "translation_text": "As a result of the delayed delivery, the deadlines changed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Вследствие ошибки расчётов проект подорожал.",
+          "translation_text": "Due to a calculation error, the project became more expensive.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/formal-prep-case/051-ввиду-genitive-in-view-of",
+      "title": "Use ввиду + genitive correctly.",
+      "summary": "ввиду + Genitive (in view of)",
+      "explanation": "`ввиду` is formal 'in view of / considering' and takes **genitive**.\n\nIt often introduces justification.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/formal-prep-case"
+      ],
+      "tag_names": [
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 51,
+        "b2/formal-prep-case": 51
+      },
+      "examples": [
+        {
+          "example_text": "Ввиду отсутствия данных выводы делать рано.",
+          "translation_text": "In view of the lack of data, it’s too early to draw conclusions.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду изменений в расписании встречу перенесли.",
+          "translation_text": "Given the changes in the schedule, the meeting was moved.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду сложности задачи мы привлекли эксперта.",
+          "translation_text": "Given the complexity of the task, we involved an expert.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/formal-prep-case/052-благодаря-vs-из-за-positive-vs-negative-cause",
+      "title": "Contrast благодаря vs из-за appropriately.",
+      "summary": "благодаря vs из-за (positive vs negative cause)",
+      "explanation": "`благодаря` typically frames a cause as **positive/beneficial**; `из‑за` frames it as negative/problematic.\n\nThis is a key nuance for B2 writing.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/formal-prep-case"
+      ],
+      "tag_names": [
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 52,
+        "b2/formal-prep-case": 52
+      },
+      "examples": [
+        {
+          "example_text": "Благодаря вашей помощи мы успели.",
+          "translation_text": "Thanks to your help, we made it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Из‑за вашей помощи… (odd) → лучше: Благодаря.",
+          "translation_text": "Because of your help… (odd) → better: Thanks to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Из‑за ошибки мы потеряли время.",
+          "translation_text": "Because of the mistake, we lost time.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/formal-prep-case/053-accusative-for-extended-time-всю-неделю-целый-год",
+      "title": "Use idiomatic accusative for extended time expressions.",
+      "summary": "Accusative for extended time (всю неделю, целый год)",
+      "explanation": "Use **accusative** to express duration: `весь/целый + Acc` and other duration phrases.\n\nB2 expects idiomatic variety and accuracy.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/formal-prep-case"
+      ],
+      "tag_names": [
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 53,
+        "b2/formal-prep-case": 53
+      },
+      "examples": [
+        {
+          "example_text": "Я работал всю неделю.",
+          "translation_text": "I worked all week.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он ждал целый час.",
+          "translation_text": "He waited a whole hour.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсуждали это весь день.",
+          "translation_text": "We discussed it all day.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/formal-prep-case/054-metaphorical-case-usage-in-abstract-sentences",
+      "title": "Interpret metaphorical case usage in an abstract sentence.",
+      "summary": "Metaphorical case usage in abstract sentences",
+      "explanation": "Russian uses cases metaphorically: movement into situations (`в + Acc`), exit from states (`из + Gen`), being in a domain (`в + Prep`).\n\nB2 control means you can interpret and produce these without literal movement.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/formal-prep-case"
+      ],
+      "tag_names": [
+        "topic:cases",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 54,
+        "b2/formal-prep-case": 54
+      },
+      "examples": [
+        {
+          "example_text": "Мы вошли в сложную ситуацию.",
+          "translation_text": "We entered a difficult situation.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он вышел из кризиса сильнее.",
+          "translation_text": "He came out of the crisis stronger.",
+          "notes": ""
+        },
+        {
+          "example_text": "В этом вопросе я не специалист.",
+          "translation_text": "In this matter I’m not a specialist.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/abstract-verbs/055-metaphorical-motion-verbs",
+      "title": "Use motion verbs metaphorically in an abstract context.",
+      "summary": "Metaphorical motion verbs",
+      "explanation": "Motion verbs often describe abstract change: `идти` (process), `прийти` (arrive at conclusion), `уйти` (move away from topic).\n\nB2 requires using these naturally in discussion and writing.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/abstract-verbs"
+      ],
+      "tag_names": [
+        "topic:prefixes",
+        "topic:aspect",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 55,
+        "b2/abstract-verbs": 55
+      },
+      "examples": [
+        {
+          "example_text": "Разговор зашёл о финансах.",
+          "translation_text": "The conversation turned to finances.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы пришли к выводу, что нужно менять план.",
+          "translation_text": "We came to the conclusion that we need to change the plan.",
+          "notes": ""
+        },
+        {
+          "example_text": "Дискуссия ушла в сторону.",
+          "translation_text": "The discussion went off on a tangent.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/abstract-verbs/056-interpret-prefixed-verb-meaning-in-abstract-usage",
+      "title": "Interpret the meaning of a prefixed verb in abstract usage.",
+      "summary": "Interpret prefixed verb meaning in abstract usage",
+      "explanation": "Prefixes remain meaningful in abstract verbs: `пересмотреть` (review), `доработать` (refine), `выяснить` (find out).\n\nSkill: infer meaning from prefix + base verb.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/abstract-verbs"
+      ],
+      "tag_names": [
+        "topic:prefixes",
+        "topic:aspect",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 56,
+        "b2/abstract-verbs": 56
+      },
+      "examples": [
+        {
+          "example_text": "Пересмотреть решение",
+          "translation_text": "to reconsider a decision",
+          "notes": ""
+        },
+        {
+          "example_text": "Доработать текст",
+          "translation_text": "to revise/refine a text",
+          "notes": ""
+        },
+        {
+          "example_text": "Выяснить причину",
+          "translation_text": "to выяснить the reason / find out",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/abstract-verbs/057-aspect-choice-in-metaphorical-prefixed-verbs",
+      "title": "Select aspect appropriately in a metaphorical prefixed verb.",
+      "summary": "Aspect choice in metaphorical prefixed verbs",
+      "explanation": "Even metaphorical prefixed verbs keep aspect contrasts (process vs result).\n\nChoose IPFV for ongoing/repeated review; PFV for a single completed act.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/abstract-verbs"
+      ],
+      "tag_names": [
+        "topic:prefixes",
+        "topic:aspect",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 57,
+        "b2/abstract-verbs": 57
+      },
+      "examples": [
+        {
+          "example_text": "Мы пересматривали стратегию весь месяц.",
+          "translation_text": "We were reviewing the strategy all month.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы пересмотрели стратегию после отчёта.",
+          "translation_text": "We reviewed/reconsidered the strategy after the report.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он дорабатывал проект, пока не стал доволен.",
+          "translation_text": "He was refining the project until he was satisfied.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/abstract-verbs/058-reformulate-literal-motion-abstract-equivalent",
+      "title": "Reformulate a literal motion verb into an abstract equivalent.",
+      "summary": "Reformulate literal motion → abstract equivalent",
+      "explanation": "Rewrite a literal motion sentence into an abstract one to expand stylistic range.\n\nExample: `идти` → `продвигаться`, `выйти` → `выйти из кризиса` / `перейти`.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/abstract-verbs"
+      ],
+      "tag_names": [
+        "topic:prefixes",
+        "topic:aspect",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 58,
+        "b2/abstract-verbs": 58
+      },
+      "examples": [
+        {
+          "example_text": "Мы идём к цели. → Мы продвигаемся к цели.",
+          "translation_text": "We are going toward the goal. → We are making progress toward the goal.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он вышел из комнаты. → Он вышел из конфликта достойно.",
+          "translation_text": "He left the room. → He exited the conflict with dignity.",
+          "notes": ""
+        },
+        {
+          "example_text": "Команда пошла вперёд. → Команда продвинулась в переговорах.",
+          "translation_text": "The team moved forward. → The team made progress in negotiations.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/particles-discourse/059-positioning-же",
+      "title": "Position же correctly within a complex sentence.",
+      "summary": "Positioning же",
+      "explanation": "`же` marks contrast/insistence and usually follows the word it emphasizes.\n\nPractice: move `же` to change focus.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/particles-discourse"
+      ],
+      "tag_names": [
+        "topic:particles",
+        "df:report-and-attribute",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 59,
+        "b2/particles-discourse": 59
+      },
+      "examples": [
+        {
+          "example_text": "Я же говорил!",
+          "translation_text": "I told you!",
+          "notes": ""
+        },
+        {
+          "example_text": "Это же очевидно.",
+          "translation_text": "It’s obvious, you know.",
+          "notes": ""
+        },
+        {
+          "example_text": "Почему ты же не сказал раньше?",
+          "translation_text": "Why didn’t you say earlier then?",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/particles-discourse/060-ведь-as-shared-knowledge-marker",
+      "title": "Use ведь to reinforce known information.",
+      "summary": "ведь as shared-knowledge marker",
+      "explanation": "`ведь` appeals to shared knowledge or obviousness, often in explanations.\n\nIt can soften persuasion: reminding rather than insisting.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/particles-discourse"
+      ],
+      "tag_names": [
+        "topic:particles",
+        "df:report-and-attribute",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 60,
+        "b2/particles-discourse": 60
+      },
+      "examples": [
+        {
+          "example_text": "Ведь мы уже это обсуждали.",
+          "translation_text": "We already discussed this, remember.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он ведь предупреждал.",
+          "translation_text": "He did warn (after all).",
+          "notes": ""
+        },
+        {
+          "example_text": "Ведь это важно.",
+          "translation_text": "After all, it’s important.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/particles-discourse/061-мол-as-reported-stance",
+      "title": "Use мол to report someone’s stance.",
+      "summary": "мол as reported stance",
+      "explanation": "`мол` introduces reported speech/stance in a colloquial-neutral way.\n\nIt’s often equivalent to 'saying that…'.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/particles-discourse"
+      ],
+      "tag_names": [
+        "topic:particles",
+        "df:report-and-attribute",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 61,
+        "b2/particles-discourse": 61
+      },
+      "examples": [
+        {
+          "example_text": "Он сказал, мол, времени нет.",
+          "translation_text": "He said, like, there’s no time.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она объяснила, мол, так будет лучше.",
+          "translation_text": "She explained, saying it would be better that way.",
+          "notes": ""
+        },
+        {
+          "example_text": "Они написали, мол, не могут прийти.",
+          "translation_text": "They wrote, saying they can’t come.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/particles-discourse/062-дескать-to-distance-from-claim",
+      "title": "Use дескать to distance speaker from a reported claim.",
+      "summary": "дескать to distance from claim",
+      "explanation": "`дескать` reports a claim while signaling the speaker’s distance/skepticism.\n\nIt’s stylistic and common in narratives and commentary.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/particles-discourse"
+      ],
+      "tag_names": [
+        "topic:particles",
+        "df:report-and-attribute",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 62,
+        "b2/particles-discourse": 62
+      },
+      "examples": [
+        {
+          "example_text": "Он уверял, дескать, всё под контролем.",
+          "translation_text": "He insisted, allegedly, that everything is under control.",
+          "notes": ""
+        },
+        {
+          "example_text": "Они заявили, дескать, это не их вина.",
+          "translation_text": "They claimed, supposedly, it’s not their fault.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она сказала, дескать, устала.",
+          "translation_text": "She said, supposedly, she was tired.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/particles-discourse/063-всё-таки-as-concessive-insistence",
+      "title": "Use всё-таки to signal concessive insistence.",
+      "summary": "всё-таки as concessive insistence",
+      "explanation": "`всё-таки` signals 'still / nevertheless' often after a concession or change of plan.\n\nIt’s measurable: choose it when the action happens despite obstacles.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/particles-discourse"
+      ],
+      "tag_names": [
+        "topic:particles",
+        "df:report-and-attribute",
+        "df:argue-and-justify"
+      ],
+      "section_sort_order": {
+        "b2": 63,
+        "b2/particles-discourse": 63
+      },
+      "examples": [
+        {
+          "example_text": "Хотя было поздно, мы всё-таки встретились.",
+          "translation_text": "Although it was late, we still met.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я сомневался, но всё-таки согласился.",
+          "translation_text": "I hesitated, but I agreed nonetheless.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он всё-таки пришёл.",
+          "translation_text": "He came after all.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/register/064-colloquial-formal-rewrite",
+      "title": "Rewrite a colloquial sentence into a formal syntactic structure.",
+      "summary": "Colloquial → formal rewrite",
+      "explanation": "Rewrite informal phrasing into formal structures (nominalization, participles, impersonal constructions).\n\nThis is directly testable: produce two equivalent versions with different register.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/register"
+      ],
+      "tag_names": [
+        "topic:register",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 64,
+        "b2/register": 64
+      },
+      "examples": [
+        {
+          "example_text": "Ну, короче, мы решили так. → Было принято решение…",
+          "translation_text": "So, basically, we decided like this. → A decision was made…",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы тут подумали и поняли… → В ходе обсуждения стало ясно…",
+          "translation_text": "We thought and realized… → During the discussion it became clear…",
+          "notes": ""
+        },
+        {
+          "example_text": "Это типа важно. → Это представляется важным.",
+          "translation_text": "This is like important. → This appears important.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/register/065-reduce-pronouns-formal-cohesion",
+      "title": "Reduce personal pronoun usage through structural reformulation.",
+      "summary": "Reduce pronouns (formal cohesion)",
+      "explanation": "Formal Russian often reduces explicit `я/мы` by using impersonal/passive structures or topic nouns.\n\nTask: rewrite to minimize pronouns without losing meaning.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/register"
+      ],
+      "tag_names": [
+        "topic:register",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 65,
+        "b2/register": 65
+      },
+      "examples": [
+        {
+          "example_text": "Мы считаем, что… → Можно считать, что…",
+          "translation_text": "We think that… → One can consider that…",
+          "notes": ""
+        },
+        {
+          "example_text": "Я предлагаю обсудить… → Предлагается обсудить…",
+          "translation_text": "I propose discussing… → It is proposed to discuss…",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы проверили данные. → Данные были проверены.",
+          "translation_text": "We checked the data. → The data were checked.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/register/066-expand-short-spoken-clause-into-formal-written-variant",
+      "title": "Expand a short spoken clause into a formal written variant.",
+      "summary": "Expand short spoken clause into formal written variant",
+      "explanation": "Turn short spoken fragments into complete formal sentences with connectors and clear structure.\n\nThis supports B2 writing: essays, emails, reports.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/register"
+      ],
+      "tag_names": [
+        "topic:register",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 66,
+        "b2/register": 66
+      },
+      "examples": [
+        {
+          "example_text": "Не успели. → Мы не успели завершить работу из‑за нехватки времени.",
+          "translation_text": "Didn’t make it. → We didn’t manage to finish due to lack of time.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ну, не знаю. → Я не уверен, что это верное решение.",
+          "translation_text": "Well, I don’t know. → I’m not sure this is the right decision.",
+          "notes": ""
+        },
+        {
+          "example_text": "Так нельзя. → Так поступать нельзя, поскольку это нарушает правила.",
+          "translation_text": "You can’t do that. → One must not act like that because it breaks the rules.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/register/067-identify-conversational-structures-in-formal-text",
+      "title": "Identify an overly conversational structure in formal text.",
+      "summary": "Identify conversational structures in formal text",
+      "explanation": "Spot and fix markers like `типа`, `короче`, excessive ellipses, and vague pronouns.\n\nAssessment: editing task—replace with neutral connectors and precise nouns.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/register"
+      ],
+      "tag_names": [
+        "topic:register",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 67,
+        "b2/register": 67
+      },
+      "examples": [
+        {
+          "example_text": "Короче, вывод такой… → Таким образом, можно сделать вывод…",
+          "translation_text": "Basically, the conclusion is… → Thus, one can conclude…",
+          "notes": ""
+        },
+        {
+          "example_text": "Это, ну, как бы, проблема. → Это представляет собой проблему.",
+          "translation_text": "This is, like, a problem. → This constitutes a problem.",
+          "notes": ""
+        },
+        {
+          "example_text": "И всё такое. → и другие подобные факторы.",
+          "translation_text": "And stuff like that. → and other similar factors.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/register/068-adjust-clause-complexity-for-formal-register",
+      "title": "Adjust clause complexity to match a formal register.",
+      "summary": "Adjust clause complexity for formal register",
+      "explanation": "Choose sentence length and embedding depth appropriate to the genre.\n\nTask: combine/split sentences to reach a clear formal style.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/register"
+      ],
+      "tag_names": [
+        "topic:register",
+        "df:formal-writing"
+      ],
+      "section_sort_order": {
+        "b2": 68,
+        "b2/register": 68
+      },
+      "examples": [
+        {
+          "example_text": "Мы сделали X. Мы получили Y. → После выполнения X мы получили Y.",
+          "translation_text": "We did X. We got Y. → After doing X we got Y.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя…, потому что…, когда… → (split) …",
+          "translation_text": "Although…, because…, when… → (split) …",
+          "notes": ""
+        },
+        {
+          "example_text": "Вследствие…, однако…, поэтому… (controlled connectors)",
+          "translation_text": "As a result…, however…, therefore…",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/argumentation/069-claim-concession-in-one-complex-sentence",
+      "title": "Combine claim and concession into a single complex sentence.",
+      "summary": "Claim + concession in one complex sentence",
+      "explanation": "Combine a claim and concession using `хотя/несмотря на то что/тем не менее`.\n\nAssessment: produce a single sentence that preserves both ideas.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/argumentation"
+      ],
+      "tag_names": [
+        "topic:argumentation",
+        "topic:clauses",
+        "df:argue-and-justify",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 69,
+        "b2/argumentation": 69
+      },
+      "examples": [
+        {
+          "example_text": "Хотя данных мало, вывод выглядит обоснованным.",
+          "translation_text": "Although there is little data, the conclusion looks justified.",
+          "notes": ""
+        },
+        {
+          "example_text": "Несмотря на то что сроки сжаты, проект выполним.",
+          "translation_text": "Despite the tight deadlines, the project is feasible.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы согласны с критикой, хотя считаем, что метод полезен.",
+          "translation_text": "We agree with the criticism, though we think the method is useful.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/argumentation/070-evaluative-phrase-embedded-in-subordinate-clause",
+      "title": "Embed an evaluative phrase inside a subordinate clause.",
+      "summary": "Evaluative phrase embedded in subordinate clause",
+      "explanation": "Embed stance/evaluation inside subordinate structures: `поскольку`, `так как`, `несмотря на то что` + evaluation.\n\nThis helps you sound B2 in argumentation.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/argumentation"
+      ],
+      "tag_names": [
+        "topic:argumentation",
+        "topic:clauses",
+        "df:argue-and-justify",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 70,
+        "b2/argumentation": 70
+      },
+      "examples": [
+        {
+          "example_text": "Поскольку результат кажется нестабильным, нужно повторить эксперимент.",
+          "translation_text": "Since the result seems unstable, we need to repeat the experiment.",
+          "notes": ""
+        },
+        {
+          "example_text": "Так как подход, на мой взгляд, слишком общий, предлагаю уточнить критерии.",
+          "translation_text": "Since the approach, in my view, is too general, I propose уточнить the criteria.",
+          "notes": ""
+        },
+        {
+          "example_text": "Несмотря на то что идея привлекательна, она рискованна.",
+          "translation_text": "Although the idea is attractive, it is risky.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/argumentation/071-two-step-causal-argument",
+      "title": "Structure a two-step causal argument syntactically.",
+      "summary": "Two-step causal argument",
+      "explanation": "Build a chain: cause → intermediate result → conclusion, using clear connectors (`поскольку`, `в результате`, `поэтому`).\n\nTask: write one sentence or two linked clauses that show both steps.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/argumentation"
+      ],
+      "tag_names": [
+        "topic:argumentation",
+        "topic:clauses",
+        "df:argue-and-justify",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 71,
+        "b2/argumentation": 71
+      },
+      "examples": [
+        {
+          "example_text": "Поскольку данные неполные, в результате оценка искажается, поэтому выводы нужно уточнить.",
+          "translation_text": "Since the data are incomplete, as a result the estimate is distorted, so the conclusions need to be уточнить.",
+          "notes": ""
+        },
+        {
+          "example_text": "Так как спрос вырос, вследствие этого цены поднялись, поэтому бюджет нужно пересчитать.",
+          "translation_text": "Since demand increased, consequently prices rose, so the budget must be recalculated.",
+          "notes": ""
+        },
+        {
+          "example_text": "Поскольку система перегружена, из‑за этого растёт задержка, поэтому требуется оптимизация.",
+          "translation_text": "Since the system is overloaded, because of this latency increases, so optimization is required.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/argumentation/072-conditional-to-soften-a-claim",
+      "title": "Use a conditional to soften an argumentative claim.",
+      "summary": "Conditional to soften a claim",
+      "explanation": "Use conditional framing to make a claim less categorical: `если`, `в случае если`, `при условии что`.\n\nThis is common in professional writing.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/argumentation"
+      ],
+      "tag_names": [
+        "topic:argumentation",
+        "topic:clauses",
+        "df:argue-and-justify",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 72,
+        "b2/argumentation": 72
+      },
+      "examples": [
+        {
+          "example_text": "Если тенденция сохранится, результаты улучшатся.",
+          "translation_text": "If the trend continues, the results will improve.",
+          "notes": ""
+        },
+        {
+          "example_text": "В случае если данные подтвердятся, можно будет говорить о росте.",
+          "translation_text": "If the data are confirmed, we will be able to talk about growth.",
+          "notes": ""
+        },
+        {
+          "example_text": "При условии что сроки не изменятся, проект завершится вовремя.",
+          "translation_text": "Provided the deadlines don’t change, the project will finish on time.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/argumentation/073-hedged-grammatical-structure",
+      "title": "Reformulate a direct claim into a hedged grammatical structure.",
+      "summary": "Hedged grammatical structure",
+      "explanation": "Hedge direct claims using `кажется/похоже/можно предположить/вероятно` and impersonal structures.\n\nAssessment: transform a categorical statement into a hedged one.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/argumentation"
+      ],
+      "tag_names": [
+        "topic:argumentation",
+        "topic:clauses",
+        "df:argue-and-justify",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 73,
+        "b2/argumentation": 73
+      },
+      "examples": [
+        {
+          "example_text": "Это ошибка. → Похоже, что это ошибка.",
+          "translation_text": "This is an error. → It looks like this is an error.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы правы. → Можно предположить, что мы правы.",
+          "translation_text": "We are right. → One can предположить that we are right.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он виноват. → Не исключено, что он виноват.",
+          "translation_text": "He is guilty. → It’s possible that he is guilty.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "b2/argumentation/074-stance-marker-inside-reporting-clause",
+      "title": "Embed a stance marker inside a reporting clause.",
+      "summary": "Stance marker inside reporting clause",
+      "explanation": "Embed stance inside reporting: `Он утверждает, что…`, `Эксперты считают, что…`, plus your own hedging (`как мне кажется`).\n\nThis lets you attribute claims and manage responsibility.",
+      "usage_notes": "",
+      "section_slugs": [
+        "b2",
+        "b2/argumentation"
+      ],
+      "tag_names": [
+        "topic:argumentation",
+        "topic:clauses",
+        "df:argue-and-justify",
+        "df:report-and-attribute"
+      ],
+      "section_sort_order": {
+        "b2": 74,
+        "b2/argumentation": 74
+      },
+      "examples": [
+        {
+          "example_text": "Эксперты считают, что метод эффективен.",
+          "translation_text": "Experts believe the method is effective.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он утверждает, что всё было сделано правильно, хотя, как мне кажется, есть ошибки.",
+          "translation_text": "He claims everything was done correctly, although, as it seems to me, there are errors.",
+          "notes": ""
+        },
+        {
+          "example_text": "Исследование показывает, что эффект невелик.",
+          "translation_text": "The study shows that the effect is small.",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

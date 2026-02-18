@@ -1,0 +1,2075 @@
+{
+  "meta": {
+    "schema_version": "hermes-grammar-pack.v1",
+    "pack_id": "ru_grammar_c1_v1",
+    "language": "Russian",
+    "native_language": "English",
+    "cefr_level": "C1",
+    "title": "Russian C1 Grammar Pack",
+    "description": "Behavior-based C1 performance objectives (production and transformation tasks) focused on advanced discourse control, dense syntax, and register precision beyond B2.",
+    "generated_at": "2026-02-18T00:00:00+00:00",
+    "source_notes": "Built from a behavior-based C1 performance list; items are phrased as observable production/transformation behaviors suitable for generation and assessment in Hermes.",
+    "functional_discourse_goals": [
+      "Sustain clear, cohesive academic or professional discourse over multiple paragraphs",
+      "Control information structure (topic/focus, emphasis, reference tracking) in extended texts",
+      "Use dense written syntax (participles/gerunds/nominalizations) without loss of clarity",
+      "Express nuanced stance: obligation, probability, evaluation, and hedging with grammatical means",
+      "Manage agency and perspective (active/passive/impersonal) to match discourse focus",
+      "Maintain precise negation scope and contrast in complex multi-clause sentences",
+      "Adapt grammar to genre and register (academic, analytical, bureaucratic, semi-formal)"
+    ]
+  },
+  "sections": [
+    {
+      "slug": "c1",
+      "title": "C1 Grammar",
+      "description": "C1 grammar pack (behavior-based performance objectives).",
+      "parent_slug": null,
+      "sort_order": 0
+    },
+    {
+      "slug": "c1/functional-discourse",
+      "title": "Functional discourse goals",
+      "description": "What learners should be able to do communicatively at C1.",
+      "parent_slug": "c1",
+      "sort_order": 1
+    },
+    {
+      "slug": "c1/recursive-syntax",
+      "title": "Deep recursive syntax",
+      "description": "Beyond B2: 3+ layers of embedding, ambiguity management, and paragraph-level coherence.",
+      "parent_slug": "c1",
+      "sort_order": 10
+    },
+    {
+      "slug": "c1/info-structure",
+      "title": "Information structure control",
+      "description": "Theme–rheme control, emphasis, inversion, and reference tracking across extended discourse.",
+      "parent_slug": "c1",
+      "sort_order": 20
+    },
+    {
+      "slug": "c1/aspect-modality",
+      "title": "Aspect–modality integration",
+      "description": "Layered modality, counterfactuals, evaluation, and framing with aspect choices.",
+      "parent_slug": "c1",
+      "sort_order": 30
+    },
+    {
+      "slug": "c1/density",
+      "title": "Structural density management",
+      "description": "Compression/expansion strategies; participles and gerunds in extended formal writing.",
+      "parent_slug": "c1",
+      "sort_order": 40
+    },
+    {
+      "slug": "c1/derivation",
+      "title": "Derivational and lexico-grammatical depth",
+      "description": "Productive derivation, register-appropriate word-family choice, and lexical cohesion.",
+      "parent_slug": "c1",
+      "sort_order": 50
+    },
+    {
+      "slug": "c1/agency",
+      "title": "Agency and perspective framing",
+      "description": "Passive/impersonal framing and perspective shifts across paragraph-level exposition.",
+      "parent_slug": "c1",
+      "sort_order": 60
+    },
+    {
+      "slug": "c1/negation-scope",
+      "title": "Advanced negation scope",
+      "description": "Negation scope control in layered clauses and contrastive evaluation.",
+      "parent_slug": "c1",
+      "sort_order": 70
+    },
+    {
+      "slug": "c1/argumentation",
+      "title": "Argument structuring through grammar",
+      "description": "Complex argument packaging: concession, causality, stance, and rhetorical pacing.",
+      "parent_slug": "c1",
+      "sort_order": 80
+    },
+    {
+      "slug": "c1/register",
+      "title": "Register and genre control",
+      "description": "Sustained academic style and controlled shifts (academic ↔ semi-formal; bureaucratic ↔ analytical).",
+      "parent_slug": "c1",
+      "sort_order": 90
+    }
+  ],
+  "tags": [
+    {
+      "name": "syntax",
+      "description": "Complex syntax and embedding"
+    },
+    {
+      "name": "subordination",
+      "description": "Subordinate clause control"
+    },
+    {
+      "name": "reference",
+      "description": "Reference tracking and cohesion"
+    },
+    {
+      "name": "information-structure",
+      "description": "Topic/focus, theme–rheme, emphasis"
+    },
+    {
+      "name": "word-order",
+      "description": "Word order and inversion"
+    },
+    {
+      "name": "aspect",
+      "description": "Aspect choice and discourse functions"
+    },
+    {
+      "name": "modality",
+      "description": "Obligation/probability/stance via grammar"
+    },
+    {
+      "name": "participles",
+      "description": "Participles and clause reduction"
+    },
+    {
+      "name": "gerunds",
+      "description": "Gerunds and subject-control"
+    },
+    {
+      "name": "nominalization",
+      "description": "Compression via noun phrases and deverbal nouns"
+    },
+    {
+      "name": "derivation",
+      "description": "Derivational morphology and word families"
+    },
+    {
+      "name": "lexical-cohesion",
+      "description": "Repetition, substitution, and semantic stability"
+    },
+    {
+      "name": "voice",
+      "description": "Passive/active alternation"
+    },
+    {
+      "name": "impersonal",
+      "description": "Impersonal strategies"
+    },
+    {
+      "name": "negation",
+      "description": "Negation scope and evaluative negation"
+    },
+    {
+      "name": "argumentation",
+      "description": "Grammar-driven argument and stance"
+    },
+    {
+      "name": "register",
+      "description": "Formal/semi-formal register control"
+    }
+  ],
+  "grammar_points": [
+    {
+      "slug": "c1/a/001-produce-a-sentence-with-three-levels-of-subordination-while-",
+      "title": "Produce a sentence with three levels of subordination while maintaining agreement",
+      "summary": "Produce a sentence with three levels of subordination while maintaining agreement",
+      "explanation": "Target behavior: Produce a sentence with three levels of subordination while maintaining agreement.\n\nMeaning:\n- A main clause serves as the backbone, introducing the primary idea.\n- The first subordinate clause adds detail or condition to the main clause.\n- The second subordinate clause further elaborates on the first one.\n- The third and deepest subordinate clause provides specific information or explanation.\n\nHow to use:\n- Start with a simple main clause: e.g., 'I read an article.'\n- Add a first subordinate clause: e.g., 'that explains why.'\n- Follow with a second subordinate clause: e.g., 'why people think learning should be personalized.'\n- Finally, add a third and deepest clause to provide details or reasons: e.g., 'people believe that modern technology makes it possible.'\n\n- Always ensure clear reference tracking using pronouns appropriately.\n- Use commas to separate clauses for clarity.\n- Maintain agreement in terms of number and gender when referring back to nouns.\n- Be mindful of sentence length; two sentences might be clearer if overloading one is hard.\n\nEdge cases:\n- When a subordinate clause becomes too long, consider breaking it into shorter clauses or splitting the information across multiple sentences.\n- Avoid complex subordination that makes your message difficult to understand.",
+      "usage_notes": "Practice by writing short stories with embedded clauses. Use simple vocabulary and adjust complexity gradually.",
+      "section_slugs": [
+        "c1/recursive-syntax"
+      ],
+      "tag_names": [
+        "syntax",
+        "subordination",
+        "reference"
+      ],
+      "section_sort_order": 11,
+      "examples": [
+        {
+          "example_text": "Я уверен, что ты помнишь, что он сказал, что придёт поздно.",
+          "translation_text": "I’m sure that you remember that he said that he would come late.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя я знаю, что она думает, что это сложно, я всё равно попробую.",
+          "translation_text": "Although I know that she thinks it’s hard, I’ll try anyway.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я прочитал статью, в которой автор объясняет, почему люди считают, что обучение должно быть персонализированным.",
+          "translation_text": "I read an article in which the author explains why people think learning should be personalized.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/a/002-embed-a-relative-clause-inside-another-subordinate-clause-wi",
+      "title": "Embed a relative clause inside another subordinate clause without referential ambiguity",
+      "summary": "C1 performance objective: Use complex sentences with nested clauses.",
+      "explanation": "Meaning:\n- Understand that a relative clause (a type of subordinate clause) can be embedded within another subordinate clause to add more information.\nHow to use:\n- Plan your sentence by identifying the main idea first, then adding details in layers: main clause → subordinate clause 1 → subordinate clause 2 → subordinate clause 3.\n- Track who/what each pronoun refers to. If necessary, repeat nouns to avoid confusion.\n- Use commas appropriately to separate clauses and make your meaning clear; this is crucial for Russian as well.\nEdge cases:\n- Be careful with pronouns in long sentences to ensure they are clearly linked to the right noun or person. For example: *Я знаю, что он думает, что они будут там.* (I know that he thinks that they will be there.)\n- Avoid overly complex sentences where two simpler sentences might suffice.",
+      "usage_notes": "Practice by producing your own examples and transforming simple sentences into more complex ones. Pay attention to grammatical accuracy and clarity of meaning.",
+      "section_slugs": [
+        "c1/recursive-syntax"
+      ],
+      "tag_names": [
+        "syntax",
+        "subordination",
+        "reference"
+      ],
+      "section_sort_order": 12,
+      "examples": [
+        {
+          "example_text": "Хотя я знаю, что она думает, что это сложно, я всё равно попробую.",
+          "translation_text": "Although I know that she thinks it’s hard, I’ll try anyway.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я прочитал статью, в которой автор объясняет, почему люди считают, что обучение должно быть персонализированным.",
+          "translation_text": "I read an article in which the author explains why people think learning should be personalized.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я уверен, что ты помнишь, что он сказал, что придёт поздно.",
+          "translation_text": "I’m sure that you remember that he said that he would come late.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/a/003-maintain-correct-case-agreement-across-nested-clause-structu",
+      "title": "Maintain correct case agreement across nested clause structures",
+      "summary": "C1 performance objective: Maintain correct case agreement across nested clause structures",
+      "explanation": "Target behavior:\nMaintain correct case agreement across nested clause structures.\n\nMeaning:\nIn this task, you need to ensure that pronouns agree in number, gender, and case with the nouns they refer to, even when those nouns are part of multiple layers of clauses within a sentence. This helps your sentences sound natural and clear.\n\nHow to use:\n- Plan your sentence first: start with the main clause, then add subordinate clauses one by one (main clause → subordinate 1 → subordinate 2 → etc.).\n- Track who or what each pronoun refers to; repeat the noun when needed to avoid ambiguity. For example, if you say 'He said that he would come late,' ensure that 'he' and 'would come' both refer correctly to the same person.\n- Use commas consistently in your sentences. In Russian, punctuation is a major cue for parsing complex structures, so make sure your commas are placed correctly.\n\nEdge cases:\n- Be careful with reflexive pronouns (e.g., 'сам' or 'себе') and reciprocal pronouns ('друг другу'). Ensure they match the subject in number and case. For instance, 'они помогли друг другу' (they helped each other).\n\nHow to do it:\n- Plan your sentence first: main clause → subordinate 1 → subordinate 2 → subordinate 3.\n- Track who/what each pronoun refers to; repeat the noun when needed to avoid ambiguity.\n- Use commas consistently; in Russian, punctuation is a major cue for parsing deep syntax.",
+      "usage_notes": "Practice producing complex sentences from prompts and transforming simpler ones into target forms. Pay attention to grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/recursive-syntax"
+      ],
+      "tag_names": [
+        "syntax",
+        "subordination",
+        "reference"
+      ],
+      "section_sort_order": 13,
+      "examples": [
+        {
+          "example_text": "Я прочитал статью, в которой автор объясняет, почему люди считают, что обучение должно быть персонализированным.",
+          "translation_text": "I read an article in which the author explains why people think learning should be personalized.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я уверен, что ты помнишь, что он сказал, что придёт поздно.",
+          "translation_text": "I’m sure that you remember that he said that he would come late.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя я знаю, что она думает, что это сложно, я всё равно попробую.",
+          "translation_text": "Although I know that she thinks it’s hard, I’ll try anyway.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/a/004-reformulate-a-deeply-embedded-sentence-to-improve-clarity-wi",
+      "title": "Reformulate a deeply embedded sentence to improve clarity without reducing complexity",
+      "summary": "C1 performance objective: Reformulate complex sentences for clarity.",
+      "explanation": "Target behavior:\nReformulate deeply embedded sentences to improve clarity without reducing complexity.\n\nMeaning:\n- Deeply embedded sentences can be confusing because they contain multiple clauses nested within each other. Simplifying such sentences makes them easier to understand while maintaining the original meaning and depth of information.\n\nHow to use:\n1. Start by identifying the main clause, which is the primary statement in your sentence.\n2. Identify subordinate clauses that provide additional information or context. These are typically introduced by words like 'that,' 'which,' or 'who.' Organize them from the most general to the most specific.\n3. Ensure each pronoun clearly refers back to its antecedent (the noun it replaces) without causing ambiguity.\n4. Use commas appropriately to separate clauses and improve readability.\n\nEdge cases:\n- Be cautious not to over-simplify the sentence, which might reduce its depth or complexity unnecessarily.\n- Watch for long sentences that could be split into two shorter ones if clarity is improved.",
+      "usage_notes": "Practice by transforming complex sentences into simpler forms while maintaining their original meaning. Pay attention to correct grammar and punctuation.",
+      "section_slugs": [
+        "c1/recursive-syntax"
+      ],
+      "tag_names": [
+        "syntax",
+        "subordination",
+        "reference"
+      ],
+      "section_sort_order": 14,
+      "examples": [
+        {
+          "example_text": "Я уверен, что ты помнишь, что он сказал, что придёт поздно.",
+          "translation_text": "I’m sure that you remember that he said that he would come late.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя я знаю, что она думает, что это сложно, я всё равно попробую.",
+          "translation_text": "Although I know that she thinks it’s hard, I’ll try anyway.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я прочитал статью, в которой автор объясняет, почему люди считают, что обучение должно быть персонализированным.",
+          "translation_text": "I read an article in which the author explains why people think learning should be personalized.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/a/005-sustain-syntactic-accuracy-in-a-sentence-exceeding-30-words",
+      "title": "Sustain syntactic accuracy in a sentence exceeding 30 words",
+      "summary": "Sustain syntactic accuracy in long sentences",
+      "explanation": "Target behavior: Sustain syntactic accuracy in a sentence exceeding 30 words.\n\n**Meaning:**\n- A1 learners should focus on constructing complex sentences with multiple clauses to express ideas clearly and precisely.\n\n**How to use:**\n- Start by planning your main clause, then add subordinate clauses as needed: main clause → subordinate 1 → subordinate 2 → subordinate 3. Each additional clause should build upon the previous one to create a logical flow.\n- Ensure that pronouns refer correctly to their antecedents (the noun they replace). Repeat nouns when necessary to avoid ambiguity.\n- Use commas consistently to separate clauses and improve readability. In Russian, punctuation is crucial for understanding complex syntax; pay close attention to where to use commas.\n\n**Edge cases:**\n- Be mindful of overloading a single sentence with too much information. When two sentences would better express the idea, split them to maintain clarity.",
+      "usage_notes": "Practice by producing long sentences from prompts and transforming shorter versions into more complex ones while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/recursive-syntax"
+      ],
+      "tag_names": [
+        "syntax",
+        "subordination",
+        "reference"
+      ],
+      "section_sort_order": 15,
+      "examples": [
+        {
+          "example_text": "Хотя я знаю, что она думает, что это сложно, я всё равно попробую.",
+          "translation_text": "Although I know that she thinks it’s hard, I’ll try anyway.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я прочитал статью, в которой автор объясняет, почему люди считают, что обучение должно быть персонализированным.",
+          "translation_text": "I read an article in which the author explains why people think learning should be personalized.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я уверен, что ты помнишь, что он сказал, что придёт поздно.",
+          "translation_text": "I’m sure that you remember that he said that he would come late.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/a/006-maintain-referential-clarity-across-a-paragraph-containing-m",
+      "title": "Maintain referential clarity across a paragraph containing multiple embedded clauses",
+      "summary": "C1 performance objective: Maintain referential clarity across multiple embedded clauses.",
+      "explanation": "Maintain referential clarity means making sure it’s clear what each pronoun refers to in a sentence with many parts. This is crucial for complex sentences, like those found at C1 level.\n\n**Meaning:**\n- Each pronoun (he, she, it, they) should clearly refer back to the noun or name it describes.\n- If necessary, repeat the noun instead of using a pronoun when there might be confusion.\n- Use commas effectively to separate different parts of your sentence.\n\n**How to use:**\n- Start by writing the main clause. This is the main idea of what you want to say.\n- Add subordinate clauses (clauses that provide additional information) one after another, ensuring each pronoun clearly connects back to a noun or name.\n- Use commas where needed to make your sentence easier to understand.\n\n**Edge cases:**\n- Be careful with long sentences; too much information in one sentence can be hard to follow. Break it into simpler ones if possible.",
+      "usage_notes": "Practice by rewriting complex sentences from prompts or transforming simple sentences into more detailed versions while keeping the meaning intact. This helps improve both grammar and clarity.",
+      "section_slugs": [
+        "c1/recursive-syntax"
+      ],
+      "tag_names": [
+        "syntax",
+        "subordination",
+        "reference"
+      ],
+      "section_sort_order": 16,
+      "examples": [
+        {
+          "example_text": "Я прочитал статью, в которой автор объясняет, почему люди считают, что обучение должно быть персонализированным.",
+          "translation_text": "I read an article in which the author explains why people think learning should be personalized.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я уверен, что ты помнишь, что он сказал, что придёт поздно.",
+          "translation_text": "I’m sure that you remember that he said that he would come late.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя я знаю, что она думает, что это сложно, я всё равно попробую.",
+          "translation_text": "Although I know that she thinks it’s hard, I’ll try anyway.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/007-front-a-subordinate-clause-to-create-contrast-while-preservi",
+      "title": "Front a subordinate clause to create contrast while preserving cohesion",
+      "summary": "Front a subordinate clause to create contrast while preserving cohesion",
+      "explanation": "Target behavior: Front a subordinate clause to create contrast while preserving cohesion.\n\nMeaning:\n- In Russian, you can move a subordinate clause at the beginning of a sentence to emphasize the new or contrasting information. This helps highlight what is important without changing the main idea.\n\nHow to do it:\n- Identify the topic (given) and the focus (new/contrastive). Move the subordinate clause to start the sentence, making sure the rest follows logically.\n- Use particles like ‘именно’, ‘вот’, or ‘же’ sparingly for emphasis; often, word order works well on its own.\n- After reordering, check agreement and pronoun references. Emphasis shifts can make these tricky.\n\nEdge cases:\n- Be careful with long sentences where moving clauses might confuse the meaning or create ambiguity.\n- Don’t overuse this structure; two simpler sentences are often clearer.",
+      "usage_notes": "Practice by transforming alternative versions into the target form while preserving meaning. This helps improve your grammatical accuracy and register appropriateness.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 27,
+      "examples": [
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        },
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        },
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/008-reorder-clause-elements-to-shift-emphasis-without-altering-m",
+      "title": "Reorder clause elements to shift emphasis without altering meaning",
+      "summary": "C1 performance objective: Reorder clause elements to shift emphasis without altering meaning",
+      "explanation": "Meaning: To shift emphasis, rearrange clause elements while keeping the core meaning unchanged.\n\nHow to use:\n- Identify what is **topic** (given) and what is **focus** (new/contrastive).\n- Use particles like **именно**, **вот**, or **же** sparingly; let word order carry much of the emphasis.\n- After reordering, check agreement and pronoun references to avoid ambiguity.\n\nEdge cases:\n- Overloading one sentence with too many clauses can make it confusing. Use two sentences if necessary for clarity.\n- Be cautious with long sentences where agreement and reference might be easily lost.",
+      "usage_notes": "Practice by producing target structures from prompts and transforming alternative versions into the target form while preserving meaning.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 28,
+      "examples": [
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        },
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/009-use-inversion-for-rhetorical-emphasis-appropriately",
+      "title": "Use inversion for rhetorical emphasis appropriately",
+      "summary": "C1 performance objective: Use inversion for rhetorical emphasis appropriately",
+      "explanation": "Target behavior: Use inversion for rhetorical emphasis appropriately.\n\nMeaning:\n- Inversion means rearranging parts of a sentence to emphasize something specific, like moving the verb or subject to the beginning of the sentence. This technique can make your points clearer and more engaging.\n\nHow to use:\n- Before reordering, decide what is **topic** (given) and what is **focus** (new/contrastive). For example, in 'We’ll talk about the student later; right now the method matters more,' the topic is talking about a student, while the focus is on the importance of the method.\n- Use particles like **именно**, **вот**, or **же** sparingly to mark emphasis. In 'It’s this factor, not the amount of data, that determines model quality,' **это** and **не** are used to emphasize the key point.\n- After reordering, check if pronouns still agree with their antecedents and ensure clarity. This is important because shifting focus can sometimes make sentences confusing or unclear.\n\nEdge cases:\n- Be careful not to overload a single sentence when two simpler ones would be clearer. For example, instead of 'The project was successful only due to the team’s hard work,' consider saying, 'Due to the team’s hard work, the project was successful.'\n- Avoid overusing particles like **именно** or **же**, as this can sound too forceful and unnatural in Russian.\n\nHow to do it:\n- Identify what is already known (topic) and what you want to highlight (focus).\n- Use word order and particles like **именно, вот, же** sparingly for emphasis.\n- Check pronoun references after reordering to maintain clarity and agreement.",
+      "usage_notes": "Practice by producing target structures from prompts and transforming alternative versions while preserving meaning. Ensure grammatical accuracy and referential clarity.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 29,
+      "examples": [
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        },
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/010-maintain-topic-continuity-across-five-or-more-consecutive-se",
+      "title": "Maintain topic continuity across five or more consecutive sentences",
+      "summary": "Maintain topic continuity across five or more consecutive sentences",
+      "explanation": "Target behavior: Maintain topic continuity across five or more consecutive sentences.\n\nMeaning:\n- Continuity means keeping your main idea clear and related throughout several sentences.\n- Use familiar topics to avoid confusion for the reader/listener.\n- Ensure that each new sentence adds information that relates back to the overall theme.\n\nHow to do it:\n- Identify the topic (given) and focus (new/contrastive) before writing.\n- Use particles like 'именно', 'вот', 'же' sparingly for emphasis; rely on word order when possible.\n- After reordering, check agreement and pronoun references; shifts in emphasis can create ambiguity.\n\nEdge cases:\n- Be mindful of overloading one sentence with too much information. Splitting ideas into two sentences can improve clarity.\n- Avoid breaking case/number/gender agreements, especially in long sentences.\n- Watch out for losing track of referents (pronouns without clear nouns) as the topic changes.\n\nUsage notes: Ask learners to produce target structures from prompts and transform alternative versions while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 30,
+      "examples": [
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        },
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        },
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/011-introduce-new-information-without-breaking-thematic-progress",
+      "title": "Introduce new information without breaking thematic progression",
+      "summary": "C1 performance objective: Introduce new information without breaking thematic progression",
+      "explanation": "Target behavior: Introduce new information without breaking thematic progression.\n\nMeaning:\n- When introducing a new idea, ensure it flows naturally from what was previously discussed.\n- Use existing context to set up the new point logically.\n\nHow to do it:\n- Identify the **topic** (what is already known) and the **focus** (new or contrasting information).\n- Place emphasis on the focus using words like **именно, вот, же** but sparingly.\n- Adjust word order so the flow remains smooth.\n- Re-check pronoun references after reordering to avoid ambiguity.\n\nEdge cases:\n- Avoid overly complex sentences that might confuse the reader or listener.\n- Be mindful of how you introduce new information; it should relate closely to what came before.",
+      "usage_notes": "Practice by transforming alternative sentence structures into the target form while preserving meaning.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 31,
+      "examples": [
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        },
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/012-repair-pronoun-ambiguity-in-extended-discourse",
+      "title": "Repair pronoun ambiguity in extended discourse",
+      "summary": "C1 performance objective: Repair pronoun ambiguity in extended discourse",
+      "explanation": "Target behavior:\n\n**Meaning:** In long sentences, ensure clarity by making it clear what a pronoun refers to.\n\n**How to do it**\n- Before reordering, decide which part of the sentence is **topic** (given information) and which is **focus** (new or contrasting information).\n- Use particles like **именно, вот, же** sparingly for emphasis; let word order help guide meaning.\n- After rearranging, check that pronouns match their antecedents in number, gender, and case to avoid ambiguity.\n\n**Edge cases**\n- Be careful with ambiguous pronouns when the topic or focus changes significantly within a sentence.\n- Avoid overloading one sentence; split into two if necessary for clarity.",
+      "usage_notes": "Practice by transforming sentences from simple to complex structures while keeping meaning clear. Use this in formal and informal contexts.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 32,
+      "examples": [
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        },
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/b/013-deliberately-shift-thematic-focus-within-a-paragraph",
+      "title": "Deliberately shift thematic focus within a paragraph",
+      "summary": "C1 performance objective: Deliberately shift thematic focus within a paragraph",
+      "explanation": "Target behavior: Deliberately shift thematic focus within a paragraph.\n\nMeaning:\n- Identify what is the **topic** (given information) and what is the **focus** (new or contrasting idea).\n- Purposefully change the main subject of your sentence or paragraph to introduce a new idea.\n- Use emphasis particles like **именно, вот, же** sparingly; let word order convey most emphasis.\n\nHow to use:\n- Start with a topic and its supporting information (theme-rheme structure).\n- Identify a key point you want to highlight or contrast.\n- Reorder the sentence or paragraph so that this new idea becomes the focus.\n- Ensure the shift is smooth by checking agreement in pronouns and nouns.\n\nEdge cases:\n- Avoid overloading one sentence; break it into two if needed for clarity.\n- Be mindful of long sentences which can confuse readers due to multiple shifts.",
+      "usage_notes": "Assessment idea: ask learners to produce the target structure from a prompt and transform an alternative version while preserving meaning. Score on grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/info-structure"
+      ],
+      "tag_names": [
+        "information-structure",
+        "word-order",
+        "reference"
+      ],
+      "section_sort_order": 33,
+      "examples": [
+        {
+          "example_text": "Хотя аргументы сильные, я всё же считаю, что вывод преждевременный.",
+          "translation_text": "Although the arguments are strong, I still think the conclusion is premature.",
+          "notes": ""
+        },
+        {
+          "example_text": "Именно этот фактор, а не количество данных, определяет качество модели.",
+          "translation_text": "It’s this factor, not the amount of data, that determines model quality.",
+          "notes": ""
+        },
+        {
+          "example_text": "О студенте мы поговорим позже; сейчас важнее метод.",
+          "translation_text": "We’ll talk about the student later; right now the method matters more.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/014-combine-epistemic-and-deontic-modality-in-a-single-sentence-",
+      "title": "Combine epistemic and deontic modality in a single sentence correctly",
+      "summary": "C1 performance objective: Combine epistemic and deontic modality in a single sentence correctly",
+      "explanation": "Meaning:\n- Epistemic modality expresses beliefs, doubts, or opinions about what is likely to happen.\n- Deontic modality describes obligations, permissions, or recommendations.\n\nHow to use:\n- Identify the subject and context of your statement.\n- Use epistemic modal verbs like 'could', 'might', 'should' for expressing beliefs or advice.\n- Employ deontic modal verbs such as 'must', 'may', 'shall' to indicate rules, duties, or suggestions.\n- Ensure proper aspect choice (imperfective vs. perfective) to distinguish between processes and completed actions.\n\nEdge cases:\n- Be cautious with double negatives; they can be confusing.\n- Use clear referents for pronouns to avoid ambiguity.",
+      "usage_notes": "Assessment idea: ask the learner to produce the target structure from a prompt, and transform an alternative version into the target form while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 44,
+      "examples": [
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/015-maintain-aspect-consistency-across-a-narrative-with-time-shi",
+      "title": "Maintain aspect consistency across a narrative with time shifts",
+      "summary": "C1 performance objective: Maintain aspect consistency across a narrative with time shifts",
+      "explanation": "Meaning:\n- Understand when to use different verb aspects in Russian, especially regarding ability/opportunity and achieved results.\nHow to do it:\n- Distinguish between 'мог' (ability) and 'смог', 'успел' (achieved result).\n- Use modals like 'должен', 'обязан', and 'следует' for obligation, noting their different levels of formality.\nEdge cases:\n- Watch out for pronouns that might be unclear without context. Make sure your sentences are clear and easy to follow.",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 45,
+      "examples": [
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/016-adjust-aspect-to-signal-evaluation-rather-than-mere-chronolo",
+      "title": "Adjust aspect to signal evaluation rather than mere chronology",
+      "summary": "C1 performance objective: Adjust aspect to signal evaluation rather than mere chronology",
+      "explanation": "Target behavior: Adjust aspect to signal evaluation rather than mere chronology.\n\nMeaning:\n- Use aspect (perfective vs imperfective) and modality correctly to convey more than just when something happened; indicate what the speaker thinks about it.\n- For example, use 'could have' instead of just saying someone did or didn’t do something for a reason.\n\nHow to use:\n- Separate ability/opportunity (мог) from achieved result (смог, удалось).\n- With modals like should/could: imperfective aspect indicates ongoing possibility, perfective shows a single completed event.\n- For obligation: 'должен' is neutral, 'обязан' conveys strong duty, and 'следует' suggests a recommendation or norm.\n\nEdge cases:\n- Be cautious with pronouns to avoid confusion; always ensure clear reference.\n- Watch out for long sentences where splitting them into two can make the meaning clearer.",
+      "usage_notes": "Practice by transforming simple statements about actions into evaluations. Ensure accuracy, clarity, and appropriate formality in your expressions.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 46,
+      "examples": [
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/017-use-hypothetical-modal-stacking-without-aspectual-errors",
+      "title": "Use hypothetical + modal stacking without aspectual errors",
+      "summary": "C1 performance objective: Use hypothetical + modal stacking without aspectual errors",
+      "explanation": "Target behavior: Use hypothetical + modal stacking without aspectual errors.\n\nMeaning:\n- Understand that 'мог' (could) refers to an ability or opportunity in the past, and 'смог' (managed to) or 'удалось' (succeeded) refer to achieving a result.\n- Realize that modals often indicate ongoing actions ('imperfective') versus completed actions ('perfective').\n\nHow to use:\n- Separate 'ability/opportunity' using 'мог' from the 'achieved result' with 'смог', 'удалось'. For example: ‘Мне следовало бы закончить отчёт, но я не успел. ’ (I should have finished the report, but I didn’t manage to.)\n- Use different modal verbs for obligation: 'должен' (situational/neutral), 'обязан' (strong duty), and 'следует' (recommendation/norm). For instance: ‘Он обязан быть готов к встрече.’ (He is obliged to be ready for the meeting.)\n- Consider context to determine if a situation requires a continuous or completed action. Use 'процесс' when describing something that happened over time, like reading an article.\n\nEdge cases:\n- Avoid mixing 'мог' with 'смог' in one sentence. Ensure clear separation of opportunity and result.",
+      "usage_notes": "Ensure grammatical accuracy, clarity of referents, and appropriate register when using these structures.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 47,
+      "examples": [
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/018-contrast-vs-vs-in-context",
+      "title": "Contrast должен vs обязан vs следует in context",
+      "summary": "C1 performance objective: Contrast should vs must vs ought to in context",
+      "explanation": "Target behavior: Learn to contrast 'должен', 'обязан', and 'следует' in different contexts.\n\n**Meaning:**\n- 'Должен' (should) suggests a general obligation or duty, often based on social norms or situational expectations.\n- 'Обязан' (must) implies a strong sense of duty or legal responsibility.\n- 'Следует' (ought to) is used for recommendations or advice.\n\n**How to use:**\n- Separate ability from achieved result. Use 'мог' (could, was able to) for opportunity, and 'смог' (managed to), 'удалось' (succeeded in) for the outcome.\n- With modals, aspect often signals a process (imperfective) vs a single achievement (perfective).\n- For obligation: use 'должен' for general situations, 'обязан' for strong duty, and 'следует' for recommendations or norms.\n\n**Edge cases:**\n- Watch out for pronouns without clear referents; ensure they are easily understood in context.\n- Be mindful of case, number, and gender agreement in long sentences to avoid grammatical errors.\n- Avoid overloading one sentence when two would be clearer. Break up complex ideas into simpler statements.",
+      "usage_notes": "Practice by producing the target structures from prompts and transforming alternatives while preserving meaning. Focus on accurate grammar, clear references, and appropriate register.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 48,
+      "examples": [
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/019-maintain-correct-aspect-choice-under-counterfactual-conditio",
+      "title": "Maintain correct aspect choice under counterfactual conditions",
+      "summary": "C1 performance objective: Maintain correct aspect choice under counterfactual conditions",
+      "explanation": "Target behavior: Maintain correct aspect choice when using counterfactual conditions.\n\nMeaning:\n- Counterfactual conditions describe situations that did not happen but were possible. They often use the past perfect tense in Russian, similar to English constructions like 'if he had wanted'.\n- Aspect helps distinguish between ongoing processes and completed actions or states.\nHow to do it:\n- Separate ability/opportunity (мог) from achieved result (смог, удалось).\n- With modals, aspect often signals process (imperfective) vs single achieved outcome (perfective).\n- For obligation: дожен (situational/neutral), обязан (strong duty), следует (recommendation/norm).\nEdge cases:\n- Be careful with pronouns to avoid losing track of referents.\n- Maintain case, number, and gender agreement in long sentences.\n- Avoid overloading one sentence when two would be clearer.",
+      "usage_notes": "Practice by producing the target structure from prompts and transforming alternative versions into it. Focus on grammatical accuracy, clear references, and appropriate formality.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 49,
+      "examples": [
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/c/020-shift-between-retrospective-and-prospective-framing-in-argum",
+      "title": "Shift between retrospective and prospective framing in argument",
+      "summary": "C1 performance objective: Shift between retrospective and prospective framing in argument",
+      "explanation": "Meaning:\n- Understand when to use past tenses (retrospective) versus future tenses (prospective).\n\nHow to use:\n- For ability or opportunity in the past, use 'мог/мочь' with imperfective verbs.\n- For a completed action in the past, use 'смог' or 'успел(а)' for positive outcomes and 'не смог' or 'не успел(а)' for negative ones.\n\nFor obligation or recommendation:\n- Use 'должен' for neutral situations,\n- 'обязан' for strong obligations,\n- 'следует' for advice or norms.\n\nEdge cases:\n- Avoid confusing pronouns and maintain clear references.\n- Keep sentences concise to avoid overloading information.",
+      "usage_notes": "Practice by producing examples from prompts and transforming given sentences. Ensure grammatical accuracy, clarity in meaning, and appropriate register.",
+      "section_slugs": [
+        "c1/aspect-modality"
+      ],
+      "tag_names": [
+        "aspect",
+        "modality"
+      ],
+      "section_sort_order": 50,
+      "examples": [
+        {
+          "example_text": "Мне следовало бы закончить отчёт, но я не успел.",
+          "translation_text": "I should have finished the report, but I didn’t manage to.",
+          "notes": ""
+        },
+        {
+          "example_text": "Она могла прочитать статью (процесс), но так и не прочитала её до конца.",
+          "translation_text": "She could have read the article (process), but didn’t finish it.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он, должно быть, мог бы сделать это раньше, если бы хотел.",
+          "translation_text": "He probably could have done it earlier if he had wanted to.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/021-compress-a-multi-clause-explanation-into-an-academically-den",
+      "title": "Compress a multi-clause explanation into an academically dense structure",
+      "summary": "C1 performance objective: Compress a multi-clause explanation into an academically dense structure",
+      "explanation": "**Target behavior:** Compress a multi-clause explanation into an academically dense structure.\n\n**How to do it**\n- Use compression when the reader already knows the context; expand when precision matters.\n- Participles and gerunds must have a clear controller (usually the subject of the main clause).\n- Avoid stacking so many modifiers that the noun becomes hard to identify; split if needed.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 61,
+      "examples": [
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        },
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/022-expand-a-compressed-nominal-structure-into-clearer-clause-ba",
+      "title": "Expand a compressed nominal structure into clearer clause-based form",
+      "summary": "C1 performance objective: Expand compressed nominal structures into clearer clause-based forms.",
+      "explanation": "Target behavior:\nExpand a compressed nominal structure into a clearer clause-based form.\n\nMeaning:\nCompressed nominal structures often use concise forms, such as participles and gerunds, to describe actions or states. While these are useful in familiar contexts, clarity is essential for precision.\n\nHow to use:\n- Use compression when the context is well-known to the reader; expand when precision matters.\n- Ensure participles and gerunds clearly indicate their controller (usually the subject of the main clause).\n- Avoid overloading one sentence with too many modifiers. If needed, split the sentence to improve readability.\n\nEdge cases:\n- Be cautious not to lose track of referents (avoid pronouns without clear antecedents).\n- Watch out for long sentences that may break case/number/gender agreement.\n- Avoid overloading one sentence when two would be clearer and more precise.",
+      "usage_notes": "Practice by producing the target structure from prompts and transforming alternative versions while preserving meaning. Ensure grammatical accuracy, referential clarity, and appropriate register.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 62,
+      "examples": [
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/023-sustain-participial-modifiers-across-multiple-clauses-withou",
+      "title": "Sustain participial modifiers across multiple clauses without ambiguity",
+      "summary": "C1 performance objective: Sustain participial modifiers across multiple clauses without ambiguity",
+      "explanation": "**Target behavior:** Sustain participial modifiers across multiple clauses without ambiguity.\n\n**How to do it**\n- Use compression when the reader already knows the context; expand when precision matters.\n- Participles and gerunds must have a clear controller (usually the subject of the main clause).\n- Avoid stacking so many modifiers that the noun becomes hard to identify; split if needed.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Practice by producing these structures from prompts and transforming longer versions into concise ones.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 63,
+      "examples": [
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        },
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/024-integrate-gerunds-in-extended-formal-discourse-with-correct-",
+      "title": "Integrate gerunds in extended formal discourse with correct subject control",
+      "summary": "C1 performance objective: Integrate gerunds in formal writing with correct subject control.",
+      "explanation": "Meaning:\nGerunds are verb forms ending in -ing used as nouns. They can be integrated into sentences to add detail and form complex structures.\n\nHow to use:\n- Use gerunds when you want to describe actions that relate directly to the main subject of the sentence. For example, 'Having read the book, we decided to buy it.'\n- Ensure clear control: The subject of your main clause should be the controller of any gerund or participle used in the sentence.\n\nEdge cases:\n- Be cautious with long sentences that have many modifiers. Avoid making the noun hard to understand; break up if necessary.\n- Watch out for pronoun referents. Make sure each pronoun clearly refers back to its noun.",
+      "usage_notes": "Practice by producing sentences from prompts and transforming alternative versions while preserving meaning. Check accuracy, clarity, and formality level in your writing.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 64,
+      "examples": [
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        },
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/025-identify-and-repair-over-compressed-academic-sentences",
+      "title": "Identify and repair over-compressed academic sentences",
+      "summary": "C1 performance objective: Identify and repair over-compressed academic sentences",
+      "explanation": "Meaning:\nIdentify overly compressed sentences in academic writing, where important information might be lost due to lack of context.\n\nHow to use:\n- Check if the reader already knows the context. If yes, keep compression; if not, expand for clarity.\n- Ensure participles and gerunds have a clear controller (usually the subject of the main clause).\n- Avoid too many modifiers that make nouns hard to understand; split sentences if necessary.\n\nEdge cases:\n- Be cautious with pronouns like 'it' or 'they,' which might refer back ambiguously without proper context.",
+      "usage_notes": "Assessment idea: produce the target structure from a prompt and transform an alternative version into the target form. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 65,
+      "examples": [
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/026-maintain-clarity-while-increasing-syntactic-density",
+      "title": "Maintain clarity while increasing syntactic density",
+      "summary": "C1 performance objective: Maintain clarity while increasing syntactic density",
+      "explanation": "Meaning:\nMaintaining clear communication even when using more complex sentence structures.\nHow to use:\n- Compress information when the context is familiar, but expand for critical details.\n- Ensure participles and gerunds clearly reference their subjects or controllers.\n- Avoid overly long sentences with too many modifiers; split if necessary.\nEdge cases:\n- Be cautious of overloading one sentence, as two shorter ones might be clearer.",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 66,
+      "examples": [
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        },
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/d/027-adjust-sentence-length-strategically-for-rhetorical-pacing",
+      "title": "Adjust sentence length strategically for rhetorical pacing",
+      "summary": "C1 performance objective: Adjust sentence length strategically for rhetorical pacing",
+      "explanation": "Meaning:\nStrategically adjust sentence lengths to control the flow and emphasis of your writing.\n\nHow to use:\n- **Use compression**: When the reader is familiar with the context, make sentences shorter. For example, 'Comparing results, we found the method more effective.'\n- **Expand for precision**: Use longer sentences when clear details are necessary. Example: 'The analysis of data conducted last year showed an increase in achievement because...' This sentence explains why there was a rise.\n\nEdge cases:\n- Avoid overly long sentences with too many modifiers, as they can be confusing. For instance, instead of 'The student who had been studying hardest for the longest time performed better,' say, 'The student who studied the most improved.'\n- Be mindful of the context and audience to decide on appropriate sentence length.",
+      "usage_notes": "Practice by producing sentences from prompts and transforming longer ones into shorter, clearer forms. Ensure your writing is accurate, clear, and suitable for formal or informal settings as required.",
+      "section_slugs": [
+        "c1/density"
+      ],
+      "tag_names": [
+        "participles",
+        "gerunds",
+        "nominalization",
+        "syntax"
+      ],
+      "section_sort_order": 67,
+      "examples": [
+        {
+          "example_text": "Сравнив результаты, мы пришли к выводу, что метод эффективнее.",
+          "translation_text": "Having compared the results, we concluded that the method is more effective.",
+          "notes": ""
+        },
+        {
+          "example_text": "Проведённый в прошлом году анализ данных показал рост успеваемости.",
+          "translation_text": "The analysis of data conducted last year showed an increase in achievement.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы обсудили причины снижения мотивации, возникшего из-за изменений в расписании.",
+          "translation_text": "We discussed the reasons for the drop in motivation that arose due to schedule changes.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/028-infer-meaning-of-unfamiliar-derived-words-from-morphological",
+      "title": "Infer meaning of unfamiliar derived words from morphological structure",
+      "summary": "Infer meaning from word structure.",
+      "explanation": "Meaning:\nIdentify base words (root) and suffixes in unfamiliar derived words to understand their meanings.\nHow to use:\n- Look for common endings like -ие, -ция, -ость, -изм, -ировать. These often indicate the type of word or its meaning.\n- Think about what role the word plays: is it an action, a result, or something else?\n- In formal writing, aim for more abstract words; in casual speech, use simpler language.\nEdge cases:\nSometimes suffixes can have multiple meanings. Pay attention to context!",
+      "usage_notes": "Practice by identifying roots and prefixes in unfamiliar words. Use in both academic and informal contexts.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 78,
+      "examples": [
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/029-reformulate-a-sentence-using-a-different-derivational-form-o",
+      "title": "Reformulate a sentence using a different derivational form of the same root",
+      "summary": "C1 performance objective: Reformulate a sentence using a different derivational form of the same root",
+      "explanation": "Target behavior: Reformulate a sentence using a different derivational form of the same root.\n\n**Meaning:**\n- Identify the root word and common suffixes (e.g., -ние, -ция, -ость, -изм, -ировать) to understand the core meaning of the sentence.\n- Use these forms to create sentences with similar but varied meanings, ensuring the overall message remains consistent.\n\n**How to use:**\n- **Identify the root and suffixes:** Recognize the base word (root) and common derivational suffixes in Russian words. For example, in 'объяснение' (explanation), the root is 'ясно' (clear).\n- **Maintain semantic role consistency:** Ensure that when you change the form of a word, you keep its function or role within the sentence intact. For instance, if 'объяснение' means an action, use forms like 'объяснение' for the result and 'объяснять' for the process.\n- **Register appropriateness:** Choose more abstract derivations in formal contexts; opt for concrete words in semi-formal settings. For example, use 'объяснение' (explanation) over 'рассуждение' (argument) in academic writing.\n\n**Edge cases:**\n- Avoid overloading sentences with too many complex forms, as this can make the meaning less clear and harder to follow.",
+      "usage_notes": "Assessment idea: Ask the learner to produce the target structure from a prompt and transform an alternative version into the target form while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 79,
+      "examples": [
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/030-distinguish-between-near-synonymous-derivations-in-context",
+      "title": "Distinguish between near-synonymous derivations in context",
+      "summary": "C1 performance objective: Distinguish between near-synonymous derivations in context",
+      "explanation": "Target behavior: Distinguish between near-synonymous derivations in context.\n\nMeaning:\n- Identify root words and common suffixes like -ние, -ция, -ость, -изм, -ировать to understand the meaning of a word or phrase.\n- Pay attention to the semantic role (who does what, result, process) when reformulating sentences.\n\nHow to use:\n- Look for derivational morphemes and common suffixes. For instance, -ние often indicates an action or process, while -ция is used in more formal contexts to denote a concept or state.\n- Ensure the semantic role remains consistent. For example, if you are describing someone making something clear, keep this role intact during reformulation.\n- Use abstract derivations for academic writing and concrete wording for semi-formal speech.\n\nEdge cases:\n- Be cautious with pronouns; ensure they clearly refer to their antecedents.\n- Watch out for long sentences where case, number, or gender might be misaligned.\n- Avoid overloading a single sentence. Use two shorter sentences if needed.",
+      "usage_notes": "Assessment idea: Ask the learner to produce target structure from prompts and transform alternative versions while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 80,
+      "examples": [
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/031-select-register-appropriate-derivational-forms-in-formal-wri",
+      "title": "Select register-appropriate derivational forms in formal writing",
+      "summary": "C1 performance objective: Choose correct word forms for formal writing.",
+      "explanation": "Meaning:\n- Derivational morphology involves adding suffixes to roots to change a word’s meaning and function.\n- For example, ‘-ние’ (action), ‘-ция’ (process or result), ‘-ость’ (state or quality), ‘-изм’ (system or ideology), and ‘-ировать’ (causative verb) are common suffixes in Russian.\n\nHow to use:\n- Identify the root word: For instance, from 'процедура' (procedure) to '-ция' (procedural process).\n- Use abstract derivations for academic writing; for example, ‘компетентность’ (competence) instead of less formal ‘умение’ (ability).\n- Maintain semantic role consistency: Ensure the agent or process is clear in your reformulation.\n\nEdge cases:\n- Avoid overusing suffixes like ‘-ость’ and ‘-изм’, which can make writing too abstract.\n- Be cautious with pronouns; ensure they clearly refer to their antecedents.",
+      "usage_notes": "Practice by producing formal structures from prompts and transforming informal versions into more academic language. Ensure clarity, accuracy, and appropriate register.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 81,
+      "examples": [
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/032-maintain-lexical-cohesion-through-controlled-repetition-and-",
+      "title": "Maintain lexical cohesion through controlled repetition and substitution",
+      "summary": "C1 performance objective: Maintain lexical cohesion through controlled repetition and substitution",
+      "explanation": "Target behavior: Maintain lexical cohesion through controlled repetition and substitution.\n\nMeaning:\n- Lexical cohesion involves using related words to connect ideas within a text, ensuring clarity and coherence. Controlled repetition means using synonyms or similar phrases without overusing them. Substitution refers to replacing words with their equivalents to maintain the same meaning but vary the sentence structure.\n\nHow to use:\n- Identify the root word and common suffixes (e.g., -ние, -ция) to understand the word's core meaning.\n- When reformulating sentences, keep the semantic role consistent. For example, if a sentence talks about an action by a person, make sure the reformulated version still portrays that same agent performing the action.\n- In academic writing, prefer abstract derivations (e.g., analysis) to maintain formal tone; use more concrete words in semi-formal speech (e.g., discussion).\n\nEdge cases:\n- Be cautious of overloading one sentence with too much information. Break down complex ideas into simpler sentences if necessary.\n- Avoid losing track of referents, especially pronouns without clear nouns they replace.\n- Watch out for case/number/gender agreement in long sentences to maintain grammatical accuracy.",
+      "usage_notes": "Ask the learner to produce the target structure from a prompt and transform alternative versions into the target form. Ensure correct grammar, clarity of references, and appropriate register.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 82,
+      "examples": [
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/033-use-abstract-noun-constructions-appropriately-in-academic-di",
+      "title": "Use abstract noun constructions appropriately in academic discourse",
+      "summary": "Use abstract noun constructions appropriately.",
+      "explanation": "Target behavior: Use abstract noun constructions appropriately in academic discourse.\n\n**Meaning:**\nAbstract nouns, such as 'сопоставимость' (comparability) or 'тенденция' (tendency), are used to describe concepts that cannot be directly perceived. They help make your writing more formal and precise.\n\n**How to use:**\n- **Identify the root**: Recognize common suffixes like '-ние', '-ция', '-ость', '-изм', and '-ировать'. These indicate abstract meanings, e.g., 'сопоставлять' (to compare) becomes 'сопоставимость' (comparability).\n- **Consistency in semantic role**: Ensure that the action or state described by the noun is clear. For instance, in ‘тезис’ (thesis), the focus is on the idea, not on writing it down.\n- **Register control**: Use abstract nouns for academic writing and more concrete verbs for everyday speech.\n\n**Edge cases:**\nAvoid overloading sentences with too many abstract terms. A single well-chosen term often works better than multiple similar ones. Also, be cautious of losing clarity by being overly complex or abstract without necessary detail.",
+      "usage_notes": "Practice producing and transforming abstract noun constructions in academic texts for clearer and more formal language.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 83,
+      "examples": [
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        },
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/e/034-avoid-semantic-drift-when-using-extended-word-families",
+      "title": "Avoid semantic drift when using extended word families",
+      "summary": "C1 performance objective: Avoid semantic drift when using extended word families",
+      "explanation": "**Target behavior:** Avoid semantic drift when using extended word families.\n\n**How to do it**\n- Identify the root and common suffixes (‑ние, ‑ция, ‑ость, ‑изм, ‑ировать) to infer meaning.\n- When reformulating, keep the **semantic role** (agent/result/process) consistent.\n- Prefer more abstract derivations in academic style; prefer more verbal, concrete wording in semi-formal speech.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/derivation"
+      ],
+      "tag_names": [
+        "derivation",
+        "lexical-cohesion",
+        "register"
+      ],
+      "section_sort_order": 84,
+      "examples": [
+        {
+          "example_text": "Сопоставимость результатов обеспечивается стандартизацией процедуры.",
+          "translation_text": "Comparability of results is ensured by standardization of the procedure.",
+          "notes": ""
+        },
+        {
+          "example_text": "Он переформулировал объяснение, сделав его более убедительным.",
+          "translation_text": "He reformulated the explanation, making it more convincing.",
+          "notes": ""
+        },
+        {
+          "example_text": "Тенденция к упрощению терминологии наблюдается в популярных текстах.",
+          "translation_text": "A tendency toward simplifying terminology is observed in popular texts.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/f/035-sustain-passive-framing-across-a-full-paragraph-of-expositio",
+      "title": "Sustain passive framing across a full paragraph of exposition",
+      "summary": "C1 performance objective: Sustain passive framing across a full paragraph of exposition",
+      "explanation": "Target behavior: Sustain passive framing across a full paragraph of exposition.\n\nMeaning:\n- Passive voice is used when the focus is on the action or result rather than the doer.\n- Impersonal strategies help maintain consistency in the topic, avoiding repetitive mention of actors.\n\nHow to use:\n- Choose passive/impersonal for process/results that matter more than who performs them.\n- Use agent suppression if the actor is obvious, irrelevant, or intentionally backgrounded.\n- Repeat key nouns when shifting perspectives to keep coherence.\n\nEdge cases:\n- Be cautious not to overuse impersonal structures; they can make writing sound unnatural or vague.\n- Watch out for pronoun use that might confuse readers (e.g., avoid 'it' without a clear antecedent).\n\nCommon pitfalls:\n- Losing track of referents through unclear pronouns.\n- Breaking grammatical agreements in long sentences.\n- Overloading one sentence with too much information, making it hard to follow.",
+      "usage_notes": "Ask the learner to produce from prompts and transform alternatives while preserving meaning. Score for accuracy, clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/agency"
+      ],
+      "tag_names": [
+        "voice",
+        "impersonal",
+        "reference"
+      ],
+      "section_sort_order": 95,
+      "examples": [
+        {
+          "example_text": "Мы считаем это важным; однако в отчёте подчёркивается другое.",
+          "translation_text": "We consider this important; however, the report emphasizes something else.",
+          "notes": ""
+        },
+        {
+          "example_text": "Принято считать, что качество зависит от данных, но это не всегда так.",
+          "translation_text": "It is commonly believed that quality depends on data, but that’s not always so.",
+          "notes": ""
+        },
+        {
+          "example_text": "В исследовании было показано, что эффект сохраняется в течение месяца.",
+          "translation_text": "The study showed that the effect persists for a month.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/f/036-shift-from-passive-to-active-framing-to-change-discourse-foc",
+      "title": "Shift from passive to active framing to change discourse focus",
+      "summary": "C1 performance objective: Shift from passive to active framing to change discourse focus",
+      "explanation": "Target behavior:\nShift from passive to active framing to change discourse focus.\n\nMeaning:\n- Use passive voice when focusing on the process or result, not who performs it. For example, 'It is believed that the project was completed.' This emphasizes the completion rather than the doer.\n- Change to an active sentence when you want to highlight the actor. For instance, 'The company successfully finished the project.' Here, the emphasis shifts from the process of completion to the company doing it.\n\nHow to use:\n- Choose passive voice for impersonal statements or when the agent is irrelevant, such as in scientific or bureaucratic contexts: 'It was discovered that the treatment is effective.'\n- Use active voice when emphasizing the actor and making the subject more personal: 'The scientist discovered the new treatment.'\n- Keep key nouns consistent to avoid confusion: If you mention a project in both sentences, use its name each time. For example, 'The project was delayed, but it is back on track.' This helps maintain clarity.\n\nEdge cases:\n- Avoid using passive voice unnecessarily; sometimes active voice can be clearer and more direct.\n- Be cautious with long sentences that might break grammatical agreements or become confusing.",
+      "usage_notes": "Practice by rewriting passive sentences to active ones, focusing on the actor. Ensure referential clarity and maintain proper grammar and register.",
+      "section_slugs": [
+        "c1/agency"
+      ],
+      "tag_names": [
+        "voice",
+        "impersonal",
+        "reference"
+      ],
+      "section_sort_order": 96,
+      "examples": [
+        {
+          "example_text": "Принято считать, что качество зависит от данных, но это не всегда так.",
+          "translation_text": "It is commonly believed that quality depends on data, but that’s not always so.",
+          "notes": ""
+        },
+        {
+          "example_text": "В исследовании было показано, что эффект сохраняется в течение месяца.",
+          "translation_text": "The study showed that the effect persists for a month.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы считаем это важным; однако в отчёте подчёркивается другое.",
+          "translation_text": "We consider this important; however, the report emphasizes something else.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/f/037-suppress-agents-strategically-without-loss-of-clarity",
+      "title": "Suppress agents strategically without loss of clarity",
+      "summary": "C1 performance objective: Suppress agents strategically without loss of clarity",
+      "explanation": "Target behavior: Suppress agents strategically without loss of clarity.\n\nMeaning:\n- Passive or impersonal voice is used when the focus is on the process or result, not the actor.\n- This helps to avoid clutter and maintain a clear flow in writing.\n\nHow to use:\n- Choose passive/impersonal when the **process/result** matters more than the actor. For example: 'The experiment was conducted under controlled conditions' instead of 'We conducted the experiment under controlled conditions.'\n- Use agent suppression only if the agent is obvious, irrelevant, or intentionally backgrounded. For instance, in scientific writing where the focus is on findings rather than researchers.\n- When shifting perspective, keep the same referents active (repeat key nouns) to preserve coherence. Example: 'The data were analyzed using various methods. The results indicated a significant improvement.'\n\nEdge cases:\n- Avoid overusing passive voice, as it can make sentences cumbersome and unclear. Use active voice when the actor is important or necessary for clarity.\n- Be mindful of context; in some fields like literature or biographies, active voice may be more appropriate to maintain a personal tone.\n- In long complex sentences, ensure clarity by avoiding pronoun confusion and maintaining consistent subject-verb agreement.",
+      "usage_notes": "Assessment idea: Ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/agency"
+      ],
+      "tag_names": [
+        "voice",
+        "impersonal",
+        "reference"
+      ],
+      "section_sort_order": 97,
+      "examples": [
+        {
+          "example_text": "В исследовании было показано, что эффект сохраняется в течение месяца.",
+          "translation_text": "The study showed that the effect persists for a month.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы считаем это важным; однако в отчёте подчёркивается другое.",
+          "translation_text": "We consider this important; however, the report emphasizes something else.",
+          "notes": ""
+        },
+        {
+          "example_text": "Принято считать, что качество зависит от данных, но это не всегда так.",
+          "translation_text": "It is commonly believed that quality depends on data, but that’s not always so.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/f/038-combine-impersonal-constructions-with-modal-nuance",
+      "title": "Combine impersonal constructions with modal nuance",
+      "summary": "Combine impersonal constructions with modal nuance",
+      "explanation": "Meaning: Combine impersonal constructions, which focus on actions or states rather than specifying who performs them, with modal nuance to express likelihood, ability, permission, etc.\n\nHow to use:\n- Choose passive/impersonal when the process or result matters more than the actor. For example, in reporting research findings: 'The study showed that the effect persists for a month.'\n- Use agent suppression only if the agent is obvious, irrelevant, or intentionally backgrounded. Avoid using pronouns like 'he' or 'she' without context.\n- When shifting perspective, keep key nouns active to maintain coherence. For instance, in: 'It is commonly believed that quality depends on data, but that's not always so.'\n\nEdge cases:\n- Be careful not to confuse impersonal constructions with passive voice. They both use passive forms, but the focus differs.\n- Avoid overloading sentences; split complex ideas into simpler ones for clarity.",
+      "usage_notes": "Practice producing these structures from prompts and transforming alternative versions while maintaining meaning and grammatical accuracy.",
+      "section_slugs": [
+        "c1/agency"
+      ],
+      "tag_names": [
+        "voice",
+        "impersonal",
+        "reference"
+      ],
+      "section_sort_order": 98,
+      "examples": [
+        {
+          "example_text": "Мы считаем это важным; однако в отчёте подчёркивается другое.",
+          "translation_text": "We consider this important; however, the report emphasizes something else.",
+          "notes": ""
+        },
+        {
+          "example_text": "Принято считать, что качество зависит от данных, но это не всегда так.",
+          "translation_text": "It is commonly believed that quality depends on data, but that’s not always so.",
+          "notes": ""
+        },
+        {
+          "example_text": "В исследовании было показано, что эффект сохраняется в течение месяца.",
+          "translation_text": "The study showed that the effect persists for a month.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/f/039-alternate-between-personal-and-impersonal-stance-within-argu",
+      "title": "Alternate between personal and impersonal stance within argumentation",
+      "summary": "C1 performance objective: Alternate between personal and impersonal stance within argumentation",
+      "explanation": "Target behavior: Alternate between personal and impersonal stance within argumentation.\n\nMeaning:\n- Use passive voice (impersonal) when discussing general processes, results, or findings that don’t focus on a specific actor. This makes the statement more objective.\n- Use active voice (personal) to refer directly to actions or decisions made by individuals or groups.\n- When shifting perspectives, repeat key nouns to keep references clear and maintain coherence.\n\nHow to use:\n- Choose passive/impersonal when discussing general processes/results: 'The study showed that the effect persists for a month.'\n- Use active voice for personal actions or decisions: 'We consider this important; however, the report emphasizes something else.'\n- Keep references clear by repeating key nouns: 'The committee analyzed the data, and these findings were reported in the final summary.'\n\nEdge cases:\n- Avoid overloading one sentence with too much information. Use two sentences if necessary.\n- Be cautious about losing track of referents (e.g., pronouns without clear nouns).\n- Ensure agreement in case, number, and gender in long sentences.",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/agency"
+      ],
+      "tag_names": [
+        "voice",
+        "impersonal",
+        "reference"
+      ],
+      "section_sort_order": 99,
+      "examples": [
+        {
+          "example_text": "Принято считать, что качество зависит от данных, но это не всегда так.",
+          "translation_text": "It is commonly believed that quality depends on data, but that’s not always so.",
+          "notes": ""
+        },
+        {
+          "example_text": "В исследовании было показано, что эффект сохраняется в течение месяца.",
+          "translation_text": "The study showed that the effect persists for a month.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы считаем это важным; однако в отчёте подчёркивается другое.",
+          "translation_text": "We consider this important; however, the report emphasizes something else.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/f/040-maintain-coherence-while-shifting-perspective-mid-paragraph",
+      "title": "Maintain coherence while shifting perspective mid-paragraph",
+      "summary": "C1 performance objective: Maintain coherence while shifting perspective mid-paragraph",
+      "explanation": "**Target behavior:** Maintain coherence while shifting perspective mid-paragraph.\n\n**Meaning**: This grammar point involves keeping your writing clear and connected by changing focus from one subject to another without losing track of what you are talking about. It’s important for maintaining the flow and understanding of your text, especially in longer paragraphs.\n\n**How to use**:\n- Use passive voice or impersonal expressions when the process or result is more important than who performs it.\n- Suppress mentioning the agent only if it's obvious, irrelevant, or intentionally backgrounded.\n- When switching focus, keep repeating key nouns (reference tracking) to help maintain coherence and avoid confusion.\n\n**Edge cases**: Be careful not to overload a single sentence with too much information. Break up complex ideas into multiple sentences for better clarity.",
+      "usage_notes": "Assessment idea: ask the learner to transform an alternative version into the target form while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/agency"
+      ],
+      "tag_names": [
+        "voice",
+        "impersonal",
+        "reference"
+      ],
+      "section_sort_order": 100,
+      "examples": [
+        {
+          "example_text": "В исследовании было показано, что эффект сохраняется в течение месяца.",
+          "translation_text": "The study showed that the effect persists for a month.",
+          "notes": ""
+        },
+        {
+          "example_text": "Мы считаем это важным; однако в отчёте подчёркивается другое.",
+          "translation_text": "We consider this important; however, the report emphasizes something else.",
+          "notes": ""
+        },
+        {
+          "example_text": "Принято считать, что качество зависит от данных, но это не всегда так.",
+          "translation_text": "It is commonly believed that quality depends on data, but that’s not always so.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/g/041-embed-negation-inside-multiple-subordinate-clauses-correctly",
+      "title": "Embed negation inside multiple subordinate clauses correctly",
+      "summary": "C1 performance objective: Embed negation inside multiple subordinate clauses correctly",
+      "explanation": "Meaning:\n- Understand when to use negations in complex sentences.\nHow to do it:\n- Check **scope**: Determine which clause the negation targets and make this clear if needed. For example, \"Я не думаю, что он не понял, о чём речь\" means 'I don’t think that he didn’t understand what was said.'\n- Avoid accidental double negatives: Test by paraphrasing into an affirmative. For instance, avoid saying 'He is not not happy'—this should be 'He is happy'.\n- Use evaluative negation (далеко не, вовсе не) to mark **partial** or **mitigated** disagreement.\nEdge cases:\n- Be careful with pronouns in long sentences. For example, 'Это решение далеко не идеально, хотя и работает' means 'This solution is far from ideal even though it does work.'",
+      "usage_notes": "Practice by producing the target structure from a prompt and transforming alternative versions while preserving meaning.",
+      "section_slugs": [
+        "c1/negation-scope"
+      ],
+      "tag_names": [
+        "negation",
+        "syntax"
+      ],
+      "section_sort_order": 111,
+      "examples": [
+        {
+          "example_text": "Нельзя сказать, что результат вовсе не полезен.",
+          "translation_text": "You can’t say that the result is not useful at all.",
+          "notes": ""
+        },
+        {
+          "example_text": "Это решение далеко не идеально, хотя и работает.",
+          "translation_text": "This solution is far from ideal, although it works.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я не думаю, что он не понял, о чём речь.",
+          "translation_text": "I don’t think that he didn’t understand what it was about.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/g/042-maintain-consistent-negation-scope-across-layered-clauses",
+      "title": "Maintain consistent negation scope across layered clauses",
+      "summary": "C1 performance objective: Maintain consistent negation scope across layered clauses",
+      "explanation": "Maintain consistent negation scope across layered clauses.\n\nMeaning:\n- Understand which part of a complex sentence is being negated, whether it's the main clause or a subordinate clause.\n- Use words like 'далеко не' (far from) and 'вовсе не' (not at all) to emphasize partial disagreement.\n\nHow to use:\n- Check scope: Determine if the negation applies to the entire clause or just part of it. Make it explicit by using appropriate structures.\n- Avoid double negatives: Ensure that your sentence doesn’t reverse meaning due to accidental double negatives. Test for correctness by paraphrasing into an affirmative form.\n- Use evaluative negation: Employ phrases like 'далеко не' and 'вовсе не' when you want to express partial disagreement or mitigation of a statement.\n\nEdge cases:\n- Be cautious with pronouns; they can cause confusion if not clearly linked to their antecedents. Ensure clarity in your sentence structure.\n- Beware of complex sentences that might break grammatical agreements, especially in terms of case, number, and gender.\n- Try to avoid overly long sentences where two simpler sentences could convey the message more effectively.",
+      "usage_notes": "Assessment idea: ask the learner to produce the target structure from a prompt, and transform an alternative version into the target form while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/negation-scope"
+      ],
+      "tag_names": [
+        "negation",
+        "syntax"
+      ],
+      "section_sort_order": 112,
+      "examples": [
+        {
+          "example_text": "Это решение далеко не идеально, хотя и работает.",
+          "translation_text": "This solution is far from ideal, although it works.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я не думаю, что он не понял, о чём речь.",
+          "translation_text": "I don’t think that he didn’t understand what it was about.",
+          "notes": ""
+        },
+        {
+          "example_text": "Нельзя сказать, что результат вовсе не полезен.",
+          "translation_text": "You can’t say that the result is not useful at all.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/g/043-use-negation-to-imply-presupposed-alternatives",
+      "title": "Use negation to imply presupposed alternatives",
+      "summary": "Use negation to imply presupposed alternatives",
+      "explanation": "**Target behavior:** Use negation to imply presupposed alternatives.\n\n**How to do it**\n- Check **scope**: decide which clause the negation targets and make it explicit if needed.\n- Avoid accidental double negatives that reverse meaning; test by paraphrasing into an affirmative.\n- Use evaluative negation (далеко не, вовсе не) to mark **partial** or **mitigated** disagreement.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Ensure your meaning remains clear and considerate. Use this technique in formal or neutral contexts.",
+      "section_slugs": [
+        "c1/negation-scope"
+      ],
+      "tag_names": [
+        "negation",
+        "syntax"
+      ],
+      "section_sort_order": 113,
+      "examples": [
+        {
+          "example_text": "Я не думаю, что он не понял, о чём речь.",
+          "translation_text": "I don’t think that he didn’t understand what it was about.",
+          "notes": ""
+        },
+        {
+          "example_text": "Нельзя сказать, что результат вовсе не полезен.",
+          "translation_text": "You can’t say that the result is not useful at all.",
+          "notes": ""
+        },
+        {
+          "example_text": "Это решение далеко не идеально, хотя и работает.",
+          "translation_text": "This solution is far from ideal, although it works.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/g/044-reformulate-positive-evaluation-into-mitigated-or-contrastiv",
+      "title": "Reformulate positive evaluation into mitigated or contrastive negative form",
+      "summary": "C1 performance objective: Reformulate positive evaluation into mitigated or contrastive negative form",
+      "explanation": "Target behavior: Reformulate positive evaluation into mitigated or contrastive negative form.\n\nMeaning:\n- Use evaluative negation (далеко не, вовсе не) to show partial disagreement with a positive statement. This is called mitigated or contrastive negativity.\n\nHow to use:\n- Check **scope**: Determine which clause the negation targets and make it explicit if needed.\n- Avoid double negatives that reverse meaning; test by paraphrasing into an affirmative.\n- Use evaluative negation (далеко не, вовсе не) to mark partial or mitigated disagreement. For example: Нельзя сказать, что результат вовсе не полезен. (You can’t say that the result is not useful at all.)\n\nEdge cases:\n- Be careful with pronouns and clear nouns; avoid losing track of referents.\n- Use long sentences sparingly to avoid overloading your statement. Two simpler sentences might be clearer.",
+      "usage_notes": "Practice by producing target structures from prompts or transforming alternative versions into the target form while preserving meaning. Aim for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/negation-scope"
+      ],
+      "tag_names": [
+        "negation",
+        "syntax"
+      ],
+      "section_sort_order": 114,
+      "examples": [
+        {
+          "example_text": "Нельзя сказать, что результат вовсе не полезен.",
+          "translation_text": "You can’t say that the result is not useful at all.",
+          "notes": ""
+        },
+        {
+          "example_text": "Это решение далеко не идеально, хотя и работает.",
+          "translation_text": "This solution is far from ideal, although it works.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я не думаю, что он не понял, о чём речь.",
+          "translation_text": "I don’t think that he didn’t understand what it was about.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/g/045-avoid-double-scope-ambiguity-in-complex-negation",
+      "title": "Avoid double-scope ambiguity in complex negation",
+      "summary": "C1 performance objective: Avoid double-scope ambiguity in complex negation",
+      "explanation": "Target behavior: Avoid double-scope ambiguity in complex negation.\n\nMeaning:\n- Understand when a negation applies to one part of a sentence and avoid making it unclear by applying it to both parts, which can reverse the intended meaning.\n- Use evaluative negations (далеко не, вовсе не) to show that something is not entirely true but still has some value or relevance.\n\nHow to use:\n- **Check scope**: Decide which part of a complex sentence the negation affects. Make it clear by repeating necessary words if needed.\n- **Avoid double negatives**: Ensure your negations do not create contradictory meanings. Try paraphrasing into an affirmative form to check clarity.\n- **Use evaluative negation**: Mark partial or mitigated disagreement with phrases like ‘далеко не’ and ‘вовсе не’. These show that something is only partly true, but still relevant.\n\nEdge cases:\n- Be cautious with long sentences where multiple clauses are involved. Double-check to ensure each part of the sentence is correctly negated without causing ambiguity.\n- Avoid overloading one sentence when two would be clearer and more precise in expressing your point.",
+      "usage_notes": "Practice by producing complex negations from prompts and transforming alternative versions into target forms while preserving meaning. Ensure accuracy, clarity, and appropriate register.",
+      "section_slugs": [
+        "c1/negation-scope"
+      ],
+      "tag_names": [
+        "negation",
+        "syntax"
+      ],
+      "section_sort_order": 115,
+      "examples": [
+        {
+          "example_text": "Это решение далеко не идеально, хотя и работает.",
+          "translation_text": "This solution is far from ideal, although it works.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я не думаю, что он не понял, о чём речь.",
+          "translation_text": "I don’t think that he didn’t understand what it was about.",
+          "notes": ""
+        },
+        {
+          "example_text": "Нельзя сказать, что результат вовсе не полезен.",
+          "translation_text": "You can’t say that the result is not useful at all.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/h/046-integrate-concession-before-thesis-within-one-structured-par",
+      "title": "Integrate concession before thesis within one structured paragraph",
+      "summary": "C1 performance objective: Integrate concession before thesis within one structured paragraph",
+      "explanation": "**Target behavior:** Integrate concession before thesis within one structured paragraph.\n\n**How to do it**\n- Structure argument sentences: concession → reason → claim (or claim → reason → concession) depending on emphasis.\n- Embed stance markers (по‑моему, я считаю) in reporting frames to sound less blunt.\n- Mix sentence lengths: long sentences for layered logic, short ones for punchy conclusions.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/argumentation"
+      ],
+      "tag_names": [
+        "argumentation",
+        "syntax",
+        "information-structure"
+      ],
+      "section_sort_order": 126,
+      "examples": [
+        {
+          "example_text": "Хотя возражения понятны, я всё же считаю, что вывод обоснован.",
+          "translation_text": "Although the objections are understandable, I still think the conclusion is justified.",
+          "notes": ""
+        },
+        {
+          "example_text": "Поскольку данные неполные, следует, во‑первых, уточнить выборку, а во‑вторых, пересчитать метрики.",
+          "translation_text": "Since the data are incomplete, one should, first, уточнить the sample and, second, recompute the metrics.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я согласен, что проблема сложная, но именно поэтому нужно действовать осторожно.",
+          "translation_text": "I agree the problem is complex, but that’s exactly why we need to act carefully.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/h/047-combine-causal-and-concessive-clauses-in-a-single-argument-s",
+      "title": "Combine causal and concessive clauses in a single argument sentence",
+      "summary": "Combine causal and concessive clauses to strengthen arguments.",
+      "explanation": "Target behavior: Combine causal and concessive clauses in a single argument sentence.\n\nMeaning:\n- Causal clauses explain why something happens (because, since).\n- Concessive clauses acknowledge exceptions or counterarguments (although, though, despite).\n\nHow to use:\n- Start with a concession to address an opposing view: 'Although the objections are understandable,...'\n- Follow it with a reason that supports your claim: ', I still think the conclusion is justified.'\n- Use a causal clause at the beginning or middle of the sentence, e.g., 'Since the data are incomplete,...'\n\nEdge cases:\n- Avoid overly long sentences to maintain clarity.\n- Balance between giving reasons and concessions without overwhelming the reader.",
+      "usage_notes": "Practice by combining clauses in your arguments. Use shorter sentences for emphasis.",
+      "section_slugs": [
+        "c1/argumentation"
+      ],
+      "tag_names": [
+        "argumentation",
+        "syntax",
+        "information-structure"
+      ],
+      "section_sort_order": 127,
+      "examples": [
+        {
+          "example_text": "Поскольку данные неполные, следует, во‑первых, уточнить выборку, а во‑вторых, пересчитать метрики.",
+          "translation_text": "Since the data are incomplete, one should, first, уточнить the sample and, second, recompute the metrics.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я согласен, что проблема сложная, но именно поэтому нужно действовать осторожно.",
+          "translation_text": "I agree the problem is complex, but that’s exactly why we need to act carefully.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя возражения понятны, я всё же считаю, что вывод обоснован.",
+          "translation_text": "Although the objections are understandable, I still think the conclusion is justified.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/h/048-embed-stance-markers-within-reporting-structures-naturally",
+      "title": "Embed stance markers within reporting structures naturally",
+      "summary": "C1 performance objective: Embed stance markers within reporting structures naturally",
+      "explanation": "Target behavior: Embed stance markers within reporting structures naturally.\n\nMeaning:\n- Use words like 'по-моему' or 'я считаю' to express your opinion smoothly.\n- This makes your argument sound less direct and more convincing.\n\nHow to use:\n- Start with a concession (agreeing with part of the argument), then introduce a reason, followed by your claim. For example: 'Although the data are incomplete, one should first...'\n- Alternatively, begin with your claim and follow with reasons and concessions. Example: 'I think we need to...\n  but that's because...' \n\n- Mix sentence lengths for clarity and impact. Use long sentences when you want to build an argument gradually, and short ones for strong conclusions.\n\nEdge cases:\n- Avoid overloading a single sentence with too much information; two shorter sentences may be clearer.",
+      "usage_notes": "Practice embedding your opinions naturally while maintaining grammatical accuracy and clear meaning. Be mindful of the register appropriate for your audience.",
+      "section_slugs": [
+        "c1/argumentation"
+      ],
+      "tag_names": [
+        "argumentation",
+        "syntax",
+        "information-structure"
+      ],
+      "section_sort_order": 128,
+      "examples": [
+        {
+          "example_text": "Я согласен, что проблема сложная, но именно поэтому нужно действовать осторожно.",
+          "translation_text": "I agree the problem is complex, but that’s exactly why we need to act carefully.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя возражения понятны, я всё же считаю, что вывод обоснован.",
+          "translation_text": "Although the objections are understandable, I still think the conclusion is justified.",
+          "notes": ""
+        },
+        {
+          "example_text": "Поскольку данные неполные, следует, во‑первых, уточнить выборку, а во‑вторых, пересчитать метрики.",
+          "translation_text": "Since the data are incomplete, one should, first, уточнить the sample and, second, recompute the metrics.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/h/049-sustain-cohesive-progression-across-a-200-word-argument",
+      "title": "Sustain cohesive progression across a 200+ word argument",
+      "summary": "C1 performance objective: Sustain cohesive progression across a 200+ word argument",
+      "explanation": "Target behavior: Sustain cohesive progression across a 200+ word argument.\n\nMeaning:\n- This means you need to construct an argument that flows smoothly and logically, maintaining clarity in your message throughout the entire argument. You should not lose track of your main points or introduce irrelevant information.\n\nHow to do it:\n- **Structure Argument Sentences:** Use a concession → reason → claim pattern (or vice versa) depending on the emphasis you want to place. For instance, if conceding a point is necessary, start with 'Although...'; then provide reasons ('reason' sentences); finally, make your claim or conclusion.\n- **Embed Stance Markers:** Use phrases like 'по-моему,' 'я считаю,' or 'как мне кажется' to soften your statements and avoid sounding too assertive. This makes the argument more persuasive by adding a personal touch.\n- **Mix Sentence Lengths:** Longer sentences can handle complex ideas, while shorter ones can emphasize key points or punchy conclusions.\n\nEdge Cases:\n- Be cautious with long sentences that might become confusing due to overloading. Break them into two if necessary for better clarity and readability.\n- Avoid pronoun ambiguity by using clear nouns when referring back to ideas already discussed in the argument.\n- Ensure agreement in case, number, and gender of words throughout your argument to maintain grammatical accuracy.",
+      "usage_notes": "Assessment idea: Ask the learner to produce the target structure from a prompt and transform an alternative version into the target form while preserving meaning. Score for grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/argumentation"
+      ],
+      "tag_names": [
+        "argumentation",
+        "syntax",
+        "information-structure"
+      ],
+      "section_sort_order": 129,
+      "examples": [
+        {
+          "example_text": "Хотя возражения понятны, я всё же считаю, что вывод обоснован.",
+          "translation_text": "Although the objections are understandable, I still think the conclusion is justified.",
+          "notes": ""
+        },
+        {
+          "example_text": "Поскольку данные неполные, следует, во‑первых, уточнить выборку, а во‑вторых, пересчитать метрики.",
+          "translation_text": "Since the data are incomplete, one should, first, уточнить the sample and, second, recompute the metrics.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я согласен, что проблема сложная, но именно поэтому нужно действовать осторожно.",
+          "translation_text": "I agree the problem is complex, but that’s exactly why we need to act carefully.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/h/050-use-syntactic-variation-short-vs-long-sentences-to-manage-em",
+      "title": "Use syntactic variation (short vs long sentences) to manage emphasis",
+      "summary": "C1 performance objective: Use syntactic variation (short vs long sentences) to manage emphasis",
+      "explanation": "Target behavior: Use syntactic variation (short vs long sentences) to manage emphasis.\n\nMeaning:\n- Short sentences are direct and impactful, often used for conclusions or key points.\n- Long sentences can be complex but allow deeper explanation with more detail.\n\nHow to use:\n- **Structure argument sentences**: Start with a concession followed by reasons, then state your claim (or start with the claim, follow with reasons, and end with a concession).\n- **Embed stance markers** like ‘по-моему’ or ‘я считаю’ in reporting frames to soften statements.\n- **Mix sentence lengths**: Use long sentences for detailed reasoning and short ones for strong conclusions.\n\nEdge cases:\n- Avoid overloading one sentence, as it can become unclear. Break complex ideas into simpler sentences if needed.",
+      "usage_notes": "Practice producing the target structure from prompts and transforming alternative versions to ensure accuracy and clarity. Use this skill in formal and professional contexts where precise argumentation is required.",
+      "section_slugs": [
+        "c1/argumentation"
+      ],
+      "tag_names": [
+        "argumentation",
+        "syntax",
+        "information-structure"
+      ],
+      "section_sort_order": 130,
+      "examples": [
+        {
+          "example_text": "Поскольку данные неполные, следует, во‑первых, уточнить выборку, а во‑вторых, пересчитать метрики.",
+          "translation_text": "Since the data are incomplete, one should, first, уточнить the sample and, second, recompute the metrics.",
+          "notes": ""
+        },
+        {
+          "example_text": "Я согласен, что проблема сложная, но именно поэтому нужно действовать осторожно.",
+          "translation_text": "I agree the problem is complex, but that’s exactly why we need to act carefully.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя возражения понятны, я всё же считаю, что вывод обоснован.",
+          "translation_text": "Although the objections are understandable, I still think the conclusion is justified.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/h/051-layer-multi-step-causal-reasoning-grammatically",
+      "title": "Layer multi-step causal reasoning grammatically",
+      "summary": "C1 performance objective: Layer multi-step causal reasoning grammatically",
+      "explanation": "Target behavior: Layer multi-step causal reasoning grammatically.\n\nMeaning:\n- Present complex ideas by breaking them down into smaller parts, such as concession and reason leading to a claim.\n- Use this structure to build logical arguments with multiple steps.\n\nHow to use:\n- Start with a concession or an opposing view (e.g., 'Although...'), followed by the main argument (reason).\n- Conclude with your own stance or claim (e.g., 'I think...').\n- Alternatively, start with your claim and follow it with reasons.\n- Use linking words like 'but,' 'however,' and 'therefore' to connect ideas smoothly.\n\nEdge cases:\n- Avoid overloading one sentence; use shorter sentences for punchy conclusions.\n- Be mindful of pronoun usage (e.g., ensure clear referents).\n- Maintain proper case, number, and gender agreement in long sentences.",
+      "usage_notes": "Practice by transforming simple statements into layered arguments. Ensure clarity and grammatical accuracy.",
+      "section_slugs": [
+        "c1/argumentation"
+      ],
+      "tag_names": [
+        "argumentation",
+        "syntax",
+        "information-structure"
+      ],
+      "section_sort_order": 131,
+      "examples": [
+        {
+          "example_text": "Я согласен, что проблема сложная, но именно поэтому нужно действовать осторожно.",
+          "translation_text": "I agree the problem is complex, but that’s exactly why we need to act carefully.",
+          "notes": ""
+        },
+        {
+          "example_text": "Хотя возражения понятны, я всё же считаю, что вывод обоснован.",
+          "translation_text": "Although the objections are understandable, I still think the conclusion is justified.",
+          "notes": ""
+        },
+        {
+          "example_text": "Поскольку данные неполные, следует, во‑первых, уточнить выборку, а во‑вторых, пересчитать метрики.",
+          "translation_text": "Since the data are incomplete, one should, first, уточнить the sample and, second, recompute the metrics.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/052-maintain-academic-register-across-extended-discourse",
+      "title": "Maintain academic register across extended discourse",
+      "summary": "C1 performance objective: Maintain academic register across extended discourse",
+      "explanation": "**Target behavior:** Maintain academic register across extended discourse.\n\n**How to do it**\n- Match register to audience: bureaucratic texts favor nominalizations; analytical texts favor explicit causal logic.\n- Reduce conversational markers (ну, типа, как бы) and replace with connectors (однако, таким образом).\n- Use formal prepositions (ввиду, вследствие, согласно) with correct case government.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 142,
+      "examples": [
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/053-shift-from-academic-to-semi-formal-tone-appropriately",
+      "title": "Shift from academic to semi-formal tone appropriately",
+      "summary": "Shift between academic and semi-formal tones appropriately",
+      "explanation": "Target behavior: Shift from academic to semi-formal tone appropriately.\n\n### Meaning\nAcademic writing is formal, detailed, and precise. Semi-formal writing is less strict but still maintains a professional tone, suitable for workplace or business contexts.\n\n### How to use\n- **Match register to audience:** In bureaucratic texts, prefer nominalizations (using nouns instead of verbs). In analytical texts, favor explicit causal logic by explaining cause and effect clearly.\n- **Reduce conversational markers:** Avoid casual words like 'ну', 'типа', or 'как бы'. Replace them with formal connectors such as 'однако' (however) and 'таким образом' (thus).\n- **Use formal prepositions correctly:** Use formal prepositions like 'ввиду' (due to), 'вследствие' (because of), and 'согласно' (according to). Ensure correct case government with these.\n\n### Edge cases\nBe cautious with overloading sentences. Two shorter, clearer sentences might be better than one overly complex one.",
+      "usage_notes": "Practice transforming casual language into more formal tone while maintaining clarity and accuracy.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 143,
+      "examples": [
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        },
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/054-adjust-politeness-gradient-grammatically-in-professional-con",
+      "title": "Adjust politeness gradient grammatically in professional contexts",
+      "summary": "C1 performance objective: Adjust politeness gradient grammatically in professional contexts",
+      "explanation": "Target behavior: Adjust politeness gradient grammatically in professional contexts.\n\nMeaning:\n- In formal/semi-formal contexts, use language that is precise and clear to ensure professionalism. Avoid overly casual or informal expressions.\n\nHow to do it:\n- Match register to audience: Use nominalizations for bureaucratic texts (e.g., 'инициативы' instead of 'направления'), and explicit causal logic for analytical texts (e.g., 'таким образом', 'в результате').\n- Reduce conversational markers like 'ну', 'типа', 'как бы'. Replace them with connectors such as 'однако', 'следовательно', or 'поэтому' to maintain a professional tone.\n- Use formal prepositions like 'ввиду', 'вследствие', and 'согласно' correctly, ensuring proper case government.\n\nEdge cases:\n- Be mindful of referents in long sentences (avoid pronouns without clear antecedents).\n- Ensure correct case/number/gender agreement to maintain grammatical accuracy.\n- Avoid overloading one sentence; split it into two if necessary for clarity.",
+      "usage_notes": "Transform informal expressions into formal ones while preserving the original meaning. Check register appropriateness and referential clarity in your writing.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 144,
+      "examples": [
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        },
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/055-calibrate-clause-complexity-for-audience-expectations",
+      "title": "Calibrate clause complexity for audience expectations",
+      "summary": "Calibrate clause complexity for audience expectations",
+      "explanation": "Target behavior: Calibrate clause complexity for audience expectations.\n\nMeaning:\n- Adapt your language to match the level of formality and complexity expected by your audience.\n- Bureaucratic texts use nominalizations (e.g., \"the implementation of measures\"). Analytical texts favor explicit causal logic (e.g., \"because of the constraints\").\n\nHow to use:\n- Match register: Use formal prepositions like 'ввиду' and 'согласно'. Replace informal markers (ну, типа) with connectors ('однако', 'таким образом').\n- Keep clauses clear: Avoid overloading one sentence. Break down complex ideas into simpler sentences if necessary.\n\nEdge cases:\n- Be cautious not to lose referents in your writing. Ensure pronouns clearly refer back to nouns.\n- Watch for grammatical agreement issues, especially in long sentences. Correct case and number government errors.",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 145,
+      "examples": [
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/056-maintain-stylistic-consistency-under-syntactic-complexity",
+      "title": "Maintain stylistic consistency under syntactic complexity",
+      "summary": "Maintain stylistic consistency under syntactic complexity",
+      "explanation": "Target behavior: Maintain stylistic consistency under syntactic complexity.\n\nMeaning:\n- Ensure your writing sounds consistent and formal, even when sentences are complex.\n- Use appropriate vocabulary and sentence structures to match the context.\n\nHow to do it:\n- Match register to audience: Use nominalizations for bureaucratic texts; explicit causal logic for analytical texts.\n- Reduce conversational markers (ну, типа, как бы) and replace with connectors (однако, таким образом).\n- Use formal prepositions (ввиду, вследствие, согласно) correctly with case government.\n\nEdge cases:\n- Be careful not to overcomplicate sentences; two simpler sentences can often be clearer than one overly complex one.\n- Avoid losing track of referents by ensuring pronouns have clear antecedents.\n- Watch for case/number/gender agreement in long sentences.",
+      "usage_notes": "Practice producing target structures from prompts and transforming alternative versions while preserving meaning. Ensure grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 146,
+      "examples": [
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        },
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/057-avoid-conversational-leakage-in-formal-writing",
+      "title": "Avoid conversational leakage in formal writing",
+      "summary": "C1 performance objective: Avoid conversational leakage in formal writing",
+      "explanation": "**Target behavior:** Avoid conversational leakage in formal writing.\n\n**How to do it**\n- Match register to audience: bureaucratic texts favor nominalizations; analytical texts favor explicit causal logic.\n- Reduce conversational markers (ну, типа, как бы) and replace with connectors (однако, таким образом).\n- Use formal prepositions (ввиду, вследствие, согласно) with correct case government.\n\n**Common pitfalls**\n- Losing track of referents (pronouns without clear nouns)\n- Breaking case/number/gender agreement in long sentences\n- Overloading one sentence when two would be clearer\n",
+      "usage_notes": "Assessment idea: ask the learner to (a) produce the target structure from a prompt, and (b) transform an alternative version into the target form while preserving meaning. Score for: grammatical accuracy, referential clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 147,
+      "examples": [
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        },
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "slug": "c1/i/058-modify-grammar-choices-to-suit-bureaucratic-vs-analytical-st",
+      "title": "Modify grammar choices to suit bureaucratic vs analytical style",
+      "summary": "C1 performance objective: Modify grammar choices to suit bureaucratic vs analytical style",
+      "explanation": "Target behavior: Modify grammar choices to suit bureaucratic vs analytical style.\n\n**Meaning:**\n- Bureaucratic style uses formal language and nominalizations (noun forms) to sound official. Analytical style prefers explicit causal logic and direct sentences to explain reasons clearly.\n\n**How to use:**\n- Match register to audience: Use nominalizations for bureaucratic texts, such as 'данные источники' instead of 'источники данных', which are more formal and precise. For analytical texts, ensure clarity through explicit causation like 'the delay was due to time constraints'.\n- Reduce conversational markers (ну, типа, как бы) and replace with connectors (однако, таким образом). Examples include changing 'ну' to 'ввиду' or 'согласно'. Use formal prepositions correctly: 'ввиду ограничений времени' instead of 'потому что времени не хватало'.\n\n**Edge cases:**\n- Be cautious with pronouns, ensuring they have clear antecedents. Avoid overly long sentences that can confuse the reader.\n- Avoid overloading one sentence; split into two for better clarity and readability.",
+      "usage_notes": "Practice by producing formal texts from prompts and transforming conversational ones to be more official while preserving meaning. Check grammar, clarity, and register appropriateness.",
+      "section_slugs": [
+        "c1/register"
+      ],
+      "tag_names": [
+        "register",
+        "information-structure"
+      ],
+      "section_sort_order": 148,
+      "examples": [
+        {
+          "example_text": "В отчёте, согласно требованиям, указаны источники данных.",
+          "translation_text": "In the report, according to the requirements, the data sources are listed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Ввиду ограничений времени обсуждение перенесли.",
+          "translation_text": "In view of time constraints, the discussion was postponed.",
+          "notes": ""
+        },
+        {
+          "example_text": "Стиль письма следует сделать менее разговорным.",
+          "translation_text": "The writing style should be made less conversational.",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

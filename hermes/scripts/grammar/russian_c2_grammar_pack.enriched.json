@@ -1,0 +1,1383 @@
+{
+  "schema_version": "hermes-grammar-pack.v1",
+  "language": {
+    "id": 1,
+    "code": "ru",
+    "name": "Russian"
+  },
+  "level": "C2",
+  "generated_at": "2026-02-18T21:48:54+00:00",
+  "functional_discourse_goals": [
+    "Sustain fluent, precise discourse across complex topics",
+    "Argue and persuade with stylistic control (formal ↔ informal ↔ literary ↔ bureaucratic)",
+    "Manage ambiguity, emphasis, and stance for rhetorical effect (measurably)",
+    "Maintain cohesion and reference across multi-paragraph texts",
+    "Interpret and produce novel lexico-grammatical formations appropriately"
+  ],
+  "sections": [
+    {
+      "slug": "c2-dynamic-clause-manipulation",
+      "title": "Dynamic Clause Manipulation",
+      "description": "Real-time restructuring, ellipsis, substitution, and flexible clause packaging in extended discourse.",
+      "parent_slug": null,
+      "sort_order": 10
+    },
+    {
+      "slug": "c2-rhetorical-information-structuring",
+      "title": "Rhetorical Information Structuring",
+      "description": "Grammar-driven emphasis, ambiguity management, irony/contrast framing, and presupposition control.",
+      "parent_slug": null,
+      "sort_order": 20
+    },
+    {
+      "slug": "c2-extreme-aspect-modality-precision",
+      "title": "Extreme Precision in Aspect and Modality",
+      "description": "Micro-nuance choices in aspect, modality, and counterfactual framing within dense arguments.",
+      "parent_slug": null,
+      "sort_order": 30
+    },
+    {
+      "slug": "c2-stylistic-agility",
+      "title": "Stylistic Agility and Genre Imitation",
+      "description": "Switching and imitating registers/genres with controlled word order, punctuation, and density.",
+      "parent_slug": null,
+      "sort_order": 40
+    },
+    {
+      "slug": "c2-lexico-grammatical-creativity",
+      "title": "Lexico-Grammatical Creativity",
+      "description": "Productive word-formation and prefixed-verb inference with accuracy and minimal semantic drift.",
+      "parent_slug": null,
+      "sort_order": 50
+    },
+    {
+      "slug": "c2-long-text-cohesion",
+      "title": "Advanced Cohesion Across Long Text",
+      "description": "Multi-paragraph coherence, reference tracking, redundancy control, and thematic progression.",
+      "parent_slug": null,
+      "sort_order": 60
+    }
+  ],
+  "tags": [
+    {
+      "name": "c2",
+      "description": "CEFR C2 scope"
+    },
+    {
+      "name": "behavior",
+      "description": "Observable, assessable performance target"
+    },
+    {
+      "name": "syntax",
+      "description": "Clause structure, embedding, packaging"
+    },
+    {
+      "name": "discourse",
+      "description": "Cohesion, information structure, argumentation"
+    },
+    {
+      "name": "aspect-modality",
+      "description": "Aspect and modality interaction"
+    },
+    {
+      "name": "register",
+      "description": "Genre and register control"
+    },
+    {
+      "name": "word-formation",
+      "description": "Derivational and prefixed-verb productivity"
+    },
+    {
+      "name": "editing",
+      "description": "Self-repair and reformulation skills"
+    }
+  ],
+  "grammar_points": [
+    {
+      "slug": "c2-001",
+      "title": "Restructure a sentence mid-stream without losing grammar",
+      "summary": "Self-repair: start one structure, then reformulate into a clearer/stronger one while keeping agreement and case.",
+      "explanation": "Pattern:\n- Start with an initial sentence structure.\n- Pause and use repair markers like ‘то есть’, ‘вернее’, or ‘точнее’ to signal that you are going to rephrase the idea more precisely.\n- Restart with a new, clearer structure without breaking grammatical rules such as case agreement and reference.\n\nMeaning:\nThis technique helps improve clarity in speech or writing by allowing you to correct yourself mid-sentence. It’s useful when you realize your initial phrasing was imprecise or could be stated better.\n\nHow to use:\n- Begin with a simple statement: ‘Я хотел…’ (I wanted…)\n- Pause and introduce a repair marker: ‘то есть, я собирался сказать,…’ (that is, I was going to say,…)\n- Continue with the rephrased idea in a clearer way.\n\nEdge cases:\n- Be cautious not to leave dangling case frames. For example, avoid starting with ‘о чём’ and finishing with an accusative verb.\n- Use repair markers like ‘точнее говоря’ for more precise statements or nuances.\n- Practice this technique in real-time speaking or writing exercises.",
+      "usage_notes": "Common repair markers include ‘то есть’, ‘вернее’, and ‘точнее’. Ensure that the final sentence is grammatically correct and more precise than the initial attempt.",
+      "section_slugs": [
+        "c2-dynamic-clause-manipulation"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "editing",
+        "syntax"
+      ],
+      "section_sort_order": {
+        "c2-dynamic-clause-manipulation": 10
+      },
+      "examples": [
+        {
+          "example_text": "Я хотел… то есть, я собирался сказать, что это решение было ошибкой.",
+          "translation_text": "I wanted… that is, I was going to say that this decision was a mistake.",
+          "notes": "Self-repair with то есть; rebuild into reported clause."
+        },
+        {
+          "example_text": "Мы обсуждали проект — вернее, не сам проект, а сроки его запуска.",
+          "translation_text": "We were discussing the project—rather, not the project itself but the timeline for its launch.",
+          "notes": "Repair marker вернее; contrastive уточнение."
+        },
+        {
+          "example_text": "Он согласился… точнее, сделал вид, что согласился.",
+          "translation_text": "He agreed… more precisely, he pretended that he agreed.",
+          "notes": "Repair marker точнее; aspect/stance nuance."
+        }
+      ]
+    },
+    {
+      "slug": "c2-002",
+      "title": "Switch between parataxis and hypotaxis to control style",
+      "summary": "Repackage information by splitting into coordinated clauses or merging into a subordinate structure.",
+      "explanation": "Meaning: Express the same idea using shorter, independent clauses (parataxis) or dependent clauses with conjunctions like потому что, хотя, когда (hypotaxis).\n\nHow to use:\n- Parataxis uses short, simple sentences connected by coordinating conjunctions like и, но, а, однако. This style is more conversational.\n- Hypotaxis uses subordinate clauses introduced by subordinating conjunctions such as потому что (because), хотя (although), когда (when). This structure gives a more formal or written tone.\n\nEdge cases:\n- Be careful not to overuse complex structures, which can make sentences confusing. A1 learners should focus on basic coordination and simple subordination.\n- Avoid using advanced grammar structures that are typically learned in later levels.",
+      "usage_notes": "Parataxis sounds more conversational; hypotaxis is typically more formal or written. Watch commas: subordinate clauses require comma separation in standard writing.",
+      "section_slugs": [
+        "c2-dynamic-clause-manipulation"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "syntax",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-dynamic-clause-manipulation": 20
+      },
+      "examples": [
+        {
+          "example_text": "Он не пришёл, потому что был болен. → Он был болен, и поэтому не пришёл.",
+          "translation_text": "He didn’t come because he was ill. → He was ill, so he didn’t come.",
+          "notes": "Subordination ↔ coordination with поэтому."
+        },
+        {
+          "example_text": "Хотя было поздно, мы продолжили. → Было поздно, но мы продолжили.",
+          "translation_text": "Although it was late, we continued. → It was late, but we continued.",
+          "notes": "Concessive subordinator ↔ но."
+        },
+        {
+          "example_text": "Когда я дочитал отчёт, я позвонил. → Я дочитал отчёт и позвонил.",
+          "translation_text": "When I finished reading the report, I called. → I finished reading the report and called.",
+          "notes": "Temporal clause ↔ sequencing coordination."
+        }
+      ]
+    },
+    {
+      "slug": "c2-003",
+      "title": "Use ellipsis with shared predicate across coordinated clauses",
+      "summary": "Omit repeated words when the verb or complement is recoverable from context.",
+      "explanation": "**What it is**: leaving out a repeated element (often the verb) in the second clause when it is clearly understood.\n\n**Pattern:** \n- **Я — в офис, а он — домой.** (elliptical movement/verb implied)\n- **Одни поддержали, другие — нет.** (predicate implied)\n\n**Meaning:** This technique helps make your speech or writing more concise and natural by omitting repeated elements that can be easily inferred from the context.\n\n**How to use:**\n- Identify clauses with a shared verb or complement in both parts of the sentence.\n- Remove the repeated element if it’s recoverable from context, ensuring clarity isn’t compromised.\n- Use dashes (—) as punctuation marks to signal the omission.\n\n**Edge cases:**\n  - Don't omit elements if doing so would create ambiguity.\n  - In technical or formal writing, be cautious and avoid omissions that might confuse readers.\n\n**Common mistakes:** \n- Omitting too much information, making sentences unclear.\n- Using punctuation incorrectly, leading to confusion",
+      "usage_notes": "Use dashes (—) as punctuation marks for signaling ellipsis. Avoid omitting elements if it forces the reader or listener to guess the verb, especially in dense technical text.",
+      "section_slugs": [
+        "c2-dynamic-clause-manipulation"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "syntax",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-dynamic-clause-manipulation": 30
+      },
+      "examples": [
+        {
+          "example_text": "Я — в архив, а ты — в библиотеку.",
+          "translation_text": "I’m to the archive, and you’re to the library.",
+          "notes": "Elliptical motion; dash marks omitted verb (иду/поеду)."
+        },
+        {
+          "example_text": "Одни считают это успехом, другие — провалом.",
+          "translation_text": "Some consider it a success, others a failure.",
+          "notes": "Ellipsis of считают/считают это."
+        },
+        {
+          "example_text": "Он обещал помочь, а потом — тишина.",
+          "translation_text": "He promised to help, and then—silence.",
+          "notes": "Elliptical predicate; rhetorical effect with dash."
+        }
+      ]
+    },
+    {
+      "slug": "c2-004",
+      "title": "Use substitution to avoid repetition in extended discourse",
+      "summary": "Replace repeated nouns/clauses with pro-forms (это, такой, подобный, то, такой-то) while preserving reference.",
+      "explanation": "Explanation of using substitution to avoid repetition in extended discourse.\n\nMeaning: When you repeat a noun or clause multiple times, it can make your text less clear and harder to read. Using pro-forms (words like это, такой, подобный) helps maintain clarity by reducing redundancy.\n\nHow to use:\n- Use **это** or **то** when referring to whole propositions or actions.\n- Use **такой**, **подобный**, or **аналогичный** when referring to nouns (objects).\n- You can also say **делать это**, **так поступать**, or **такое бывает** for actions or events, though these are less common at A1 level.\n\nEdge cases:\n- Be careful with **это**; it might point to the nearest clause instead of your intended one. \n- In long sentences, repeat key nouns once before substituting them again to ensure clear reference.",
+      "usage_notes": "Beware of ambiguous это (it can refer to the nearest clause). Repeat key nouns in long sentences to reset reference.",
+      "section_slugs": [
+        "c2-dynamic-clause-manipulation"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-dynamic-clause-manipulation": 40
+      },
+      "examples": [
+        {
+          "example_text": "Он предложил компромисс. Я поддержал **это** сразу.",
+          "translation_text": "He proposed a compromise. I supported it immediately.",
+          "notes": "Это substitutes for whole proposal."
+        },
+        {
+          "example_text": "Мы обсуждали две стратегии. **Такая** модель подходит для старта, а вторая — для масштабирования.",
+          "translation_text": "We discussed two strategies. Such a model fits for the start, and the second for scaling.",
+          "notes": "Такая points back to the named strategy; contrast maintained."
+        },
+        {
+          "example_text": "Она допустила ошибку. **Подобные** случаи уже были раньше.",
+          "translation_text": "She made a mistake. Similar cases have happened before.",
+          "notes": "Подобные + noun implies repeated situation type."
+        }
+      ]
+    },
+    {
+      "slug": "c2-005",
+      "title": "Recast relative clauses into participial modifiers and back",
+      "summary": "Transform between finite relative clauses and participial phrases to match genre and rhythm.",
+      "explanation": "**Two equivalent ways** to modify a noun:\n\n1) **Finite clause**: *книга, которую я купил*\n\n2) **Participle**: *книга, купленная мной* / *книга, купленная вчера*\n\n\n\n**Assessable outcome**: you can perform both transformations while keeping case, voice, and meaning.",
+      "usage_notes": "Participles can sound bookish; use them strategically, not everywhere.\n\nCheck agreement: participles must match the noun in gender/number/case.",
+      "section_slugs": [
+        "c2-dynamic-clause-manipulation"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "syntax",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-dynamic-clause-manipulation": 50
+      },
+      "examples": [
+        {
+          "example_text": "Доклад, который подготовили вчера, уже опубликован. → Доклад, **подготовленный** вчера, уже опубликован.",
+          "translation_text": "The report that was prepared yesterday has already been published. → The report prepared yesterday has already been published.",
+          "notes": "Finite relative → passive past participle."
+        },
+        {
+          "example_text": "Студенты, которые спорят о методе, не согласны. → Студенты, **спорящие** о методе, не согласны.",
+          "translation_text": "The students who are arguing about the method disagree. → The students arguing about the method disagree.",
+          "notes": "Finite relative → active present participle."
+        },
+        {
+          "example_text": "Статья, написанная автором в спешке, содержит ошибки. → Статья, которую автор написал в спешке, содержит ошибки.",
+          "translation_text": "The article written by the author in haste contains errors. → The article that the author wrote in haste contains errors.",
+          "notes": "Participle → finite relative; keep meaning."
+        }
+      ]
+    },
+    {
+      "slug": "c2-006",
+      "title": "Use detached explanatory insertions with dash/parentheses",
+      "summary": "Insert parentheticals to provide additional information without disrupting the main clause.",
+      "explanation": "What it is: An insertion that adds clarification, definition, or aside information.\n\n- A dash (—) and parentheses (( )) are used for these insertions.\n\nHow to use:\n- Use dashes when you want to add important notes that aren't essential but need to be mentioned. For example, 'He—importantly—did not deny his responsibility.'\n- Use parentheses for information that is supplementary or can be omitted without changing the meaning of the main clause. For example, '(at least at this stage)'.\n\nExamples:\n- Dashes: He—importantly—did not deny his responsibility.\n- Parentheses: The decision (at least at this stage) looks reasonable.\n\nEdge cases:\n- Avoid using long insertions in spoken speech to keep the sentence clear and concise. Longer insertions are better for writing.\n- Ensure that removing the insertion does not affect the grammatical structure of the main clause.",
+      "usage_notes": "Keep your insertions short, especially in spoken language. Use dashes for important notes and parentheses for supplementary information.",
+      "section_slugs": [
+        "c2-dynamic-clause-manipulation"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "syntax",
+        "discourse",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-dynamic-clause-manipulation": 60
+      },
+      "examples": [
+        {
+          "example_text": "Он — что важно — не отрицал своей ответственности.",
+          "translation_text": "He—importantly—did not deny his responsibility.",
+          "notes": "Dash detachment with что важно."
+        },
+        {
+          "example_text": "Решение (по крайней мере на данном этапе) выглядит разумным.",
+          "translation_text": "The decision (at least at this stage) looks reasonable.",
+          "notes": "Parenthetical phrase; register-neutral."
+        },
+        {
+          "example_text": "Мы обсудили план — довольно спорный, надо признать — и приняли его.",
+          "translation_text": "We discussed the plan—rather controversial, one must admit—and adopted it.",
+          "notes": "Two detached insertions; rhetorical stance."
+        }
+      ]
+    },
+    {
+      "slug": "c2-007",
+      "title": "Maintain deliberate ambiguity by choosing under-specified forms",
+      "summary": "Use under-specified pronouns/indefinites to keep reference vague.",
+      "explanation": "Purpose: Sometimes you don’t want to fully specify an agent or object (politeness, confidentiality, rhetoric).\n\n\nMeaning:\n- **кто-то / что-то / где-то**: For unknown or irrelevant identity.\n- **кое-кто / кое-что**: Speaker knows but withholds information.\n- **некий X**: A certain X; often bookish or ironic.\n- **один человек/одна история**: Deliberately vague to maintain ambiguity.\n\n\nHow to use:\n- Use these forms when you want listeners to know the role of an agent but not their identity (e.g., for politeness).\n- They can be used in conversations or formal writing to avoid direct attribution, maintaining a level of vagueness that can be strategic.\n- Be mindful of overusing vagueness; too many times it might sound evasive rather than polite or strategic.\n\n\nEdge cases:\n- **кое-** (speaker knows) vs. **кто-то/что-то** (speaker may not know): Distinguish between knowing and not knowing to avoid confusion.\n- Use with caution in different contexts; what sounds appropriate in one situation might not be in another.",
+      "usage_notes": "Avoid overusing vagueness, as it can sound evasive. Teach it as a strategic tool, not a default practice.",
+      "section_slugs": [
+        "c2-rhetorical-information-structuring"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-rhetorical-information-structuring": 10
+      },
+      "examples": [
+        {
+          "example_text": "**Кто-то** уже сообщил об этом руководству.",
+          "translation_text": "Someone has already reported this to management.",
+          "notes": "Identity unspecified; focus on action."
+        },
+        {
+          "example_text": "**Кое-кто** явно не рад этим изменениям.",
+          "translation_text": "Certain people are clearly not happy about these changes.",
+          "notes": "Speaker implies they know who; rhetorical hint."
+        },
+        {
+          "example_text": "Есть **некий** риск, о котором обычно не говорят вслух.",
+          "translation_text": "There is a certain risk that people usually don’t say out loud.",
+          "notes": "Bookish neкий; controlled vagueness."
+        }
+      ]
+    },
+    {
+      "slug": "c2-008",
+      "title": "Create irony/contrast through particles and positioning",
+      "summary": "Use particles (уж, ведь, мол, дескать, тоже, вот) and word order to signal ironic distance or contrast.",
+      "explanation": "**Core idea**: the same sentence can sound neutral or ironic depending on particles and emphasis placement.\n\n\n\n**Common irony/contrast cues**\n\n- **уж** (dismissive/ironic: *уж конечно*)\n\n- **ведь** (appeal to shared knowledge; can be pointed)\n\n- **мол/дескать** (reported stance; distancing)\n\n- **вот** (pointing, sometimes sarcastic framing)\n\n\n\n**Assessable outcome**: learner can produce two versions (neutral vs ironic) and explain the pragmatic difference.",
+      "usage_notes": "Particles are highly context-sensitive; teach with paired minimal contrasts.\n\nDon’t assign a single fixed translation; focus on effect (distance, insistence, shared knowledge).",
+      "section_slugs": [
+        "c2-rhetorical-information-structuring"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-rhetorical-information-structuring": 20
+      },
+      "examples": [
+        {
+          "example_text": "Ну **уж** это-то он умеет делать.",
+          "translation_text": "Well, *that* he certainly knows how to do (ironic emphasis).",
+          "notes": "уж + это-то frames pointed emphasis."
+        },
+        {
+          "example_text": "Ты **ведь** сам это предлагал.",
+          "translation_text": "You yourself proposed it, you know.",
+          "notes": "ведь appeals to shared fact; can be accusatory."
+        },
+        {
+          "example_text": "Он, **мол**, «ничего не знал».",
+          "translation_text": "He was like, 'he didn’t know anything'.",
+          "notes": "мол marks reported claim with distance."
+        }
+      ]
+    },
+    {
+      "slug": "c2-009",
+      "title": "Use inversion and contrast framing for rhetorical emphasis",
+      "summary": "Front or invert constituents to highlight contrast (а/же/вот/именно) while keeping grammar intact.",
+      "explanation": "Mechanisms\n\nMeaning: Use inversion, contrastive elements (а/же/вот/именно), to emphasize parts of a sentence.\nHow to use:\n- Front the contrastive element: Например, *Именно это я и имел в виду.*\n- Use paired framing: Например, *А вот это — уже другое дело.*\n- Use inversion for focus: Например, *Сказать-то он сказал, а сделать — не сделал.*\n\nEdge cases:\n- Avoid incorrect case agreements or verb conjugations.\n- Ensure the sentence remains readable and natural-sounding.\n\nExamples of common mistakes to avoid:\n- Incorrect word order can make the meaning unclear.",
+      "usage_notes": "Russian allows flexible word order, but keep information structure clear. Use these techniques for emphasis in your speech and writing.",
+      "section_slugs": [
+        "c2-rhetorical-information-structuring"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "syntax",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-rhetorical-information-structuring": 30
+      },
+      "examples": [
+        {
+          "example_text": "**Именно этого** я и не ожидал.",
+          "translation_text": "This is exactly what I didn’t expect.",
+          "notes": "Fronted genitive object for focus."
+        },
+        {
+          "example_text": "**А вот** объяснить причину он так и не смог.",
+          "translation_text": "But explaining the reason—he never managed to.",
+          "notes": "Contrast frame a вот + focus on inability."
+        },
+        {
+          "example_text": "Согласиться он согласился, **но** выполнять — не стал.",
+          "translation_text": "He agreed, but as for doing it—he didn’t.",
+          "notes": "Contrast via split predicate; emphasis."
+        }
+      ]
+    },
+    {
+      "slug": "c2-010",
+      "title": "Shift perspective through reporting frames and distancing markers",
+      "summary": "Reframe narrative by moving between direct, indirect, and distanced report (якобы, дескать, мол).",
+      "explanation": "Shift perspective through reporting frames and distancing markers.\n\n**Meaning:**\nThese words help you change how a statement is presented, making it more indirect or less direct.\n- **якобы**: Adds doubt or skepticism to the statement.\n- **дескать**: Signals that what follows might not be directly related to your own thoughts.\n- **мол**: Used for starting reported speech without introducing the speaker explicitly.\n\n**How to use:**\n- Use **якобы** when you want to express doubt or skepticism about a statement. For example, 'Он сказал, что проект готов, якoby всё проверено.' means 'He said the project was ready—supposedly everything was checked.'\n- Use **дескать** when you want to distance yourself from someone else's claim. For example, 'Она уверяет, что не виновата, дескать,' can be translated as 'She insists she’s not guilty.'\n- Use **мол** at the beginning of a reported speech without introducing the speaker: 'Говорят, что это ошибка.' means 'They say it’s a mistake.'\n\n**Edge cases:**\n- Ensure that when you use these words, the pronouns and agreements are correct. For instance, in 'Я думаю, что это ошибка,' changing to a reported form as 'Говорят, что это ошибка' should maintain agreement: 'Они говорят, что это ошибка.'\n- Be careful not to overuse these markers; too many can make the text sound unnatural.",
+      "usage_notes": "**якобы** often implies doubt or skepticism.\n\nKeep agreement/pronouns consistent when shifting perspective.",
+      "section_slugs": [
+        "c2-rhetorical-information-structuring"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-rhetorical-information-structuring": 40
+      },
+      "examples": [
+        {
+          "example_text": "Он сказал, что проект готов. → Он сказал, что проект готов, **якобы** всё проверено.",
+          "translation_text": "He said the project was ready. → He said it was ready—supposedly everything was checked.",
+          "notes": "якобы adds distancing/skepticism."
+        },
+        {
+          "example_text": "Она уверяет, что не виновата. → Она, **дескать**, «не виновата».",
+          "translation_text": "She insists she’s not guilty. → She’s like, 'not guilty'.",
+          "notes": "дескать signals distancing from claim."
+        },
+        {
+          "example_text": "Я думаю, что это ошибка. → Говорят, что это ошибка.",
+          "translation_text": "I think it’s a mistake. → They say it’s a mistake.",
+          "notes": "Perspective shift via impersonal reporting."
+        }
+      ]
+    },
+    {
+      "slug": "c2-011",
+      "title": "Control presupposition with particles (уже, ещё, даже, опять)",
+      "summary": "Use presupposition triggers to imply background assumptions and manipulate what is taken as 'given'.",
+      "explanation": "Presupposition triggers add implied background information.\n\nMeaning:\n- **уже**: implies the action/state happened earlier than expected.\n- **ещё**: suggests something is still ongoing or continuing.\n- **опять**: indicates an event has repeated before.\n- **даже**: shows that a situation is below an expected minimum threshold on a scale.\n\nHow to use:\n- Use these triggers to imply background assumptions and manipulate what is taken as 'given'. For example, 'Он уже ушёл' implies the person left earlier than anticipated. \n- Be mindful of the implications: 'даже не извинился' means he didn’t even apologize, indicating a surprising level of insensitivity.\n\nEdge cases:\n- Avoid stacking multiple triggers in one sentence unless you are aiming for emphasis or rhetorical effect. For instance, saying both 'уже' and 'ещё' together would be unusual and could confuse the listener.\n\nUsage Notes: These words are simple, but their implications are advanced—teach by asking learners to state the hidden assumption. Avoid using too many triggers in one sentence unless you intend a strong rhetorical impact.",
+      "usage_notes": "Teach by having learners state the hidden assumption. Avoid stacking triggers for clarity.",
+      "section_slugs": [
+        "c2-rhetorical-information-structuring"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-rhetorical-information-structuring": 50
+      },
+      "examples": [
+        {
+          "example_text": "Он **уже** ушёл, хотя встреча ещё не началась.",
+          "translation_text": "He has already left, although the meeting hasn’t started yet.",
+          "notes": "уже implies earlier-than-expected."
+        },
+        {
+          "example_text": "Ты **опять** забыл пароль?",
+          "translation_text": "Did you forget the password again?",
+          "notes": "опять presupposes repetition."
+        },
+        {
+          "example_text": "Он **даже** не извинился.",
+          "translation_text": "He didn’t even apologize.",
+          "notes": "даже marks unexpected minimum on a scale."
+        }
+      ]
+    },
+    {
+      "slug": "c2-012",
+      "title": "Embed evaluation subtly using parenthetical stance frames",
+      "summary": "Insert stance as parentheticals (честно говоря, по правде, по сути, вообще-то) without making it the main predicate.",
+      "explanation": "Why this matters at C2: You can express evaluation without making every sentence feel like a statement of opinion.\n\nMeaning: Parenthetical stance frames allow you to subtly convey your thoughts and reactions, adding depth to the conversation.\n\nHow to use: Integrate these phrases naturally into sentences as conversational additions. For instance, 'честно говоря' can introduce an honest observation or a personal insight without sounding too assertive.\n\nEdge cases: Be mindful of overusing these expressions; doing so might make your writing sound overly casual or indecisive. Ensure that the sentence flows naturally and remains clear to avoid confusion.",
+      "usage_notes": "In formal writing, prefer neutral frames ('в сущности, по сути') over conversational ones ('вообще-то'). Don’t overuse; it can sound hedgy.",
+      "section_slugs": [
+        "c2-rhetorical-information-structuring"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-rhetorical-information-structuring": 60
+      },
+      "examples": [
+        {
+          "example_text": "**Честно говоря**, аргумент меня не убедил.",
+          "translation_text": "Honestly, the argument didn’t convince me.",
+          "notes": "Conversational stance frame; comma needed."
+        },
+        {
+          "example_text": "Это, **по сути**, попытка отложить решение.",
+          "translation_text": "This is, in essence, an attempt to postpone the decision.",
+          "notes": "Neutral evaluative parenthetical."
+        },
+        {
+          "example_text": "Он **вообще-то** прав, но выводы слишком резкие.",
+          "translation_text": "He’s actually right, but the conclusions are too harsh.",
+          "notes": "вообще-то signals correction/contrast."
+        }
+      ]
+    },
+    {
+      "slug": "c2-013",
+      "title": "Choose obligation nuance precisely: должен vs должен был vs обязан vs приходится",
+      "summary": "Select obligation framing to distinguish duty, expectation, missed obligation, and forced necessity.",
+      "explanation": "**Key contrasts**\n\n- **должен + INF**: obligation/requirement now\n\n- **должен был + INF**: expected/required in the past (may imply it didn’t happen)\n\n- **обязан + INF**: strong duty (often formal/legal)\n\n- **приходится + INF**: forced necessity due to circumstances\n\n\n\n**Assessable outcome**: given a scenario, learner chooses the correct frame and explains the nuance.",
+      "usage_notes": "Be careful: **должен был сделать** often implies 'should have done (but didn’t)'.\n\nWith **приходится**, aspect often depends on whether you emphasize repeated necessity (imperfective) or one-time event (perfective context).",
+      "section_slugs": [
+        "c2-extreme-aspect-modality-precision"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "aspect-modality"
+      ],
+      "section_sort_order": {
+        "c2-extreme-aspect-modality-precision": 10
+      },
+      "examples": [
+        {
+          "example_text": "Я **должен** закончить отчёт сегодня.",
+          "translation_text": "I must finish the report today.",
+          "notes": "Current obligation; perfective infinitive signals completion."
+        },
+        {
+          "example_text": "Я **должен был** позвонить, но забыл.",
+          "translation_text": "I was supposed to call, but I forgot.",
+          "notes": "Past obligation with non-fulfillment implication."
+        },
+        {
+          "example_text": "Мне **приходится** работать по выходным.",
+          "translation_text": "I have to work on weekends (due to circumstances).",
+          "notes": "Circumstantial necessity; habitual."
+        }
+      ]
+    },
+    {
+      "slug": "c2-014",
+      "title": "Choose ability/outcome nuance: мог vs смог vs удалось",
+      "summary": "Distinguish possibility/ability from successful completion and from 'managed' outcome.",
+      "explanation": "**Core contrasts**\n\n- **мог**: could (ability/possibility), success not guaranteed\n\n- **смог**: managed to (successful result)\n\n- **удалось**: succeeded (often external circumstances; impersonal frame)\n\n\n\n**Assessable outcome**: in result-focused contexts, learner uses **смог/удалось**, not **мог**.",
+      "usage_notes": "**удалось** typically takes dative experiencer: *мне удалось*.\n\nWith **смочь**, perfective often fits because it encodes successful result.",
+      "section_slugs": [
+        "c2-extreme-aspect-modality-precision"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "aspect-modality"
+      ],
+      "section_sort_order": {
+        "c2-extreme-aspect-modality-precision": 20
+      },
+      "examples": [
+        {
+          "example_text": "Я **мог** уйти раньше, но решил остаться.",
+          "translation_text": "I could have left earlier, but I decided to stay.",
+          "notes": "Possibility; no result implied."
+        },
+        {
+          "example_text": "Я **смог** убедить его.",
+          "translation_text": "I managed to convince him.",
+          "notes": "Successful outcome; perfective."
+        },
+        {
+          "example_text": "Нам **удалось** договориться.",
+          "translation_text": "We managed to reach an agreement.",
+          "notes": "Impersonal success framing with удалось."
+        }
+      ]
+    },
+    {
+      "slug": "c2-015",
+      "title": "Shift aspect within a single argument to separate process vs result",
+      "summary": "Use imperfective to frame process/attempt/background and perfective to mark achieved results within one argument.",
+      "explanation": "**Technique**\n\n- Imperfective for *how it unfolded / what was happening*\n\n- Perfective for *what was achieved / the key outcome*\n\n\n\n**Assessable outcome**: within one paragraph, aspect choices consistently support the argument structure.",
+      "usage_notes": "Avoid random alternation; tie aspect to discourse function (background vs foreground).\n\nTeach with highlighting: mark 'process' vs 'result' clauses and match aspect accordingly.",
+      "section_slugs": [
+        "c2-extreme-aspect-modality-precision"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "aspect-modality",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-extreme-aspect-modality-precision": 30
+      },
+      "examples": [
+        {
+          "example_text": "Мы **обсуждали** варианты долго, но в итоге **приняли** решение.",
+          "translation_text": "We were discussing options for a long time, but in the end we made a decision.",
+          "notes": "Process (impf) → result (pf)."
+        },
+        {
+          "example_text": "Он **пытался** объяснить, однако так и не **убедил** аудиторию.",
+          "translation_text": "He tried to explain, yet he never convinced the audience.",
+          "notes": "Attempt/process vs result."
+        },
+        {
+          "example_text": "Я **сравнивал** данные, чтобы понять тенденцию, и наконец **выявил** закономерность.",
+          "translation_text": "I compared the data to understand the trend and finally identified a pattern.",
+          "notes": "Analytic process → discovery result."
+        }
+      ]
+    },
+    {
+      "slug": "c2-016",
+      "title": "Select perfective vs imperfective infinitive after a modal",
+      "summary": "Choose infinitive aspect after modals to encode intent (process) vs target result (completion).",
+      "explanation": "Perfective vs Imperfective Infinitives after Modals\n\nPattern: \n- Use perfective infinitive for completed actions.\n- Use imperfective infinitive for ongoing, habitual, or experience processes.\n\nMeaning:\n- Perfective indicates a specific, completed action (e.g., doing something once fully).\n- Imperfective suggests an unfinished, continuous process (e.g., doing something repeatedly or habitually).\n\nHow to use:\n- For *должен*: Choose perfective if the outcome is definite and complete; choose imperfective for ongoing processes.\n  - Example: Ты должен **прочитать** договор до вечера. (You must read the contract by evening.)\n  - Example: Тебе нельзя **курить** здесь. (You must not smoke here.)\n- For *решено*: Use perfective when making a specific decision; use imperfective for habitual or repeated decisions.\n  - Example: Он решил **переписать** письмо заново. (He decided to rewrite the letter from scratch.)\n\nEdge cases:\n- Some verbs have idiomatic uses that deviate from this pattern, so learners should pay attention to context and examples.\n- Negatives can sometimes change meaning: не хотел читать vs не захотел прочитать (didn't want to read vs didn't want to finish reading).",
+      "usage_notes": "Be mindful of specific verb families that have idiomatic preferences, such as 'прочитать' over 'читать'.\nIn negatives, the aspect can change meaning, so be cautious.",
+      "section_slugs": [
+        "c2-extreme-aspect-modality-precision"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "aspect-modality"
+      ],
+      "section_sort_order": {
+        "c2-extreme-aspect-modality-precision": 40
+      },
+      "examples": [
+        {
+          "example_text": "Ты должен **прочитать** договор до вечера.",
+          "translation_text": "You must read (through) the contract by evening.",
+          "notes": "Perfective infinitive = completion."
+        },
+        {
+          "example_text": "Тебе нельзя **курить** здесь.",
+          "translation_text": "You must not smoke here.",
+          "notes": "Imperfective = ongoing activity."
+        },
+        {
+          "example_text": "Он решил **переписать** письмо заново.",
+          "translation_text": "He decided to rewrite the letter from scratch.",
+          "notes": "Perfective = achieve new finished text."
+        }
+      ]
+    },
+    {
+      "slug": "c2-017",
+      "title": "Express graded epistemic uncertainty with structured markers",
+      "summary": "Use a scale of certainty (возможно → вероятно → должно быть → наверняка) with correct placement and tone.",
+      "explanation": "**Uncertainty scale (typical)**\n\n- **возможно** (maybe)\n\n- **вероятно / скорее всего** (probably)\n\n- **должно быть / видимо** (apparently / must be)\n\n- **наверняка** (surely)\n\n\n\n**Assessable outcome**: learner picks a marker that matches evidence strength, not just preference.",
+      "usage_notes": "Markers can be sentence adverbs; punctuation varies by position: initial often followed by comma.\n\n**должно быть** can be parenthetical (likely) or literal obligation; context disambiguates.",
+      "section_slugs": [
+        "c2-extreme-aspect-modality-precision"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "aspect-modality",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-extreme-aspect-modality-precision": 50
+      },
+      "examples": [
+        {
+          "example_text": "**Возможно**, он просто не получил письмо.",
+          "translation_text": "Maybe he just didn’t receive the email.",
+          "notes": "Low certainty; initial marker."
+        },
+        {
+          "example_text": "Он, **видимо**, перепутал даты.",
+          "translation_text": "He apparently mixed up the dates.",
+          "notes": "Evidence-based inference."
+        },
+        {
+          "example_text": "Она **наверняка** знала об этом заранее.",
+          "translation_text": "She surely knew about it beforehand.",
+          "notes": "High certainty; intensifies claim."
+        }
+      ]
+    },
+    {
+      "slug": "c2-018",
+      "title": "Maintain counterfactual precision under stacking (if + бы + modal)",
+      "summary": "Build counterfactuals with correct tense/aspect and add modals without breaking scope.",
+      "explanation": "Pattern:\n\n- *If* + past tense, (then) + past tense + бы ...\n\nMeaning:\n\nThis pattern forms a counterfactual statement indicating that something did not happen in the past and its outcome. The first part sets up the hypothetical situation, while the second part shows what would have happened under those conditions.\n\nHow to use:\n\n- Start with *If* followed by the past tense of the verb.\n- Add (then) for clarity, though it’s optional.\n- Follow with another past tense verb + бы.\n- Add a modal like *могли бы*, *должен был бы*, or similar to indicate possibility or obligation in the counterfactual scenario.\n\nEdge cases:\n\n- Avoid dropping *бы* as it indicates the unreal nature of the situation. Dropping *бы* can make your sentence confusing.\n- Use *бы* only once per clause for clarity.",
+      "usage_notes": "In Russian, use **бы** in each clause to keep the scope clear, but avoid overusing it, especially at A1 level.",
+      "section_slugs": [
+        "c2-extreme-aspect-modality-precision"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "aspect-modality",
+        "syntax"
+      ],
+      "section_sort_order": {
+        "c2-extreme-aspect-modality-precision": 60
+      },
+      "examples": [
+        {
+          "example_text": "Если бы мы **начали** раньше, мы **могли бы закончить** вовремя.",
+          "translation_text": "If we had started earlier, we could have finished on time.",
+          "notes": "Counterfactual past + modal outcome."
+        },
+        {
+          "example_text": "Если бы он **подготовился**, ему **не пришлось бы отвечать** наугад.",
+          "translation_text": "If he had prepared, he wouldn’t have had to answer randomly.",
+          "notes": "Counterfactual + пришлось бы (necessity avoided)."
+        },
+        {
+          "example_text": "Если бы данные **подтвердились**, выводы **следовало бы пересмотреть**.",
+          "translation_text": "If the data were confirmed, the conclusions should be reconsidered.",
+          "notes": "Counterfactual condition + formal obligation."
+        }
+      ]
+    },
+    {
+      "slug": "c2-019",
+      "title": "Rewrite the same content across genres (academic ↔ conversational)",
+      "summary": "Transform one message into two genre-appropriate versions while preserving meaning.",
+      "explanation": "Task: Given a proposition, produce:\n\n- An **academic/analytic** version (denser syntax, nominalizations, cautious modality)\n\n- A **conversational** version (shorter clauses, direct verbs, simpler connectors)\n\n\nMeaning: This task involves rewriting the same message in two different styles—academic and conversational—to ensure clarity and appropriateness for each genre.\n\nHow to use:\n- Identify the key points of your statement.\n- For academic/analytic version, use complex sentences, nominalizations (e.g., ‘the decision was made’), cautious language like 'it seems,' and impersonal frames if necessary.\n- For conversational version, keep sentences short, use direct verbs, and maintain a straightforward tone with simple connectors.\n\nEdge cases:\n- Be careful not to merely replace words with more formal ones. Ensure both versions are genuinely suitable for their respective genres.\n- Academic writing often avoids personal pronouns, while conversational writing uses them freely.\n- Consider the context in which each version will be used to decide on tone and style.",
+      "usage_notes": "Formal style often reduces personal pronouns and uses impersonal frames (считается, принято). Conversational style tolerates parataxis and explicit speakers (я думаю, мне кажется).",
+      "section_slugs": [
+        "c2-stylistic-agility"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "register",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-stylistic-agility": 10
+      },
+      "examples": [
+        {
+          "example_text": "Разговорно: «Я думаю, это не сработает». → Академично: «Представляется маловероятным, что это окажется эффективным».",
+          "translation_text": "Conversational: 'I think it won’t work.' → Academic: 'It seems unlikely that this will prove effective.'",
+          "notes": "Register transformation; modality shift."
+        },
+        {
+          "example_text": "Разговорно: «Мы решили поменять план». → Официально: «Было принято решение о корректировке плана».",
+          "translation_text": "Conversational: 'We decided to change the plan.' → Official: 'A decision was made to adjust the plan.'",
+          "notes": "Official passive/nominalization."
+        },
+        {
+          "example_text": "Разговорно: «Он просто ушёл». → Публицистично: «Он предпочёл покинуть встречу без объяснений».",
+          "translation_text": "Conversational: 'He just left.' → Publicistic: 'He chose to leave the meeting without explanations.'",
+          "notes": "Publicistic nuance; lexical choice."
+        }
+      ]
+    },
+    {
+      "slug": "c2-020",
+      "title": "Imitate bureaucratic syntax using set constructions",
+      "summary": "Produce standard bureaucratic patterns correctly.",
+      "explanation": "Pattern: В связи с тем, что\nMeaning: Due to a certain reason.\nHow to use: Use this pattern when explaining a situation in an official context. For example, replace 'We canceled the meeting because there was no data.' with 'В связи с тем, что данные отсутствовали, встреча была отменена.'\n\nPattern: Ввиду\nMeaning: In view of.\nHow to use: Use this pattern when mentioning a reason for an action. For instance, change 'Нехватки времени сроки были перенесены.' to 'Ввиду нехватки времени сроки были перенесены.'\n\nPattern: На основании\nMeaning: On the basis of.\nHow to use: Utilize this phrase when stating a decision or action based on some information. Replace 'Было принято решение' with 'На основании отчёта было принято решение'.\n\nEdge cases:\n- Ensure you correctly choose the case after prepositions (genitive for Ввиду, no case change needed for В связи с тем что).\n- Maintain formal tone; avoid overusing these phrases in everyday speech.",
+      "usage_notes": "Don’t overuse in daily conversations; use for official contexts only.\nComma rules: 'В связи с тем, что' requires a comma before ‘что’.",
+      "section_slugs": [
+        "c2-stylistic-agility"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "register",
+        "syntax"
+      ],
+      "section_sort_order": {
+        "c2-stylistic-agility": 20
+      },
+      "examples": [
+        {
+          "example_text": "Мы отменили встречу, потому что не было данных. → **В связи с тем, что** данные отсутствовали, встреча была отменена.",
+          "translation_text": "We canceled the meeting because there was no data. → Due to the absence of data, the meeting was canceled.",
+          "notes": "Clause packaging + passive."
+        },
+        {
+          "example_text": "**Ввиду** нехватки времени сроки были перенесены.",
+          "translation_text": "In view of the lack of time, the deadlines were moved.",
+          "notes": "ввиду + genitive; bureaucratic."
+        },
+        {
+          "example_text": "**На основании** отчёта было принято решение.",
+          "translation_text": "On the basis of the report, a decision was made.",
+          "notes": "на основании + genitive; official formula."
+        }
+      ]
+    },
+    {
+      "slug": "c2-021",
+      "title": "Use literary pacing: parcellation and asyndeton without breaking grammar",
+      "summary": "Create stylistic effect by splitting a thought into short fragments (парцелляция) or omitting conjunctions.",
+      "explanation": "Tools\n\n**Parcellation**: Split one idea into fragments for emphasis.\n\n- How to use: Break a single thought into short parts to create impact and enhance readability. This technique is useful in narrative or publicistic genres but can feel theatrical if overused.\n\n- Edge cases: Be cautious when using parcellation with very simple ideas; it might make your text less clear and harder to follow.\n\n**Bessosuzye (Asyndeton)**: Juxtapose clauses without a conjunction, relying on punctuation/intonation.\n\n- How to use: Use commas or no punctuation at all between clauses to create a quick, punchy sequence. This technique can be used for building suspense or highlighting sequences of actions or events.\n\n- Edge cases: Ensure that the meaning remains clear when using asyndeton; overusing it can make your text confusing and harder to understand.",
+      "usage_notes": "Use parcellation and asyndeton sparingly; too much feels theatrical. In formal academic writing, prefer explicit connectors; parcellation suits narrative/publicistic genres.",
+      "section_slugs": [
+        "c2-stylistic-agility"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "register",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-stylistic-agility": 30
+      },
+      "examples": [
+        {
+          "example_text": "Он обещал вернуться. **Не вернулся.**",
+          "translation_text": "He promised to return. Didn’t return.",
+          "notes": "Parcellation for emphasis."
+        },
+        {
+          "example_text": "Сделал шаг, оглянулся, замер.",
+          "translation_text": "He took a step, looked back, froze.",
+          "notes": "Asyndeton sequence; comma rhythm."
+        },
+        {
+          "example_text": "Я ждал. Долго. Слишком долго.",
+          "translation_text": "I waited. Long. Too long.",
+          "notes": "Fragmentation; rhetorical pacing."
+        }
+      ]
+    },
+    {
+      "slug": "c2-022",
+      "title": "Control marked word order for rhythm without losing clarity",
+      "summary": "Use non-neutral order (fronting, postponing predicates) for stylistic rhythm while keeping reference clear.",
+      "explanation": "**Measurable target**: produce a sentence in which the emphasized element is placed first (or delayed), and the listener can still recover who did what.\n\n\n\n**Examples of marked order**\n\n- Fronted object: *Эту мысль я запомнил навсегда.*\n\n- Delayed subject: *Понять это было трудно — мне.* (marked, rhetorical)\n\n\n\n**Assessable outcome**: emphasis is intentional and interpretable.",
+      "usage_notes": "Marked order is easiest when you keep case endings explicit (they signal roles).\n\nAvoid marked order when endings are syncretic and could confuse roles.",
+      "section_slugs": [
+        "c2-stylistic-agility"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "syntax",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-stylistic-agility": 40
+      },
+      "examples": [
+        {
+          "example_text": "**Эту** деталь я бы не упускал.",
+          "translation_text": "I wouldn’t overlook this detail.",
+          "notes": "Fronted object for focus."
+        },
+        {
+          "example_text": "Понять его было трудно — **всем**.",
+          "translation_text": "Understanding him was difficult—for everyone.",
+          "notes": "Detached dative/instrumental? Here всем = dative plural; rhetorical detachment."
+        },
+        {
+          "example_text": "Сказать легко, **сделать** — сложнее.",
+          "translation_text": "Saying it is easy; doing it is harder.",
+          "notes": "Contrastive rhythm; ellipsis + dash."
+        }
+      ]
+    },
+    {
+      "slug": "c2-023",
+      "title": "Compress or expand on demand while preserving content",
+      "summary": "Nominalize or de-nominalize to match the genre (dense vs clear) without changing the claim.",
+      "explanation": "Meaning:\n- Compress: Change full sentences to shorter noun phrases.\n- Expand: Turn noun phrases back into full sentences with details restored.\n\nHow to use:\n- **Compression**: Reduce a clause (e.g., 'He refused to participate') to a noun phrase ('His refusal'). Ensure the new phrase keeps the original meaning and doesn't change what is being said.\n- **Expansion**: Turn a shorter noun phrase back into a full sentence, adding necessary conjunctions and tense details. For example, turn 'His refusal' into 'That he refused'.\n\nEdge cases:\n- Be careful with tenses and aspects in expansion, especially when restoring past actions or states.",
+      "usage_notes": "In compression, check government: deverbal nouns often take genitive complements (*обсуждение чего?*).\n\nIn expansion, ensure you restore conjunctions and tense/aspect appropriately.",
+      "section_slugs": [
+        "c2-stylistic-agility"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "register",
+        "syntax"
+      ],
+      "section_sort_order": {
+        "c2-stylistic-agility": 50
+      },
+      "examples": [
+        {
+          "example_text": "Он отказался участвовать. → **Его отказ** участвовать удивил всех.",
+          "translation_text": "He refused to participate. → His refusal to participate surprised everyone.",
+          "notes": "Maintain the original meaning without changing it."
+        },
+        {
+          "example_text": "**После обсуждения** мы приняли решение. → **После того как мы обсудили**, мы приняли решение.",
+          "translation_text": "After the discussion we made a decision. → After we discussed it, we made a decision.",
+          "notes": "Ensure tense and aspect are correctly restored during expansion."
+        },
+        {
+          "example_text": "Это привело к снижению расходов. → Это привело к тому, что расходы **снизились**.",
+          "translation_text": "This led to a reduction in expenses. → This led to expenses decreasing.",
+          "notes": "Noun phrase → clause; maintain meaning."
+        }
+      ]
+    },
+    {
+      "slug": "c2-024",
+      "title": "Use punctuation to signal logical relations (colon, dash, semicolon)",
+      "summary": "Choose punctuation to mark explanation, consequence, or contrast in complex written sentences.",
+      "explanation": "**Practical mapping**\n\n- **:** explanation / clarification (*Причина одна: …*)\n\n- **—** sharp turn / result / contrast (*… — и всё.*)\n\n- **;** link long clauses that are related but already have commas\n\n\n\n**Assessable outcome**: punctuation choice matches relation; sentence remains readable.",
+      "usage_notes": "Semicolon is mainly written and stylistic; don’t force it in casual text.\n\nIn Russian, dash is very productive—teach its most common rhetorical uses with safeguards.",
+      "section_slugs": [
+        "c2-stylistic-agility"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "register",
+        "syntax"
+      ],
+      "section_sort_order": {
+        "c2-stylistic-agility": 60
+      },
+      "examples": [
+        {
+          "example_text": "Причина проста: данных недостаточно.",
+          "translation_text": "The reason is simple: there isn’t enough data.",
+          "notes": "Colon introduces explanation."
+        },
+        {
+          "example_text": "Я проверил всё — ошибки всё равно остались.",
+          "translation_text": "I checked everything—and the errors still remained.",
+          "notes": "Dash marks contrast/result."
+        },
+        {
+          "example_text": "Мы обсудили риски, подготовили план; дальше оставалось только действовать.",
+          "translation_text": "We discussed the risks, prepared a plan; after that, all that remained was to act.",
+          "notes": "Semicolon links long clauses with internal commas."
+        }
+      ]
+    },
+    {
+      "slug": "c2-025",
+      "title": "Infer meaning of rare prefixed verbs from base + prefix + context",
+      "summary": "Use word-formation inference to interpret unfamiliar prefixed verbs accurately in context.",
+      "explanation": "**Method**\n\n1) Identify base verb meaning.\n\n2) Identify prefix contribution (direction, completion, repetition, crossing, etc.).\n\n3) Check aspect (perfective/imperfective) and objects.\n\n4) Verify against context.\n\n\n\n**Assessable outcome**: learner paraphrases the verb with a known synonym and uses it correctly in a new sentence.",
+      "usage_notes": "Some prefixed verbs are idiomatic; teach inference as a *first pass* and validate with context clues.\n\nWatch false friends: same prefix can yield different lexicalized meanings.",
+      "section_slugs": [
+        "c2-lexico-grammatical-creativity"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "word-formation",
+        "aspect-modality"
+      ],
+      "section_sort_order": {
+        "c2-lexico-grammatical-creativity": 10
+      },
+      "examples": [
+        {
+          "example_text": "Он **перечитал** письмо и заметил ошибку.",
+          "translation_text": "He reread the letter and noticed a mistake.",
+          "notes": "пере- + читать = read again; result."
+        },
+        {
+          "example_text": "Доклад **пересказали** так, что смысл исказился.",
+          "translation_text": "They retold the report in a way that distorted the meaning.",
+          "notes": "пере- + сказать = retell; lexical meaning."
+        },
+        {
+          "example_text": "Он **допроверил** расчёты перед сдачей.",
+          "translation_text": "He double-checked the calculations before submitting.",
+          "notes": "до- + проверять often ‘finish checking’; inference from context."
+        }
+      ]
+    },
+    {
+      "slug": "c2-026",
+      "title": "Create a plausible new prefixed verb to express a target meaning",
+      "summary": "Given a base verb and intended nuance, build a prefixed form and use it in a sentence that sounds natural.",
+      "explanation": "Meaning: In Russian, certain prefixes can transform base verbs into new meanings, creating a more precise way to express actions.\n\nHow to use: Learn common productive prefix combinations and their intended nuances. For instance, пере- (пере-) means 're-', as in re-doing something; до- indicates completing or adding to something; и- often means repeating an action briefly.\n\nEdge cases: Be cautious with lexicalized forms where the meaning changes unexpectedly. Avoid overusing prefixes, as they can make sentences sound unnatural.",
+      "usage_notes": "Teach 'safe' productive combinations first (пере- for redo, до- for completion, и- for brief action). Flag lexicalized exceptions as usage notes (where prefix changes meaning unexpectedly).",
+      "section_slugs": [
+        "c2-lexico-grammatical-creativity"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "word-formation"
+      ],
+      "section_sort_order": {
+        "c2-lexico-grammatical-creativity": 20
+      },
+      "examples": [
+        {
+          "example_text": "Давай **перепроверим** данные перед публикацией.",
+          "translation_text": "Let’s re-check the data before publication.",
+          "notes": "Productive пере- with проверять."
+        },
+        {
+          "example_text": "Я **дописал** раздел и отправил черновик.",
+          "translation_text": "I finished writing the section and sent the draft.",
+          "notes": "до- as 'finish up'."
+        },
+        {
+          "example_text": "Он **подправил** формулировку, чтобы звучало точнее.",
+          "translation_text": "He tweaked the wording so it would sound more precise.",
+          "notes": "под- as slight adjustment; common and natural."
+        }
+      ]
+    },
+    {
+      "slug": "c2-027",
+      "title": "Navigate extended derivational families while avoiding semantic drift",
+      "summary": "Reformulate using related derivatives (noun/adjective/adverb) without changing the claim’s meaning.",
+      "explanation": "Meaning: Understanding how different derivatives of words relate to each other helps maintain the meaning when rewriting sentences.\n\nHow to use: When you need to rephrase a sentence, choose another form (noun, adjective, or adverb) that carries the same core idea. For example, if you have a verb, consider turning it into a noun; if you have an adjective, think about using a similar noun or adverb.\n\n- If you use a verb like 'analyze,' you can switch to its noun form 'analysis' to keep the meaning intact.\n- An adjective like 'logical' can be turned back into the noun form 'logic' or the adverb 'logically.'\n\nEdge cases: Be careful with derivatives that might have different connotations, such as 'official' and 'neutral' language. Stick to the tone of your original text when making these changes.",
+      "usage_notes": "Teach typical pairs like *analyze → analysis → analytical → analytically*. Beware of connotations, especially in official vs neutral contexts.",
+      "section_slugs": [
+        "c2-lexico-grammatical-creativity"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "word-formation",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-lexico-grammatical-creativity": 30
+      },
+      "examples": [
+        {
+          "example_text": "Мы **анализировали** результаты. → Провели **анализ** результатов.",
+          "translation_text": "We analyzed the results. → We conducted an analysis of the results.",
+          "notes": "Verb → noun; same meaning."
+        },
+        {
+          "example_text": "Это решение **логично**. → Это решение выглядит **логичным**.",
+          "translation_text": "This decision is logical. → This decision looks logical.",
+          "notes": "Predicate adverb → adjective; keep evaluation."
+        },
+        {
+          "example_text": "Он ответил **уверенно**. → Его ответ был **уверенным**.",
+          "translation_text": "He answered confidently. → His answer was confident.",
+          "notes": "Adverb → adjective; maintain stance."
+        }
+      ]
+    },
+    {
+      "slug": "c2-028",
+      "title": "Exploit derivational morphology to express precision (agent, instrument, property)",
+      "summary": "Choose derivational models to express 'doer', 'tool', or 'property' precisely (‑тель, ‑щик, ‑ость, ‑имость).",
+      "explanation": "**Measurable skill**: pick the correct derivation for the communicative need, then integrate it in a grammatical frame (case government).\n\n\n\n**Assessable outcome**: learner forms a plausible derivative and uses it with correct case frames.",
+      "usage_notes": "Not every root supports every suffix; focus on high-productivity models and teach acceptability judgments via exposure.\n\nCheck stress/orthography only if your curriculum tracks it; otherwise focus on meaning + syntax.",
+      "section_slugs": [
+        "c2-lexico-grammatical-creativity"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "word-formation"
+      ],
+      "section_sort_order": {
+        "c2-lexico-grammatical-creativity": 40
+      },
+      "examples": [
+        {
+          "example_text": "Этот метод повышает **устойчивость** системы.",
+          "translation_text": "This method increases the system’s stability.",
+          "notes": "Abstract property noun -ость."
+        },
+        {
+          "example_text": "Нам нужен **исполнитель** задачи, а не наблюдатель.",
+          "translation_text": "We need an executor of the task, not an observer.",
+          "notes": "Agent noun -тель; genitive complement."
+        },
+        {
+          "example_text": "Важна **применимость** модели в реальных условиях.",
+          "translation_text": "The applicability of the model in real conditions is important.",
+          "notes": "‑имость; formal academic tone."
+        }
+      ]
+    },
+    {
+      "slug": "c2-029",
+      "title": "Maintain aspect correctness when prefixation changes lexical meaning",
+      "summary": "Select aspect and prefix so that the intended meaning (redo, finish, overdo, mis-do) matches the result.",
+      "explanation": "Why C2: Prefixation is productive, but aspect and lexical meaning must align to convey intended meaning correctly.\n\nPattern:\n- Imperfective verbs describe ongoing actions or processes.\n- Perfective verbs denote completed actions with a clear endpoint.\n\nMeaning:\n- Choose the verb form that matches the intended event type (process or result).\n- Use prefixes like пере- to change word meanings and ensure correct aspect is used.\n\nHow to use:\n- For ongoing processes, choose imperfective verbs ending in -ыва-, -иру-, etc., e.g., переписывать for rewriting continuously.\n- For completed actions, select perfective verbs with clear results, like переписать for writing something and sending it off.\n- Be mindful of prefix changes that affect both meaning and aspect: пере- often implies a stronger or unexpected action (e.g., переоценивать is overestimating).\n\nEdge cases:\n- Watch out for verbs where the perfective form can be ambiguous, e.g., писать (to write) vs. написать (to finish writing).\n- Use outcome questions like 'Is it finished?' to verify you've chosen the correct aspect.",
+      "usage_notes": "Example trap: *переписывать* (ongoing rewriting) vs *переписать* (finish rewriting).\n\nTeach with minimal pairs and outcome questions: 'Is it finished?'",
+      "section_slugs": [
+        "c2-lexico-grammatical-creativity"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "word-formation",
+        "aspect-modality"
+      ],
+      "section_sort_order": {
+        "c2-lexico-grammatical-creativity": 50
+      },
+      "examples": [
+        {
+          "example_text": "Я **переписывал** текст весь вечер (процесс).",
+          "translation_text": "I was rewriting the text all evening (process).",
+          "notes": "Imperfective; ongoing."
+        },
+        {
+          "example_text": "Я **переписал** текст и отправил (результат).",
+          "translation_text": "I rewrote the text and sent it (result).",
+          "notes": "Perfective; completed outcome."
+        },
+        {
+          "example_text": "Он **переоценил** риски и поэтому отказался.",
+          "translation_text": "He overestimated the risks and therefore refused.",
+          "notes": "Note: The prefix пере- changes both lexical meaning and aspect, emphasizing an overdone or misjudged action."
+        }
+      ]
+    },
+    {
+      "slug": "c2-030",
+      "title": "Interpret and produce idiomatic prefixed verbs without literal motion",
+      "summary": "Use prefixed verbs like 'пережить', 'дойти до', 'выйти из' in non-literal contexts.",
+      "explanation": "Goal: treat prefixed verbs as semantic tools, not literal motion.\n\n\nMeaning:\n- 'Пережить' means to survive or get through something difficult (e.g., a crisis).\n- 'Дойти до' indicates reaching an endpoint in a metaphorical sense (e.g., arguing about terms).\n- 'Выйти из' suggests getting out of or overcoming a situation.\n\nHow to use:\n- Identify the context and choose the appropriate prefixed verb based on its meaning.\n- Use correct case and preposition with each verb: 'дойти до + Gen', 'выйти из + Gen'.\n- Practice by creating sentences that describe abstract or emotional situations.\n- Paraphrase to show understanding of multiple ways to express the same idea.\n\nEdge cases:\n- Be cautious when mixing literal and metaphorical uses, as it can lead to misunderstandings.\n- Some verbs may have specialized meanings in certain contexts (e.g., 'пережить' for mental or emotional stress beyond physical survival).",
+      "usage_notes": "Teach government with each verb. Use high-frequency idioms from B2/C1 readings.",
+      "section_slugs": [
+        "c2-lexico-grammatical-creativity"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "word-formation",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-lexico-grammatical-creativity": 60
+      },
+      "examples": [
+        {
+          "example_text": "Мы **дошли до** того, что спорим о терминах.",
+          "translation_text": "We’ve gotten to the point of arguing about terms.",
+          "notes": "дойти до + gen; metaphorical endpoint."
+        },
+        {
+          "example_text": "Он **вышел из** ситуации достойно.",
+          "translation_text": "He got out of the situation with dignity.",
+          "notes": "выйти из + gen; metaphorical."
+        },
+        {
+          "example_text": "Эта идея помогла мне **пережить** кризис.",
+          "translation_text": "This idea helped me get through the crisis.",
+          "notes": "пережить = survive/cope through; non-literal."
+        }
+      ]
+    },
+    {
+      "slug": "c2-031",
+      "title": "Maintain reference chains across multiple paragraphs",
+      "summary": "Track referents (people/ideas) across long text using demonstratives and anaphora without confusion.",
+      "explanation": "Maintain reference chains across multiple paragraphs is about keeping track of who or what something refers to in your writing. This helps avoid confusion and makes your text easier to understand.\n\n### Meaning:\n- Demonstratives like 'этот', 'тот', 'последний' help point to specific people or things.\n- Anaphora, using pronouns or formal words, is another way to refer back to something already mentioned.\n\n### How to Use:\n- When you mention a person or idea for the first time, use a demonstrative or anaphoric phrase to introduce it clearly.\n- In following sentences, repeat the key word or use a demonstrative/anaphora that links back to what was previously mentioned.\n- For example: 'The report describes a method. That method is used in three scenarios.'\n\n### Edge Cases:\n- Be careful not to overuse formal terms like 'указанный' which can sound too bureaucratic and stiff.\n- When introducing new ideas or people, reset the reference so you don't confuse the reader.",
+      "usage_notes": "Overusing 'данный/указанный' can make your text sound overly formal. Use them only in appropriate genres like official reports.",
+      "section_slugs": [
+        "c2-long-text-cohesion"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-long-text-cohesion": 10
+      },
+      "examples": [
+        {
+          "example_text": "Мы рассмотрели две гипотезы. **Первая** объясняет данные лучше; **вторая** требует дополнительных предположений.",
+          "translation_text": "We considered two hypotheses. The first explains the data better; the second requires additional assumptions.",
+          "notes": "Ordered reference chain: первая/вторая."
+        },
+        {
+          "example_text": "Этот подход прост. **Он** работает в малых выборках, но **в больших** даёт сбои.",
+          "translation_text": "This approach is simple. It works in small samples, but in large ones it fails.",
+          "notes": "Pronoun reference remains unambiguous."
+        },
+        {
+          "example_text": "В отчёте описан метод. **Указанный** метод применяется в трёх сценариях.",
+          "translation_text": "The report describes a method. The said method is used in three scenarios.",
+          "notes": "Formal anaphora with указанный."
+        }
+      ]
+    },
+    {
+      "slug": "c2-032",
+      "title": "Use higher-level cohesive connectors for staging and recap",
+      "summary": "Use connectors to stage discourse: при этом, тем самым, вслед за этим, в итоге, тем не менее.",
+      "explanation": "Meaning: Connectors help organize thoughts in writing, making them clear and logical.\n\nHow to use:\n- **При этом** is used when two actions happen at the same time or are closely related but different. For example: We clarified the criteria. *При этом* the original goal did not change.\n- **Тем самым** is used to show a result or consequence of an action, making it clear that one thing leads to another. For example: We removed outliers, *тем самым* increasing accuracy.\n- **Вслед за этим** is used when you want to describe actions in order or sequence. For example: First we analyzed the data; *всслед за этим* we made some adjustments.\n- **В итоге** is used to conclude a series of events or explain final results. For example: We conducted several experiments; *в итоге* we confirmed our hypothesis.\n- **Тем не менее** is used when presenting an opposing idea or concession, showing that something unexpected happened despite expectations. For example: The data are contradictory; *тем не менее* the conclusion remains the same.\n\nEdge cases:\n- Avoid using more than one connector in a single sentence to prevent redundancy. For instance, do not say: *Тем не менее однако*.\n- Some connectors prefer comma separation depending on where they appear in a sentence, such as after a clause or before a main verb.",
+      "usage_notes": "Do not stack connectors redundantly. Use commas appropriately for clarity.",
+      "section_slugs": [
+        "c2-long-text-cohesion"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-long-text-cohesion": 20
+      },
+      "examples": [
+        {
+          "example_text": "Мы уточнили критерии. **При этом** исходная цель не изменилась.",
+          "translation_text": "We clarified the criteria. At the same time, the original goal did not change.",
+          "notes": "Correct usage: *При этом* the original goal did not change."
+        },
+        {
+          "example_text": "Мы исключили выбросы, **тем самым** повысив точность.",
+          "translation_text": "We removed outliers, thereby increasing accuracy.",
+          "notes": "Correct usage: thereby = *тем самым*"
+        },
+        {
+          "example_text": "Данные противоречивы; **тем не менее** вывод остаётся тем же.",
+          "translation_text": "The data are contradictory; nevertheless, the conclusion remains the same.",
+          "notes": "Correct usage: nevertheless = *тем не менее*"
+        }
+      ]
+    },
+    {
+      "slug": "c2-033",
+      "title": "Avoid redundancy via controlled repetition, substitution, and ellipsis",
+      "summary": "Reduce repetition while preserving clarity: substitute, ellide, or restate key terms strategically.",
+      "explanation": "Avoid redundancy by repeating key terms at topic shifts, substituting them within a local window, and using pronouns effectively to avoid 'mystery pronouns'.\n\nMeaning:\n- Repetition: Repeat the term when changing topics to maintain clarity.\n- Substitution: Use synonyms or shorter forms of the term near its mention for variety.\n- Pronouns: Use them to refer back to terms, but always ensure they are clear.\n\nHow to use:\n- When you shift to a new idea, repeat the key term to remind the reader.\n- Within paragraphs, use synonyms or shorten the term to avoid repetition.\n- Use pronouns (e.g., 'it', 'them') to refer back to terms; always make sure they are clear and unambiguous.\n\nEdge cases:\n- Be careful with 'mystery pronouns'—make sure the reader can easily identify what a pronoun is referring to. For example, avoid saying 'He went home' without context if you just mentioned multiple people.\n- Avoid over-ellipsis in technical writing; always explain antecedents clearly.",
+      "usage_notes": "Over-ellipsis can harm clarity in technical writing; require learners to explain antecedents during assessment.",
+      "section_slugs": [
+        "c2-long-text-cohesion"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse",
+        "editing"
+      ],
+      "section_sort_order": {
+        "c2-long-text-cohesion": 30
+      },
+      "examples": [
+        {
+          "example_text": "Мы изучили модель. **Эта модель** проста, и **она** хорошо объясняет данные.",
+          "translation_text": "We studied the model. This model is simple, and it explains the data well.",
+          "notes": "Controlled repetition then pronoun."
+        },
+        {
+          "example_text": "Эксперимент был успешным. **Такой** результат редко бывает случайным.",
+          "translation_text": "The experiment was successful. Such a result is rarely accidental.",
+          "notes": "такой substitutes for noun phrase."
+        },
+        {
+          "example_text": "Он предложил компромисс и настоял на **нём**.",
+          "translation_text": "He proposed a compromise and insisted on it.",
+          "notes": "Pronoun object avoids repetition."
+        }
+      ]
+    },
+    {
+      "slug": "c2-034",
+      "title": "Signal topic shift and return without losing coherence",
+      "summary": "Use topic shift markers to change focus without losing clarity.",
+      "explanation": "Explanation:\n\nMeaning: When writing, it's important to be able to shift topics smoothly while keeping your main point clear.\n- What are topic shift markers? Words or phrases used to signal a change in the subject of discussion. Examples include 'что касается' (as for), 'говоря о' (speaking about), 'кстати' (by the way), 'между тем' (meanwhile), and 'впрочем' (however).\n\nHow to use: Identify when you need to change topics, and then use these markers. For example, if you're discussing a budget but want to return to the timeline, add 'возвращаясь к срокам'.\n\nEdge cases: Be careful not to over-digress or lose your main argument. Always provide a return marker to ensure coherence.\n\nSummary for A1 learners:\n- Use topic shift markers to organize your thoughts and maintain clarity in writing.",
+      "usage_notes": "Topics marked with 'кстати' are more conversational, while 'между тем / впрочем' are neutral. Don’t over-digress; always provide a return marker (итак, возвращаясь к…).",
+      "section_slugs": [
+        "c2-long-text-cohesion"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-long-text-cohesion": 40
+      },
+      "examples": [
+        {
+          "example_text": "**Что касается** бюджета, здесь есть отдельные риски; **возвращаясь к** срокам, они пока реалистичны.",
+          "translation_text": "As for the budget, there are separate risks; returning to the timeline, it is still realistic.",
+          "notes": "Shift + return markers."
+        },
+        {
+          "example_text": "**Между тем** основная проблема — не в данных, а в интерпретации.",
+          "translation_text": "Meanwhile, the main problem is not the data but the interpretation.",
+          "notes": "Topic re-centering with между тем."
+        },
+        {
+          "example_text": "Это решение выглядит логичным. **Впрочем**, есть одно исключение.",
+          "translation_text": "This decision looks logical. However, there is one exception.",
+          "notes": "Use 'впрочем' to introduce an exception or alternative viewpoint."
+        }
+      ]
+    },
+    {
+      "slug": "c2-035",
+      "title": "Sustain cohesive syntax while varying sentence length for rhetoric",
+      "summary": "Use syntactic variation (short punchy sentences + long structured ones) to manage emphasis across a long text.",
+      "explanation": "Meaning: Use syntactic variation (short punchy sentences + long structured ones) to manage emphasis across a long text.\n\nHow to use:\n- Short sentences are useful for emphasizing key points or creating a strong impact. Each sentence should advance the argument without filler words.\n- Long sentences can be used to provide detailed information or complex ideas, and they should maintain coherence with punctuation like dashes or semicolons.\n- Varying sentence length helps to keep the reader engaged and guides their attention through different parts of your text.\n\nEdge cases:\n- Avoid overly long sentences that might become confusing. Break them down if necessary for clarity.\n- Be mindful of sentence fragments, which can occur in short sentences but should be used intentionally, not as a mistake.",
+      "usage_notes": "Ensure each short sentence still advances the argument (avoid filler). In long sentences, use punctuation (dash/semicolon) to keep readability.",
+      "section_slugs": [
+        "c2-long-text-cohesion"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse",
+        "register"
+      ],
+      "section_sort_order": {
+        "c2-long-text-cohesion": 50
+      },
+      "examples": [
+        {
+          "example_text": "Мы проверили гипотезу. Результат — неожиданный. Но объяснимый.",
+          "translation_text": "We tested the hypothesis. The result is unexpected. But explainable.",
+          "notes": "Short sentences for emphasis; dash used."
+        },
+        {
+          "example_text": "Хотя данные неполны, а метод спорен, вывод остаётся прежним: модель работает.",
+          "translation_text": "Although the data are incomplete and the method is debatable, the conclusion remains the same: the model works.",
+          "notes": "Long cohesive sentence with colon."
+        },
+        {
+          "example_text": "Я согласен с целью, но не с методом; именно здесь и возникает конфликт.",
+          "translation_text": "I agree with the goal but not with the method; that’s exactly where the conflict arises.",
+          "notes": "Semicolon links related clauses."
+        }
+      ]
+    },
+    {
+      "slug": "c2-036",
+      "title": "Summarize and integrate prior discourse using nominal recaps and correlatives",
+      "summary": "Create a concise sentence that summarizes previous points using nominal recaps and correlatives.",
+      "explanation": "Pattern: \n- **Из этого следует, что…**\n- **Это означает, что…**\n- **Не только…, но и…**\n\nMeaning:\nThese patterns help you sum up what was said earlier by using nominal recaps and correlatives.\n\nHow to use:\n1. Identify the main points from your previous statements or text.\n2. Use a pattern that fits the points you want to summarize.\n3. Make sure the correlation is parallel (same syntactic type on both sides).\n4. Ensure your summary reflects accurately what was discussed before.\n\nEdge cases:\n- Be careful not to introduce new information; stick only to what has been established.\n- Watch out for grammatical consistency in correlatives.",
+      "usage_notes": "Recaps should summarize, not introduce new claims. Ensure parallel structure in correlatives.",
+      "section_slugs": [
+        "c2-long-text-cohesion"
+      ],
+      "tag_names": [
+        "c2",
+        "behavior",
+        "discourse"
+      ],
+      "section_sort_order": {
+        "c2-long-text-cohesion": 60
+      },
+      "examples": [
+        {
+          "example_text": "**Из этого следует, что** менять стратегию нужно уже сейчас.",
+          "translation_text": "It follows from this that the strategy needs to be changed already now.",
+          "notes": "Recap + implication."
+        },
+        {
+          "example_text": "Это означает **не только** снижение затрат, **но и** рост качества.",
+          "translation_text": "This means not only a reduction in costs but also an increase in quality.",
+          "notes": "Correlative structure; parallel nouns."
+        },
+        {
+          "example_text": "В итоге мы получили одно: предсказуемость выросла, а риски снизились.",
+          "translation_text": "In the end we got one thing: predictability increased and risks decreased.",
+          "notes": "Nominal recap + colon."
+        }
+      ]
+    }
+  ]
+}

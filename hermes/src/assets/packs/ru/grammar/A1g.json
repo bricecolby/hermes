@@ -1,0 +1,4101 @@
+{
+  "meta": {
+    "language": "Russian",
+    "language_id_hint": 1,
+    "level": "A1",
+    "generated_at": "2026-02-16T22:06:08.177989+00:00",
+    "counts": {
+      "sections": 16,
+      "tags": 36,
+      "grammar_points": 105,
+      "examples": 315
+    },
+    "notes": [
+      "Each grammar_point includes 3 examples. Explanation and usage_notes are written in display-ready Markdown.",
+      "Section structure is aligned to the provided 'Updated A1 Grammar' outline and includes a 'Functional discourse goals' section for steering practice."
+    ],
+    "functional_discourse_goals": [
+      "Introduce self",
+      "Describe routine (present tense)",
+      "Describe past (past tense)",
+      "Express possession",
+      "Talk about location",
+      "Express wants"
+    ]
+  },
+  "sections": [
+    {
+      "slug": "a1",
+      "title": "A1",
+      "description": "Russian A1 grammar pack organized by communicative function and form.",
+      "parent_slug": null,
+      "sort_order": 0
+    },
+    {
+      "slug": "a1/functional-discourse",
+      "title": "Functional discourse goals",
+      "description": "Communicative goals for A1 (used to steer practice and conversations).",
+      "parent_slug": "a1",
+      "sort_order": 5
+    },
+    {
+      "slug": "a1/foundations",
+      "title": "A. Sentence foundations",
+      "description": "Core sentence building blocks and basic writing conventions.",
+      "parent_slug": "a1",
+      "sort_order": 10
+    },
+    {
+      "slug": "a1/questions",
+      "title": "B. Questions",
+      "description": "Yes/no questions, wh-questions, and simple answer patterns.",
+      "parent_slug": "a1",
+      "sort_order": 20
+    },
+    {
+      "slug": "a1/negation",
+      "title": "C. Negation",
+      "description": "Negating statements and expressing absence/contrast.",
+      "parent_slug": "a1",
+      "sort_order": 30
+    },
+    {
+      "slug": "a1/nouns",
+      "title": "D. Nouns: gender, number, animacy",
+      "description": "Recognizing noun classes and making plurals.",
+      "parent_slug": "a1",
+      "sort_order": 40
+    },
+    {
+      "slug": "a1/cases",
+      "title": "E. Cases",
+      "description": "Core case uses needed at A1.",
+      "parent_slug": "a1",
+      "sort_order": 50
+    },
+    {
+      "slug": "a1/pronouns",
+      "title": "F. Pronouns",
+      "description": "Personal, possessive, demonstrative, and interrogative reference.",
+      "parent_slug": "a1",
+      "sort_order": 60
+    },
+    {
+      "slug": "a1/adjectives",
+      "title": "G. Adjectives",
+      "description": "Agreement basics and high-frequency adjective patterns.",
+      "parent_slug": "a1",
+      "sort_order": 70
+    },
+    {
+      "slug": "a1/numbers-time",
+      "title": "H. Numerals and dates",
+      "description": "Numbers, counting patterns, and dates.",
+      "parent_slug": "a1",
+      "sort_order": 80
+    },
+    {
+      "slug": "a1/verbs",
+      "title": "I. Verbs",
+      "description": "Infinitive, present/past/future, and aspect awareness.",
+      "parent_slug": "a1",
+      "sort_order": 90
+    },
+    {
+      "slug": "a1/imperative",
+      "title": "J. Imperative",
+      "description": "Commands/requests (informal and polite).",
+      "parent_slug": "a1",
+      "sort_order": 95
+    },
+    {
+      "slug": "a1/prepositions",
+      "title": "K. Prepositions",
+      "description": "High-frequency preposition + case pairings.",
+      "parent_slug": "a1",
+      "sort_order": 100
+    },
+    {
+      "slug": "a1/adverbs",
+      "title": "L. Adverbs",
+      "description": "Common adverbs and basic placement.",
+      "parent_slug": "a1",
+      "sort_order": 110
+    },
+    {
+      "slug": "a1/connectors",
+      "title": "M. Connectors and subordination",
+      "description": "Basic linking words and simple clauses.",
+      "parent_slug": "a1",
+      "sort_order": 120
+    },
+    {
+      "slug": "a1/motion",
+      "title": "N. Motion verbs (basic)",
+      "description": "идти/ходить, ехать/ездить and simple interpretations.",
+      "parent_slug": "a1",
+      "sort_order": 130
+    }
+  ],
+  "tags": [
+    {
+      "name": "case:accusative",
+      "description": "Accusative case."
+    },
+    {
+      "name": "case:dative",
+      "description": "Dative case (A1: only in a few chunks, e.g., мне нравится)."
+    },
+    {
+      "name": "case:genitive",
+      "description": "Genitive case."
+    },
+    {
+      "name": "case:nominative",
+      "description": "Nominative case."
+    },
+    {
+      "name": "case:prepositional",
+      "description": "Prepositional case."
+    },
+    {
+      "name": "df:ask-info",
+      "description": "Ask and answer basic questions."
+    },
+    {
+      "name": "df:describe-past",
+      "description": "Describe past (past tense)."
+    },
+    {
+      "name": "df:describe-people-things",
+      "description": "Describe people and things (basic descriptions)."
+    },
+    {
+      "name": "df:describe-routine",
+      "description": "Describe routine (present tense)."
+    },
+    {
+      "name": "df:express-possession",
+      "description": "Express possession / having."
+    },
+    {
+      "name": "df:express-wants",
+      "description": "Express wants/needs."
+    },
+    {
+      "name": "df:introduce-self",
+      "description": "Introduce self."
+    },
+    {
+      "name": "df:plans",
+      "description": "Talk about plans (basic future)."
+    },
+    {
+      "name": "df:preferences",
+      "description": "Express likes/dislikes and simple opinions."
+    },
+    {
+      "name": "df:social-basics",
+      "description": "Greetings, thanks, apologies, polite requests."
+    },
+    {
+      "name": "df:talk-location",
+      "description": "Talk about location (where something is)."
+    },
+    {
+      "name": "df:time",
+      "description": "Time and schedule talk."
+    },
+    {
+      "name": "df:transactions",
+      "description": "Simple transactions (buy/order/price)."
+    },
+    {
+      "name": "df:travel",
+      "description": "Move and travel (basic motion)."
+    },
+    {
+      "name": "meta:comprehension-first",
+      "description": "At A1, comprehension may be emphasized over production for this point."
+    },
+    {
+      "name": "tense:future",
+      "description": "Future tense."
+    },
+    {
+      "name": "tense:past",
+      "description": "Past tense."
+    },
+    {
+      "name": "tense:present",
+      "description": "Present tense."
+    },
+    {
+      "name": "topic:adjectives",
+      "description": "Adjectives."
+    },
+    {
+      "name": "topic:agreement",
+      "description": "Agreement (gender/number/case)."
+    },
+    {
+      "name": "topic:aspect",
+      "description": "Verbal aspect."
+    },
+    {
+      "name": "topic:connectors",
+      "description": "Connectors and linking words."
+    },
+    {
+      "name": "topic:imperative",
+      "description": "Imperatives."
+    },
+    {
+      "name": "topic:motion",
+      "description": "Verbs of motion."
+    },
+    {
+      "name": "topic:negation",
+      "description": "Negation patterns."
+    },
+    {
+      "name": "topic:nouns",
+      "description": "Noun morphology."
+    },
+    {
+      "name": "topic:numerals",
+      "description": "Numerals and counting."
+    },
+    {
+      "name": "topic:pronouns",
+      "description": "Pronouns and reference words."
+    },
+    {
+      "name": "topic:questions",
+      "description": "Question formation."
+    },
+    {
+      "name": "topic:time",
+      "description": "Time expressions."
+    },
+    {
+      "name": "topic:verbs",
+      "description": "Verbs."
+    }
+  ],
+  "grammar_points": [
+    {
+      "slug": "a1/foundations/svo-neutral",
+      "title": "Basic SVO word order (neutral default)",
+      "summary": "Use Subject–Verb–Object as a safe default in simple statements.",
+      "explanation": "Pattern:\nSubject + Verb + Object\n\nMeaning:\nA straightforward sentence order where who does something comes first, followed by what action and then what/whom it affects.\n\nHow to use:\n- Start with **who** (subject), then **what happens** (verb), then **what/whom** (object).\n- This is the most common and safest word order for simple statements in Russian. It's easy to understand and construct sentences.\n\nEdge cases:\n- Adjectives often come after nouns, not before as in English: Книга красива (The book is beautiful), not *Красива книга.*\n- Time expressions usually go at the beginning or end of a sentence, e.g., Вчера я читал книгу (Yesterday I read a book).",
+      "usage_notes": "While flexible, Russian prefers SVO for clarity. Avoid putting objects before verbs to maintain simplicity.",
+      "section_slugs": [
+        "a1/foundations",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/foundations": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я читаю книгу.",
+          "translation_text": "I read / I'm reading a book.",
+          "notes": "Neutral SVO."
+        },
+        {
+          "example_text": "Он любит кофе.",
+          "translation_text": "He likes coffee.",
+          "notes": "Neutral SVO."
+        },
+        {
+          "example_text": "Мы учим русский.",
+          "translation_text": "We study Russian.",
+          "notes": "Neutral SVO."
+        }
+      ]
+    },
+    {
+      "slug": "a1/foundations/null-copula-present",
+      "title": "Null copula in present (Он студент.)",
+      "summary": "In the present tense, Russian often omits 'to be'.",
+      "explanation": "Pattern:\n- Noun/Adj phrase without 'to be'\n\nMeaning:\n- In Russian, ‘X is Y’ in present tense often omits the verb 'is'. This makes sentences more concise.\n\nHow to use:\n- Say subject + noun/adjective: *Он студент. Она дома. Это интересно.*\n- For introducing yourself or describing someone/objects directly.\n- Use with subjects like personal pronouns (я, ты, он, она, мы).\n- Can be used for locations and states too (мы дома, она учится).\n\nEdge cases:\n- Don’t insert *есть* as a general 'is' (it’s not used like English 'is').\n- Use dashes in writing when stating an identity (он — студент), but it is replaced with a pause in speech.\n- In questions or negative sentences, use the verb 'быть'. For example: *Он не врач.*\n\nCommon pitfalls:\n- Avoid overusing this pattern in formal writing, as it can sound informal.",
+      "usage_notes": "In writing you may see a dash (—) in identity sentences; in speech it's a pause.",
+      "section_slugs": [
+        "a1/foundations",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "df:introduce-self",
+        "case:nominative"
+      ],
+      "section_sort_order": {
+        "a1/foundations": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я студент.",
+          "translation_text": "I am a student.",
+          "notes": "No explicit note needed for I am a student."
+        },
+        {
+          "example_text": "Она врач.",
+          "translation_text": "She is a doctor.",
+          "notes": "Profession noted."
+        },
+        {
+          "example_text": "Мы дома.",
+          "translation_text": "We are at home.",
+          "notes": "Location/state described."
+        }
+      ]
+    },
+    {
+      "slug": "a1/foundations/est-existence",
+      "title": "Есть as “there is/are” (existence/availability)",
+      "summary": "Use 'есть' to denote existence or availability, not identity.",
+      "explanation": "Pattern:\n\n- **Здесь есть X** (Here is/There is)\n- **У меня есть X** (I have)\n\nMeaning:\n\nMarks the presence of something in a location or the availability of something.\n\nHow to use:\n\n- To state that something exists in a place: *Здесь есть магазин.* (Here is a store.)\n- To indicate possession or availability: *У нас есть время.* (We have time.)\n\nEdge cases:\n\n- Avoid using 'есть' for identity statements, such as *Он есть студент.* Use *Он студент.* instead.\n- In casual speech, you might omit 'есть' in the possession frame: *У меня брат.* (I have a brother.), but keep it early for clarity: *У меня есть брат.*",
+      "usage_notes": "Often omitted in present tense to avoid redundancy. Keep 'есть' early for beginners.",
+      "section_slugs": [
+        "a1/foundations",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "df:talk-location",
+        "df:express-possession"
+      ],
+      "section_sort_order": {
+        "a1/foundations": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Здесь есть магазин.",
+          "translation_text": "There is a store here.",
+          "notes": "Existence."
+        },
+        {
+          "example_text": "У нас есть время.",
+          "translation_text": "We have time.",
+          "notes": "Availability."
+        },
+        {
+          "example_text": "У тебя есть вопрос?",
+          "translation_text": "Do you have a question?",
+          "notes": "Availability question."
+        }
+      ]
+    },
+    {
+      "slug": "a1/foundations/predicate-adjective",
+      "title": "Simple predicate with adjective (Она красивая.)",
+      "summary": "Use adjectives to describe someone/something in simple statements.",
+      "explanation": "Pattern: Subject + adjective (long form at A1)\n\nMeaning: Adjectives describe qualities like beauty, size, and interest in simple statements.\n\nHow to use:\n- Use long adjectives for basic descriptions. For example, 'Она красивая' means 'She is beautiful.'\n- Long adjectives are more common at this level, but short forms can be introduced later: 'Дом большой' translates to 'The house is big.'\n- Adjectives follow the subject in a simple sentence without verbs like 'is' or 'are': 'Книга интересная' means 'The book is interesting.'\n\nEdge cases:\n- Avoid using short adjectives for now, as they can be confusing and feel separate from the long forms. Short adjectives are common but should not be prioritized at this stage.\n- Be careful with grammar: Adjectives change form based on gender, number, and case of the noun they describe, but in these examples, we focus only on simple statements.",
+      "usage_notes": "Prioritize long forms; treat short forms as comprehension-first if encountered.",
+      "section_slugs": [
+        "a1/foundations",
+        "a1/adjectives",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "df:describe-people-things"
+      ],
+      "section_sort_order": {
+        "a1/foundations": 0,
+        "a1/adjectives": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Она красивая.",
+          "translation_text": "She is beautiful.",
+          "notes": "Long adjective."
+        },
+        {
+          "example_text": "Дом большой.",
+          "translation_text": "The house is big.",
+          "notes": "Predicate adjective."
+        },
+        {
+          "example_text": "Книга интересная.",
+          "translation_text": "The book is interesting.",
+          "notes": "Predicate adjective."
+        }
+      ]
+    },
+    {
+      "slug": "a1/foundations/coordination-i-a-no",
+      "title": "Basic coordination with и / а / но",
+      "summary": "Link words and simple clauses using and/but.",
+      "explanation": "Pattern: X и Y / X, а Y / X, но Y\n\nMeaning: Connect ideas by adding information (и) and showing contrast (а/но).\n\nHow to use:\n- Use **и** when you want to add more information or list similar things.\n- Use **а** for a mild contrast or switching topics within the same context.\n- Use **но** for stronger opposition, indicating a significant difference between ideas.\n\nEdge cases:\n- Don't overthink punctuation at A1: treat as chunks you can copy.\n- Commas are common before а/но when connecting clauses; prioritize meaning over commas.\n- Be careful with subject agreement after а or но. For example, 'Я студент, а он учитель' is correct, but 'Я студент, но она учитель' requires different gender agreement in the second clause.",
+      "usage_notes": "Comma usage can vary based on context; focus on clear meaning over strict punctuation rules at A1.",
+      "section_slugs": [
+        "a1/foundations",
+        "a1/connectors"
+      ],
+      "tag_names": [
+        "topic:connectors",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/foundations": 0,
+        "a1/connectors": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я студент и спортсмен.",
+          "translation_text": "I am a student and an athlete.",
+          "notes": "и = and"
+        },
+        {
+          "example_text": "Я студент, а он учитель.",
+          "translation_text": "I’m a student, and he’s a teacher (contrast).",
+          "notes": "а = mild contrast"
+        },
+        {
+          "example_text": "Я хочу чай, но нет сахара.",
+          "translation_text": "I want tea, but there is no sugar.",
+          "notes": "но = but"
+        }
+      ]
+    },
+    {
+      "slug": "a1/foundations/punctuation-simple",
+      "title": "Basic punctuation in simple sentences",
+      "summary": "Use period and question mark for simple statements and questions.",
+      "explanation": "Pattern:\n- Statements: End with a period (. )\n- Questions: End with a question mark (? )\n\nMeaning:\nPunctuation marks such as periods and question marks help make writing clearer and easier to understand.\n\nHow to use:\n- Use a period (.) at the end of simple statements, like 'I’m at home.'\n- Use a question mark (?) at the end of simple questions, like 'Are you at home?'\n- Keep each sentence focused on one idea; avoid mixing multiple thoughts in one sentence.\n\nEdge cases:\n- Do not use commas or other punctuation marks unless necessary within the sentence itself.",
+      "usage_notes": "Focus on periods (.) and question marks (?); learn about commas with connectors gradually. Punctuation can be relaxed in informal chat but should remain consistent in learning materials.",
+      "section_slugs": [
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я дома.",
+          "translation_text": "I’m at home.",
+          "notes": "Statement."
+        },
+        {
+          "example_text": "Ты дома?",
+          "translation_text": "Are you at home?",
+          "notes": "Question."
+        },
+        {
+          "example_text": "Это книга.",
+          "translation_text": "This is a book.",
+          "notes": "Statement."
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/intonation-yes-no",
+      "title": "Yes/no questions via intonation",
+      "summary": "Form yes/no questions by intonation without changing word order.",
+      "explanation": "Pattern:\n- Same word order + rising intonation\nMeaning:\n- Ask a yes/no question simply.\nHow to use:\n- Say the same sentence, but raise your voice at the end: *Ты дома?*\nEdge cases:\n- Don’t add 'do/does' equivalents—Russian doesn’t need them. For example, do not say *Дома ты?* instead of *Ты дома?*.",
+      "usage_notes": "This pattern applies to asking yes/no questions in Russian without changing the word order or adding extra words like ‘do’ or ‘does’. Practice by varying sentences: *Он работает?* (Does he work?) and *Это твоя книга?* (Is this your book?).",
+      "section_slugs": [
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Ты дома?",
+          "translation_text": "Are you at home?",
+          "notes": null
+        },
+        {
+          "example_text": "Он работает?",
+          "translation_text": "Does he work?",
+          "notes": null
+        },
+        {
+          "example_text": "Это твоя книга?",
+          "translation_text": "Is this your book?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/li-particle",
+      "title": "Particle “ли” for yes/no (useful model)",
+      "summary": "Use ли to mark questions formally.",
+      "explanation": "Pattern:\n\n**ли** is placed after the focused word, marking a yes/no question in formal speech.\n\nMeaning:\n\nAdd an explicit question marker (often in formal style).\n\nHow to use:\n- Place **ли** after the focused word: *Ты ли дома?* (rare) / *Дома ли ты?* (more bookish).\n\nExamples of when to use it include: asking for confirmation, seeking agreement, or making a statement that requires verification. It is less common in everyday speech and more frequent in written or formal contexts.\n\nEdge cases:\n- In A1 level conversation, intonation questions are more natural. Use ли mostly for recognition or understanding rather than production.",
+      "usage_notes": "Treat as comprehension-first; focus on recognizing the pattern initially.",
+      "section_slugs": [
+        "a1/questions"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0
+      },
+      "examples": [
+        {
+          "example_text": "Дома ли ты?",
+          "translation_text": "Are you at home? (bookish)",
+          "notes": "Recognition-focused."
+        },
+        {
+          "example_text": "Знаешь ли ты это слово?",
+          "translation_text": "Do you know this word? (formal)",
+          "notes": "Recognition-focused."
+        },
+        {
+          "example_text": "Правда ли это?",
+          "translation_text": "Is it true?",
+          "notes": "Useful chunk."
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/wh-kto",
+      "title": "Кто? (who) + nominative pattern",
+      "summary": "Ask about people.",
+      "explanation": "Pattern:\n\n- Кто это? (Who is this?)\n- Кто он(а)? (Who is he/she?)\n\nMeaning:\nIdentify or ask about people.\n\nHow to use:\n- Use **кто** with basic identification frames: *Кто это? Кто он(а)?*\n- For questions about a specific person, replace **это** and **он(а)** with appropriate nouns or pronouns.\n- Example: Кто твой учитель? (Who is your teacher?)\n\nEdge cases:\n- When asking about a female, use *кто она* instead of *кто он*.\n- Be careful with **он** and **она**, as they can also mean 'he' or 'she'.",
+      "usage_notes": "Be mindful of the gender when choosing between **он** and **она**.",
+      "section_slugs": [
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Кто это?",
+          "translation_text": "Who is this?",
+          "notes": null
+        },
+        {
+          "example_text": "Кто он?",
+          "translation_text": "Who is he?",
+          "notes": null
+        },
+        {
+          "example_text": "Кто твой учитель?",
+          "translation_text": "Who is your teacher?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/wh-chto",
+      "title": "Что? (what) nominative/accusative awareness",
+      "summary": "Ask about a thing, or the object of an action.",
+      "explanation": "Pattern:\n\n**Что это?** - Ask about an object.\n\n**Что ты делаешь?** - Ask about what someone is doing.\n\nMeaning:\n\nUse 'что' to ask questions about objects or actions. It means 'what.'\n\nHow to use:\n- For objects: *Что это?* (What is this?)\n- For actions: *Что ты делаешь?* (What are you doing?)\n\nEdge cases:\n- At A1, treat 'что' as a fixed question word. Case nuances will come later.\n- Be careful not to confuse it with other words like 'как,' which means 'how.'",
+      "usage_notes": "At this level, focus on using 'что' for basic questions about objects or actions. More advanced grammar will be introduced later.",
+      "section_slugs": [
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Что это?",
+          "translation_text": "What is this?",
+          "notes": null
+        },
+        {
+          "example_text": "Что ты делаешь?",
+          "translation_text": "What are you doing?",
+          "notes": null
+        },
+        {
+          "example_text": "Что ты хочешь?",
+          "translation_text": "What do you want?",
+          "notes": "Note: This example introduces a verb (хочешь) and could be used to practice other grammatical structures."
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/wh-gde",
+      "title": "Где? (where: location)",
+      "summary": "Ask where something is (static location).",
+      "explanation": "Pattern: Где + noun/pronoun?\nMeaning: Ask about location (not destination).\nHow to use:\n- Use 'где' when you mean 'where something is':\n  - Где ты? Where are you?\n  - Где магазин? Where is the store?\n  - Где моя книга? Where is my book?\n\nEdge cases:\n- Don’t confuse with 'куда' (where to):\n  - Где едем? (Where are we going?) vs. Куда едем? (Where do we go?).\n- When asking about a specific object, add a possessive pronoun or adjective: \n  - Где моя книга? Where is my book?\n\nUsage notes:\n- 'Где' can also be used to ask about the location of someone or something.\n- Make sure to use the correct form for singular and plural nouns.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:talk-location"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Где ты?",
+          "translation_text": "Where are you?",
+          "notes": null
+        },
+        {
+          "example_text": "Где магазин?",
+          "translation_text": "Where is the store?",
+          "notes": null
+        },
+        {
+          "example_text": "Где моя книга?",
+          "translation_text": "Where is my book?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/wh-kuda",
+      "title": "Куда? (where to: destination)",
+      "summary": "Ask about destination using куда.",
+      "explanation": "Pattern:\n- Куда + motion verb?\n\nMeaning:\n- Ask where someone/something is going.\n\nHow to use:\n- Use \"куда\" with motion verbs, like in these examples: *Куда ты идёшь? (Where are you going?)*, *Куда вы едете? (Where are you going by transport?)*, or *Куда мы идём сегодня? (Where are we going today?)*.\n\nEdge cases:\n- Don’t use \"где\" for destination; it’s used to ask about location, not direction.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/questions",
+        "a1/motion",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/motion": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Куда ты идёшь?",
+          "translation_text": "Where are you going (on foot)?",
+          "notes": null
+        },
+        {
+          "example_text": "Куда вы едете?",
+          "translation_text": "Where are you going (by transport)?",
+          "notes": null
+        },
+        {
+          "example_text": "Куда мы идём сегодня?",
+          "translation_text": "Where are we going today?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/wh-otkuda",
+      "title": "Откуда? (where from)",
+      "summary": "Ask about origin (where someone is from / coming from).",
+      "explanation": "Pattern:\n- Откуда + (быть/идти/ехать)?\n\nMeaning:\nAsk about origin or where someone is from.\n\nHow to use:\n- Use **откуда** for origin: *Откуда ты?* (Where are you from?) or *Откуда ты идёшь?* (Where are you coming from?).\n- When speaking formally, say *Откуда вы?* instead of *ты*.\n\nEdge cases:\n- Be careful with *быть* and *идти*; they change the context. *Откуда ты идёшь?* means 'Where are you coming from?' while *ты* alone means 'you.'",
+      "usage_notes": "Very common in introductions. Be mindful of the context and choose between *откуда* and *где* depending on what you want to ask about.",
+      "section_slugs": [
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:introduce-self",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Откуда ты?",
+          "translation_text": "Where are you from?",
+          "notes": null
+        },
+        {
+          "example_text": "Откуда вы?",
+          "translation_text": "Where are you from? (polite)",
+          "notes": null
+        },
+        {
+          "example_text": "Откуда ты идёшь?",
+          "translation_text": "Where are you coming from?",
+          "notes": "Note: The polite form is used in formal situations or when speaking to an older person."
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/wh-kogda",
+      "title": "Когда? (when)",
+      "summary": "Ask about time.",
+      "explanation": "Pattern: Когда + event?\nMeaning: Ask 'when' something happens.\nHow to use:\n- Use **когда** with a noun or verb to form questions about time, e.g., *Когда урок?* (When is the lesson?) and *Когда ты работаешь?* (When do you work?).\n\nEdge cases:\n- With events happening in the future, use present tense: *Когда мы идём в кино?* (When are we going to the cinema?).\n- When asking about a specific day or time, add more context: *Когда у тебя день рождения?* (When is your birthday?) and *Когда завтра встреча?* (When is tomorrow's meeting?).",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "df:time"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Когда урок?",
+          "translation_text": "When is the lesson?",
+          "notes": null
+        },
+        {
+          "example_text": "Когда ты работаешь?",
+          "translation_text": "When do you work?",
+          "notes": null
+        },
+        {
+          "example_text": "Когда мы идём?",
+          "translation_text": "When are we going?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/pochemu-potomu-chto",
+      "title": "Почему? + потому что (basic reason)",
+      "summary": "Ask why, and answer with because.",
+      "explanation": "Pattern:\n\n**Почему …? / … потому что …**\n\nMeaning:\n\nAsking for and giving a reason.\n\nHow to use:\n- Use **почему** to ask, e.g., *Почему ты дома?* (Why are you at home?).\n- Answer with **потому что**, e.g., *Я дома, потому что я устал.* (I’m at home because I’m tired.).\n\nEdge cases:\n- Ensure reasons stay simple and short for A1 level: one clause.\n- Be aware that overly complex or abstract answers might confuse beginners.\n- Avoid using **потому что** to combine two sentences, as this is an advanced structure.\n- When asking why someone isn’t doing something, e.g., *Почему ты не идёшь?*, respond with a reason like *Потому что я занят.* (Because I’m busy.).\n\nUsage notes: Keep reasons short and simple at A1 level. Use straightforward, concrete examples to avoid confusion.",
+      "usage_notes": "Keep reasons short at A1 (one clause).",
+      "section_slugs": [
+        "a1/questions",
+        "a1/connectors",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "topic:connectors",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/connectors": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Почему ты дома?",
+          "translation_text": "Why are you at home?",
+          "notes": null
+        },
+        {
+          "example_text": "Я дома, потому что я устал.",
+          "translation_text": "I’m at home because I’m tired.",
+          "notes": null
+        },
+        {
+          "example_text": "Почему ты не идёшь? — Потому что я занят.",
+          "translation_text": "Why aren't you going? — Because I'm busy.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/kakoy-agreement",
+      "title": "Какой/какая/какое/какие (which/what kind) basic agreement",
+      "summary": "How to ask about types of things using 'какой', 'какая', 'какое', 'какие'.",
+      "explanation": "Pattern:\n- Какой + masculine\n- Какая + feminine\n- Какое + neuter\n- Какие + plural\nMeaning:\nChoose the correct form to match the noun’s gender and number.\nHow to use:\n- To ask about a singular object, pick 'какой' for a masculine noun, 'какая' for a feminine noun, or 'какое' for a neuter noun. For example: *Какой кот? Какая книга? Какое дерево?*\n- When asking about multiple objects, use 'какие'. For example: *Коллекция какие книги у тебя?* (What kinds of books do you have in your collection?)\nEdge cases:\n- Be careful with neuter nouns; they are less common and usually require context. *Какое оружие?* (What kind of weapon?)\nUsage Notes: \nThis pattern is essential for asking about types or categories, similar to 'what kind' in English.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/questions",
+        "a1/adjectives",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "topic:agreement",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/adjectives": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Какой это фильм?",
+          "translation_text": "What kind of movie is this?",
+          "notes": null
+        },
+        {
+          "example_text": "Какая это книга?",
+          "translation_text": "What kind of book is this?",
+          "notes": null
+        },
+        {
+          "example_text": "Какие у тебя планы?",
+          "translation_text": "What plans do you have?",
+          "notes": "Note that 'какие у тебя планы?' also asks about plans, which are plural, so it follows the plural form."
+        }
+      ]
+    },
+    {
+      "slug": "a1/questions/skolko-gen-pl-awareness",
+      "title": "Сколько? + genitive plural awareness",
+      "summary": "Ask how many/much; aware of noun changes after numbers.",
+      "explanation": "Pattern: Сколько + noun (often GEN.PL)\n\nMeaning: Ask for quantity and price/time.\n\nHow to use:\n- Use **сколько** with 'how much/many':\n  - *Сколько это стоит?*\n  - *Сколько времени?*\n  - *Сколько у тебя друзей?*\n\nEdge cases:\n- Be aware that the noun often changes form after numbers/quantifiers. For example, *деньги* (money) becomes *денег* in genitive plural when used with **сколько**.\n\nUsage notes: \n- At A1, focus on comprehension first; production of genitive plural can be delayed.",
+      "usage_notes": "Production of genitive plural can be delayed; keep comprehension-first if needed.",
+      "section_slugs": [
+        "a1/questions",
+        "a1/numbers-time",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:questions",
+        "topic:numerals",
+        "meta:comprehension-first",
+        "df:transactions"
+      ],
+      "section_sort_order": {
+        "a1/questions": 0,
+        "a1/numbers-time": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Сколько это стоит?",
+          "translation_text": "How much does this cost?",
+          "notes": null
+        },
+        {
+          "example_text": "Сколько времени?",
+          "translation_text": "What time is it? / How much time?",
+          "notes": null
+        },
+        {
+          "example_text": "Сколько у тебя друзей?",
+          "translation_text": "How many friends do you have?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/negation/ne-verb",
+      "title": "не + verb (simple negation)",
+      "summary": "Negate verbs by placing не directly before the verb.",
+      "explanation": "Pattern:\n\n- не + verb\n\nMeaning:\n\nThis pattern is used to say you do not do something or that something is not happening.\n\nHow to use:\n\n- Put не right before the verb: *Я не понимаю. Он не работает.*\n- For sentences in the present tense, use the simple past participle form of the verb after не (e.g., *он не пришёл*).\n- Use не with singular subjects (я, ты, он/она/оно) and plural subjects (мы, вы, они).\n\nEdge cases:\n\n- Do not confuse this pattern with other negation structures like *нет* or *не может*, which are used in different contexts.\n- When using не + verb in a negative question, the word order remains the same: *Не ты идёшь сегодня?*\n- The form of the verb changes based on the subject and tense.",
+      "usage_notes": "Note that this pattern is commonly used for simple negations but does not change the verb's conjugation. Be mindful of different verb forms in compound tenses or with other negation words.",
+      "section_slugs": [
+        "a1/negation",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/negation": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я не понимаю.",
+          "translation_text": "I don't understand.",
+          "notes": "Survival phrase."
+        },
+        {
+          "example_text": "Он не работает.",
+          "translation_text": "He doesn't work.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы не идём сегодня.",
+          "translation_text": "We are not going today.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/negation/ne-predicate",
+      "title": "не + predicate adjective/noun (Он не студент.)",
+      "summary": "Negate identity/quality in present using не before the predicate.",
+      "explanation": "Pattern:\n\n- не + noun/adj after subject (Subject + не + noun/adj)\n\nMeaning:\n\n- Indicates negation of a quality or identity in the present tense.\n\nHow to use:\n\n- Place 'не' before the predicate word, which can be an adjective or noun: *Он не студент. Она не дома.*\n\n- The subject (He/She/It/This/That) comes first, followed by 'не', and then the predicate.\n\nEdge cases:\n\n- Be careful with double negatives; they are avoided in Russian, so always use a single 'не' before the predicate: *Это не неинтересная книга.* (This is not an uninteresting book.)\n- Not all adjectives change form when used with 'не'. For example, 'плохой' (bad) does not change to 'неплохой': *Он не плохой студент.* (He is not a bad student.)\n\nUsage Notes:\n\n- Ensure you place 'не' before the predicate word; otherwise, it may not convey the correct meaning.\n- Avoid double negatives as they are avoided in Russian grammar.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/negation",
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "df:introduce-self"
+      ],
+      "section_sort_order": {
+        "a1/negation": 0,
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Он не студент.",
+          "translation_text": "He is not a student.",
+          "notes": null
+        },
+        {
+          "example_text": "Она не дома.",
+          "translation_text": "She is not at home.",
+          "notes": null
+        },
+        {
+          "example_text": "Это не моя сумка.",
+          "translation_text": "This is not my bag.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/negation/net-gen",
+      "title": "нет + Genitive (У меня нет времени.)",
+      "summary": "Express absence / not having with нет + genitive.",
+      "explanation": "**Pattern:** нет + GEN\n\n**Meaning:** ‘There isn’t…’ / ‘I don’t have…’\n\n**How to use:**\n- Use **нет** + genitive: *У меня нет времени. Здесь нет воды.*\n\n**Common pitfalls:**\n- Don’t use accusative after нет. It requires genitive.",
+      "usage_notes": "Common frame: У меня нет + (времени/денег/идеи).",
+      "section_slugs": [
+        "a1/negation",
+        "a1/cases",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "case:genitive",
+        "df:express-possession"
+      ],
+      "section_sort_order": {
+        "a1/negation": 0,
+        "a1/cases": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "У меня нет времени.",
+          "translation_text": "I don't have time.",
+          "notes": null
+        },
+        {
+          "example_text": "Здесь нет воды.",
+          "translation_text": "There is no water here.",
+          "notes": null
+        },
+        {
+          "example_text": "У него нет телефона.",
+          "translation_text": "He doesn't have a phone.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/negation/short-answers",
+      "title": "Negative answers: нет / не (short answers)",
+      "summary": "Answer yes/no questions with short negative replies.",
+      "explanation": "Pattern:\n— …? — Нет.\n\n— …? — Не знаю.\n\nMeaning: Short, natural negative responses.\n\nHow to use:\n- Use 'Нет' for a simple no. Example: 'Не знаю.' (I don't know.)\n- Use 'не + verb' to say 'I don’t...': Examples: 'Не понимаю.' (I don’t understand.), 'Не умею.' (I can’t do it.).\n\nEdge cases:\n- Do not use 'не(т)' as a standalone phrase, unless you want to sound informal. Use 'нет' instead for clarity.\n- Be careful with verb conjugations in negative responses: ensure they match the subject's form correctly.",
+      "usage_notes": "‘не(т)’ is colloquial; keep ‘нет’ as default for formal communication.",
+      "section_slugs": [
+        "a1/negation",
+        "a1/questions"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:questions",
+        "df:social-basics"
+      ],
+      "section_sort_order": {
+        "a1/negation": 0,
+        "a1/questions": 0
+      },
+      "examples": [
+        {
+          "example_text": "— Ты дома? — Нет.",
+          "translation_text": "— Are you at home? — No.",
+          "notes": null
+        },
+        {
+          "example_text": "— Ты знаешь? — Не знаю.",
+          "translation_text": "— Do you know? — I don't know.",
+          "notes": null
+        },
+        {
+          "example_text": "— Понятно? — Не понимаю.",
+          "translation_text": "— Is it clear? — I don't understand.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/negation/ne-x-a-y",
+      "title": "Basic contrast: не X, а Y",
+      "summary": "Correct or contrast information: not X but Y.",
+      "explanation": "Pattern: не X, а Y\nMeaning: This pattern is used to reject one option and replace it with another.\nHow to use:\n- Use **не …, а …** to correct or contrast information.\n  Example: Это не чай, а кофе. (This is not tea but coffee.)\nEdge cases:\n- Be careful about the word order; in Russian, 'не' comes before 'X', and 'а' follows it.\n- Do not add additional words like 'это' or 'такой' between 'не' and 'X'.\n\nUsage Notes: Use this pattern to clarify misunderstandings in conversation. It's a simple yet effective way to correct someone's assumption.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/negation",
+        "a1/connectors"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "topic:connectors",
+        "df:transactions"
+      ],
+      "section_sort_order": {
+        "a1/negation": 0,
+        "a1/connectors": 0
+      },
+      "examples": [
+        {
+          "example_text": "Это не чай, а кофе.",
+          "translation_text": "This is not tea but coffee.",
+          "notes": null
+        },
+        {
+          "example_text": "Он не студент, а учитель.",
+          "translation_text": "He is not a student but a teacher.",
+          "notes": null
+        },
+        {
+          "example_text": "Я не дома, а на работе.",
+          "translation_text": "I'm not at home but at work.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/gender-masc",
+      "title": "Gender: masculine by ending (zero / -й)",
+      "summary": "Recognize masculine nouns often ending in consonants or -й.",
+      "explanation": "Pattern:\n\n- Most masculine nouns end with a consonant, like *стол* (table).\n- Some masculine nouns end in **-й**, such as *музей* (museum).\n\nMeaning:\n\nUnderstanding this pattern helps you choose the correct adjectives and pronouns.\n\nHow to use:\n- Look for nouns ending in a consonant or -й. For example, *дом, стол, музей.*\n- If unsure, remember that some masculine nouns may end in -а, like *папа* (dad).\n\nEdge cases:\n- Be aware of exceptions: words like *день* (day) are masculine but do not follow this pattern.\n- Practice identifying these patterns to improve your grammar skills.",
+      "usage_notes": "Remember that some masculine nouns may end in -а, such as *папа*. Also, pay attention to irregular forms.",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "topic:agreement",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "дом — он",
+          "translation_text": "house — 'he' (masc)",
+          "notes": null
+        },
+        {
+          "example_text": "стол — он",
+          "translation_text": "table — masc",
+          "notes": null
+        },
+        {
+          "example_text": "музей — он",
+          "translation_text": "museum — masc (-й)",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/gender-fem",
+      "title": "Gender: feminine by ending (-а/-я, many -ь)",
+      "summary": "Recognize feminine nouns ending in -а/-я, many -ь.",
+      "explanation": "Pattern:\n\nMost nouns ending in **-а** (e.g., книга) and **-я** (e.g., неделя) are feminine.\nMany nouns ending in **-ь** also follow this pattern (e.g., дверь).\n\nMeaning:\nWhen you identify a noun as feminine, use the correct adjectives and pronouns to agree with it.\n\nHow to use:\n- Most nouns ending in **-а/-я** are feminine.\n- Many nouns ending in **-ь** are also feminine (e.g., дверь - she).\n- For example: книга — она | неделя — она | дверь — она.\n\nEdge cases:\n- Some exceptions may exist, like окно (window), which is neutral despite its ending.\n- Be cautious and review common nouns to avoid mistakes.",
+      "usage_notes": "Note that not all words following these endings are always feminine. Always double-check to ensure accuracy.",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "topic:agreement",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "книга — она",
+          "translation_text": "book — 'she' (fem)",
+          "notes": null
+        },
+        {
+          "example_text": "неделя — она",
+          "translation_text": "week — fem (-я)",
+          "notes": null
+        },
+        {
+          "example_text": "дверь — она",
+          "translation_text": "door — fem (-ь)",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/gender-neut",
+      "title": "Gender: neuter by ending (-о/-е)",
+      "summary": "Recognize neuter nouns for agreement.",
+      "explanation": "Pattern:\n\n**Neuter Nouns Ending in -о/-е:**\n- окно (window)\n- море (sea)\n- письмо (letter)\n\nMeaning:\n\nChoose the correct neuter form of adjectives and pronouns to match these nouns.\n\nHow to use:\n- Most nouns ending in **-о/-е** are neuter: *окно, море, письмо*.\n- When describing or referring to a neuter noun using a pronoun, use 'оно' (it).\n\nEdge cases:\n- Not all nouns ending in -о/-е are neuter. For example, *зерно* (grain) is masculine, not neuter.\n\nUsage notes: \nBe careful with exceptions like *зерно*, which does not follow this rule.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "topic:agreement",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "окно — оно",
+          "translation_text": "window — 'it' (neuter)",
+          "notes": null
+        },
+        {
+          "example_text": "море — оно",
+          "translation_text": "sea — neuter",
+          "notes": null
+        },
+        {
+          "example_text": "письмо — оно",
+          "translation_text": "letter — neuter",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/common-gender-traps",
+      "title": "Common gender traps (e.g., папа masculine)",
+      "summary": "Some words look feminine but are masculine.",
+      "explanation": "Pattern:\n- папа (m), дядя (m)\n\nMeaning:\nThese nouns, despite ending in -а/-я, are masculine and require masculine agreement.\n\nHow to use:\n- Certain **male people words** end in **-а/-я** but are masculine: *папа, дядя*. Use masculine agreement: *мой папа*.\n- Keep a small set of common examples: *дедушка, тёте, сестра* (but note these are feminine).\n\nEdge cases:\n- Avoid mistakes like saying *моя дядя* or *дома папа*, which are incorrect.",
+      "usage_notes": "Remember to use masculine agreement with words like папа and дядя. These terms can also refer to female relatives in certain contexts, so be careful!",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "topic:agreement",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "мой папа",
+          "translation_text": "my dad",
+          "notes": "Masculine agreement is crucial: *мой папа* (my dad) not *мо́й папа́*."
+        },
+        {
+          "example_text": "этот дядя",
+          "translation_text": "this man/uncle",
+          "notes": "Masculine demonstrative."
+        },
+        {
+          "example_text": "папа дома",
+          "translation_text": "dad is at home",
+          "notes": "The subject uses the masculine form: *папа́ дома́* (dad is at home)."
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/animacy",
+      "title": "Animacy concept (affects accusative)",
+      "summary": "Know animate vs inanimate because it changes masculine accusative.",
+      "explanation": "Pattern:\n**Example:** Я вижу стол (I see a table) - Inanimate.\n\nMeaning:\nThe concept of animacy affects how certain nouns change their form in the accusative case, particularly for masculine nouns.\n\nHow to use:\n- For many masculine nouns, animate objects take a genitive-like form in the accusative: *брата* (brother) vs. *стол* (table).\n- Inanimate nouns remain in the nominative or accusative without change when used as objects.\n- Common mistakes include using the wrong case with animate objects, e.g., mistakenly using *стола* instead of *брата*.\n\nEdge cases:\n- Some masculine nouns that are normally inanimate can be treated as animate, such as *отец* (father) or *сын* (son), when referring to a specific person. Use the genitive-like form in accusative (*отца*, *сына*).\n- Be cautious with certain diminutives and names, which may not always follow standard patterns.\n\nUsage notes: Pay special attention to animate vs. inanimate distinction, as it significantly affects the accusative form of masculine nouns.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/nouns",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "case:accusative",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу стол.",
+          "translation_text": "I see a table.",
+          "notes": "Inanimate."
+        },
+        {
+          "example_text": "Я вижу брата.",
+          "translation_text": "I see my brother.",
+          "notes": "Note: 'брата' shows genitive-like form due to animate status."
+        },
+        {
+          "example_text": "Она любит кота.",
+          "translation_text": "She loves the cat.",
+          "notes": "Animate."
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/plural-y-i",
+      "title": "Plural: -ы/-и formation (basic + spelling constraints awareness)",
+      "summary": "Form regular plurals using -ы/-и and understand basic spelling rules.",
+      "explanation": "Pattern:\n\n- Form plurals by adding **-ы** to nouns ending in consonants, e.g., стол → столы.\n- For nouns ending in certain consonants followed by a soft sign (ь), add **-и**, e.g., книга → книги.\n\nMeaning:\n\nThis is the basic plural formation rule for Russian nouns. Understanding these patterns helps in recognizing and forming plurals correctly.\n\nHow to use:\n- Many nouns, like 'стол' (table) or 'книга' (book), follow this pattern.\n- Some consonants require a soft sign before adding -и, such as in 'день' (day) → 'дни'.\n- Not all nouns form plurals with these endings. For instance, 'мама' (mom) is an exception and does not change its ending to form the plural.\n\nEdge cases:\n- Remember that adding -и can sometimes involve changing consonants before it, e.g., 'бабочка' → 'бабочки'.",
+      "usage_notes": "Teach these patterns with examples; full spelling rules can be introduced later.",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "стол → столы",
+          "translation_text": "table → tables",
+          "notes": null
+        },
+        {
+          "example_text": "книга → книги",
+          "translation_text": "book → books",
+          "notes": null
+        },
+        {
+          "example_text": "день → дни",
+          "translation_text": "day → days",
+          "notes": "Note: The common -ь pattern is applied here."
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/plural-a-ya-masc",
+      "title": "Plural: -а/-я for some masculine nouns (high-frequency set)",
+      "summary": "Some common masculine nouns form plural with -а/-я.",
+      "explanation": "Pattern:\n- город → города\n- паспорт → паспорта\n- адрес → адреса\nMeaning:\nThis is a common plural pattern for some masculine nouns, where they add -а or -я in the plural form.\nHow to use:\n- Memorize high-frequency words that take -а/-я in plural (often place/objects).\n- Practice by creating sentences with these nouns in both singular and plural forms.\nEdge cases:\nWhile most masculine nouns follow this pattern, some do not. For example, 'стол' becomes 'столы', which is an exception to the rule.\nUsage notes: Keep the list small at A1; expand gradually.",
+      "usage_notes": "Keep the list small at A1; expand gradually.",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "город → города",
+          "translation_text": "city → cities",
+          "notes": null
+        },
+        {
+          "example_text": "паспорт → паспорта",
+          "translation_text": "passport → passports",
+          "notes": null
+        },
+        {
+          "example_text": "адрес → адреса",
+          "translation_text": "address → addresses",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/plural-neuter-a-ya",
+      "title": "Plural: neuter -о/-е → -а/-я (окно→окна)",
+      "summary": "Common neuter plural pattern.",
+      "explanation": "Pattern:\n- окно → окна\n- море → моря\nMeaning: Neuter nouns often change their ending from -о/-е to -а/-я when forming plurals.\nHow to use:\n- For many neuter nouns, replace **-о** with **-а**, and **-е** with **-я**. This is the most common pattern.\n- Edge cases: While rare, some nouns might not follow this rule; always refer to a dictionary or grammar guide for specific words like 'вино' (wine), which remains 'вино' in plural.\n\nUsage_notes: Be cautious of irregular neuter nouns that do not change their ending, such as 'вино'. Always double-check with a reliable resource.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "окно → окна",
+          "translation_text": "window → windows",
+          "notes": null
+        },
+        {
+          "example_text": "место → места",
+          "translation_text": "place → places",
+          "notes": null
+        },
+        {
+          "example_text": "море → моря",
+          "translation_text": "sea → seas",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/plural-soft-sign",
+      "title": "Plural: soft sign patterns (день→дни, дверь→двери)",
+      "summary": "Common plural changes for -ь nouns.",
+      "explanation": "Pattern:\n\n- Soft-sign nouns ending in **-ь** often form plurals with **-и**, sometimes with a stem change (день→дни).\n\nMeaning:\n\nSoft-sign nouns follow predictable rules when forming their plural forms.\n\nHow to use:\n- Remember that many soft-sign nouns like день, дверь, and ночь become дни, двери, and ночи respectively in the plural.\n- Some nouns have stem changes: for example, ученик→ученые (student→students) but доктор→доктора (doctor→doctors).\n\nEdge cases:\n- Not all -ь nouns follow this pattern; some might remain unchanged or change with a different suffix.\n- For now, focus on common words and don’t over-generalize other patterns.",
+      "usage_notes": "Teach frequent words as chunks to avoid confusion. Overgeneralization can lead to incorrect forms.",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "день → дни",
+          "translation_text": "day → days",
+          "notes": null
+        },
+        {
+          "example_text": "дверь → двери",
+          "translation_text": "door → doors",
+          "notes": null
+        },
+        {
+          "example_text": "ночь → ночи",
+          "translation_text": "night → nights",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/nouns/irregular-plurals",
+      "title": "Common irregular plurals (small curated set)",
+      "summary": "Recognize and use common irregular plurals.",
+      "explanation": "Pattern:\n- человек → люди\n- ребёнок → дети\n- друг → друзья\nMeaning:\nSome plurals must be memorized as they don’t follow the regular rules.\nHow to use:\n- Learn these irregular plurals early because they appear frequently in Russian. For example, you might hear someone say 'ребёнки' instead of 'дети'.\n- Pay attention to context and pronunciation to understand when to use which plural form.\nEdge cases:\nBe aware that 'человек' has the irregular plural 'люди', unlike other nouns with '-ок' endings, like 'ребёнок' or 'друг'.",
+      "usage_notes": "Comprehension is key; focus on recognizing and understanding these forms rather than producing them at this stage.",
+      "section_slugs": [
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:nouns",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "человек → люди",
+          "translation_text": "person → people",
+          "notes": null
+        },
+        {
+          "example_text": "ребёнок → дети",
+          "translation_text": "child → children",
+          "notes": null
+        },
+        {
+          "example_text": "друг → друзья",
+          "translation_text": "friend → friends",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/nominative-subject",
+      "title": "Nominative for subject",
+      "summary": "Use nominative case for the subject of the sentence.",
+      "explanation": "Pattern:\n- Subject is always in nominative case.\n\nMeaning:\n- Shows who or what the sentence is about.\n\nHow to use:\n- Use the dictionary form of nouns for subjects: *Мама дома. Студенты читают.*\n- Ensure the verb agrees with the subject, e.g., *Мама любит кофе* (Mama likes coffee).\n\nEdge cases:\n- Watch out for irregular verbs or pronouns that may not follow this pattern.\n- Be cautious of sentences where prepositions are involved, as they can affect case usage.\n\nUsage notes: \n- Pay attention to agreement between the subject and verb in number and gender.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/cases",
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "case:nominative",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Мама дома.",
+          "translation_text": "Mom is at home.",
+          "notes": null
+        },
+        {
+          "example_text": "Книга на столе.",
+          "translation_text": "The book is on the table.",
+          "notes": null
+        },
+        {
+          "example_text": "Студенты читают.",
+          "translation_text": "Students read.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/nominative-identification",
+      "title": "Nominative for identification (X is Y)",
+      "summary": "Nominative for identification",
+      "explanation": "Pattern:\n- X (NOM) + Y (NOM)\n\nMeaning:\n- This pattern states who someone is, using nominative nouns on both sides of the sentence.\n\nHow to use:\n- Use this pattern in present tense: *Он студент. Она врач.*\n- Example: *Я русский. Мы друзья.*\n- Remember that Y (NOM) can also be a pronoun, like *он*, *она*, or *мы*.\n\nEdge cases:\n- Be careful with verbs of state, which might require different case endings: *Он в университетах.*\n- Use this pattern for basic identity statements in the present tense only.",
+      "usage_notes": "Avoid using this pattern for complex sentences or future actions. Stick to simple statements about who someone is.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "case:nominative",
+        "df:introduce-self"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Он студент.",
+          "translation_text": "He is a student.",
+          "notes": null
+        },
+        {
+          "example_text": "Она учитель.",
+          "translation_text": "She is a teacher.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы друзья.",
+          "translation_text": "We are friends.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/eto-np",
+      "title": "Nominative in “это + NP” (Это книга.)",
+      "summary": "Use это + noun to identify an object/person.",
+      "explanation": "Pattern: Это + noun (NOM)\n\nMeaning: This is... \n\nHow to use:\n- Use **это** + noun to identify objects or people, e.g., *Это книга.* (This is a book.)\n- Add possessives and descriptors as needed: *Это мой друг.* (This is my friend.); *Это хороший ресторан.* (This is a good restaurant.)\n\nEdge cases:\n- Be careful with definite articles; for example, if you are talking about a specific known book, use the instrumental case instead of **это**.\n- This pattern is used to introduce new information or point to something in front of you.\n\nUsage notes: Be mindful of context and register. Use this phrase when pointing at objects or people in your immediate environment.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/cases",
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "case:nominative",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Это книга.",
+          "translation_text": "This is a book.",
+          "notes": null
+        },
+        {
+          "example_text": "Это мой друг.",
+          "translation_text": "This is my friend.",
+          "notes": null
+        },
+        {
+          "example_text": "Это хороший ресторан.",
+          "translation_text": "This is a good restaurant.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/acc-direct-inanimate",
+      "title": "Accusative for direct object (inanimate = nominative form)",
+      "summary": "Many inanimate direct objects look the same as nominative.",
+      "explanation": "Pattern:\n\n- Verb + inanimate noun (ACC=NOM)\n\nMeaning:\n\nThe accusative case is used for direct objects when they are inanimate and do not change their form compared to the nominative.\n\nHow to use:\n\n- For many inanimate nouns, simply use the base form of the noun: *пью чай (I drink tea), читаю текст (We read a text)*.\n\nEdge cases:\n\n- Be cautious with certain verbs that might require different forms for direct objects. For example, *слушаю музыку* (listen to music) uses a different form than the nominative.",
+      "usage_notes": "Watch out for specific verbs where the noun changes form in the accusative case.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "df:transactions"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я пью чай.",
+          "translation_text": "I drink tea.",
+          "notes": null
+        },
+        {
+          "example_text": "Он покупает хлеб.",
+          "translation_text": "He buys bread.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы читаем текст.",
+          "translation_text": "We read a text.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/acc-direct-animate-masc",
+      "title": "Accusative for direct object (animate masculine = genitive-like)",
+      "summary": "Masculine animate objects often take genitive form in accusative.",
+      "explanation": "Pattern:\n- Verb + animate masc noun (ACC=GEN)\n\nMeaning:\n- Marks a male person/animal as direct object in the sentence.\n\nHow to use:\n- For masculine animate objects, often use the genitive form in accusative: *вижу брата, люблю кота*.\n- Example: I see my brother (вижу брата), She loves the cat (любит кота).\n- Note that this pattern does not apply to feminine or neuter nouns.\n\nEdge cases:\n- Some verbs might have irregular patterns. Practice and context are key.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/cases",
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "case:genitive"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу брата.",
+          "translation_text": "I see my brother.",
+          "notes": null
+        },
+        {
+          "example_text": "Она любит кота.",
+          "translation_text": "She loves the cat.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы знаем учителя.",
+          "translation_text": "We know the teacher.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/acc-fem-a-u",
+      "title": "Accusative for feminine -а → -у",
+      "summary": "Feminine nouns ending in -а change to -у as objects.",
+      "explanation": "Pattern: -а → -у\n\nMeaning: This is a common pattern for feminine nouns that become direct objects and are placed after verbs of motion or perception.\n\nHow to use:\n- Change the ending from -а to -у when the noun is used as a direct object. For example, *книга → книгу* (book) and *мама → маму* (mom).\n- Use this pattern consistently in sentences: *Я читаю книгу.* (I read a book.)\n- Note that other feminine nouns might have different patterns or no change at all.\n\nEdge cases:\n- Be cautious with irregular nouns, which might not follow this rule. Always consult a reference if unsure.",
+      "usage_notes": "Remember to double-check the ending for consistency in your sentences. Some words may require no change or different endings depending on their form and context.",
+      "section_slugs": [
+        "a1/cases"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я читаю книгу.",
+          "translation_text": "I read a book.",
+          "notes": "книга→книгу"
+        },
+        {
+          "example_text": "Мы видим маму.",
+          "translation_text": "We see mom.",
+          "notes": "мама→маму"
+        },
+        {
+          "example_text": "Она слушает музыку.",
+          "translation_text": "She listens to music.",
+          "notes": "музыка→музыку"
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/acc-fem-ya-yu",
+      "title": "Accusative for feminine -я → -ю",
+      "summary": "Feminine nouns ending in -я change to -ю when used as direct objects.",
+      "explanation": "Pattern:\n-ya → -yu\n\nMeaning:\nThe accusative case is used for direct objects, which are things that receive the action of a verb. For feminine nouns ending in -я, their form changes to -ю.\n\nHow to use:\n- Change the ending: *семья → семью, статья → статью*\n- Practice by replacing verbs with different forms like 'слушаю' (listen) and 'наблюдаю' (watch): *она слушает музыку → она слушает музыку*; *он наблюдает за небом → он наблюдает за небом.*\n\nEdge cases:\n- Be cautious with nouns that have irregular forms in the accusative case, such as 'книга' (book), which remains '-ку'.",
+      "usage_notes": "Note that not all feminine nouns follow this pattern. Some may change to a different ending or remain the same.",
+      "section_slugs": [
+        "a1/cases"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу семью.",
+          "translation_text": "I see the family.",
+          "notes": "семья→семью"
+        },
+        {
+          "example_text": "Она читает статью.",
+          "translation_text": "She reads an article.",
+          "notes": "статья→статью"
+        },
+        {
+          "example_text": "Мы знаем историю.",
+          "translation_text": "We know the story.",
+          "notes": "история→историю"
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/acc-personal-pronouns",
+      "title": "Accusative personal pronouns (меня/тебя/его/её/нас/вас/их)",
+      "summary": "Use object forms for personal pronouns.",
+      "explanation": "Pattern: вижу/знаю/люблю + меня/тебя/его/её/нас/вас/их\nMeaning: These are direct-object pronoun forms.\nHow to use:\n- Use these forms when someone is the object of a sentence. For example, *Я вижу тебя* (I see you) or *Ты знаешь её* (You know her).\n- Remember that после вида (after verbs like видеть, знать) these pronouns go directly after the verb.\nEdge cases:\n- Accusative forms also work in genitive: его, её, их. For example, *Это его книга* (This is his book), but remember they don’t change.",
+      "usage_notes": "Note that his/her/their in genitive stay the same and do not change.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/pronouns"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "topic:pronouns"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/pronouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "Ты видишь меня?",
+          "translation_text": "Do you see me?",
+          "notes": null
+        },
+        {
+          "example_text": "Я знаю её.",
+          "translation_text": "I know her.",
+          "notes": null
+        },
+        {
+          "example_text": "Он любит их.",
+          "translation_text": "He likes them.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/acc-v-na-destination",
+      "title": "Accusative after “в/на” for destination",
+      "summary": "Use в/на + accusative to answer 'куда?' (where to).",
+      "explanation": "Pattern: в/на + ACC\nMeaning: Destination (going to).\nHow to use:\n- Use **в** for many enclosed places and cities, such as *школу* (school), *парк* (park):\n  - Я иду в школу. (I'm going to school.)\n- Use **на** for work, events, and surfaces, like *работу* (work) or *урок* (lesson):\n  - Мы идём на работу. (We’re going to work.)\nEdge cases:\n- Be careful with specific places where either preposition might be used: *в больницу* (to the hospital), *на стадион* (to the stadium).",
+      "usage_notes": "Learn common collocations: в школу, в парк, на работу, на урок. Remember that **в** is typically used for enclosed spaces and cities, while **на** is for work, events, and surfaces.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/prepositions",
+        "a1/motion"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/prepositions": 0,
+        "a1/motion": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я иду в школу.",
+          "translation_text": "I'm going to school.",
+          "notes": null
+        },
+        {
+          "example_text": "Она едет в парк.",
+          "translation_text": "She’s going to the park.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы идём на работу.",
+          "translation_text": "We’re going to work.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/gen-u-possession",
+      "title": "Genitive for possession with “у + Genitive”",
+      "summary": "Express possession using у + genitive, often with (есть).",
+      "explanation": "Pattern: у + GEN + (есть) + noun\nMeaning: Indicates possession, meaning 'someone has...'.\nHow to use:\n- Use **у меня/у тебя/у него/у неё/у нас/у вас/у них** to say who has something.\n- Examples include ‘У меня есть брат’, meaning 'I have a brother', and ‘У неё есть машина’, meaning 'She has a car'.\nEdge cases:\n- You can keep (есть) optional depending on style, as in ‘У нас время’ for 'We have time'.\n- Avoid using this pattern with animate objects that don't typically express ownership, like abstract concepts or animals.\nUsage Notes: At A1 level, the inclusion of (есть) is optional and depends on personal preference and context.",
+      "usage_notes": "At A1 you can keep (есть) optional depending on style.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/prepositions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:genitive",
+        "df:express-possession"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/prepositions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "У меня есть брат.",
+          "translation_text": "I have a brother.",
+          "notes": null
+        },
+        {
+          "example_text": "У неё есть машина.",
+          "translation_text": "She has a car.",
+          "notes": null
+        },
+        {
+          "example_text": "У нас есть время.",
+          "translation_text": "We have time.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/gen-after-net",
+      "title": "Genitive after “нет”",
+      "summary": "After нет, use the genitive case to express absence.",
+      "explanation": "Pattern:\n\n- **нет + GEN**\nMeaning:\n\n- Says something is absent.\nHow to use:\n\n- Use genitive after **нет**: *нет времени, нет воды, нет денег*.\n- Note that some words like *кофе* are indeclinable and remain the same in all cases: *У нас нет кофе.*\nEdge cases:\n\n- Be careful with words that can be both countable and uncountable; use appropriate genitive forms. For example, *нет денег* (money) but *нет машины* (car).",
+      "usage_notes": "Remember frequent genitives: времени, денег, воды. Note that indeclinable nouns like кофе do not change form.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/negation"
+      ],
+      "tag_names": [
+        "case:genitive",
+        "topic:negation"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/negation": 0
+      },
+      "examples": [
+        {
+          "example_text": "У меня нет времени.",
+          "translation_text": "I don’t have time.",
+          "notes": null
+        },
+        {
+          "example_text": "Здесь нет воды.",
+          "translation_text": "There is no water here.",
+          "notes": null
+        },
+        {
+          "example_text": "У нас нет денег.",
+          "translation_text": "We don’t have money.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/gen-quantities-2-4",
+      "title": "Genitive after quantities 2–4 (basic awareness)",
+      "summary": "After 2–4, many nouns use genitive singular.",
+      "explanation": "Pattern: \n\n2–4 + GEN.SG (often)\n\nMeaning: \n\nThis is a counting pattern for many nouns in Russian, where numbers from two to four are often followed by the genitive singular case.\n\nHow to use: \n- Learn the common pattern: *два стола, три книги, четыре дня.*\n- Practice with similar examples like: пять столов (five tables), шесть книг (six books), семь дней (seven days).\n\nEdge cases:\n- Some nouns have irregular patterns; for example, *две гвозди* (two nails) and *четыре часа* (four hours).\n- Always check with a dictionary or practice to confirm specific exceptions.",
+      "usage_notes": "Treat as a counting rule with examples; full declension comes later. Be cautious of irregular forms like *две гвозди*. Practice more to reinforce this pattern.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/numbers-time"
+      ],
+      "tag_names": [
+        "case:genitive",
+        "topic:numerals",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/numbers-time": 0
+      },
+      "examples": [
+        {
+          "example_text": "два стола",
+          "translation_text": "two tables",
+          "notes": "GEN.SG form"
+        },
+        {
+          "example_text": "три книги",
+          "translation_text": "three books",
+          "notes": "GEN.SG form"
+        },
+        {
+          "example_text": "четыре дня",
+          "translation_text": "four days",
+          "notes": "GEN.SG form"
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/gen-pl-mnogo-skolko",
+      "title": "Genitive plural basics for много/сколько",
+      "summary": "After много/сколько, nouns are often genitive plural.",
+      "explanation": "Pattern: много/сколько + GEN.PL\nMeaning: 'many/how many' pattern.\nHow to use:\n- Use genitive plural after **много** and often after **сколько**: *много людей, сколько друзей?*\n- For example, in the sentence 'У меня много денег', you would say 'деньг**ей**'.\n- However, for some nouns like 'люди', the plural form (людей) is irregular.\nEdge cases:\n- Be mindful that **сколько** does not always require a genitive plural: *Сколько книг?* still uses the nominative plural 'книг'.\n\nUsage notes: Focus on recognizing and understanding this pattern at A1; production can be optional.",
+      "usage_notes": "Focus on recognition. Production of this pattern is optional at A1.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/numbers-time",
+        "a1/questions"
+      ],
+      "tag_names": [
+        "case:genitive",
+        "topic:numerals",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/numbers-time": 0,
+        "a1/questions": 0
+      },
+      "examples": [
+        {
+          "example_text": "У меня много друзей.",
+          "translation_text": "I have many friends.",
+          "notes": "friends in GEN.PL"
+        },
+        {
+          "example_text": "Сколько у тебя денег?",
+          "translation_text": "How much money do you have?",
+          "notes": "money often genitive"
+        },
+        {
+          "example_text": "Здесь много людей.",
+          "translation_text": "There are many people here.",
+          "notes": "Note the irregular plural form of 'людей'."
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/prep-v-location",
+      "title": "Prepositional after “в” (location) (в школе)",
+      "summary": "Use в + prepositional to say where (in/at).",
+      "explanation": "Pattern:\n\n**в + prepositional (где?)**: Use this pattern to indicate where something is located, such as in a place.\n\nMeaning:\n\nThis construction helps you express static location, meaning the position or place of an object or person. For example, if someone asks 'Где книга?' (Where is the book?), you would answer with 'Книга в сумке.' (The book is in the bag.)\n\nHow to use:\n- Use **в** followed by a prepositional case ending for location: *в школе* (in school), *в городе* (in the city), *в комнате* (in the room).\n- Remember that the verb 'быть' (to be) is often implied, but not used in these sentences.\n\nEdge cases:\n- Be cautious when the location starts with a preposition like 'в,' as it can change the meaning. For example, *в городе* means 'in the city,' while *городе* would refer to 'city' as an abstract concept or location (e.g., in the city center).",
+      "usage_notes": "Note that 'в' is used for indoor locations and large outdoor spaces like cities. Do not confuse it with other prepositions that might imply a different type of location, such as *на* (on) or *под* (under).",
+      "section_slugs": [
+        "a1/cases",
+        "a1/prepositions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:prepositional",
+        "df:talk-location"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/prepositions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я в школе.",
+          "translation_text": "I’m at school.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы в городе.",
+          "translation_text": "We are in the city.",
+          "notes": null
+        },
+        {
+          "example_text": "Книга в сумке.",
+          "translation_text": "The book is in the bag.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/prep-na-location",
+      "title": "Prepositional after “на” (location) (на работе)",
+      "summary": "Use на + prepositional for certain locations and surfaces.",
+      "explanation": "Pattern:\n\n**на + PREP (где?)**: This pattern is used to describe static location on/at a surface or in a place.\n\nMeaning:\n\n- **Static location on/at**: The word 'на' indicates that something is located on the surface of an object, or at a specific place. For example, 'на столе' means 'on the table'.\n\nHow to use:\n- Use **на** with prepositional for work, events, surfaces: *на работе (at work), на улице (outside/on the street), на столе (on the table)*.\n\nExamples of usage:\n- На работе. - At work.\n- На улице. - Outside/on the street.\n- На столе. - On the table.\n\nEdge cases:\n- Be careful not to confuse 'на' with other prepositions. For example, 'в комнате' means 'in the room', while 'на стене' means 'on the wall'.\n\nUsage notes: \n- Remember that 'на' is used for static locations and surfaces.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/cases",
+        "a1/prepositions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:prepositional",
+        "df:talk-location"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/prepositions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Он на работе.",
+          "translation_text": "He is at work.",
+          "notes": null
+        },
+        {
+          "example_text": "Телефон на столе.",
+          "translation_text": "The phone is on the table.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы на улице.",
+          "translation_text": "We are outside/on the street.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/cases/prep-o-govorit-dumat",
+      "title": "Prepositional: говорить/думать о + Prep",
+      "summary": "Use о + prepositional after 'talk/think about'.",
+      "explanation": "Pattern: говорить/думать + о + PREP\nMeaning: This pattern is used to express talking or thinking about something.\nHow to use:\n- To talk about a topic, say 'говорю о книге' (I talk about the book) or 'Мы говорим о путешествиях' (We talk about travels).\n- When expressing thoughts, use 'думаю о работе' (I think about work) or 'Она думает о семье' (She thinks about family).\nEdge cases:\n- Be mindful of the preposition used with certain nouns. For example, use 'о книге' but not just 'об книге' in this pattern.",
+      "usage_notes": "Keep vocabulary simple; focus on the grammatical structure for now. The meaning will come as you learn more Russian words.",
+      "section_slugs": [
+        "a1/cases",
+        "a1/prepositions",
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "case:prepositional",
+        "topic:verbs",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/cases": 0,
+        "a1/prepositions": 0,
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я думаю о работе.",
+          "translation_text": "I think about work.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы говорим о книге.",
+          "translation_text": "We talk about the book.",
+          "notes": null
+        },
+        {
+          "example_text": "Она думает о семье.",
+          "translation_text": "She thinks about the family.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/pronouns/personal-nominative",
+      "title": "Personal pronouns nominative (я/ты/он/она/оно/мы/вы/они)",
+      "summary": "Use these as subjects.",
+      "explanation": "Pattern:\n- я\n- ты\n- он\n- она\n- оно\n- мы\n- вы\n- они\n\nMeaning:\nThese pronouns are used to indicate who is performing the action in a sentence.\n\nHow to use:\n- Use nominative pronouns as subjects: *Я работаю. Они дома.*\n- For 'ты', it's informal and used for friends or when speaking with children.\n- For 'вы', it’s formal or plural, like addressing a group of people.\n- Practice by substituting personal pronouns in sentences to change the subject:\n  - *Мы уходим.* (We are leaving.)\n  - *Он уходит.* (He is leaving.)\n\nEdge cases:\n- Be careful with 'ты' and 'вы'; their use can vary based on context and familiarity.\n- Avoid using pronouns in place of nouns if the noun is clear from context, as it can be confusing.\n- For *он*, *она* and *оно*, remember these refer to male, female, or non-human subjects respectively.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/pronouns",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:pronouns",
+        "df:introduce-self"
+      ],
+      "section_sort_order": {
+        "a1/pronouns": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я студент.",
+          "translation_text": "I am a student.",
+          "notes": null
+        },
+        {
+          "example_text": "Ты дома?",
+          "translation_text": "Are you at home?",
+          "notes": null
+        },
+        {
+          "example_text": "Они в парке.",
+          "translation_text": "They are in the park.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/pronouns/ty-vy-politeness",
+      "title": "Ты vs Вы politeness",
+      "summary": "Use ты with friends; Вы for polite or plural.",
+      "explanation": "Pattern:\nты (informal) / вы (polite or plural)\n\nMeaning:\nThis distinction is crucial in Russian to indicate social distance and level of formality.\n\nHow to use:\n- Use ты with friends, family members, children, or when you are close to someone. \n- Use Вы with strangers, teachers, bosses, customers, or in professional settings where politeness is required.\n- In writing, polite Вы can sometimes be capitalized; in messages, it's optional.\n\nEdge cases:\n- Avoid using ты with anyone older than you unless explicitly invited by them to do so. \n- Use formal Вы even when addressing children in a professional context (e.g., school teachers).\n\nUsage Notes: In writing, polite Вы is sometimes capitalized; in messages, it's optional.",
+      "usage_notes": "In writing, polite Вы can be capitalized; in messages, use it according to context.",
+      "section_slugs": [
+        "a1/pronouns",
+        "a1/questions",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:pronouns",
+        "df:social-basics"
+      ],
+      "section_sort_order": {
+        "a1/pronouns": 0,
+        "a1/questions": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Ты готов?",
+          "translation_text": "Are you ready? (informal)",
+          "notes": null
+        },
+        {
+          "example_text": "Вы готовы?",
+          "translation_text": "Are you ready? (polite/plural)",
+          "notes": null
+        },
+        {
+          "example_text": "Вы говорите по-русски?",
+          "translation_text": "Do you speak Russian? (polite)",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/pronouns/object-forms-table",
+      "title": "Accusative/Genitive forms of personal pronouns (table row)",
+      "summary": "Accusative and genitive forms share core patterns for personal pronouns.",
+      "explanation": "Pattern:\n- Me: меня\n- You: тебя (informal), вас (formal)\n- Him: его\n- Her: её\n- Us: нас\n- Them: их\n\nMeaning:\nThese are used as objects in sentences and after many prepositions. They indicate the receiver or target of an action.\n\nHow to use:\n- Use these forms after verbs like вижу (see), знаю (know): *Я вижу тебя; Я знаю его*\n- After certain prepositions: у него, нет их (rare)\n- In questions and commands, you can use accusative forms instead of nominative.\n\nEdge cases:\n- His/Her possessives are the same as their object form: его = his, её = her. This applies to both accusative and genitive.\n\nNote potential confusion with formal 'you': вас is used in both accusative and nominative for formal address.",
+      "usage_notes": "At A1, focus on use with verbs (вижу/знаю/люблю) and with у/нет. Practice recognizing these forms in different contexts to avoid common mistakes like using the wrong form after certain prepositions or in questions.",
+      "section_slugs": [
+        "a1/pronouns",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:pronouns",
+        "case:accusative",
+        "case:genitive"
+      ],
+      "section_sort_order": {
+        "a1/pronouns": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу тебя.",
+          "translation_text": "I see you.",
+          "notes": null
+        },
+        {
+          "example_text": "У него есть книга.",
+          "translation_text": "He has a book.",
+          "notes": "его = 'he' in genitive frame"
+        },
+        {
+          "example_text": "Я знаю их.",
+          "translation_text": "I know them.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/pronouns/possessives",
+      "title": "Possessive pronouns: мой/твой/его/её/наш/ваш/их",
+      "summary": "Use possessives to show ownership; some agree, some don’t.",
+      "explanation": "Pattern:\n- мой/твой/наш/ваш (agree with gender/number) + его/её/их (do not change)\n\nMeaning:\nShow whose thing it is, such as 'my', 'your', 'our', or 'their'.\n\nHow to use:\n- Use **мой/твой/наш/ваш** like adjectives; they agree in gender and number with the noun. For example: мой дом (my house), твоё окно (your window). \n- Use **его/её/их** as possessive pronouns that do not change form, regardless of the noun's gender or number.\n\nEdge cases:\n- Avoid using **мой** with feminine nouns in the plural: не мой дом, but мой дом instead. \n- With masculine singular nouns, **его** can be used for both masculine and neuter nouns (his/her).\n\nUsage Notes:\nFocus on nominative agreement at A1 level: мой дом, моя книга, моё окно, мои друзья.",
+      "usage_notes": "At A1 focus on nominative agreement: мой дом, моя книга, моё окно, мои друзья.",
+      "section_slugs": [
+        "a1/pronouns",
+        "a1/adjectives",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:pronouns",
+        "topic:agreement",
+        "df:express-possession"
+      ],
+      "section_sort_order": {
+        "a1/pronouns": 0,
+        "a1/adjectives": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Это мой дом.",
+          "translation_text": "This is my house.",
+          "notes": null
+        },
+        {
+          "example_text": "Где твоя книга?",
+          "translation_text": "Where is your book?",
+          "notes": null
+        },
+        {
+          "example_text": "Это их машина.",
+          "translation_text": "This is their car.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/pronouns/demonstratives-etot",
+      "title": "Demonstratives: этот/эта/это/эти (basic agreement)",
+      "summary": "Use ‘this’ with agreement.",
+      "explanation": "Pattern:\n- Этот (masculine singular)\n- Эта (feminine singular)\n- Это (neuter singular)\n- Эти (plural)\n\nMeaning:\nPoint to something close or relevant, such as an object near you.\n\nHow to use:\n- Match the form with the noun: Этот стол (this table), Эта книга (this book), Это окно (this window), Эти книги (these books).\n- Use it when talking about objects in your immediate vicinity.\n- For plural nouns, use ‘Эти’ for multiple masculine or neuter items, and combine gender with agreement: Эти тетради и эти ручки (these notebooks and these pencils).\n\nEdge cases:\n- Be careful not to confuse the forms; remember that gender and number must agree.\n- Use ‘Это’ when referring to something abstract or non-specific in a singular form.",
+      "usage_notes": "Be mindful of agreement, ensuring that the demonstrative adjective matches the noun’s gender and number. For example, use 'эта' with feminine nouns like 'книга' (book) and not 'этот'.",
+      "section_slugs": [
+        "a1/pronouns",
+        "a1/adjectives"
+      ],
+      "tag_names": [
+        "topic:pronouns",
+        "topic:agreement",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/pronouns": 0,
+        "a1/adjectives": 0
+      },
+      "examples": [
+        {
+          "example_text": "Этот стол большой.",
+          "translation_text": "This table is big.",
+          "notes": null
+        },
+        {
+          "example_text": "Эта книга интересная.",
+          "translation_text": "This book is interesting.",
+          "notes": null
+        },
+        {
+          "example_text": "Эти книги новые.",
+          "translation_text": "These books are new.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/pronouns/interrogatives-basic",
+      "title": "Interrogatives: кто/что/где/когда (as pronoun-like forms)",
+      "summary": "Recognize core interrogatives used constantly at A1.",
+      "explanation": "**Pattern:** кто? что? где? когда?\n\n**Meaning:** Ask about person, thing, place, time.\n\n**How to use:**\n- Use these to build almost any beginner question. Combine with simple frames: *Где…? Когда…?*",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/pronouns",
+        "a1/questions"
+      ],
+      "tag_names": [
+        "topic:pronouns",
+        "topic:questions"
+      ],
+      "section_sort_order": {
+        "a1/pronouns": 0,
+        "a1/questions": 0
+      },
+      "examples": [
+        {
+          "example_text": "Кто это?",
+          "translation_text": "Who is this?",
+          "notes": null
+        },
+        {
+          "example_text": "Что это?",
+          "translation_text": "What is this?",
+          "notes": null
+        },
+        {
+          "example_text": "Когда урок?",
+          "translation_text": "When is the lesson?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/adjectives/agreement-nom-gender",
+      "title": "Adjective agreement in nominative (gender)",
+      "summary": "Adjectives agree with noun gender in nominative.",
+      "explanation": "Pattern:\n\n- новый (m) / новая (f) / новое (n)\n\nMeaning: Describing nouns correctly.\n\nHow to use:\n- Pick the adjective ending to match the noun’s gender: *новый дом, новая книга, новое окно*.\n- Adjectives must agree with the gender of the noun they describe in the nominative case. For example, 'дом' is a masculine noun, so we use 'новый'.\n\nEdge cases:\n- Be careful when describing plural nouns: they will always be masculine or neuter and thus take the corresponding adjective form regardless of what follows.\n- Remember that some words can change their gender based on context. For instance, 'брат' (brother) is masculine but becomes feminine in certain contexts like 'мой брат' (my brother).",
+      "usage_notes": "Note that agreement applies only to the nominative case and remember that plural nouns are always masculine or neuter.",
+      "section_slugs": [
+        "a1/adjectives",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "topic:agreement",
+        "df:describe-people-things"
+      ],
+      "section_sort_order": {
+        "a1/adjectives": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Это новый дом.",
+          "translation_text": "This is a new house.",
+          "notes": null
+        },
+        {
+          "example_text": "Это новая книга.",
+          "translation_text": "This is a new book.",
+          "notes": null
+        },
+        {
+          "example_text": "Это новое окно.",
+          "translation_text": "This is a new window.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/adjectives/agreement-nom-plural",
+      "title": "Adjective agreement in nominative (plural)",
+      "summary": "Plural adjectives use -ые/-ие endings.",
+      "explanation": "Pattern:\n- новые\n- хорошие\n- интересные\nMeaning:\nDescribe multiple nouns.\nHow to use:\n- Use plural adjective endings: *новые книги, хорошие друзья*.\n- Remember that some words like *большой/маленький* have different forms for plural: *большие дома, маленькие дети*.\nEdge cases:\n- Words ending in -ий might change form when becoming plural. For example, *интересный* becomes *интересные*. Ensure you use the correct form based on context.",
+      "usage_notes": "Note that spelling rules can affect endings; teach through examples at A1.",
+      "section_slugs": [
+        "a1/adjectives"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/adjectives": 0
+      },
+      "examples": [
+        {
+          "example_text": "Это новые книги.",
+          "translation_text": "These are new books.",
+          "notes": null
+        },
+        {
+          "example_text": "У меня хорошие друзья.",
+          "translation_text": "I have good friends.",
+          "notes": null
+        },
+        {
+          "example_text": "Здесь большие дома.",
+          "translation_text": "There are big houses here.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/adjectives/short-vs-long",
+      "title": "Short vs long adjective forms (awareness)",
+      "summary": "Short forms exist but long forms are the default at A1.",
+      "explanation": "**Pattern:** длинная форма: красивый/красивая vs короткая: рад/рада\n\n**Meaning:** Two ways to say predicate adjectives.\n\n**How to use:**\n- Use **long forms** for most A1 production. Recognize short forms in common words like *рад/рада* (glad).\n\n**Notes:**\n- Short forms are common in set phrases: *Я рад(а).*",
+      "usage_notes": "Mark short forms as comprehension-first; introduce 1–2 very common ones if desired.",
+      "section_slugs": [
+        "a1/adjectives"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/adjectives": 0
+      },
+      "examples": [
+        {
+          "example_text": "Она красивая.",
+          "translation_text": "She is beautiful.",
+          "notes": "Long form."
+        },
+        {
+          "example_text": "Я рад(а).",
+          "translation_text": "I’m glad.",
+          "notes": "Short form (common)."
+        },
+        {
+          "example_text": "Он готов.",
+          "translation_text": "He is ready.",
+          "notes": "Short form (common)."
+        }
+      ]
+    },
+    {
+      "slug": "a1/adjectives/acc-inanimate",
+      "title": "Adjective accusative with inanimate nouns (= nominative)",
+      "summary": "Many adjectives stay the same in accusative with inanimate nouns.",
+      "explanation": "Pattern:\n\n**Pattern:** вижу новый стол (same as NOM)\n\n**Meaning:** When referring to an inanimate object, many adjectives do not change in the accusative case.\n\n**How to use:**\n- If the noun is inanimate, masculine or neuter adjectives typically remain unchanged: *новый стол, новое окно* (as objects).\n- Remember that this applies primarily to masculine and neuter nouns; feminine nouns may change form.\n- Use these patterns with other verbs like *слушаю*, *смотрю*, *слушаешь*, etc., when talking about inanimate objects.\n\n**Edge cases:**\n- Be cautious with some adjectives which can change, especially for animate or plural nouns: *хороший человек* (good person) → *хорошего человека* (good person - accusative).\n- In some rare cases, certain adjectives might have special forms in the accusative case, but these are not common at A1 level.\n\n**How to use:**\n- Practice with different verbs and nouns to get a feel for which adjectives stay the same.",
+      "usage_notes": "Note that while many adjectives remain unchanged, it's important to practice widely to recognize exceptions. These rules will help as you progress in Russian grammar.",
+      "section_slugs": [
+        "a1/adjectives",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "case:accusative",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/adjectives": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу новый стол.",
+          "translation_text": "I see a new table.",
+          "notes": null
+        },
+        {
+          "example_text": "Он покупает хороший хлеб.",
+          "translation_text": "He buys good bread.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы читаем интересный текст.",
+          "translation_text": "We read an interesting text.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/adjectives/acc-feminine-uyu",
+      "title": "Adjective accusative with feminine nouns (-ая→-ую / -яя→-юю)",
+      "summary": "Feminine adjectives change their endings in the accusative case.",
+      "explanation": "Pattern:\n-ая→-ую / -яя→-юю\nMeaning: This rule explains how feminine adjectives adjust their endings when they agree with a feminine noun in the accusative case.\nHow to use:\n- When you have a feminine noun in the accusative case, change the adjective's ending according to the table above. For example, *новая книга* becomes *новую книгу*.\n- Exceptions: Adjectives like *красивая* (beautiful) and *длинная* (long) follow this pattern strictly without exception.\nEdge cases:\n- Some adjectives might have irregular forms that don't follow the standard rules, but these are rare at A1 level.",
+      "usage_notes": "Remember to use the correct case for nouns and corresponding adjective endings.",
+      "section_slugs": [
+        "a1/adjectives",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "case:accusative",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/adjectives": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу новую книгу.",
+          "translation_text": "I see a new book.",
+          "notes": null
+        },
+        {
+          "example_text": "Он покупает вкусную пиццу.",
+          "translation_text": "He buys tasty pizza.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы читаем интересную статью.",
+          "translation_text": "We read an interesting article.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/adjectives/acc-animate-masc",
+      "title": "Adjective accusative with animate masculine",
+      "summary": "Animate masculine adjectives often take genitive-like form in accusative.",
+      "explanation": "Pattern:\n- Я вижу нового друга.\n- Она знает хорошего врача.\n- Мы любим этого кота.\n\nMeaning: When an adjective is used with an animate masculine noun in the accusative case, it often takes a form that looks like genitive.\n\nHow to use:\n- Adjectives agree with masculine nouns in gender and number but change to match the genitive form when in the accusative case. For example, *новый друг* (new friend) becomes *нового друга* in the accusative case: *Я вижу нового друга.*\n- Use this pattern consistently for other high-frequency adjectives with masculine nouns like *хороший* (good), *плохой* (bad), and *богатый* (rich).\n\nEdge cases:\n- Be aware that not all animate masculine nouns follow this rule. Some might require the nominative form even in the accusative case.\n- Pay attention to irregular adjectives such as *прекрасный* (beautiful) or *отвратительный* (terrible), which may have different forms.\n\nUsage notes: Start with simple examples and gradually move to more complex sentences. Full paradigms can be introduced later.",
+      "usage_notes": "Start with a few high-frequency examples; full paradigms can come later.",
+      "section_slugs": [
+        "a1/adjectives",
+        "a1/cases",
+        "a1/nouns"
+      ],
+      "tag_names": [
+        "topic:adjectives",
+        "case:accusative",
+        "case:genitive",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/adjectives": 0,
+        "a1/cases": 0,
+        "a1/nouns": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я вижу нового друга.",
+          "translation_text": "I see a new friend.",
+          "notes": null
+        },
+        {
+          "example_text": "Она знает хорошего врача.",
+          "translation_text": "She knows a good doctor.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы любим этого кота.",
+          "translation_text": "We love this cat.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/cardinals-0-10",
+      "title": "Cardinals 0–10 (required)",
+      "summary": "Core numbers for counting, prices, and time.",
+      "explanation": "Pattern:\n- **Numbers 0 to 10:** zero, one, two, three, four, five, six, seven, eight, nine, ten.\n\nMeaning:\n- These numbers are essential for basic communication in Russian. They help with counting, understanding prices, and managing time.\n\nHow to use:\n- Learn these numbers to count objects: *один кофе* (one coffee), *два брата* (two brothers).\n- Use them in phrases like ordering or requesting items: *три минуты* (three minutes), *четыре рюмки вина* (four glasses of wine).\n\nEdge cases:\n- Note that 'один' is used for singular, while 'одна' is for feminine singular.\n- For numbers like 'четыре', 'пять', and 'шесть', they are pronounced with a soft ending in the accusative case (e.g., *четырьмя*).",
+      "usage_notes": "Be mindful of gender agreement, especially when using 'одна' for feminine nouns. Also, ensure you use the correct number forms like 'четыря', 'пятя', and 'шестя'.",
+      "section_slugs": [
+        "a1/numbers-time",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "df:transactions"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Один кофе, пожалуйста.",
+          "translation_text": "One coffee, please.",
+          "notes": null
+        },
+        {
+          "example_text": "У меня два брата.",
+          "translation_text": "I have two brothers.",
+          "notes": null
+        },
+        {
+          "example_text": "Мне нужно три минуты.",
+          "translation_text": "I need three minutes.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/11-19-pattern",
+      "title": "11–19 formation (-надцать)",
+      "summary": "Recognize teen numbers ending in -надцать.",
+      "explanation": "Pattern:\n\nThe pattern for forming teen numbers is to add '-надцать' (pronounced 'nadtsat’) after a number from 10 to 9. For example, eleven is ‘одиннадцать’ ('odinnadtsat’), twelve is ‘двенадцать’ ('dvinadtsat’), and so on up to nineteen which is ‘девятнадцать’ ('dyevyatnadtsat’).\n\nMeaning:\n\nTeen numbers in Russian end with the suffix '-надцать' (‘-nadtsat’). This pattern helps you form numbers like 'thirteen', 'fourteen', and so on.\n\nHow to use:\n- Memorize the pattern: Add '-надцать' after the number from 10 to 9.\n- Use common teen numbers for age or time, such as ‘одиннадцать’ (11) for 'eleven', and ‘двенадцать’ (12) for 'twelve'.\n- Practice with examples: Say 'Мне двенадцать лет' ('mne dvinadtsat let') for 'I am twelve years old'.\n\nEdge cases:\n- Be aware that numbers like 16 and 19 have irregular forms. For example, sixteen is ‘шестнадцать’ ('shestnadtsat’) not *‘шестнадцатьть'*, and nineteen is 'девятнадцать', not a combination of 9 and 10.\n\nUsage Notes: \n- Teen numbers can be used for age or time, but remember the pattern always applies.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/numbers-time"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "df:time"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0
+      },
+      "examples": [
+        {
+          "example_text": "Мне 15 лет.",
+          "translation_text": "I am 15 years old.",
+          "notes": null
+        },
+        {
+          "example_text": "Урок в 11.",
+          "translation_text": "The lesson is at 11.",
+          "notes": null
+        },
+        {
+          "example_text": "Мне нужно 13 минут.",
+          "translation_text": "I need 13 minutes.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/tens-pattern",
+      "title": "Tens (20/30/40/50…) pattern recognition",
+      "summary": "Recognize and use tens for time and price.",
+      "explanation": "Pattern:\n\n- Learn common tens: двадцать (20), тридцать (30), сорок (40), пятьдесят (50).\n\nMeaning:\n\n- These numbers are used in everyday Russian for time and price.\n\nHow to use:\n- Combine these tens with smaller units like одни (one) or часы (hours).\n- Example: Пятьдесят рублей (fifty rubles), Сорок минут (forty minutes).\n- Note the order: tens first, then units. E.g., тридцать одна минута (thirty-one minute).\n\nEdge cases:\n- Sometimes, you might see numbers like шестьдесят (sixty) or девяносто (ninety), but focus on these common ones for now.",
+      "usage_notes": "Pay attention to the correct word order and units. Practice with different contexts, such as prices and times.",
+      "section_slugs": [
+        "a1/numbers-time"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0
+      },
+      "examples": [
+        {
+          "example_text": "Это стоит двадцать рублей.",
+          "translation_text": "It costs twenty rubles.",
+          "notes": null
+        },
+        {
+          "example_text": "Мне тридцать лет.",
+          "translation_text": "I am thirty years old.",
+          "notes": null
+        },
+        {
+          "example_text": "Сорок минут.",
+          "translation_text": "Forty minutes.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/one-hundred",
+      "title": "100 as lexical + compositional number phrase",
+      "summary": "Use сто and combine numbers (basic).",
+      "explanation": "Pattern: сто (100) + number\nMeaning: Use 'сто' for 100, then combine it with other numbers to form larger amounts.\nHow to use:\n- Use **сто** for 100 in front of another number. For example, *сто рублей* means one hundred rubles.\n- Combine simply like *сто двадцать*, which equals one hundred twenty.\n\nEdge cases:\n- When the following number is a single digit (1-9), it can be combined as 'сто один', etc., but avoid numbers 10-19, use separate words for these ranges.\n\nUsage Notes: At A1 level, focus on comprehension. Try to recognize and understand phrases with 'сто' rather than producing them until more comfortable.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/numbers-time"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "meta:comprehension-first",
+        "df:transactions"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0
+      },
+      "examples": [
+        {
+          "example_text": "сто рублей",
+          "translation_text": "one hundred rubles",
+          "notes": null
+        },
+        {
+          "example_text": "сто один",
+          "translation_text": "one hundred one",
+          "notes": null
+        },
+        {
+          "example_text": "сто двадцать",
+          "translation_text": "one hundred twenty",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/counting-after-1",
+      "title": "Counting rule after 1: noun nominative singular (1 стол)",
+      "summary": "After 1, use nominative singular for the noun.",
+      "explanation": "Pattern: 1 + NOM.SG\nMeaning: This is the counting rule after one for nouns in their nominative singular form.\nHow to use:\n- Use 'один' (one) with masculine nouns, e.g., *один стол* (one table).\n- Use 'одна' (one) with feminine nouns, e.g., *одна книга* (one book).\n- Use 'одно' (one) with neuter nouns, e.g., *одно окно* (one window).\nEdge cases:\n- Be careful to match the gender of the noun with the correct form of 'один', 'одна', or 'одно'. Incorrect agreement can make your sentences sound unnatural.\n- Remember that this pattern applies only after the number one and not other numbers.",
+      "usage_notes": "Always ensure agreement between 'один', 'одна', 'одно' and the gender of the noun to avoid errors. This is crucial for correct Russian grammar.",
+      "section_slugs": [
+        "a1/numbers-time"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "topic:agreement",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0
+      },
+      "examples": [
+        {
+          "example_text": "один стол",
+          "translation_text": "one table",
+          "notes": null
+        },
+        {
+          "example_text": "одна книга",
+          "translation_text": "one book",
+          "notes": null
+        },
+        {
+          "example_text": "одно окно",
+          "translation_text": "one window",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/counting-after-2-4",
+      "title": "Counting rule after 2–4: noun genitive singular (2 стола)",
+      "summary": "After 2–4, many nouns take genitive singular form.",
+      "explanation": "Pattern: 2–4 + GEN.SG\nMeaning: When counting with numbers two, three, four, many nouns use the genitive singular form.\nHow to use:\n- Use: *два стола (two tables), три книги (three books), четыре дня (four days)*.\n- Note that some nouns change their form entirely or have irregular forms. For example, *четыре часа* (four hours) instead of *четырех часов*.\nEdge cases:\n- Be aware of nouns like *час* and *день*, which follow this pattern but are exceptions in terms of spelling.",
+      "usage_notes": "Teach as a rule of thumb; full declension comes later, focusing on comprehension first.",
+      "section_slugs": [
+        "a1/numbers-time",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "case:genitive",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "два стола",
+          "translation_text": "two tables",
+          "notes": null
+        },
+        {
+          "example_text": "три книги",
+          "translation_text": "three books",
+          "notes": null
+        },
+        {
+          "example_text": "четыре дня",
+          "translation_text": "four days",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/counting-after-5",
+      "title": "Counting rule after 5+: noun genitive plural (5 столов)",
+      "summary": "After 5 and higher, nouns are often genitive plural.",
+      "explanation": "Pattern: \n\nFor numbers from five onwards, use the genitive plural form of nouns.\n\nMeaning: \nThis is a common counting pattern in Russian where higher numbers often require noun forms in the genitive plural case.\n\nHow to use: \n- Use: *пять столов* (five tables), *шесть книг* (six books), and *десять дней* (ten days). Note that some forms vary, so learn common ones first. \n- Practice with different numbers like *семь окон* (seven windows) or *двенадцать месяцев* (twelve months).\n\nEdge cases: \nSome nouns have irregular genitive plural endings; for example, *глаз* becomes *глаза* in the genitive plural.\n\nUsage notes: \nGenitive plural is tricky—start by focusing on understanding and comprehension. Don’t worry too much about irregular forms at this stage.",
+      "usage_notes": "Genitive plural is hard—allow comprehension-first initially.",
+      "section_slugs": [
+        "a1/numbers-time",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "case:genitive",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "пять столов",
+          "translation_text": "five tables",
+          "notes": null
+        },
+        {
+          "example_text": "шесть книг",
+          "translation_text": "six books",
+          "notes": null
+        },
+        {
+          "example_text": "десять дней",
+          "translation_text": "ten days",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/ordinals-basic",
+      "title": "Ordinal numbers for dates (первый/второй…)",
+      "summary": "Use basic ordinals as adjectives (first, second…).",
+      "explanation": "Pattern: Ordinal numbers (первый, второй, третий) + noun\n\nMeaning: Used to indicate order and dates.\n\nHow to use:\n- Use ordinals like adjectives before nouns in the singular form: *первый урок, второй этаж*.\n- These numbers change based on gender and number of the noun they modify. For example: *первая книга, вторая книга.*\n- They are always in the nominative case.\n\nEdge cases:\n- If a noun is feminine singular, add -ая to the ordinal number: *третья книга* (third book).\n- For masculine singular nouns, use -ой: *первый урок* (first lesson).\n- For plural nouns, no ending is added: *четвертые стулья* (fourth chairs).\n\nUsage notes:\nThese ordinals can also be used in dates. Be aware that they change based on the context.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/numbers-time",
+        "a1/adjectives"
+      ],
+      "tag_names": [
+        "topic:numerals",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0,
+        "a1/adjectives": 0
+      },
+      "examples": [
+        {
+          "example_text": "первый урок",
+          "translation_text": "the first lesson",
+          "notes": null
+        },
+        {
+          "example_text": "второй этаж",
+          "translation_text": "the second floor",
+          "notes": null
+        },
+        {
+          "example_text": "третья книга",
+          "translation_text": "the third book",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/numbers-time/date-ordinal-month-gen",
+      "title": "Date pattern: “(ordinal) + month (genitive)”",
+      "summary": "Express dates using ordinal day + month in genitive.",
+      "explanation": "Pattern: первое/второе/третье … + января/февраля/…\n\nMeaning: To express dates in Russian, use the ordinal form of day (neuter) followed by the genitive case month.\n\nHow to use:\n- Say: *первое января* (January 1st). Day is ordinal (neuter), month is genitive.\n- For example, say *третье апреля* for April 3rd and *второе февраля* for February 2nd.\n- Note that the ordinal number matches the gender of the day: first (первое), second (второе), third (третье) are neuter.\n\nEdge cases:\n- Ordinal numbers greater than three require different forms, but at A1 level, only first to third are necessary.\n- Month names change in genitive form. For example, *января* for January and *февраля* for February.",
+      "usage_notes": "At A1, focus on learning the patterns for common months; expand your knowledge later as you progress.\nNote: Use memorization techniques to remember these patterns effectively.",
+      "section_slugs": [
+        "a1/numbers-time",
+        "a1/cases"
+      ],
+      "tag_names": [
+        "topic:time",
+        "case:genitive",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/numbers-time": 0,
+        "a1/cases": 0
+      },
+      "examples": [
+        {
+          "example_text": "первое января",
+          "translation_text": "January 1st",
+          "notes": null
+        },
+        {
+          "example_text": "пятое марта",
+          "translation_text": "March 5th",
+          "notes": null
+        },
+        {
+          "example_text": "двадцатое сентября",
+          "translation_text": "September 20th",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/infinitive-dict",
+      "title": "Infinitive as dictionary form",
+      "summary": "Recognize infinitive form used after helper verbs.",
+      "explanation": "Pattern:\n- читать, говорить, работать\n\nMeaning:\n- Base form found in dictionaries and following helper verbs.\n\nHow to use:\n- Use the infinitive after *хочу/могу/буду/нужно*: \n  - Хочу читать (I want to read).\n  - Могу работать (Can work).\n  - Буду учиться (Will study).\n  - Мне нужно работать (I need to work).\n\nEdge cases:\n- Avoid using the base form of verbs after helper verbs without adding 'to' in English, e.g., *хочу читать* vs. *want to read*.\n- Be mindful of verb conjugations and tenses when forming sentences.",
+      "usage_notes": "Infinitives are crucial for expressing wants or needs; ensure you use the correct form after helper verbs.",
+      "section_slugs": [
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "df:express-wants"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "читать",
+          "translation_text": "to read (infinitive)",
+          "notes": null
+        },
+        {
+          "example_text": "Я хочу читать.",
+          "translation_text": "I want to read.",
+          "notes": null
+        },
+        {
+          "example_text": "Мне нужно работать.",
+          "translation_text": "I need to work.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/khotet-inf",
+      "title": "Хочу + infinitive (want)",
+      "summary": "Express wants and intentions with хотеть + infinitive.",
+      "explanation": "Pattern: \nхотеть + INF\n\nMeaning: \nExpresses a desire or wish.\n\nHow to use:\n- Conjugate **хотеть** and follow with an infinitive verb (в.infinitive): *Я хочу пить. Ты хочешь идти?*\n- Use for simple transactions like ordering food: *Я хочу кофе.*\n- To express wants or intentions: *Мы хотим поехать в парк.*\n\nEdge cases:\n- For negative sentences, use **не** before the conjugated form of хотеть (хочу): *Я не хочу чая.*",
+      "usage_notes": "You can also use 'Я хочу + noun' for ordering: 'Я хочу кофе.' Keep in mind that the verb is conjugated based on the subject.",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "df:express-wants",
+        "df:transactions"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я хочу спать.",
+          "translation_text": "I want to sleep.",
+          "notes": null
+        },
+        {
+          "example_text": "Ты хочешь кофе?",
+          "translation_text": "Do you want coffee?",
+          "notes": null
+        },
+        {
+          "example_text": "Мы хотим поехать в парк.",
+          "translation_text": "We want to go to the park.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/lyublyu-nravitsya-inf",
+      "title": "Люблю / нравится + infinitive (preferences)",
+      "summary": "Express ‘I like to…’ using either люблю + INF or мне нравится + INF.",
+      "explanation": "Pattern:\n\n- люблю + INF (I love to...)\n- мне нравится + INF (It is nice for me to...)\n\nMeaning:\nThis pattern expresses personal preferences or feelings towards activities.\n\nHow to use:\n- Use the pattern 'Я люблю' followed by an infinitive verb, e.g., Я люблю читать. (I love to read.)\n- Alternatively, say 'Мне нравится' with a dative pronoun and an infinitive verb, e.g., Мне нравится гулять. (It is nice for me to walk.)\n\nEdge cases:\n- Be careful not to mix the two patterns; they are equivalent in meaning but different grammatically.\n- Note that 'люблю' is used with a first-person singular subject, while 'мне нравится' requires the dative form of the pronoun (тебе, мне, ему, ей, им).\n\nUsage notes: At A1 level, teach both patterns as equivalent; more nuanced differences can be introduced later.",
+      "usage_notes": "At A1, teach as two equivalent frames; deeper nuance can wait.",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/cases",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "df:preferences",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/cases": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я люблю читать.",
+          "translation_text": "I like to read.",
+          "notes": null
+        },
+        {
+          "example_text": "Мне нравится гулять.",
+          "translation_text": "I like to walk.",
+          "notes": null
+        },
+        {
+          "example_text": "Тебе нравится учиться?",
+          "translation_text": "Do you like studying?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/present-1conj",
+      "title": "Present tense: 1st conjugation endings",
+      "summary": "Recognize/use common endings: -ю/-ешь/-ет/-ем/-ете/-ют.",
+      "explanation": "Pattern:\n- -ю\n- -ешь\n- -ет\n- -ем\n- -ете\n- -ют\nMeaning:\nThe present tense in Russian for many verbs uses these endings.\nHow to use:\n- Learn with a model verb (читать): я читаю, ты читаешь, он читает...\n- Notice that some verbs have different patterns; focus on high-frequency verbs at A1.\nEdge cases:\n- Some verbs change spelling before adding the ending. For example, глагол becomes говорю.\n- Be careful with verb stems and endings to avoid common mistakes like forgetting the soft sign (ь).",
+      "usage_notes": "At A1, focus on high-frequency verbs; some spelling changes may occur but are not critical at this level.",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "tense:present",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я читаю.",
+          "translation_text": "I read / I'm reading.",
+          "notes": null
+        },
+        {
+          "example_text": "Ты читаешь?",
+          "translation_text": "Do you read?",
+          "notes": null
+        },
+        {
+          "example_text": "Мы читаем дома.",
+          "translation_text": "We read at home.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/present-2conj",
+      "title": "Present tense: 2nd conjugation endings",
+      "summary": "Recognize/use common endings: -ю/-ишь/-ит/-им/-ите/-ят.",
+      "explanation": "Pattern:\n-ю, -ишь, -ит, -им, -ите, -ят\n\nMeaning:\nThe present tense for many verbs in Russian follows these endings.\n\nHow to use:\n- Learn with a model (говорить): я говорю, ты говоришь, он говорит…\n- Practice by replacing the root of the verb: работ-ать -> я работаю, ты работаешь, он работает.\n\nEdge cases:\n- Some irregular verbs like 'ходить' have different endings.\n\nUsage notes:\nThese endings are used for many regular verbs in the present tense. Be careful with irregular verbs that don't follow these patterns.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/verbs",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "tense:present",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я говорю по-русски.",
+          "translation_text": "I speak Russian.",
+          "notes": null
+        },
+        {
+          "example_text": "Ты говоришь по-английски?",
+          "translation_text": "Do you speak English?",
+          "notes": null
+        },
+        {
+          "example_text": "Они говорят быстро.",
+          "translation_text": "They speak fast.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/reflexive-sya",
+      "title": "Reflexive marker -ся/-сь (present)",
+      "summary": "Recognize and use common reflexive verbs.",
+      "explanation": "Pattern:\n- учиться\n- одеваться\n- встречаться\n\nMeaning:\nMany common Russian verbs, such as 'to study' (учиться), 'to get dressed' (одеваться), and 'to meet up' (встречаться), use the reflexive marker -ся/-сь in their present tense form.\n\nHow to use:\n- Reflexive verbs end with **-ся** or **-сь**, like учиться, одеваться, встречаться. Conjugate them as regular verbs but keep -ся/-сь at the end. For instance, 'I study' is Я учусь (Ya uchus'), and 'We meet up' is Мы встречаемся (My vstrechayemsya).\n- Some irregular reflexive verbs may have different conjugations; these are exceptions.\n\nEdge cases:\nBe cautious with verbs that look similar but are not reflexive, like 'to write' (писать), which does not use -ся/-сь.",
+      "usage_notes": "Start with common high-frequency verbs and focus on understanding first before production. Some irregular verbs may have different conjugations, so practice recognizing them by sight.",
+      "section_slugs": [
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "tense:present",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я учусь.",
+          "translation_text": "I study.",
+          "notes": null
+        },
+        {
+          "example_text": "Он одевается.",
+          "translation_text": "He gets dressed.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы встречаемся.",
+          "translation_text": "We meet up.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/byt-null-present",
+      "title": "High-frequency irregular: быть (present is null)",
+      "summary": "In present, 'to be' is usually omitted (covered as null copula).",
+      "explanation": "Pattern:\n- **No verb in present:** In Russian, 'to be' is often omitted when stating identity or location.\n\nMeaning:\n- **Zero copula:** The meaning of 'to be' is understood without an explicit verb, as the context provides clarity.\n\nHow to use:\n- Use no verb for identity: *Я студент.* (I am a student.)\n- Use no verb for location: *Она дома.* (She is at home.)\n- **Fringe pattern:** *Мы в школе.* (We are at school.)\n\nEdge cases:\n- Be cautious with pronouns in complex sentences, as they can sometimes require a verb. For example, *Если ты здесь,* means 'If you are here,' but the verb is necessary to complete the sentence properly.\n\nUsage notes: This pattern is common and helps simplify Russian grammar at A1 level, focusing on comprehension first.",
+      "usage_notes": "This point is mainly a reminder and a search anchor in your DB.",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я студент.",
+          "translation_text": "I am a student.",
+          "notes": null
+        },
+        {
+          "example_text": "Она дома.",
+          "translation_text": "She is at home.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы в школе.",
+          "translation_text": "We are at school.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/est-limited",
+      "title": "High-frequency irregular: есть (limited have/there is)",
+      "summary": "Reinforce that есть is for existence/availability and possession frames.",
+      "explanation": "**Pattern:**\n\n- Есть in 'Здесь есть...' (There is...) \n- У меня есть... (I have...) / У вас есть...\n\n**Meaning:** Not a general 'is', but used to indicate the presence or existence of something.\n\n**How to use:**\n- Use it when you want to say 'there is/are' or 'have' in Russian. It's important for describing availability and possession.\n- When saying 'We have time', often this verb can be omitted, but including it helps clarity, especially early on.\n\n**Edge cases:**\n- In spoken Russian, the verb 'есть' is sometimes left out of sentences like 'У меня есть вопрос.' (I have a question.) This is common and acceptable in everyday speech.",
+      "usage_notes": "Often omitted in speech; keep it early for clarity.",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/foundations"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/foundations": 0
+      },
+      "examples": [
+        {
+          "example_text": "Здесь есть вода.",
+          "translation_text": "There is water here.",
+          "notes": null
+        },
+        {
+          "example_text": "У меня есть вопрос.",
+          "translation_text": "I have a question.",
+          "notes": null
+        },
+        {
+          "example_text": "У нас (есть) время.",
+          "translation_text": "We have time. (often omitted)",
+          "notes": "In spoken Russian, this can often be left out."
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/itdi-ekhat-present",
+      "title": "High-frequency irregular: идти/ехать (present forms)",
+      "summary": "Use present forms for going (on foot vs transport).",
+      "explanation": "Pattern:\n\n**Pattern:** идти/ехать (present)\n\nMeaning:\n\n**Meaning:** Two basic motion verbs with their own forms.\n\nHow to use:\n- Use **идти** for walking/on foot: *иду в школу; шёл домой*.\n- Use **ехать** for transport: *еду на работу; ездил в город*.\n\nEdge cases:\n- Both verbs have irregular forms. Pay attention to the endings, especially in the future tense where they become **буду идти** and **буду ехать**.\n- Avoid confusion by focusing on context: **иду** for walking and **еду** for transport.\n\nUsage Notes:\n- Teach as a core survival pair at A1 level (destination with куда?).\n- Be cautious of similar verbs like *ходить* (to go around) which share some forms.",
+      "usage_notes": "Teach as a core survival pair at A1 (destination with куда?).",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/motion"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "topic:motion",
+        "tense:present"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/motion": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я иду в школу.",
+          "translation_text": "I'm going to school (on foot).",
+          "notes": null
+        },
+        {
+          "example_text": "Я еду на работу.",
+          "translation_text": "I'm going to work (by transport).",
+          "notes": null
+        },
+        {
+          "example_text": "Куда ты идёшь?",
+          "translation_text": "Where are you going?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/past-formation",
+      "title": "Past tense formation: -л/-ла/-ло/-ли",
+      "summary": "Form past with -л and agree by gender/number.",
+      "explanation": "Pattern:\n- Add **-л** for masculine singular; \n- **-ла** for feminine singular; \n- **-ло** for neuter singular; \n- **-ли** for plural (masculine, feminine, and mixed).\n\nMeaning:\nThis pattern is used to form the past tense in Russian, indicating actions or states that occurred in the past.\n\nHow to use:\n- For *я* (I), choose between **-л** and **-ла**: \n  - *работал* for a male subject,\n  - *работала* for a female subject.\n- For other subjects, add: \n  - **-ло** if the subject is neuter singular;\n  - **-ли** if the subject is plural (both genders).\n\nEdge cases:\n- Be careful with verbs that change their stem before adding the past tense ending. \n  - Example: *говорить* (to speak) becomes *говорил*, *говорила*, etc.\n\nUsage notes: This pattern works for most regular verbs, but some irregular verbs may require different endings. Always refer to a Russian grammar guide or dictionary if unsure.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/verbs",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "tense:past",
+        "df:describe-past"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я работал вчера.",
+          "translation_text": "I worked yesterday. (male)",
+          "notes": null
+        },
+        {
+          "example_text": "Я работала вчера.",
+          "translation_text": "I worked yesterday. (female)",
+          "notes": null
+        },
+        {
+          "example_text": "Мы работали вчера.",
+          "translation_text": "We worked yesterday.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/past-agreement",
+      "title": "Past tense agreement with subject gender/number",
+      "summary": "Past verb ending matches the subject (male/female/neuter/plural).",
+      "explanation": "Pattern:\n- он был / он был (masculine)\n- она была (feminine)\n- оно было (neuter)\n- они были (plural)\n\nMeaning:\nThe past tense verb form agrees with the gender and number of its subject.\n\nHow to use:\n1. Choose the correct ending based on whether you are talking about a male, female, neuter noun or multiple people/nouns.\n2. For example, 'он' (he) uses 'был', while 'она' (she) uses 'была'.\n3. Remember that 'оно' is used for neuter nouns and 'они' for plural subjects.\n4. Be careful with inanimate objects which might be considered neuter.\n\nEdge cases:\n- In some cases, especially with children or animals, Russian can use 'он', even if it's a feminine subject.\n- When speaking about multiple people or things that are mixed genders, use the plural form 'были'.",
+      "usage_notes": "You can teach with быть as the clearest example: был/была/было/были.",
+      "section_slugs": [
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "tense:past",
+        "topic:agreement"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Он был дома.",
+          "translation_text": "He was at home.",
+          "notes": null
+        },
+        {
+          "example_text": "Она была дома.",
+          "translation_text": "She was at home.",
+          "notes": null
+        },
+        {
+          "example_text": "Они были дома.",
+          "translation_text": "They were at home.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/past-negation-ne-byl",
+      "title": "Past negation with не (Я не был/не была…)",
+      "summary": "Negate past with не before the past form.",
+      "explanation": "Pattern:\n\n- не + past verb\n\nMeaning:\n\nThis pattern is used to negate a statement about something that did not happen in the past or when you were somewhere else.\n\nHow to use:\n\n- Put 'не' before the past form of the verb: *Я не был дома. Она не работала.*\n\nEdge cases:\n\n- Remember, this only applies to negating actions and states in the past tense. For example, *Я не жил здесь* (I did not live here) is correct.\n- Use 'был' for males and 'была' for females when talking about being somewhere: *Он не был дома.*\n- When talking about a group or plural subjects, use 'не работали': *Мы не работали вчера.*",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/verbs",
+        "a1/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "tense:past"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/negation": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я не был дома.",
+          "translation_text": "I was not at home. (male)",
+          "notes": null
+        },
+        {
+          "example_text": "Я не была дома.",
+          "translation_text": "I was not at home. (female)",
+          "notes": null
+        },
+        {
+          "example_text": "Мы не работали вчера.",
+          "translation_text": "We did not work yesterday.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/future-compound-budu",
+      "title": "Compound future: буду/будешь/… + imperfective infinitive",
+      "summary": "Talk about future plans with быть + infinitive.",
+      "explanation": "Pattern: буду/будешь/будет/будем/будете/будут + INF\nMeaning: This pattern is used to express plans or processes in the future.\nHow to use:\n- Use **буду + infinitive**: *Я буду читать завтра.* (I will read tomorrow.)\n- Use **будешь + infinitive** with second person singular: *Ты будешь пить воду?* (Will you be drinking water?)\n- Use **будет + infinitive** for third-person singular: *Он будет играть на гитаре.* (He will play the guitar.)\n- For plural forms, use **будем + infinitive**: *Мы будем учиться.* (We will study.)\n- For formal or polite second person plural, use **будете + infinitive**: *Вы будете работать.* (You [formal] will work.)\nEdge cases:\n- Avoid using this pattern with perfective verbs, as they are typically used in different contexts.\n- Be mindful of the time words: они придут завтра (They will come tomorrow) vs. они придут сегодня (They will come today).",
+      "usage_notes": "Often paired with time words like завтра or вечером.",
+      "section_slugs": [
+        "a1/verbs",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:verbs",
+        "tense:future",
+        "df:plans"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я буду учиться завтра.",
+          "translation_text": "I will study tomorrow.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы будем работать сегодня.",
+          "translation_text": "We will work today.",
+          "notes": null
+        },
+        {
+          "example_text": "Ты будешь читать вечером?",
+          "translation_text": "Will you read in the evening?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/future-negation",
+      "title": "Future negation (Я не буду читать.)",
+      "summary": "Negate future tense using не before буду/будешь/…",
+      "explanation": "Pattern:\n\n- не + буду + INF\n\nMeaning:\n\nThis pattern is used to express that you will not do something in the future.\n\nHow to use:\n\n1. Put **не** before the form of **быть**: *Я не буду читать.* (I will not read.)\n2. This works for all subjects: *Мы не будем идти* (We will not go). *Он не будет учиться* (He will not study).\n3. It can be used with different verbs, like *работать* or *писать*: *Мы не будем работать завтра.* (We will not work tomorrow.)\n4. When negating future tense, the verb **быть** is often implied and omitted: *Не буду пить кофе.* (I will not drink coffee.)\n\nEdge cases:\n- For questions or polite requests, you might need to use different forms of не.\n- Be careful with word order; the pattern always comes before the infinitive verb.\n\nUsage Notes:\nThis is a simple and common way to negate future actions. Remember that it's not used for negating present or past actions.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/verbs",
+        "a1/negation"
+      ],
+      "tag_names": [
+        "topic:negation",
+        "tense:future"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0,
+        "a1/negation": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я не буду читать.",
+          "translation_text": "I will not read.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы не будем работать завтра.",
+          "translation_text": "We will not work tomorrow.",
+          "notes": null
+        },
+        {
+          "example_text": "Он не будет учиться сегодня.",
+          "translation_text": "He will not study today.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/aspect-imperfective",
+      "title": "Imperfective = process/habit (basic concept)",
+      "summary": "Imperfective describes ongoing process or habitual action.",
+      "explanation": "Pattern: imperfective (читать, делать)\n\nMeaning: Focus on ongoing process or habitual action.\n\nHow to use:\n- Use when describing actions that are regular or in progress: *я читаю каждый день; я читал вечером*.\n- For future plans and ongoing processes: *я буду читать завтра*.\n\nEdge cases:\n- Avoid using with specific, one-time events (use perfective instead): *не используйте с акциденциями*.\n\nUsage notes: Keep as awareness; don’t overload with lists of pairs at A1.",
+      "usage_notes": "Keep as awareness; don’t overload with lists of pairs at A1.",
+      "section_slugs": [
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "topic:aspect",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я читаю каждый день.",
+          "translation_text": "I read every day.",
+          "notes": "Habit."
+        },
+        {
+          "example_text": "Я читал вчера вечером.",
+          "translation_text": "I was reading yesterday evening.",
+          "notes": "Process."
+        },
+        {
+          "example_text": "Я буду читать завтра.",
+          "translation_text": "I will read tomorrow.",
+          "notes": "Plan/process."
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/aspect-perfective",
+      "title": "Perfective = completion/result (basic concept)",
+      "summary": "Perfective verbs show completed actions.",
+      "explanation": "Pattern:\n\n- **Perfective:** (прочитать, сделать)\n\nMeaning:\n\n- Focus on a completed action or result.\n\nHow to use:\n\n- Use perfective verbs when you are talking about an event that has already happened and is complete: *я прочитал книгу* (I finished reading the book).\n\n- Often used with words like 'already' (уже) or in completed past events, e.g., *уже купили хлеб* (we have bought bread). \n\nEdge cases:\n\n- Be careful not to mix up perfective and imperfective verbs. For example, *делать работа* is imperfetive but *сделать работу* is perfective.\n\nUsage notes: Perfective verbs often indicate a completed action or result.",
+      "usage_notes": "Often appears with 'already' (уже) or in completed past events.",
+      "section_slugs": [
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "topic:aspect",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я прочитал книгу.",
+          "translation_text": "I finished reading the book.",
+          "notes": null
+        },
+        {
+          "example_text": "Она сделала работу.",
+          "translation_text": "She finished the work.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы купили хлеб.",
+          "translation_text": "We bought bread (completed).",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/verbs/aspect-pairs-awareness",
+      "title": "Recognize common aspect pairs in context",
+      "summary": "Be able to notice that verbs often come in imperfective/perfective pairs.",
+      "explanation": "Pattern:\n\n- читать ↔ прочитать: reading vs finishing a book.\n- делать ↔ сделать: doing vs completing work.\n\nMeaning:\n\nPairs of verbs express continuous action (imperfective) versus completed action (perfective).\n\nHow to use:\n- At A1, focus on recognizing pairs through context and simple examples rather than memorizing long lists.\n- Practice by identifying which verb is used in a sentence based on whether the action is ongoing or has been completed.\n- Common mistakes: Using perfective verbs for continuous actions can lead to incorrect translations.\n\nEdge cases:\n- Some verbs may not have perfective counterparts, like \"писать\" (to write), where only imperfective exists.\n- Be cautious with context; some sentences might require more than a simple pair switch for correct translation.",
+      "usage_notes": "Practice recognizing pairs in context to improve comprehension. Gradually introduce more examples as proficiency grows.",
+      "section_slugs": [
+        "a1/verbs"
+      ],
+      "tag_names": [
+        "topic:aspect",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/verbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я читаю книгу.",
+          "translation_text": "I am reading a book.",
+          "notes": "Imperfective."
+        },
+        {
+          "example_text": "Я прочитал книгу.",
+          "translation_text": "I finished the book.",
+          "notes": "Perfective."
+        },
+        {
+          "example_text": "Я делаю работу / Я сделал работу.",
+          "translation_text": "I’m doing the work / I finished the work.",
+          "notes": "In Russian, 'Я делаю работу' and 'Я сделал работу' can be used interchangeably depending on the context."
+        }
+      ]
+    },
+    {
+      "slug": "a1/imperative/imperative-informal",
+      "title": "Imperative: informal singular (basic formation)",
+      "summary": "Make simple commands/requests for 'ты'.",
+      "explanation": "Pattern:\n- Use simple verbs like *иди, скажи, читай* for informal commands to 'ты'.\n\nMeaning:\n- Tell someone a direct action (informal) without additional details.\n\nHow to use:\n- Common imperatives: *иди, иди сюда, прочти, скажи.*\n- Soften with *пожалуйста*: *скажи, пожалуйста; прочитай, пожалуйста.*\n- Use for simple requests or instructions.\n\nEdge cases:\n- Don't use polite forms like *можно* in imperatives. \n- Avoid overly formal verbs in informal contexts.\n- Be direct but friendly when using these commands.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/imperative",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:imperative",
+        "df:social-basics"
+      ],
+      "section_sort_order": {
+        "a1/imperative": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Иди сюда.",
+          "translation_text": "Come here.",
+          "notes": null
+        },
+        {
+          "example_text": "Скажи, пожалуйста.",
+          "translation_text": "Tell me, please.",
+          "notes": null
+        },
+        {
+          "example_text": "Читай текст.",
+          "translation_text": "Read the text.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/imperative/imperative-te",
+      "title": "Imperative: plural/polite (-те)",
+      "summary": "Use -те for polite or plural commands.",
+      "explanation": "Pattern: \n\nUse '-те' after verbs to make commands polite or for multiple people.\n\nMeaning: \n\nThis form is used when you want to be polite or address more than one person. It sounds more respectful and formal.\n\nHow to use: \n- To make a request politely, add '-те' to the verb: 'скажите' (say), 'повторите' (repeat), 'идите' (come).\n- For example, say 'скажите, пожалуйста' instead of 'скажи'.\n\nEdge cases: \n- Not all verbs can be used in this form. Some may change their root or require additional particles.\n- The '-те' form is commonly used in formal situations and polite requests.",
+      "usage_notes": "Remember to use '-те' for politeness, but avoid using it in casual settings with friends.",
+      "section_slugs": [
+        "a1/imperative",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:imperative",
+        "df:social-basics"
+      ],
+      "section_sort_order": {
+        "a1/imperative": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Скажите, пожалуйста.",
+          "translation_text": "Tell me, please. (polite)",
+          "notes": null
+        },
+        {
+          "example_text": "Повторите, пожалуйста.",
+          "translation_text": "Repeat, please.",
+          "notes": null
+        },
+        {
+          "example_text": "Идите сюда.",
+          "translation_text": "Come here. (polite/plural)",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/imperative/imperative-negative",
+      "title": "Negative imperative with не (Не делай.)",
+      "summary": "Negate imperatives with не.",
+      "explanation": "Pattern:\n\n- **не + imperative**: For example, не говори (do not speak) or не идите туда (do not go there).\n\nMeaning:\n\n**Tell someone not to do something.**\n\nHow to use:\n\n- Put не before the command: *Не говори. Не идите туда.*\n- Note that you can also use a softer form with 'пожалуйста': *Не говори, пожалуйста.* (Please don’t speak.)\n\nEdge cases:\n\n- Negative imperatives can be more polite by adding 'пожалуйста' after the command: *Не говори быстро, пожалуйста.* (Don’t speak fast, please.).",
+      "usage_notes": "Be careful not to omit не; it is crucial for negating commands. Also, consider using a softer form with 'пожалуйста' for politeness.",
+      "section_slugs": [
+        "a1/imperative",
+        "a1/negation"
+      ],
+      "tag_names": [
+        "topic:imperative",
+        "topic:negation"
+      ],
+      "section_sort_order": {
+        "a1/imperative": 0,
+        "a1/negation": 0
+      },
+      "examples": [
+        {
+          "example_text": "Не делай так.",
+          "translation_text": "Don’t do it like that.",
+          "notes": null
+        },
+        {
+          "example_text": "Не говори быстро.",
+          "translation_text": "Don’t speak fast.",
+          "notes": null
+        },
+        {
+          "example_text": "Не идите туда.",
+          "translation_text": "Don’t go there. (polite/plural)",
+          "notes": "In formal or polite settings, you might want to add 'пожалуйста' at the end of the command."
+        }
+      ]
+    },
+    {
+      "slug": "a1/prepositions/v-prep-location",
+      "title": "в + Prepositional = location",
+      "summary": "Use в + prepositional for location.",
+      "explanation": "Pattern:\n\n**в + PREP (где?)**\n\nMeaning:\n\n- **Static location**: Used to indicate where something is permanently or temporarily, like 'in' or 'at' in English.\n\nHow to use:\n\n- Use: *в школе, в городе, в комнате* (in the school, in the city, in the room)\n- Sentences with location can be formed using this pattern. For example: *Я в Москве.* (I am in Moscow.)\n- Note that 'в' is used for both singular and plural subjects, as well as for multiple objects.\n\nEdge cases:\n\n- Avoid using 'в' with 'где?' when asking about location. Instead use 'где' directly, e.g., *Где книга?* (Where is the book?)\n- Be careful not to confuse 'в' with other prepositions that might be used in different contexts.",
+      "usage_notes": "Be mindful of the gender and number agreement when using в + prepositional. Avoid using 'где?' directly after 'в' when asking about location.",
+      "section_slugs": [
+        "a1/prepositions",
+        "a1/cases",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:prepositional",
+        "df:talk-location"
+      ],
+      "section_sort_order": {
+        "a1/prepositions": 0,
+        "a1/cases": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я в школе.",
+          "translation_text": "I'm at school.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы в Москве.",
+          "translation_text": "We are in Moscow.",
+          "notes": null
+        },
+        {
+          "example_text": "Книга в сумке.",
+          "translation_text": "The book is in the bag.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/prepositions/na-prep-location",
+      "title": "на + Prepositional = location",
+      "summary": "Use на + prepositional for certain places/surfaces.",
+      "explanation": "**Pattern:** на + PREP (где?)\n\n**Meaning:** Static location on/at.\n\n**How to use:**\n- Use: *на работе, на улице, на столе*.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/prepositions",
+        "a1/cases",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:prepositional",
+        "df:talk-location"
+      ],
+      "section_sort_order": {
+        "a1/prepositions": 0,
+        "a1/cases": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Он на работе.",
+          "translation_text": "He is at work.",
+          "notes": null
+        },
+        {
+          "example_text": "Телефон на столе.",
+          "translation_text": "The phone is on the table.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы на вокзале.",
+          "translation_text": "We are at the station.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/prepositions/v-acc-destination",
+      "title": "в + Accusative = destination",
+      "summary": "Use в + accusative to answer 'куда?'",
+      "explanation": "**Pattern:** в + ACC (куда?)\n\n**Meaning:** Destination into/to a place.\n\n**How to use:**\n- Use: *в школу, в парк, в город* with motion verbs.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/prepositions",
+        "a1/cases",
+        "a1/motion"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/prepositions": 0,
+        "a1/cases": 0,
+        "a1/motion": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я иду в школу.",
+          "translation_text": "I'm going to school.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы едем в парк.",
+          "translation_text": "We are going to the park.",
+          "notes": null
+        },
+        {
+          "example_text": "Она идёт в магазин.",
+          "translation_text": "She’s going to the store.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/prepositions/na-acc-destination",
+      "title": "на + Accusative = destination",
+      "summary": "Use на + accusative to go to work/events/onto surfaces.",
+      "explanation": "Pattern:\n\nна + ACC (куда?)\n\nMeaning:\nDestination to/onto.\n\nHow to use:\n- Use 'на' followed by the accusative case when going to a place, an event, or moving onto something. Common collocations include *на работу*, *на урок*, and *на концерт*.\n- The verb used typically indicates motion: 'идти', 'ходить', 'ехать', etc., although other verbs can also be used in certain contexts.\n\nEdge cases:\n- When talking about going to a surface or location, ensure the accusative case is correctly formed. For instance, *на стол* (onto the table) uses the accusative form of *стол*, which is *стол*.\n- Be mindful that 'на' can be used for both destinations and surfaces; however, in A1 level, focus on destination use.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/prepositions",
+        "a1/cases",
+        "a1/motion"
+      ],
+      "tag_names": [
+        "case:accusative",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/prepositions": 0,
+        "a1/cases": 0,
+        "a1/motion": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я иду на работу.",
+          "translation_text": "I'm going to work.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы едем на концерт.",
+          "translation_text": "We are going to a concert.",
+          "notes": null
+        },
+        {
+          "example_text": "Она идёт на урок.",
+          "translation_text": "She’s going to a lesson.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/prepositions/u-gen",
+      "title": "у + Genitive = possession / at someone’s place",
+      "summary": "Use у + genitive for possession frame and to say you are at someone’s place.",
+      "explanation": "Pattern: у + GEN\nMeaning: 'at (someone)' / 'someone has'.\nHow to use:\n- Location: You can say where you are by using 'у' with a person's name in the genitive case. For example, *Я у друга* means 'I am at my friend’s place.'\n- Possession: Use 'У меня есть…' to express that you have something. For example, *У меня есть книга* means 'I have a book.'\nEdge cases:\n- Be careful with plural nouns; the genitive form can change based on the number of people or objects.\n- Avoid using у + GEN for direct addresses (like 'you' in English), which would use other prepositions instead.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/prepositions",
+        "a1/cases",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:genitive",
+        "df:express-possession",
+        "df:talk-location"
+      ],
+      "section_sort_order": {
+        "a1/prepositions": 0,
+        "a1/cases": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я у друга.",
+          "translation_text": "I'm at my friend's place.",
+          "notes": null
+        },
+        {
+          "example_text": "У меня есть книга.",
+          "translation_text": "I have a book.",
+          "notes": null
+        },
+        {
+          "example_text": "У нас нет времени.",
+          "translation_text": "We don't have time.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/prepositions/iz-s-gen-origin",
+      "title": "из + Genitive / с + Genitive = from (origin)",
+      "summary": "Use из for 'from inside', с for 'from surface/event'.",
+      "explanation": "Pattern:\n- из + genitive: from inside (e.g., из школы, из города)\n\nMeaning:\nOrigin (where from), indicating a starting point.\n\nHow to use:\n- Use **из** for places that are 'inside' or contained within something. Examples include buildings, countries, and cities. For instance: я из России (I am from Russia).\n- Use **с** for surfaces or events that are 'outside' but related to an action starting at a particular place. Examples include work, school, and tables. For instance: я иду с работы (I’m coming from work).\n\nEdge cases:\n- Be cautious with ambiguous situations. Sometimes both prepositions can be used interchangeably.\n- Focus on using **из** for places 'inside' and **с** for surfaces or events.",
+      "usage_notes": "At A1, focus on the common pair: из школы / с работы.",
+      "section_slugs": [
+        "a1/prepositions",
+        "a1/cases",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "case:genitive",
+        "df:travel",
+        "df:introduce-self"
+      ],
+      "section_sort_order": {
+        "a1/prepositions": 0,
+        "a1/cases": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я из США.",
+          "translation_text": "I am from the USA.",
+          "notes": "из + country/city"
+        },
+        {
+          "example_text": "Я иду из школы.",
+          "translation_text": "I’m coming from school.",
+          "notes": "из + inside place"
+        },
+        {
+          "example_text": "Я иду с работы.",
+          "translation_text": "I’m coming from work.",
+          "notes": "с + work/event"
+        }
+      ]
+    },
+    {
+      "slug": "a1/adverbs/common-set",
+      "title": "Common adverbs set (часто/иногда/сейчас/тут/там/вчера/сегодня/завтра)",
+      "summary": "Use common adverbs for time and place.",
+      "explanation": "Pattern:\n- Сейчас, сегодня, завтра, вчера, тут, там, часто, иногда\n\nMeaning:\nThese adverbs are used to indicate when or where something happens. For example, 'сейчас' means 'now', 'вчера' means 'yesterday', and so on.\n\nHow to use:\n- Drop these adverbs into simple SVO sentences to add meaning: *Сейчас я дома.* (Right now I’m at home.)\n- Use them to describe routine, past actions, or future plans. For example, *Вчера я работал.* (Yesterday I worked.), *Завтра мы будем учиться.* (Tomorrow we will study.).\n\nEdge cases:\nBe careful with 'часто' and 'иногда', as they mean 'often' or 'sometimes'. They can be used in questions like, *Часто ли ты ходишь в кино?* (Do you often go to the movies?)",
+      "usage_notes": "Be mindful of word order. Adverbs often come after the subject and before the verb in Russian sentences.",
+      "section_slugs": [
+        "a1/adverbs",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:time",
+        "df:describe-routine",
+        "df:describe-past",
+        "df:plans"
+      ],
+      "section_sort_order": {
+        "a1/adverbs": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Сейчас я дома.",
+          "translation_text": "Right now I’m at home.",
+          "notes": null
+        },
+        {
+          "example_text": "Вчера я работал.",
+          "translation_text": "Yesterday I worked.",
+          "notes": null
+        },
+        {
+          "example_text": "Завтра мы будем учиться.",
+          "translation_text": "Tomorrow we will study.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/adverbs/placement-basic",
+      "title": "Adverb placement (basic)",
+      "summary": "Place adverbs at the start or right before the verb.",
+      "explanation": "Pattern:\n\n- Common placement: [Time] + Subject + Verb (e.g., *Сегодня я работаю*), or right before the verb (e.g., *Я часто работаю*).\n\nMeaning:\n\nAdverbs indicate frequency, time, manner, etc.\n\nHow to use:\n\n- For time: Place at the start of the sentence (*Сегодня я работаю*) or directly before the verb (*Я сегодня работаю*).\n- For manner: Usually placed right before the verb (*Я медленно ем*), though sometimes they can be after the verb (*Я ем медленно*).\n\nEdge cases:\n\n- Adverbs of frequency like *часто*, *редко* often go directly before the verb, but can also go at the start for emphasis.\n- Some adverbs have specific placement rules, such as *только* which usually goes before the main verb (*Только я это делал*).\n\nUsage Notes:\n\nRussian allows flexibility in placement; focus on clarity and simplicity.",
+      "usage_notes": "Russian is flexible; prioritize clarity and a few safe patterns.",
+      "section_slugs": [
+        "a1/adverbs"
+      ],
+      "tag_names": [
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/adverbs": 0
+      },
+      "examples": [
+        {
+          "example_text": "Сегодня я работаю.",
+          "translation_text": "Today I work.",
+          "notes": null
+        },
+        {
+          "example_text": "Я часто читаю.",
+          "translation_text": "I often read.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы иногда ходим в парк.",
+          "translation_text": "We sometimes go to the park.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/connectors/potomu-chto",
+      "title": "потому что (because)",
+      "summary": "Give a reason with потому что.",
+      "explanation": "Pattern:\n\nUse *потому что* to add a short reason: *Я дома, потому что я устал.*\n\nMeaning:\n\nThis phrase explains the cause or reason for an action. It is used when you want to give information about why something happens.\n\nHow to use:\n- Use *потому что* to explain your reasons: \n  - *Я не пришел на встречу, потому что был занят.* (I didn't come to the meeting because I was busy.)\n  - *Он вышел из дома рано утром, потому что ему нужно было быть в офисе к десяти.* (He left home early in the morning because he needed to be at the office by ten.)\n- Use it with a variety of verbs: \n  - *Я не ем морковь, потому что она мне не нравится.* (I don't eat carrots because I don’t like them.)\n\nEdge cases:\n- Be careful not to use *потому что* when you want to introduce an additional fact or information: *Я пришел поздно, потому что встала пробка.* (I came late because there was a traffic jam). Here, the reason is introduced with *потому что*, but it’s more natural to say just *я пришел поздно* and then explain the situation separately.\n- You can also use *потому что* in questions: *Почему ты не ешь морковь? Потому что она мне не нравится.* (Why don’t you eat carrots? Because I don’t like them.)",
+      "usage_notes": "Use *потому что* to explain why something happens, but avoid using it when introducing a new fact in the middle of a sentence.",
+      "section_slugs": [
+        "a1/connectors",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:connectors",
+        "df:ask-info"
+      ],
+      "section_sort_order": {
+        "a1/connectors": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я не иду, потому что я занят.",
+          "translation_text": "I'm not going because I'm busy.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы дома, потому что холодно.",
+          "translation_text": "We are at home because it's cold.",
+          "notes": null
+        },
+        {
+          "example_text": "Я люблю чай, потому что он вкусный.",
+          "translation_text": "I like tea because it's tasty.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/connectors/poetomu",
+      "title": "поэтому (therefore/so)",
+      "summary": "Express result/consequence with поэтому.",
+      "explanation": "Pattern:\n\n**поэтому** …\n\nMeaning:\n\nCauses lead to results in a sentence.\n\nHow to use:\n- Use *поэтому* when you want to show the consequence of something: \n- I'm busy, поэтому я не иду. (I'm not going because I'm busy.)\n- It's raining, поэтому мы дома. (We are at home because it's raining.)\n- I don't have time, поэтому потом. (Later, because I don't have time now.)\n\nEdge cases:\n- Be cautious with using *поэтому* in complex sentences or when there isn't a clear cause and effect.\n- If the reason is not directly stated before *поэтому*, it may confuse the listener.",
+      "usage_notes": "Use *поэтому* to show straightforward consequences. Avoid overly complex sentences.",
+      "section_slugs": [
+        "a1/connectors"
+      ],
+      "tag_names": [
+        "topic:connectors"
+      ],
+      "section_sort_order": {
+        "a1/connectors": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я занят, поэтому я не иду.",
+          "translation_text": "I'm busy, so I'm not going.",
+          "notes": null
+        },
+        {
+          "example_text": "Сегодня дождь, поэтому мы дома.",
+          "translation_text": "It's raining, so we are at home.",
+          "notes": null
+        },
+        {
+          "example_text": "У меня нет времени, поэтому потом.",
+          "translation_text": "I don't have time, so later.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/connectors/kogda-clause",
+      "title": "когда (when) for simple time clause",
+      "summary": "Use когда to connect a simple time clause.",
+      "explanation": "Pattern:\n- когда + clause, … / …, когда + clause\n\nMeaning:\n- ‘when’ clause.\n\nHow to use:\n- Use *когда* to introduce a simple time clause. For instance: *Когда я дома, я отдыхаю.* (When I'm at home, I rest.)\n- Keep it simple and straightforward for A1 learners; avoid complex structures like nested clauses or advanced tenses.\n- Examples of acceptable usage include actions that occur regularly in a specific time frame. Avoid overly complex sentences like *Когда урок, ты пишешь?* (When class is, do you write?).\n\nEdge cases:\n- When introducing a simple action happening at a certain time: Use a present tense after the when clause. For example, *Когда я просыпаюсь рано, я принимаю таблетки.* (When I wake up early, I take my pills.).",
+      "usage_notes": "Keep clauses short and straightforward; avoid complex or nested sentences.",
+      "section_slugs": [
+        "a1/connectors",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:connectors",
+        "df:time",
+        "meta:comprehension-first"
+      ],
+      "section_sort_order": {
+        "a1/connectors": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Когда я дома, я отдыхаю.",
+          "translation_text": "When I'm at home, I rest.",
+          "notes": null
+        },
+        {
+          "example_text": "Я читаю, когда есть время.",
+          "translation_text": "I read when there is time.",
+          "notes": null
+        },
+        {
+          "example_text": "Когда урок, ты пишешь?",
+          "translation_text": "When it's class, do you write?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/motion/itdi-vs-khodit",
+      "title": "идти vs ходить (one trip vs habitual/multi)",
+      "summary": "идти = one direction trip now; ходить = habitual/multi-direction.",
+      "explanation": "Pattern:\n- иду: used for a current, single journey on foot.\n- хожу: indicates regular or repeated actions of walking.\n\nMeaning:\nDifferent meanings for ‘go on foot’. 'идти' is specific to an immediate trip, while 'ходить' conveys routine or multiple trips over time.\n\nHow to use:\n- Use иду when you are currently going somewhere once.\n- Use хожу if you are talking about a regular activity that happens often.\n\nEdge cases:\n- Be careful not to mix them in situations requiring habitual actions; for example, 'ходил' is the past tense form of ‘хоро', not 'идти'.\n- Both verbs can be used with prepositions like 'в' or 'на' to indicate direction, but their meanings differ.\n\nUsage Notes: \nThese verbs are commonly used in daily conversations and written texts. They help describe both immediate actions and routines.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/motion",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:motion",
+        "df:describe-routine",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/motion": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Сейчас я иду в школу.",
+          "translation_text": "Right now I'm going to school (on foot).",
+          "notes": null
+        },
+        {
+          "example_text": "Я хожу в школу каждый день.",
+          "translation_text": "I go to school every day.",
+          "notes": null
+        },
+        {
+          "example_text": "Ты часто ходишь в парк?",
+          "translation_text": "Do you often go to the park?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/motion/ekhat-vs-ezdit",
+      "title": "ехать vs ездить (one trip vs habitual/multi)",
+      "summary": "ехать = one trip; ездить = regular transport.",
+      "explanation": "Pattern:\n\n- Use **еду** for a single journey by any means of transportation.\n- Use **езжу** when you regularly travel by any mode of transport.\n\nMeaning:\n\nThese verbs are used to describe different types of movement: ехать (еду) is for a singular trip, whereas ездить (езжу) implies frequent or habitual use of transport.\n\nHow to use:\n\n- **Еду** on my way to the grocery store today. This means I am going there once and not regularly.\n- **Езжу** on my bike every weekend. This indicates that this is a regular activity, not just for today.\n\nEdge cases:\n\n- Be careful with context: ездишь (you go by car) might also mean you drive someone else’s car without ownership, which can be confusing at first.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/motion",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:motion",
+        "df:describe-routine",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/motion": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Сейчас я еду на работу.",
+          "translation_text": "Right now I'm going to work (transport).",
+          "notes": null
+        },
+        {
+          "example_text": "Я езжу на работу каждый день.",
+          "translation_text": "I go to work every day (transport).",
+          "notes": null
+        },
+        {
+          "example_text": "Ты часто ездишь в центр?",
+          "translation_text": "Do you often go downtown?",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/motion/present-usage-kuda",
+      "title": "Present tense motion verb usage (куда?)",
+      "summary": "Use motion verbs with куда? and destination prepositions (в/на).",
+      "explanation": "Pattern:\n- иду + куда? + в/на + ACC\n- еду + куда? + в/на + ACC\nMeaning:\nSaying where you are going now using motion verbs like and .\nHow to use:\n- When asked 'куда?', respond with the destination using a preposition (в or на) and the accusative case.\n  - Example: Where are you going? — I'm going to school. (Где ты идёшь? — Я иду в школу.)\n- Use different verbs for movement, like , for specific actions.\n  - Example: Where are they driving? — They are driving to the park. (Где они едут? — Они едут в парк.)\nEdge cases:\n- Avoid using accusative case with prepositions like 'по' or 'от', which require dative case instead.\n- Be careful with irregular verbs, such as 'идти', which can change form in certain contexts.",
+      "usage_notes": null,
+      "section_slugs": [
+        "a1/motion",
+        "a1/prepositions"
+      ],
+      "tag_names": [
+        "topic:motion",
+        "case:accusative",
+        "df:travel"
+      ],
+      "section_sort_order": {
+        "a1/motion": 0,
+        "a1/prepositions": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я иду в магазин.",
+          "translation_text": "I'm going to the store.",
+          "notes": null
+        },
+        {
+          "example_text": "Мы едем в парк.",
+          "translation_text": "We are going to the park.",
+          "notes": null
+        },
+        {
+          "example_text": "Куда ты идёшь? — В школу.",
+          "translation_text": "Where are you going? — To school.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "slug": "a1/motion/past-usage",
+      "title": "Past tense motion verb usage",
+      "summary": "Use past tense motion verbs to describe where you went.",
+      "explanation": "Pattern:\n\n**ходил/ходила, ездил/ездила (etc.)**\n\nMeaning:\nTalking about completed or habitual trips in the past.\n\nHow to use:\n- Use **ходил/ездил** for 'went (and came back) or unspecified journey' from one place to another. Example: 'Вчера я ходил в парк.'\n- Learn **шёл/шла** as 'was walking,' which indicates an ongoing process, often with no clear destination. Example: 'Я шёл домой.'\n\nEdge cases:\nRemember that some past tense forms are irregular and may not follow the standard pattern. For example, the verb ‘идти’ (to walk) changes to **шёл/шла** in its past form.\n\nUsage notes: Be cautious with the verb 'идти' as it has an irregular past form.",
+      "usage_notes": "Be mindful of the verb 'идти,' which has a distinct past tense form: шёл/шла/шло/шли (teach as a chunk).",
+      "section_slugs": [
+        "a1/motion",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:motion",
+        "tense:past",
+        "df:describe-past"
+      ],
+      "section_sort_order": {
+        "a1/motion": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Вчера я ходил в парк.",
+          "translation_text": "Yesterday I went to the park (on foot).",
+          "notes": null
+        },
+        {
+          "example_text": "Вчера я ездил в центр.",
+          "translation_text": "Yesterday I went downtown (transport).",
+          "notes": null
+        },
+        {
+          "example_text": "Я шёл домой.",
+          "translation_text": "I was walking home.",
+          "notes": "Process (irregular)"
+        }
+      ]
+    },
+    {
+      "slug": "a1/motion/roundtrip-habitual-multi",
+      "title": "Round-trip / habitual interpretation with multidirectional",
+      "summary": "Multi-directional verbs often imply routine or repeated trips.",
+      "explanation": "Pattern:\n\n- ходить (to go regularly)\n- ездить (to go there and back)\n\nMeaning:\n\nOften means ‘go regularly’ or ‘go there and back’. These verbs are used to describe habits and routines.\n\nHow to use:\n- Use them for habits: *Я хожу в школу каждый день.* This sentence translates as 'I go to school every day' (habitually). Also common in narration, e.g., *Он ездил на рынок.* meaning 'He went to the market and came back'.\n\nEdge cases:\n- Avoid using these verbs for single trips without context. For example, saying 'Я хожу в магазин' (I go to the store) would be unclear if it’s just a one-time trip.\n\nUsage notes: At A1 level, focus on the ‘habit’ meaning; add ‘there-and-back’ nuance later.",
+      "usage_notes": "At A1, prioritize the 'habit' meaning; add 'there-and-back' nuance later.",
+      "section_slugs": [
+        "a1/motion",
+        "a1/functional-discourse"
+      ],
+      "tag_names": [
+        "topic:motion",
+        "meta:comprehension-first",
+        "df:describe-routine"
+      ],
+      "section_sort_order": {
+        "a1/motion": 0,
+        "a1/functional-discourse": 0
+      },
+      "examples": [
+        {
+          "example_text": "Я хожу в спортзал.",
+          "translation_text": "I go to the gym (regularly).",
+          "notes": null
+        },
+        {
+          "example_text": "Мы ездили в магазин.",
+          "translation_text": "We went to the store (there and back / trip completed).",
+          "notes": null
+        },
+        {
+          "example_text": "Ты часто ходишь туда?",
+          "translation_text": "Do you often go there?",
+          "notes": null
+        }
+      ]
+    }
+  ]
+}

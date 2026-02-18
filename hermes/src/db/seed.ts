@@ -1,11 +1,13 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 import { importVocabPacks } from "./importers/vocabPackImporter";
 import { RU_VOCAB_PACKS } from "@/assets/packs/ru/vocab";
+import { importGrammarPacks } from "./importers/grammarPackImporter";
+import { RU_GRAMMAR_PACKS } from "@/assets/packs/ru/grammar";
 import { ensureCoreConcepts } from "./importers/conceptsImporter";
 
 type SeedOpts = { fromSeedVersion?: number };
 
-export const SEED_VERSION = 8;
+export const SEED_VERSION = 9;
 
 export async function seedDb(db: SQLiteDatabase, opts: SeedOpts = {}) {
   const from = opts.fromSeedVersion ?? 0;
@@ -17,9 +19,8 @@ export async function seedDb(db: SQLiteDatabase, opts: SeedOpts = {}) {
 
 /**
  * Seed Patch v1
- * - Minimal RU pack content
- * - Grammar sections/points/examples/tags
- * - Vocab items/senses/forms/media/examples/tags
+ * - Import RU vocab packs
+ * - Import RU grammar packs
  * - Concepts + lessons + practice + quests + achievements + features
  *
  * Idempotent + patch-safe: no assumed numeric IDs.
@@ -134,118 +135,31 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   // ============================================================
   // GRAMMAR
   // ============================================================
-
-  // ----------------------------
-  // Grammar sections
-  // ----------------------------
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_sections (language_id, title, description, parent_id, sort_order, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "Basics", "Core beginner concepts", null, 1, now, now]
-  );
-  const basicsId = await getId("grammar_sections", "language_id = ? AND title = ?", [RU, "Basics"]);
-
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_sections (language_id, title, description, parent_id, sort_order, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "Nouns", "Noun basics and cases", basicsId, 1, now, now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_sections (language_id, title, description, parent_id, sort_order, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "Verbs", "Verb basics", basicsId, 2, now, now]
-  );
-
-  const nounsId = await getId("grammar_sections", "language_id = ? AND title = ?", [RU, "Nouns"]);
-  const verbsId = await getId("grammar_sections", "language_id = ? AND title = ?", [RU, "Verbs"]);
-
-  // ----------------------------
-  // Grammar points
-  // ----------------------------
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_points (language_id, title, summary, explanation, usage_notes, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "Nominative vs Genitive (A1)", "Basic subject vs 'of/not having'", "Genitive often answers “of what” and appears after нет.", "Start with patterns: у меня нет …", now, now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_points (language_id, title, summary, explanation, usage_notes, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [RU, "Present tense: читать", "Conjugation of читать", "читать → читаю, читаешь, читает…", "Imperfective present", now, now]
-  );
-
-  const gpNomGenId = await getId("grammar_points", "language_id = ? AND title = ?", [RU, "Nominative vs Genitive (A1)"]);
-  const gpReadId = await getId("grammar_points", "language_id = ? AND title = ?", [RU, "Present tense: читать"]);
-
-  // ----------------------------
-  // Link points to sections
-  // ----------------------------
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_point_sections (grammar_point_id, grammar_section_id, sort_order) VALUES (?, ?, ?);`,
-    [gpNomGenId, nounsId, 1]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_point_sections (grammar_point_id, grammar_section_id, sort_order) VALUES (?, ?, ?);`,
-    [gpReadId, verbsId, 1]
-  );
-
-  // ----------------------------
-  // Grammar tags (+ A1)
-  // ----------------------------
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_tags (language_id, name, description, created_at) VALUES (?, ?, ?, ?);`,
-    [RU, "cases", "Noun case system", now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_tags (language_id, name, description, created_at) VALUES (?, ?, ?, ?);`,
-    [RU, "verbs", "Verb conjugation", now]
-  );
-  await db.runAsync(
-    `INSERT OR IGNORE INTO grammar_tags (language_id, name, description, created_at) VALUES (?, ?, ?, ?);`,
-    [RU, "CEFR:A1", "CEFR level A1", now]
-  );
-
-  const tagCasesId = await getId("grammar_tags", "language_id = ? AND name = ?", [RU, "cases"]);
-  const tagVerbsId = await getId("grammar_tags", "language_id = ? AND name = ?", [RU, "verbs"]);
-  const tagA1GrammarId = await getId("grammar_tags", "language_id = ? AND name = ?", [RU, "CEFR:A1"]);
-
-  await db.runAsync(`INSERT OR IGNORE INTO grammar_point_tags (grammar_point_id, grammar_tag_id) VALUES (?, ?);`, [gpNomGenId, tagCasesId]);
-  await db.runAsync(`INSERT OR IGNORE INTO grammar_point_tags (grammar_point_id, grammar_tag_id) VALUES (?, ?);`, [gpReadId, tagVerbsId]);
-
-  // tag both as A1 for now
-  await db.runAsync(`INSERT OR IGNORE INTO grammar_point_tags (grammar_point_id, grammar_tag_id) VALUES (?, ?);`, [gpNomGenId, tagA1GrammarId]);
-  await db.runAsync(`INSERT OR IGNORE INTO grammar_point_tags (grammar_point_id, grammar_tag_id) VALUES (?, ?);`, [gpReadId, tagA1GrammarId]);
-
-  // ----------------------------
-  // Grammar examples
-  // ----------------------------
-  if (!(await hasRow("grammar_examples", "grammar_point_id = ? AND example_text = ?", [gpNomGenId, "У меня нет книги."]))) {
-    await db.runAsync(
-      `INSERT INTO grammar_examples (grammar_point_id, example_text, translation_text, media_id, notes, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?);`,
-      [gpNomGenId, "У меня нет книги.", "I do not have a book.", null, "Genitive after нет", now, now]
-    );
-  }
-
-  // // Link grammar point to vocab form (genitive "книги")
-  // if (!(await hasRow("vocab_grammar_links", "grammar_point_id = ? AND vocab_form_id = ?", [gpNomGenId, formKnigiGenId]))) {
-  //   await db.runAsync(
-  //     `INSERT INTO vocab_grammar_links (grammar_point_id, vocab_form_id, created_at) VALUES (?, ?, ?);`,
-  //     [gpNomGenId, formKnigiGenId, now]
-  //   );
-  // }
+  await importGrammarPacks(db, {
+    languageCode: "ru",
+    packs: RU_GRAMMAR_PACKS,
+    replaceExisting: true,
+    verbose: true,
+  });
 
   // ============================================================
   // Concepts + Lessons
   // ============================================================
 
-  // Ensure concepts exist for vocab_items + grammar_points
-  await ensureCoreConcepts(db, RU);
+  // Remove stale concept rows for replaced import data.
+  await db.runAsync(
+    `DELETE FROM concepts
+     WHERE kind = 'vocab_item'
+       AND ref_id NOT IN (SELECT id FROM vocab_items);`
+  );
+  await db.runAsync(
+    `DELETE FROM concepts
+     WHERE kind = 'grammar_point'
+       AND ref_id NOT IN (SELECT id FROM grammar_points);`
+  );
 
-  // Fetch the concept id for the grammar point you want in the lesson
-  const conceptNomGenId = await getId("concepts", "kind = ? AND ref_id = ?", [
-    "grammar_point",
-    gpNomGenId,
-  ]);
+  // Ensure concepts exist for imported vocab_items + grammar_points
+  await ensureCoreConcepts(db, RU);
 
   // Lesson (A1)
   await db.runAsync(
@@ -259,11 +173,22 @@ async function seedPatch_v1(db: SQLiteDatabase) {
     "Greetings & Introductions",
   ]);
 
-  await db.runAsync(
-    `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
-    VALUES (?, ?, ?, ?);`,
-    [lessonId, conceptNomGenId, 3, now]
+  const seedLessonConcepts = await db.getAllAsync<{ id: number }>(
+    `SELECT id
+     FROM concepts
+     WHERE language_id = ?
+       AND kind IN ('vocab_item', 'grammar_point')
+     ORDER BY kind ASC, id ASC
+     LIMIT 3;`,
+    [RU]
   );
+  for (let i = 0; i < seedLessonConcepts.length; i++) {
+    await db.runAsync(
+      `INSERT OR IGNORE INTO lesson_concepts (lesson_id, concept_id, order_in_lesson, created_at)
+      VALUES (?, ?, ?, ?);`,
+      [lessonId, seedLessonConcepts[i].id, i + 1, now]
+    );
+  }
 
 
   // ============================================================
