@@ -1,8 +1,10 @@
 import "react-native-gesture-handler";
 import React from "react";
 import { Drawer } from "expo-router/drawer";
+import { useRouter } from "expo-router";
 import {
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
   type DrawerContentComponentProps,
 } from "@react-navigation/drawer";
@@ -13,6 +15,7 @@ import { Home, WholeWord, NotepadText, Settings, BarChart } from "@tamagui/lucid
 
 function HermesDrawerContent(props: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   return (
     <DrawerContentScrollView
@@ -29,6 +32,14 @@ function HermesDrawerContent(props: DrawerContentComponentProps) {
       </View>
 
       <DrawerItemList {...props} />
+      {__DEV__ ? (
+        <DrawerItem
+          label="Dev: DB Inspector"
+          onPress={() => router.push("/(app)/dev/db-inspector")}
+          activeTintColor="#E6EBFF"
+          inactiveTintColor="#9BA3B4"
+        />
+      ) : null}
     </DrawerContentScrollView>
   );
 }

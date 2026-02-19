@@ -5,6 +5,7 @@ import type { SQLiteDatabase } from "expo-sqlite";
 export type HermesVocabJson = {
   vocab_item: {
     language_id?: number; // ignored; we map via languageCode
+    external_id?: string;
     base_form: string;
     part_of_speech: string;
     frequency_rank?: number | null;
@@ -72,7 +73,7 @@ export type VocabPackRef = {
 type ImportOptions = {
   languageCode: string;             // "ru"
   packs: readonly VocabPackRef[];
-  replaceExisting?: boolean;        // wipe vocab_items for this language before importing
+  replaceExisting?: boolean;        // destructive mode; avoid for production
   verbose?: boolean;
 };
 
@@ -109,6 +110,85 @@ function truthyInt(v: any): number {
   if (v === false) return 0;
   if (v === 1 || v === 0) return v;
   return v ? 1 : 0;
+}
+
+function encodeIdPart(s: string): string {
+  return encodeURIComponent(
+    s
+      .normalize("NFKC")
+      .trim()
+      .toLowerCase()
+  );
+}
+
+function defaultExternalId(baseForm: string, partOfSpeech: string): string {
+  return `auto:vocab:${encodeIdPart(baseForm)}:${encodeIdPart(partOfSpeech)}`;
+}
+
+async function clearVocabChildren(db: SQLiteDatabase, vocabItemId: number): Promise<void> {
+  await db.runAsync(
+    `DELETE FROM vocab_examples
+     WHERE vocab_sense_id IN (
+       SELECT id FROM vocab_senses WHERE vocab_item_id = ?
+     );`,
+    [vocabItemId]
+  );
+  await db.runAsync(`DELETE FROM vocab_senses WHERE vocab_item_id = ?;`, [vocabItemId]);
+  await db.runAsync(`DELETE FROM vocab_forms WHERE vocab_item_id = ?;`, [vocabItemId]);
+  await db.runAsync(`DELETE FROM vocab_media WHERE vocab_item_id = ?;`, [vocabItemId]);
+}
+
+function normalizeTagName(name: string): string {
+  const trimmed = name.trim();
+  const m = /^cefr\s*:\s*([abc][12])$/i.exec(trimmed);
+  if (m) {
+    return `CEFR:${m[1].toUpperCase()}`;
+  }
+  return trimmed;
+}
+
+function isCefrTag(name: string): boolean {
+  return /^CEFR:(A1|A2|B1|B2|C1|C2)$/i.test(name.trim());
+}
+
+async function getExistingItemTagNames(db: SQLiteDatabase, vocabItemId: number): Promise<string[]> {
+  const rows = await db.getAllAsync<{ name: string }>(
+    `SELECT vt.name AS name
+     FROM vocab_item_tags vit
+     JOIN vocab_tags vt ON vt.id = vit.vocab_tag_id
+     WHERE vit.vocab_item_id = ?;`,
+    [vocabItemId]
+  );
+  return rows.map((r) => r.name);
+}
+
+async function findExistingVocabItemId(
+  db: SQLiteDatabase,
+  languageId: number,
+  externalId: string,
+  baseForm: string,
+  partOfSpeech: string
+): Promise<number | null> {
+  const byExternal = await db.getAllAsync<{ id: number }>(
+    `SELECT id
+     FROM vocab_items
+     WHERE language_id = ? AND external_id = ?
+     LIMIT 1;`,
+    [languageId, externalId]
+  );
+  if (byExternal.length) return byExternal[0].id;
+
+  const byNatural = await db.getAllAsync<{ id: number }>(
+    `SELECT id
+     FROM vocab_items
+     WHERE language_id = ? AND base_form = ? AND part_of_speech = ?
+     ORDER BY id ASC
+     LIMIT 1;`,
+    [languageId, baseForm, partOfSpeech]
+  );
+  if (byNatural.length) return byNatural[0].id;
+
+  return null;
 }
 
 async function ensureTag(db: SQLiteDatabase, name: string, description?: string | null): Promise<number> {
@@ -153,24 +233,70 @@ export async function importVocabPacks(db: SQLiteDatabase, opts: ImportOptions) 
       const base = (vi.base_form ?? "").trim();
       const pos = (vi.part_of_speech ?? "").trim();
       if (!base || !pos) continue;
-      // Insert vocab_items
-      const itemRes = await db.runAsync(
-        `INSERT INTO vocab_items
-          (language_id, base_form, part_of_speech, frequency_rank, frequency_band, lexeme_features, usage_notes, created_at, updated_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-        [
-          langId,
-          base,
-          pos,
-          vi.frequency_rank ?? null,
-          vi.frequency_band ?? null,
-          vi.lexeme_features ? asJsonOrNull(vi.lexeme_features) : null,
-          vi.usage_notes ?? null,
-          vi.created_at ?? ts,
-          vi.updated_at ?? ts,
-        ]
-      );
-      const vocabItemId = Number(itemRes.lastInsertRowId);
+      const externalId = (vi.external_id ?? "").trim() || defaultExternalId(base, pos);
+      const existingItemId = await findExistingVocabItemId(db, langId, externalId, base, pos);
+      let vocabItemId: number;
+
+      if (existingItemId != null) {
+        const existingTagNames = await getExistingItemTagNames(db, existingItemId);
+        await db.runAsync(
+          `UPDATE vocab_items
+           SET external_id = ?,
+               base_form = ?,
+               part_of_speech = ?,
+               frequency_rank = ?,
+               frequency_band = ?,
+               lexeme_features = ?,
+               usage_notes = ?,
+               updated_at = ?
+           WHERE id = ?;`,
+          [
+            externalId,
+            base,
+            pos,
+            vi.frequency_rank ?? null,
+            vi.frequency_band ?? null,
+            vi.lexeme_features ? asJsonOrNull(vi.lexeme_features) : null,
+            vi.usage_notes ?? null,
+            vi.updated_at ?? ts,
+            existingItemId,
+          ]
+        );
+        vocabItemId = existingItemId;
+        await clearVocabChildren(db, vocabItemId);
+        await db.runAsync(`DELETE FROM vocab_item_tags WHERE vocab_item_id = ?;`, [vocabItemId]);
+
+        // Preserve previously learned CEFR classification for overlapping pack keys.
+        // This prevents later pack passes from erasing earlier CEFR levels on the same lexeme key.
+        for (const tagName of existingTagNames) {
+          const normalized = normalizeTagName(tagName);
+          if (!isCefrTag(normalized)) continue;
+          const preservedTagId = await ensureTag(db, normalized, null);
+          await db.runAsync(
+            `INSERT OR IGNORE INTO vocab_item_tags (vocab_item_id, vocab_tag_id) VALUES (?, ?);`,
+            [vocabItemId, preservedTagId]
+          );
+        }
+      } else {
+        const itemRes = await db.runAsync(
+          `INSERT INTO vocab_items
+            (language_id, external_id, base_form, part_of_speech, frequency_rank, frequency_band, lexeme_features, usage_notes, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+          [
+            langId,
+            externalId,
+            base,
+            pos,
+            vi.frequency_rank ?? null,
+            vi.frequency_band ?? null,
+            vi.lexeme_features ? asJsonOrNull(vi.lexeme_features) : null,
+            vi.usage_notes ?? null,
+            vi.created_at ?? ts,
+            vi.updated_at ?? ts,
+          ]
+        );
+        vocabItemId = Number(itemRes.lastInsertRowId);
+      }
 
       // Forms first so examples can link by surface_form
       const forms = obj.forms ?? [];
@@ -286,11 +412,16 @@ export async function importVocabPacks(db: SQLiteDatabase, opts: ImportOptions) 
 
       // Tags (pack tags + per-item tags)
       const tagNames: Array<string | { name: string; description?: string | null }> = [];
-      if (pack.levelTag) tagNames.push(pack.levelTag);
+      const itemHasCefrTag = (obj.tags ?? []).some((t) => {
+        const raw = typeof t === "string" ? t : t.name ?? "";
+        return isCefrTag(normalizeTagName(raw));
+      });
+      if (pack.levelTag && !itemHasCefrTag) tagNames.push(pack.levelTag);
       if (obj.tags?.length) tagNames.push(...obj.tags);
 
       for (const t of tagNames) {
-        const name = (typeof t === "string" ? t : t.name ?? "").trim();
+        const rawName = (typeof t === "string" ? t : t.name ?? "").trim();
+        const name = normalizeTagName(rawName);
         if (!name) continue;
 
         const desc = typeof t === "object" ? (t.description ?? null) : null;

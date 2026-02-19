@@ -3,7 +3,7 @@ import { schemaStatements } from "../../shared/schema";
 import { seedDb, SEED_VERSION } from "./seed";
 
 const DB_NAME = "hermes.db";
-const SCHEMA_VERSION = 9;
+const SCHEMA_VERSION = 10;
 
 let db: SQLiteDatabase | null = null;
 
@@ -62,59 +62,122 @@ async function setSeedVersion(d: SQLiteDatabase, version: number) {
   await setMetaInt(d, "seed_version", version);
 }
 
-/**
- * Drops all non-meta tables.
- * Must be called OUTSIDE a transaction so PRAGMA foreign_keys can be toggled.
- */
-async function resetDb(d: SQLiteDatabase) {
-  await d.execAsync(`PRAGMA foreign_keys = OFF;`);
+async function tableExists(d: SQLiteDatabase, table: string): Promise<boolean> {
+  const rows = await d.getAllAsync<{ name: string }>(
+    `SELECT name
+     FROM sqlite_master
+     WHERE type = 'table' AND name = ?
+     LIMIT 1;`,
+    [table]
+  );
+  return rows.length > 0;
+}
 
-  const tables = await d.getAllAsync<{ name: string }>(`
-    SELECT name
-    FROM sqlite_master
-    WHERE type='table'
-      AND name NOT LIKE 'sqlite_%'
-      AND name != 'app_meta';
-  `);
+async function columnExists(d: SQLiteDatabase, table: string, column: string): Promise<boolean> {
+  const rows = await d.getAllAsync<{ name: string }>(`PRAGMA table_info(${table});`);
+  return rows.some((r) => r.name === column);
+}
 
-  for (const t of tables) {
-    await d.execAsync(`DROP TABLE IF EXISTS "${t.name}";`);
+async function execIfMissingColumn(
+  d: SQLiteDatabase,
+  table: string,
+  column: string,
+  sql: string
+): Promise<void> {
+  if (!(await columnExists(d, table, column))) {
+    await d.execAsync(sql);
   }
+}
 
-  await d.execAsync(`PRAGMA foreign_keys = ON;`);
+async function inferLegacySchemaVersion(d: SQLiteDatabase): Promise<number> {
+  const hasVocabExternal = await columnExists(d, "vocab_items", "external_id");
+  const hasGrammarPointExternal = await columnExists(d, "grammar_points", "external_id");
+  const hasGrammarSectionExternal = await columnExists(d, "grammar_sections", "external_id");
+  if (hasVocabExternal && hasGrammarPointExternal && hasGrammarSectionExternal) {
+    return SCHEMA_VERSION;
+  }
+  return 9;
+}
+
+async function migrateToV10(d: SQLiteDatabase): Promise<void> {
+  await execIfMissingColumn(
+    d,
+    "vocab_items",
+    "external_id",
+    `ALTER TABLE vocab_items ADD COLUMN external_id TEXT;`
+  );
+  await execIfMissingColumn(
+    d,
+    "grammar_points",
+    "external_id",
+    `ALTER TABLE grammar_points ADD COLUMN external_id TEXT;`
+  );
+  await execIfMissingColumn(
+    d,
+    "grammar_sections",
+    "external_id",
+    `ALTER TABLE grammar_sections ADD COLUMN external_id TEXT;`
+  );
+
+  await d.execAsync(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_vocab_items_lang_external
+      ON vocab_items (language_id, external_id);
+  `);
+  await d.execAsync(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_grammar_points_lang_external
+      ON grammar_points (language_id, external_id);
+  `);
+  await d.execAsync(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_grammar_sections_lang_external
+      ON grammar_sections (language_id, external_id);
+  `);
+}
+
+async function runSchemaMigrations(d: SQLiteDatabase, fromVersion: number): Promise<void> {
+  if (fromVersion < 10) {
+    await migrateToV10(d);
+  }
 }
 
 /**
  * Initialize schema + seed.
  *
  * Rules:
- * - If schema_version changed: DROP ALL tables, recreate schema, run full seed, set schema_version + seed_version.
- * - Else if seed_version changed: run seed patch (idempotent), set seed_version.
+ * - Fresh DB: create schema, run full seed.
+ * - Existing DB: apply non-destructive schema migrations.
+ * - If seed_version changed: run seed patch (idempotent), set seed_version.
  */
 export async function initDb(d: SQLiteDatabase) {
   await d.execAsync(`PRAGMA foreign_keys = ON;`);
   await ensureMetaTable(d);
 
-  const currentSchema = await getSchemaVersion(d);
+  let currentSchema = await getSchemaVersion(d);
+  const hasLanguagesTable = await tableExists(d, "languages");
 
-  if (currentSchema !== SCHEMA_VERSION) {
-    // reset OUTSIDE transaction so PRAGMA foreign_keys=OFF applies
-    await resetDb(d);
-
-    // then build + seed atomically
+  // Fresh DB
+  if (!hasLanguagesTable) {
     await d.withTransactionAsync(async () => {
       for (const stmt of schemaStatements) {
         await d.execAsync(stmt);
       }
-
-      // Fresh DB: run full seed
       await seedDb(d, { fromSeedVersion: 0 });
-
       await setSchemaVersion(d, SCHEMA_VERSION);
       await setSeedVersion(d, SEED_VERSION);
     });
-
     return;
+  }
+
+  // Legacy DB with missing app_meta schema version; infer to avoid destructive reset.
+  if (currentSchema === 0) {
+    currentSchema = await inferLegacySchemaVersion(d);
+    await setSchemaVersion(d, currentSchema);
+  }
+
+  if (currentSchema < SCHEMA_VERSION) {
+    await d.withTransactionAsync(async () => {
+      await runSchemaMigrations(d, currentSchema);
+      await setSchemaVersion(d, SCHEMA_VERSION);
+    });
   }
 
   const currentSeed = await getSeedVersion(d);

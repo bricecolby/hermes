@@ -6,7 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List
 
-from playwright.sync_api import sync_playwright, Page, TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import Page
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import sync_playwright
 
 BASE_URL = "https://www.ros-edu.ru/basic-dictionary"
 
@@ -14,7 +16,7 @@ LEVEL_LINK_TEXT: Dict[str, str] = {
     "A1": "Элементарный уровень (A1)",
     "A2": "Базовый уровень (A2)",
     "B1": "I сертификационный уровень (B1)",
-    "B2": "II сертификационный уровень (В2)",  # Cyrillic В
+    "B2": "II сертификационный уровень (B2)",
     "C1": "III сертификационный уровень (C1)",
     "C2": "IV сертификационный уровень (C2)",
 }

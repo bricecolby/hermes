@@ -1,13 +1,13 @@
-import type { SQLiteDatabase } from "expo-sqlite";
-import { importVocabPacks } from "./importers/vocabPackImporter";
-import { RU_VOCAB_PACKS } from "@/assets/packs/ru/vocab";
-import { importGrammarPacks } from "./importers/grammarPackImporter";
 import { RU_GRAMMAR_PACKS } from "@/assets/packs/ru/grammar";
+import { RU_VOCAB_PACKS } from "@/assets/packs/ru/vocab";
+import type { SQLiteDatabase } from "expo-sqlite";
 import { ensureCoreConcepts } from "./importers/conceptsImporter";
+import { importGrammarPacks } from "./importers/grammarPackImporter";
+import { importVocabPacks } from "./importers/vocabPackImporter";
 
 type SeedOpts = { fromSeedVersion?: number };
 
-export const SEED_VERSION = 9;
+export const SEED_VERSION = 11;
 
 export async function seedDb(db: SQLiteDatabase, opts: SeedOpts = {}) {
   const from = opts.fromSeedVersion ?? 0;
@@ -109,26 +109,10 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   // VOCAB
   // ============================================================
 
-  // ============================================================
-  // RESET VOCAB TABLES (DEV SEED ONLY)
-  // ============================================================
-  // Since vocab is now sourced from language packs, we clear all
-  // vocab-related tables before importing fresh data.
-  // This is safe during early development when no user data exists.
-
-  await db.execAsync(`
-    DELETE FROM vocab_examples;
-    DELETE FROM vocab_media;
-    DELETE FROM vocab_forms;
-    DELETE FROM vocab_senses;
-    DELETE FROM vocab_item_tags;
-    DELETE FROM vocab_items;
-  `);
-
   await importVocabPacks(db, {
     languageCode: "ru",
     packs: RU_VOCAB_PACKS,
-    replaceExisting: true, // wipe the dummy seed vocab
+    replaceExisting: false,
     verbose: true,
   });
  
@@ -138,25 +122,13 @@ async function seedPatch_v1(db: SQLiteDatabase) {
   await importGrammarPacks(db, {
     languageCode: "ru",
     packs: RU_GRAMMAR_PACKS,
-    replaceExisting: true,
+    replaceExisting: false,
     verbose: true,
   });
 
   // ============================================================
   // Concepts + Lessons
   // ============================================================
-
-  // Remove stale concept rows for replaced import data.
-  await db.runAsync(
-    `DELETE FROM concepts
-     WHERE kind = 'vocab_item'
-       AND ref_id NOT IN (SELECT id FROM vocab_items);`
-  );
-  await db.runAsync(
-    `DELETE FROM concepts
-     WHERE kind = 'grammar_point'
-       AND ref_id NOT IN (SELECT id FROM grammar_points);`
-  );
 
   // Ensure concepts exist for imported vocab_items + grammar_points
   await ensureCoreConcepts(db, RU);

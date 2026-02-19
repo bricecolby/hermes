@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -9,33 +10,32 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
-import { LinearGradient } from "expo-linear-gradient";
 
 import { Screen } from "../../components/ui/Screen";
+import { HermesButton } from "@/components/ui/HermesButton";
 import {
-  listLanguagePacksNotOwnedByUsername,
-  type LanguagePackRow,
-} from "../../db/queries/languages";
-import { createUserProfileForLanguagePack } from "../../db/queries/users";
+  deleteLanguagePack,
+  installOrUpdateLanguagePack,
+  listManagedLanguagePacks,
+  type ManagedLanguagePack,
+} from "@/services/languagePackManager";
 
-const DB_NAME = "hermes.db";
 const MVP_USERNAME = "default";
 
 export default function AddLanguage() {
   const router = useRouter();
   const db = SQLite.useSQLiteContext();
 
-  const [packs, setPacks] = useState<LanguagePackRow[]>([]);
+  const [packs, setPacks] = useState<ManagedLanguagePack[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+  const [busyCode, setBusyCode] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
       setErr(null);
       setLoading(true);
-
-      const rows = await listLanguagePacksNotOwnedByUsername(db, MVP_USERNAME);
-
+      const rows = await listManagedLanguagePacks(db, MVP_USERNAME);
       setPacks(rows);
     } catch (e: any) {
       setErr(e?.message ?? "Failed to load language packs");
@@ -43,31 +43,56 @@ export default function AddLanguage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [db]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  const onPick = async (packId: number) => {
+  const onDownloadOrUpdate = async (pack: ManagedLanguagePack) => {
+    if (busyCode) return;
+    setBusyCode(pack.code);
     try {
-      await createUserProfileForLanguagePack(db, MVP_USERNAME, packId);
-      router.back();
+      await installOrUpdateLanguagePack(db, MVP_USERNAME, pack.code);
+      await load();
     } catch (e: any) {
-      const msg = String(e?.message ?? "").toLowerCase();
-      if (msg.includes("unique")) {
-        router.back();
-        return;
-      }
-      setErr(e?.message ?? "Failed to add language");
+      Alert.alert("Pack operation failed", e?.message ?? "Could not install/update this language pack.");
+    } finally {
+      setBusyCode(null);
     }
+  };
+
+  const onDelete = (pack: ManagedLanguagePack) => {
+    if (busyCode) return;
+    Alert.alert(
+      `Delete ${pack.name} pack?`,
+      "This removes downloaded vocab/grammar content and profiles for this language on this device.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            setBusyCode(pack.code);
+            try {
+              await deleteLanguagePack(db, MVP_USERNAME, pack.code);
+              await load();
+            } catch (e: any) {
+              Alert.alert("Delete failed", e?.message ?? "Could not delete this language pack.");
+            } finally {
+              setBusyCode(null);
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
     <Screen>
       <View style={styles.header}>
         <Text style={styles.title}>Add Language</Text>
-        <Text style={styles.sub}>Pick a supported language pack.</Text>
+        <Text style={styles.sub}>Download or update supported language packs.</Text>
       </View>
 
       {loading ? (
@@ -82,34 +107,50 @@ export default function AddLanguage() {
       ) : (
         <FlatList
           data={packs}
-          keyExtractor={(x) => String(x.packId)}
+          keyExtractor={(x) => x.code}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
-            <TouchableOpacity activeOpacity={0.9} onPress={() => onPick(item.packId)}>
-              {/* Gradient border (only used on selectable pack cards here) */}
-              <LinearGradient
-                colors={["#1971FF", "#1EE6A8"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.cardBorder}
-              >
-                {/* Muted glass interior */}
-                <View style={styles.cardInner}>
-                  <Text style={styles.cardTitle}>
-                    {item.targetName} ({item.targetCode})
-                  </Text>
-                  <Text style={styles.cardMeta}>
-                    Native: {item.nativeName} ({item.nativeCode})
-                  </Text>
-                </View>
-              </LinearGradient>
-            </TouchableOpacity>
+            <View style={styles.cardInner}>
+              <Text style={styles.cardTitle}>
+                {item.name} ({item.code})
+              </Text>
+              <Text style={styles.cardMeta}>
+                Native: {item.nativeName} ({item.nativeCode})
+              </Text>
+              <Text style={styles.cardMeta}>
+                {item.installed ? "Installed" : "Not installed"} • vocab {item.vocabItems} • grammar {item.grammarPoints}
+              </Text>
+              <Text style={styles.cardMeta}>
+                Profile: {item.hasProfile ? "ready" : "not created"}
+              </Text>
+
+              <View style={styles.actionsRow}>
+                <HermesButton
+                  label={busyCode === item.code ? "Working…" : item.installed ? "Update Pack" : "Download Pack"}
+                  variant="primary"
+                  onPress={() => onDownloadOrUpdate(item)}
+                  disabled={busyCode != null}
+                  marginTop={0}
+                  size="sm"
+                />
+                {item.installed ? (
+                  <HermesButton
+                    label="Delete Pack"
+                    variant="secondary"
+                    onPress={() => onDelete(item)}
+                    disabled={busyCode != null}
+                    marginTop={0}
+                    size="sm"
+                  />
+                ) : null}
+              </View>
+            </View>
           )}
           ListEmptyComponent={
             <View style={styles.centerBlock}>
               <Text style={styles.mutedText}>
-                No additional language packs available.
+                No language packs available.
               </Text>
             </View>
           }
@@ -156,11 +197,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  cardBorder: {
-    borderRadius: 16,
-    padding: 1.6,
-  },
-
   cardInner: {
     borderRadius: 14,
     padding: 14,
@@ -178,6 +214,13 @@ const styles = StyleSheet.create({
   cardMeta: {
     color: "rgba(230, 235, 255, 0.55)",
     marginTop: 6,
+  },
+
+  actionsRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 10,
+    flexWrap: "wrap",
   },
 
   cancelWrap: {

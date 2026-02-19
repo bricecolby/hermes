@@ -36,14 +36,14 @@ export type HermesGrammarPackJson = {
 
 export type GrammarPackRef = {
   name: string;
-  asset: number;
+  asset: number | HermesGrammarPackJson;
   levelTag?: string;
 };
 
 type ImportOptions = {
   languageCode: string;
   packs: readonly GrammarPackRef[];
-  replaceExisting?: boolean;
+  replaceExisting?: boolean; // destructive mode; avoid for production
   verbose?: boolean;
 };
 
@@ -51,13 +51,19 @@ function nowIso() {
   return new Date().toISOString();
 }
 
-async function readBundledText(assetModuleId: number): Promise<string> {
-  const asset = Asset.fromModule(assetModuleId);
+async function readBundledPack(source: number | HermesGrammarPackJson): Promise<HermesGrammarPackJson> {
+  // JSON imports in Metro can resolve to an object (not an asset module id).
+  if (typeof source === "object" && source !== null) {
+    return source as HermesGrammarPackJson;
+  }
+
+  const asset = Asset.fromModule(source);
   await asset.downloadAsync();
   if (!asset.localUri) throw new Error("Asset missing localUri");
-  return await FileSystem.readAsStringAsync(asset.localUri, {
+  const text = await FileSystem.readAsStringAsync(asset.localUri, {
     encoding: "utf8",
   });
+  return JSON.parse(text) as HermesGrammarPackJson;
 }
 
 async function getLanguageId(db: SQLiteDatabase, code: string): Promise<number> {
@@ -90,7 +96,26 @@ async function ensureGrammarTag(
   return rows[0].id;
 }
 
-async function insertSections(
+function slugifyIdPart(s: string): string {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function sectionExternalId(slug: string): string {
+  return `grammar-section:${slug}`;
+}
+
+function pointExternalId(slug: string, title: string): string {
+  const trimmed = slug.trim();
+  if (trimmed) return `grammar-point:${trimmed}`;
+  return `grammar-point:title:${slugifyIdPart(title)}`;
+}
+
+async function upsertSections(
   db: SQLiteDatabase,
   languageId: number,
   sections: NonNullable<HermesGrammarPackJson["sections"]>,
@@ -105,7 +130,7 @@ async function insertSections(
     bySlug.set(slug, s);
   }
 
-  const inserted = new Map<string, number>();
+  const upserted = new Map<string, number>();
   const pending = new Set<string>(Array.from(bySlug.keys()));
 
   while (pending.size > 0) {
@@ -121,27 +146,53 @@ async function insertSections(
       const parentSlug = (s.parent_slug ?? "").trim();
       let parentId: number | null = null;
       if (parentSlug) {
-        if (!inserted.has(parentSlug)) {
+        if (!upserted.has(parentSlug)) {
           continue;
         }
-        parentId = inserted.get(parentSlug)!;
+        parentId = upserted.get(parentSlug)!;
       }
 
-      const res = await db.runAsync(
-        `INSERT INTO grammar_sections (language_id, title, description, parent_id, sort_order, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?);`,
-        [
-          languageId,
-          s.title,
-          s.description ?? null,
-          parentId,
-          s.sort_order ?? 0,
-          ts,
-          ts,
-        ]
+      const externalId = sectionExternalId(slug);
+      let existing = await db.getAllAsync<{ id: number }>(
+        `SELECT id
+         FROM grammar_sections
+         WHERE language_id = ? AND external_id = ?
+         LIMIT 1;`,
+        [languageId, externalId]
       );
+      if (!existing.length) {
+        existing = await db.getAllAsync<{ id: number }>(
+          `SELECT id
+           FROM grammar_sections
+           WHERE language_id = ? AND title = ?
+           ORDER BY id ASC
+           LIMIT 1;`,
+          [languageId, s.title]
+        );
+      }
 
-      inserted.set(slug, Number(res.lastInsertRowId));
+      if (existing.length) {
+        await db.runAsync(
+          `UPDATE grammar_sections
+           SET external_id = ?,
+               title = ?,
+               description = ?,
+               parent_id = ?,
+               sort_order = ?,
+               updated_at = ?
+           WHERE id = ?;`,
+          [externalId, s.title, s.description ?? null, parentId, s.sort_order ?? 0, ts, existing[0].id]
+        );
+        upserted.set(slug, existing[0].id);
+      } else {
+        const res = await db.runAsync(
+          `INSERT INTO grammar_sections (language_id, external_id, title, description, parent_id, sort_order, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+          [languageId, externalId, s.title, s.description ?? null, parentId, s.sort_order ?? 0, ts, ts]
+        );
+        upserted.set(slug, Number(res.lastInsertRowId));
+      }
+
       pending.delete(slug);
       progressed = true;
     }
@@ -156,26 +207,46 @@ async function insertSections(
           pending.delete(slug);
           continue;
         }
-        const res = await db.runAsync(
-          `INSERT INTO grammar_sections (language_id, title, description, parent_id, sort_order, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?);`,
-          [
-            languageId,
-            s.title,
-            s.description ?? null,
-            null,
-            s.sort_order ?? 0,
-            ts,
-            ts,
-          ]
+        const externalId = sectionExternalId(slug);
+        let existing = await db.getAllAsync<{ id: number }>(
+          `SELECT id
+           FROM grammar_sections
+           WHERE language_id = ? AND external_id = ?
+           LIMIT 1;`,
+          [languageId, externalId]
         );
-        inserted.set(slug, Number(res.lastInsertRowId));
+        if (!existing.length) {
+          existing = await db.getAllAsync<{ id: number }>(
+            `SELECT id
+             FROM grammar_sections
+             WHERE language_id = ? AND title = ?
+             ORDER BY id ASC
+             LIMIT 1;`,
+            [languageId, s.title]
+          );
+        }
+        if (existing.length) {
+          await db.runAsync(
+            `UPDATE grammar_sections
+             SET external_id = ?, title = ?, description = ?, parent_id = NULL, sort_order = ?, updated_at = ?
+             WHERE id = ?;`,
+            [externalId, s.title, s.description ?? null, s.sort_order ?? 0, ts, existing[0].id]
+          );
+          upserted.set(slug, existing[0].id);
+        } else {
+          const res = await db.runAsync(
+            `INSERT INTO grammar_sections (language_id, external_id, title, description, parent_id, sort_order, created_at, updated_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+            [languageId, externalId, s.title, s.description ?? null, null, s.sort_order ?? 0, ts, ts]
+          );
+          upserted.set(slug, Number(res.lastInsertRowId));
+        }
         pending.delete(slug);
       }
     }
   }
 
-  return inserted;
+  return upserted;
 }
 
 export async function importGrammarPacks(db: SQLiteDatabase, opts: ImportOptions) {
@@ -197,20 +268,18 @@ export async function importGrammarPacks(db: SQLiteDatabase, opts: ImportOptions
   for (const pack of opts.packs) {
     if (opts.verbose) console.log(`[grammar] importing pack: ${pack.name}`);
 
-    const text = await readBundledText(pack.asset);
     let obj: HermesGrammarPackJson;
-
     try {
-      obj = JSON.parse(text);
+      obj = await readBundledPack(pack.asset);
     } catch (e) {
-      throw new Error(`Failed to parse grammar pack ${pack.name}: ${String(e)}`);
+      throw new Error(`Failed to load grammar pack ${pack.name}: ${String(e)}`);
     }
 
     const sections = obj.sections ?? [];
     const tags = obj.tags ?? [];
     const points = obj.grammar_points ?? [];
 
-    const sectionIdBySlug = await insertSections(db, langId, sections, opts.verbose);
+    const sectionIdBySlug = await upsertSections(db, langId, sections, opts.verbose);
 
     const tagIdByName = new Map<string, number>();
     for (const t of tags) {
@@ -230,13 +299,51 @@ export async function importGrammarPacks(db: SQLiteDatabase, opts: ImportOptions
     for (const gp of points) {
       const title = (gp.title ?? "").trim();
       if (!title) continue;
+      const gpExternalId = pointExternalId(gp.slug ?? "", title);
 
-      const gpRes = await db.runAsync(
-        `INSERT INTO grammar_points (language_id, title, summary, explanation, usage_notes, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?);`,
-        [langId, title, gp.summary ?? null, gp.explanation ?? null, gp.usage_notes ?? null, ts, ts]
+      let existingPoint = await db.getAllAsync<{ id: number }>(
+        `SELECT id
+         FROM grammar_points
+         WHERE language_id = ? AND external_id = ?
+         LIMIT 1;`,
+        [langId, gpExternalId]
       );
-      const grammarPointId = Number(gpRes.lastInsertRowId);
+      if (!existingPoint.length) {
+        existingPoint = await db.getAllAsync<{ id: number }>(
+          `SELECT id
+           FROM grammar_points
+           WHERE language_id = ? AND title = ?
+           ORDER BY id ASC
+           LIMIT 1;`,
+          [langId, title]
+        );
+      }
+
+      let grammarPointId: number;
+      if (existingPoint.length) {
+        grammarPointId = existingPoint[0].id;
+        await db.runAsync(
+          `UPDATE grammar_points
+           SET external_id = ?,
+               title = ?,
+               summary = ?,
+               explanation = ?,
+               usage_notes = ?,
+               updated_at = ?
+           WHERE id = ?;`,
+          [gpExternalId, title, gp.summary ?? null, gp.explanation ?? null, gp.usage_notes ?? null, ts, grammarPointId]
+        );
+        await db.runAsync(`DELETE FROM grammar_examples WHERE grammar_point_id = ?;`, [grammarPointId]);
+        await db.runAsync(`DELETE FROM grammar_point_sections WHERE grammar_point_id = ?;`, [grammarPointId]);
+        await db.runAsync(`DELETE FROM grammar_point_tags WHERE grammar_point_id = ?;`, [grammarPointId]);
+      } else {
+        const gpRes = await db.runAsync(
+          `INSERT INTO grammar_points (language_id, external_id, title, summary, explanation, usage_notes, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+          [langId, gpExternalId, title, gp.summary ?? null, gp.explanation ?? null, gp.usage_notes ?? null, ts, ts]
+        );
+        grammarPointId = Number(gpRes.lastInsertRowId);
+      }
 
       const slugs = gp.section_slugs ?? [];
       for (const slug of slugs) {

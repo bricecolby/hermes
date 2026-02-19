@@ -88,6 +88,7 @@ export const schemaStatements: string[] = [
   `CREATE TABLE IF NOT EXISTS vocab_items (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     language_id     INTEGER NOT NULL,
+    external_id     TEXT,
 
     base_form       TEXT NOT NULL,
     part_of_speech  TEXT NOT NULL,
@@ -194,6 +195,7 @@ export const schemaStatements: string[] = [
   `CREATE TABLE IF NOT EXISTS grammar_points (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     language_id INTEGER NOT NULL,
+    external_id TEXT,
 
     title       TEXT NOT NULL,
     summary     TEXT,
@@ -225,6 +227,7 @@ export const schemaStatements: string[] = [
   `CREATE TABLE IF NOT EXISTS grammar_sections (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     language_id INTEGER NOT NULL,
+    external_id TEXT,
 
     title       TEXT NOT NULL,
     description TEXT,
@@ -543,6 +546,9 @@ export const schemaStatements: string[] = [
   `CREATE INDEX IF NOT EXISTS idx_vocab_items_language_base
     ON vocab_items (language_id, base_form);`,
 
+  `CREATE UNIQUE INDEX IF NOT EXISTS idx_vocab_items_lang_external
+    ON vocab_items (language_id, external_id);`,
+
   `CREATE INDEX IF NOT EXISTS idx_vocab_forms_vocab_item
     ON vocab_forms (vocab_item_id);`,
 
@@ -555,8 +561,14 @@ export const schemaStatements: string[] = [
   `CREATE INDEX IF NOT EXISTS idx_grammar_points_language_title
     ON grammar_points (language_id, title);`,
 
+  `CREATE UNIQUE INDEX IF NOT EXISTS idx_grammar_points_lang_external
+    ON grammar_points (language_id, external_id);`,
+
   `CREATE INDEX IF NOT EXISTS idx_grammar_sections_language_parent
     ON grammar_sections (language_id, parent_id);`,
+
+  `CREATE UNIQUE INDEX IF NOT EXISTS idx_grammar_sections_lang_external
+    ON grammar_sections (language_id, external_id);`,
 
   `CREATE INDEX IF NOT EXISTS idx_grammar_tags_language_name
     ON grammar_tags (language_id, name);`,

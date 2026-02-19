@@ -49,3 +49,6 @@ app-example
 hermes-capstone.zip
 
 *.ipa
+
+# local dev-only routes/tools
+src/app/(app)/dev/
