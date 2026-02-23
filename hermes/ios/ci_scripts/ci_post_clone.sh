@@ -4,21 +4,26 @@ set -e
 echo "CI_PRIMARY_REPOSITORY_PATH=${CI_PRIMARY_REPOSITORY_PATH:-<empty>}"
 echo "PWD before: $(pwd)"
 
-# Go to the root of the cloned repository
 cd "$CI_PRIMARY_REPOSITORY_PATH"
-
-# If your app is in a subfolder called "hermes"
 cd hermes
 
 echo "PWD after cd: $(pwd)"
-ls -la
+
+# ---- Ensure Node/npm exists ----
+HOMEBREW_NO_AUTO_UPDATE=1
+if ! command -v node >/dev/null 2>&1; then
+  echo "Node not found. Installing via Homebrew..."
+  brew install node
+fi
+
+echo "node: $(node -v)"
+echo "npm:  $(npm -v)"
 
 # Install JS deps
 npm ci
 
-# Install CocoaPods deps (generates the Pods-*.xcconfig files)
+# Pods
 cd ios
 pod install
 
 echo "✅ ci_post_clone complete"
-exit 0
