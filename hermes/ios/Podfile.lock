@@ -1,10 +1,10 @@
 PODS:
-  - EXConstants (18.0.9):
+  - EXConstants (18.0.13):
     - ExpoModulesCore
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.8):
     - ExpoModulesCore
-  - Expo (54.0.12):
+  - Expo (54.0.33):
     - ExpoModulesCore
     - hermes-engine
     - RCTRequired
@@ -200,11 +200,11 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - ExpoAsset (12.0.9):
+  - ExpoAsset (12.0.12):
     - ExpoModulesCore
   - ExpoFileSystem (19.0.21):
     - ExpoModulesCore
-  - ExpoFont (14.0.8):
+  - ExpoFont (14.0.11):
     - ExpoModulesCore
   - ExpoHaptics (15.0.7):
     - ExpoModulesCore
@@ -218,13 +218,13 @@ PODS:
     - SDWebImageAVIFCoder (~> 0.11.0)
     - SDWebImageSVGCoder (~> 1.7.0)
     - SDWebImageWebPCoder (~> 0.14.6)
-  - ExpoKeepAwake (15.0.7):
+  - ExpoKeepAwake (15.0.8):
     - ExpoModulesCore
   - ExpoLinearGradient (15.0.7):
     - ExpoModulesCore
   - ExpoLinking (8.0.8):
     - ExpoModulesCore
-  - ExpoModulesCore (3.0.20):
+  - ExpoModulesCore (3.0.29):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -247,6 +247,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - ExpoSecureStore (15.0.8):
+    - ExpoModulesCore
   - ExpoSplashScreen (31.0.10):
     - ExpoModulesCore
   - ExpoSQLite (16.0.10):
@@ -2315,6 +2317,7 @@ DEPENDENCIES:
   - ExpoLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - ExpoLinking (from `../node_modules/expo-linking/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - ExpoSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - ExpoSQLite (from `../node_modules/expo-sqlite/ios`)
   - ExpoSymbols (from `../node_modules/expo-symbols/ios`)
@@ -2445,6 +2448,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-linking/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoSecureStore:
+    :path: "../node_modules/expo-secure-store/ios"
   ExpoSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
   ExpoSQLite:
@@ -2610,24 +2615,25 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  EXConstants: a95804601ee4a6aa7800645f9b070d753b1142b3
+  EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: 224345a575fca389073c416297b6348163f28d1a
-  Expo: 24375439ae3be9e01cdd3ab8e03967d453e66d3e
+  Expo: aadbcc8c6c14ff3105a9154f1683cb1424ff0d2a
   expo-dev-client: 32b1d17ceeb17b87b8c4cc6457adea0e76074560
   expo-dev-launcher: 1ff54db59daf90fd472dccde9b26dad1f01575a5
   expo-dev-menu: 6db57f4d3001fe3992d84a0c2e285de381e4b51b
   expo-dev-menu-interface: 600df12ea01efecdd822daaf13cc0ac091775533
-  ExpoAsset: 9ba6fbd677fb8e241a3899ac00fa735bc911eadf
+  ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
   ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
-  ExpoFont: 86ceec09ffed1c99cfee36ceb79ba149074901b5
+  ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
   ExpoHaptics: 807476b0c39e9d82b7270349d6487928ce32df84
   ExpoHead: b1843315be5ef6751b4ecb2404b3effffbb33d96
   ExpoImage: 6356eb13d3a076a991cf191e4bb22cca91a8f317
-  ExpoKeepAwake: 1a2e820692e933c94a565ec3fbbe38ac31658ffe
+  ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
   ExpoLinearGradient: a464898cb95153125e3b81894fd479bcb1c7dd27
   ExpoLinking: f051f28e50ea9269ff539317c166adec81d9342d
-  ExpoModulesCore: e646280de9e06297a3668c568ddc6b8564fa2896
+  ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
+  ExpoSecureStore: d32f751874a2ceb5aaeebeb3578e165c1ba2b24a
   ExpoSplashScreen: cbb839de72110dea1851dd3e85080b7923af2540
   ExpoSQLite: 7eedbe476870a5f18d6b89c817c4ac6f299830ad
   ExpoSymbols: 1ae04ce686de719b9720453b988d8bc5bf776c68

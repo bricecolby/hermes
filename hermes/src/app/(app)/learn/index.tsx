@@ -163,8 +163,8 @@ export default function Learn() {
           userId,
           languageId,
           modelKey: "ema_v1",
-          vocabChunkSize: settings.vocabChunkSize,
-          grammarChunkSize: settings.grammarChunkSize,
+          vocabChunkSize: settings.vocabDailyTarget > 0 ? settings.vocabChunkSize : 0,
+          grammarChunkSize: settings.grammarDailyTarget > 0 ? settings.grammarChunkSize : 0,
         });
 
         if (cancelled) return;

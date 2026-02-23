@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
 import { ActivityIndicator } from "react-native";
-import { Text, YStack } from "tamagui";
+import { ScrollView, Text, YStack } from "tamagui";
 import { useSQLiteContext } from "expo-sqlite";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Screen } from "@/components/ui/Screen";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -44,55 +45,57 @@ export default function LearnConcept() {
   const [conceptIds, setConceptIds] = useState<number[]>([]);
   const [conceptRefs, setConceptRefs] = useState<ConceptRefRow[]>([]);
 
-  useEffect(() => {
-    let cancelled = false;
+  useFocusEffect(
+    React.useCallback(() => {
+      let cancelled = false;
 
-    async function load() {
-      try {
-        setLoading(true);
-        const settings = await getLearnSettings(db, { userId, languageId });
+      async function load() {
+        try {
+          setLoading(true);
+          const settings = await getLearnSettings(db, { userId, languageId });
 
-        await ensureLearnQueueForKind(db, {
-          userId,
-          languageId,
-          kind: "vocab_item",
-          chunkSize: settings.vocabChunkSize,
-          modelKey: "ema_v1",
-        });
+          await ensureLearnQueueForKind(db, {
+            userId,
+            languageId,
+            kind: "vocab_item",
+            chunkSize: settings.vocabDailyTarget > 0 ? settings.vocabChunkSize : 0,
+            modelKey: "ema_v1",
+          });
 
-        await ensureLearnQueueForKind(db, {
-          userId,
-          languageId,
-          kind: "grammar_point",
-          chunkSize: settings.grammarChunkSize,
-          modelKey: "ema_v1",
-        });
+          await ensureLearnQueueForKind(db, {
+            userId,
+            languageId,
+            kind: "grammar_point",
+            chunkSize: settings.grammarDailyTarget > 0 ? settings.grammarChunkSize : 0,
+            modelKey: "ema_v1",
+          });
 
-        const queue = await listLearnQueueRows(db, { userId, languageId });
-        const pending = queue.filter((r) => r.correctOnce === 0);
-        const ids = Array.from(new Set(pending.map((r) => r.conceptId)));
+          const queue = await listLearnQueueRows(db, { userId, languageId });
+          const pending = queue.filter((r) => r.correctOnce === 0);
+          const ids = Array.from(new Set(pending.map((r) => r.conceptId)));
 
-        const refs = await getConceptRefsByConceptIds(db, ids);
-        if (cancelled) return;
+          const refs = await getConceptRefsByConceptIds(db, ids);
+          if (cancelled) return;
 
-        setConceptIds(ids);
-        setConceptRefs(refs);
-      } catch (e) {
-        console.warn("[learn concept] load failed", e);
-        if (!cancelled) {
-          setConceptIds([]);
-          setConceptRefs([]);
+          setConceptIds(ids);
+          setConceptRefs(refs);
+        } catch (e) {
+          console.warn("[learn concept] load failed", e);
+          if (!cancelled) {
+            setConceptIds([]);
+            setConceptRefs([]);
+          }
+        } finally {
+          if (!cancelled) setLoading(false);
         }
-      } finally {
-        if (!cancelled) setLoading(false);
       }
-    }
 
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [db, languageId, userId]);
+      load();
+      return () => {
+        cancelled = true;
+      };
+    }, [db, languageId, userId])
+  );
 
   const vocab = useMemo<VocabVM[]>(() => {
     return conceptRefs
@@ -139,77 +142,79 @@ export default function LearnConcept() {
 
   return (
     <Screen>
-      <H1>Learn Preview</H1>
-      <Sub>Here’s what you’ll see in this learn session.</Sub>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <H1>Learn Preview</H1>
+        <Sub>Here’s what you’ll see in this learn session.</Sub>
 
-      <YStack marginTop={14} gap={14}>
-        <GlassCard>
-          <SectionTitle>Vocabulary</SectionTitle>
+        <YStack marginTop={14} gap={14} paddingBottom={16}>
+          <GlassCard>
+            <SectionTitle>Vocabulary</SectionTitle>
 
-          {vocab.length === 0 ? (
-            <Muted>No new vocabulary in this session.</Muted>
-          ) : (
-            vocab.map((v) => (
-              <VocabRow
-                key={v.conceptId}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(modals)/vocab/[id]",
-                    params: { id: String(v.vocabItemId), returnTo: "/(app)/learn/concept" },
-                  })
-                }
-                left={
-                  <Text color="$color" fontWeight="900">
-                    {v.target}
-                  </Text>
-                }
-                right={
-                  <Text color="$color11" fontWeight="700">
-                    {v.native}
-                  </Text>
-                }
-              />
-            ))
-          )}
-        </GlassCard>
+            {vocab.length === 0 ? (
+              <Muted>No new vocabulary in this session.</Muted>
+            ) : (
+              vocab.map((v) => (
+                <VocabRow
+                  key={v.conceptId}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(modals)/vocab/[id]",
+                      params: { id: String(v.vocabItemId), returnTo: "/(app)/learn/concept" },
+                    })
+                  }
+                  left={
+                    <Text color="$color" fontWeight="900">
+                      {v.target}
+                    </Text>
+                  }
+                  right={
+                    <Text color="$color11" fontWeight="700">
+                      {v.native}
+                    </Text>
+                  }
+                />
+              ))
+            )}
+          </GlassCard>
 
-        <GlassCard>
-          <SectionTitle>Grammar</SectionTitle>
+          <GlassCard>
+            <SectionTitle>Grammar</SectionTitle>
 
-          {grammar.length === 0 ? (
-            <Muted>No grammar focus in this session.</Muted>
-          ) : (
-            grammar.map((g) => (
-              <StackRow
-                key={g.conceptId}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(modals)/grammar/[id]",
-                    params: { id: String(g.grammarItemId), returnTo: "/(app)/learn/concept" },
-                  })
-                }
-                title={
-                  <Text color="$color" fontWeight="900">
-                    {g.title}
-                  </Text>
-                }
-                subtitle={<Text color="$color11">{g.summary}</Text>}
-              />
-            ))
-          )}
-        </GlassCard>
+            {grammar.length === 0 ? (
+              <Muted>No grammar focus in this session.</Muted>
+            ) : (
+              grammar.map((g) => (
+                <StackRow
+                  key={g.conceptId}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(modals)/grammar/[id]",
+                      params: { id: String(g.grammarItemId), returnTo: "/(app)/learn/concept" },
+                    })
+                  }
+                  title={
+                    <Text color="$color" fontWeight="900">
+                      {g.title}
+                    </Text>
+                  }
+                  subtitle={<Text color="$color11">{g.summary}</Text>}
+                />
+              ))
+            )}
+          </GlassCard>
 
-        <HermesButton
-          label="Start Learning"
-          variant="primary"
-          onPress={() =>
-            router.replace({
-              pathname: "/(app)/learn",
-              params: { run: String(Date.now()) },
-            })
-          }
-        />
-      </YStack>
+          <HermesButton
+            label="Start Learning"
+            variant="primary"
+            onPress={() =>
+              router.replace({
+                pathname: "/(app)/learn",
+                params: { run: String(Date.now()) },
+              })
+            }
+          />
+        </YStack>
+      </ScrollView>
     </Screen>
   );
 }

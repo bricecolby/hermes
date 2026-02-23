@@ -1,29 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, TouchableOpacity } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import * as SQLite from "expo-sqlite";
+import React, { useCallback, useEffect, useState } from "react";
+import { TouchableOpacity } from "react-native";
 
-import { YStack, Text, ScrollView, XStack, useTheme } from "tamagui";
+import { ScrollView, Text, XStack, YStack } from "tamagui";
 
-import { Screen } from "../../components/ui/Screen";
-import { AppHeader } from "../../components/ui/AppHeader";
-import { ActionCard } from "../../components/ui/ActionCard";
-import { useAppState } from "../../state/AppState";
-import { listLanguageProfilesForUsername, type LanguageProfileRow } from "../../db/queries/users";
 import { CefrProgressWidget } from "@/components/ui/CefrProgressWidget";
-import { useFocusEffect } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { PillProgressRow } from "@/components/ui/PillProgressRow";
 import { ReviewForecast } from "@/components/ui/ReviewForecast";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { resolveThemeColor } from "@/components/ui/themeColor";
 import {
-  getLearnSettings,
   getLearnCompletedTodayByKind,
-  getLearnChunkProgressByKind,
+  getLearnSettings,
   type LearnSettings,
 } from "@/db/queries/learn";
-
-const MVP_USERNAME = "default";
+import { useFocusEffect } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ActionCard } from "../../components/ui/ActionCard";
+import { AppHeader } from "../../components/ui/AppHeader";
+import { Screen } from "../../components/ui/Screen";
+import { useAppState } from "../../state/AppState";
 
 type LearnStats = {
   chunkCompleted: number;
@@ -32,144 +28,22 @@ type LearnStats = {
   grammarCompletedToday: number;
 };
 
-type RGB = { r: number; g: number; b: number };
-
-function parseColorToRgb(input: string): RGB | null {
-  const s = input.trim();
-  const hex = s.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-  if (hex) {
-    const raw = hex[1];
-    const full =
-      raw.length === 3
-        ? `${raw[0]}${raw[0]}${raw[1]}${raw[1]}${raw[2]}${raw[2]}`
-        : raw;
-    return {
-      r: parseInt(full.slice(0, 2), 16),
-      g: parseInt(full.slice(2, 4), 16),
-      b: parseInt(full.slice(4, 6), 16),
-    };
-  }
-
-  const rgb = s.match(
-    /^rgba?\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})(?:\s*,\s*[0-9.]+\s*)?\)$/i
-  );
-  if (rgb) {
-    return {
-      r: Math.max(0, Math.min(255, Number(rgb[1]))),
-      g: Math.max(0, Math.min(255, Number(rgb[2]))),
-      b: Math.max(0, Math.min(255, Number(rgb[3]))),
-    };
-  }
-
-  return null;
-}
-
-function gradientAt(a: RGB, b: RGB, t: number, alpha: number): string {
-  const clamped = Math.max(0, Math.min(1, t));
-  const r = Math.round(a.r + (b.r - a.r) * clamped);
-  const g = Math.round(a.g + (b.g - a.g) * clamped);
-  const bCh = Math.round(a.b + (b.b - a.b) * clamped);
-  return `rgba(${r},${g},${bCh},${alpha})`;
-}
-
 function startOfDayIso() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   return d.toISOString();
 }
 
-function PillRow({
-  total,
-  filled,
-  tone = "strong",
-}: {
-  total: number;
-  filled: number;
-  tone?: "strong" | "muted";
-}) {
-  const theme = useTheme();
-  const safeTotal = Math.max(0, total);
-  const safeFilled = Math.min(Math.max(filled, 0), safeTotal);
-  const [width, setWidth] = useState(0);
-  const gap = tone === "strong" ? 3 : 6;
-  const minPillWidth = tone === "strong" ? 6 : 10;
-  const maxPillWidth = tone === "strong" ? 16 : 20;
-  const pillHeight = tone === "strong" ? 8 : 12;
-  const gradA = parseColorToRgb(resolveThemeColor(theme.gradA, "#2BCEFB")) ?? {
-    r: 43,
-    g: 206,
-    b: 251,
-  };
-  const gradB = parseColorToRgb(resolveThemeColor(theme.gradB, "#2CD1AA")) ?? {
-    r: 44,
-    g: 209,
-    b: 170,
-  };
-  const emptyColor = tone === "strong" ? "rgba(255,255,255,0.12)" : "rgba(14,56,46,0.55)";
-
-  let count = safeTotal;
-  let pillWidth = maxPillWidth;
-
-  if (width > 0 && safeTotal > 0) {
-    const naturalWidth = safeTotal * maxPillWidth + gap * (safeTotal - 1);
-    if (naturalWidth > width) {
-      const maxVisible = Math.max(1, Math.floor((width + gap) / (minPillWidth + gap)));
-      count = Math.min(safeTotal, maxVisible);
-      pillWidth = Math.max(minPillWidth, Math.floor((width - gap * (count - 1)) / count));
-    }
-  }
-
-  const shownFilled =
-    safeTotal <= 0 || count <= 0 ? 0 : Math.round((safeFilled / safeTotal) * count);
-
-  return (
-    <YStack
-      onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-    >
-      <XStack gap={gap} flexWrap="nowrap">
-        {Array.from({ length: count }).map((_, i) => (
-          <YStack
-            key={i}
-            width={pillWidth}
-            height={pillHeight}
-            borderRadius={tone === "strong" ? 999 : 14}
-            backgroundColor={
-              i < shownFilled
-                ? gradientAt(
-                    gradA,
-                    gradB,
-                    shownFilled <= 1 ? 1 : i / (shownFilled - 1),
-                    tone === "strong" ? 0.92 : 0.38
-                  )
-                : emptyColor
-            }
-            borderWidth={tone === "muted" ? 1 : 0}
-            borderColor={
-              tone === "muted"
-                ? i < shownFilled
-                  ? gradientAt(
-                      gradA,
-                      gradB,
-                      shownFilled <= 1 ? 1 : i / (shownFilled - 1),
-                      0.78
-                    )
-                  : "rgba(44,209,170,0.32)"
-                : "transparent"
-            }
-          />
-        ))}
-      </XStack>
-    </YStack>
-  );
-}
-
 export default function Home() {
   const router = useRouter();
-  const { activeProfileId, activeLanguageId, session, startSession, endSession } = useAppState();
+  const {
+    activeProfileId,
+    activeLanguageId,
+    session,
+    startSession,
+    endSession,
+  } = useAppState();
   const insets = useSafeAreaInsets();
-
-  const [profiles, setProfiles] = useState<LanguageProfileRow[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const db = SQLite.useSQLiteContext();
 
@@ -183,27 +57,15 @@ export default function Home() {
   });
   const [learnExpanded, setLearnExpanded] = useState(false);
   const [learnLoading, setLearnLoading] = useState(false);
-  const [learnSettings, setLearnSettings] = useState<LearnSettings | null>(null);
+  const [learnSettings, setLearnSettings] = useState<LearnSettings | null>(
+    null,
+  );
   const [learnStats, setLearnStats] = useState<LearnStats>({
     chunkCompleted: 0,
     chunkTarget: 0,
     vocabCompletedToday: 0,
     grammarCompletedToday: 0,
   });
-
-  const loadProfiles = useCallback(async () => {
-    try {
-      setLoading(true);
-      const rows = await listLanguageProfilesForUsername(db, MVP_USERNAME);
-      setProfiles(rows);
-    } finally {
-      setLoading(false);
-    }
-  }, [db]);
-
-  useEffect(() => {
-    loadProfiles();
-  }, [loadProfiles]);
 
   const loadReviewCounts = useCallback(async () => {
     if (!activeProfileId || !activeLanguageId) {
@@ -228,7 +90,7 @@ export default function Home() {
           AND ucm.due_at < ?
         GROUP BY c.kind;
         `,
-        [activeLanguageId, activeProfileId, "ema_v1", nowIso]
+        [activeLanguageId, activeProfileId, "ema_v1", nowIso],
       );
 
       const next = { total: 0, vocab: 0, grammar: 0 };
@@ -266,19 +128,6 @@ export default function Home() {
       });
       setLearnSettings(settings);
 
-      const [vocabProgress, grammarProgress] = await Promise.all([
-        getLearnChunkProgressByKind(db, {
-          userId: activeProfileId,
-          languageId: activeLanguageId,
-          kind: "vocab_item",
-        }),
-        getLearnChunkProgressByKind(db, {
-          userId: activeProfileId,
-          languageId: activeLanguageId,
-          kind: "grammar_point",
-        }),
-      ]);
-
       const sinceIso = startOfDayIso();
       const [vocabToday, grammarToday] = await Promise.all([
         getLearnCompletedTodayByKind(db, {
@@ -311,12 +160,10 @@ export default function Home() {
   useFocusEffect(
     useCallback(() => {
       setCefrNonce((n) => n + 1);
-      loadProfiles();
       loadReviewCounts();
       loadLearnStats();
-    }, [loadProfiles, loadReviewCounts, loadLearnStats])
+    }, [loadReviewCounts, loadLearnStats]),
   );
-
 
   useEffect(() => {
     if (!activeProfileId) router.replace("/(onboarding)/profile");
@@ -361,7 +208,7 @@ export default function Home() {
         <YStack paddingTop={6}>
           <AppHeader title="Home" />
 
-          {!loading && activeProfileId ? (
+          {activeProfileId ? (
             <>
               <YStack gap={16} marginTop={6}>
                 <CefrProgressWidget
@@ -378,258 +225,287 @@ export default function Home() {
                   modelKey="ema_v1"
                 />
               </YStack>
-
             </>
           ) : null}
 
           <YStack marginTop={18} gap={12}>
             <>
-                <ActionCard
-                  title="Learn"
-                  subtitle={
-                    learnLoading ? "Loading learn queue…" : undefined
-                  }
-                  disabled={!activeLanguageId}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/(app)/learn/concept",
-                      params: { run: String(Date.now()) },
-                    })
-                  }
-                  showChevron
-                  chevronOpen={learnExpanded}
-                  onChevronPress={() => setLearnExpanded((v) => !v)}
-                  rightSlot={
-                    <Text color="$textMuted" fontSize={12} fontWeight="800">
-                      {learnLoading
-                        ? "…"
-                        : `${learnStats.chunkCompleted}/${learnStats.chunkTarget}`}
-                    </Text>
-                  }
-                  footer={
-                    <YStack gap={12}>
-                      <PillRow
-                        total={learnStats.chunkTarget}
-                        filled={learnStats.chunkCompleted}
-                      />
+              <ActionCard
+                title="Learn"
+                subtitle={learnLoading ? "Loading learn queue…" : undefined}
+                disabled={!activeLanguageId}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(app)/learn/concept",
+                    params: { run: String(Date.now()) },
+                  })
+                }
+                showChevron
+                chevronOpen={learnExpanded}
+                onChevronPress={() => setLearnExpanded((v) => !v)}
+                rightSlot={
+                  <Text color="$textMuted" fontSize={12} fontWeight="800">
+                    {learnLoading
+                      ? "…"
+                      : `${learnStats.chunkCompleted}/${learnStats.chunkTarget}`}
+                  </Text>
+                }
+                footer={
+                  <YStack gap={12}>
+                    <PillProgressRow
+                      total={learnStats.chunkTarget}
+                      filled={learnStats.chunkCompleted}
+                    />
 
-                      {learnExpanded ? (
-                        <YStack gap={12}>
-                          <XStack
-                            alignItems="center"
-                            justifyContent="space-between"
-                            paddingVertical={6}
-                          >
-                            <YStack gap={4} flex={1}>
-                              <XStack alignItems="center" justifyContent="space-between">
-                                <Text fontSize={14} fontWeight="800" color="$color">
-                                  Vocab
-                                </Text>
-                                <Text color="$textMuted" fontSize={12} fontWeight="800">
-                                  {learnSettings
-                                    ? `${learnStats.vocabCompletedToday}/${learnSettings.vocabDailyTarget}`
-                                    : "—"}
-                                </Text>
-                              </XStack>
-                              <PillRow
-                                total={learnSettings?.vocabDailyTarget ?? 0}
-                                filled={learnStats.vocabCompletedToday}
-                                tone="muted"
-                              />
-                            </YStack>
-                            <YStack alignItems="center" marginLeft={10}>
-                              <TouchableOpacity
-                                onPress={() => router.push("/(modals)/learn-settings")}
-                                activeOpacity={0.8}
-                              >
-                                <IconSymbol
-                                  name="ellipsis"
-                                  size={18}
-                                  weight="medium"
-                                  color="rgba(255,255,255,0.7)"
-                                />
-                              </TouchableOpacity>
-                            </YStack>
-                          </XStack>
-
-                          <XStack
-                            alignItems="center"
-                            justifyContent="space-between"
-                            paddingVertical={6}
-                          >
-                            <YStack gap={4} flex={1}>
-                              <XStack alignItems="center" justifyContent="space-between">
-                                <Text fontSize={14} fontWeight="800" color="$color">
-                                  Grammar
-                                </Text>
-                                <Text color="$textMuted" fontSize={12} fontWeight="800">
-                                  {learnSettings
-                                    ? `${learnStats.grammarCompletedToday}/${learnSettings.grammarDailyTarget}`
-                                    : "—"}
-                                </Text>
-                              </XStack>
-                              <PillRow
-                                total={learnSettings?.grammarDailyTarget ?? 0}
-                                filled={learnStats.grammarCompletedToday}
-                                tone="muted"
-                              />
-                            </YStack>
-                            <YStack alignItems="center" marginLeft={10}>
-                              <TouchableOpacity
-                                onPress={() => router.push("/(modals)/learn-settings")}
-                                activeOpacity={0.8}
-                              >
-                                <IconSymbol
-                                  name="ellipsis"
-                                  size={18}
-                                  weight="medium"
-                                  color="rgba(255,255,255,0.7)"
-                                />
-                              </TouchableOpacity>
-                            </YStack>
-                          </XStack>
-
-                          <TouchableOpacity
-                            onPress={() => router.push("/(modals)/learn-settings")}
-                            activeOpacity={0.8}
-                          >
+                    {learnExpanded ? (
+                      <YStack gap={12}>
+                        <XStack
+                          alignItems="center"
+                          justifyContent="space-between"
+                          paddingVertical={6}
+                        >
+                          <YStack gap={4} flex={1}>
                             <XStack
                               alignItems="center"
                               justifyContent="space-between"
-                              paddingVertical={6}
                             >
-                              <Text fontSize={14} fontWeight="800" color="$color">
-                                Learn Queue Settings
+                              <Text
+                                fontSize={14}
+                                fontWeight="800"
+                                color="$color"
+                              >
+                                Vocab
                               </Text>
+                              <Text
+                                color="$textMuted"
+                                fontSize={12}
+                                fontWeight="800"
+                              >
+                                {learnSettings
+                                  ? `${learnStats.vocabCompletedToday}/${learnSettings.vocabDailyTarget}`
+                                  : "—"}
+                              </Text>
+                            </XStack>
+                            <PillProgressRow
+                              total={learnSettings?.vocabDailyTarget ?? 0}
+                              filled={learnStats.vocabCompletedToday}
+                              tone="muted"
+                            />
+                          </YStack>
+                          <YStack alignItems="center" marginLeft={10}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                router.push("/(modals)/learn-settings")
+                              }
+                              activeOpacity={0.8}
+                            >
                               <IconSymbol
-                                name="gearshape"
+                                name="ellipsis"
                                 size={18}
                                 weight="medium"
                                 color="rgba(255,255,255,0.7)"
                               />
+                            </TouchableOpacity>
+                          </YStack>
+                        </XStack>
+
+                        <XStack
+                          alignItems="center"
+                          justifyContent="space-between"
+                          paddingVertical={6}
+                        >
+                          <YStack gap={4} flex={1}>
+                            <XStack
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
+                              <Text
+                                fontSize={14}
+                                fontWeight="800"
+                                color="$color"
+                              >
+                                Grammar
+                              </Text>
+                              <Text
+                                color="$textMuted"
+                                fontSize={12}
+                                fontWeight="800"
+                              >
+                                {learnSettings
+                                  ? `${learnStats.grammarCompletedToday}/${learnSettings.grammarDailyTarget}`
+                                  : "—"}
+                              </Text>
                             </XStack>
-                          </TouchableOpacity>
-                        </YStack>
-                      ) : null}
-                    </YStack>
-                  }
-                />
-
-                <ActionCard
-                  title="Practice"
-                  subtitle={practiceSubtitle}
-                  highlight={canResumeSession}
-                  disabled={!activeLanguageId}
-                  onPress={handlePracticePress}
-                />
-
-                <ActionCard
-                  title="Apply"
-                  subtitle="Freeform chat practice"
-                  disabled={!activeLanguageId}
-                  onPress={() => router.push("/(app)/apply")}
-                />
-
-                <ActionCard
-                  title="Review"
-                  subtitle={
-                    reviewLoading
-                      ? "Loading reviews…"
-                      : reviewCounts.total > 0
-                        ? `You have ${reviewCounts.total} reviews overdue.`
-                        : "No reviews are overdue right now."
-                  }
-                  disabled={!activeLanguageId}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/(app)/review",
-                      params: { run: String(Date.now()) },
-                    })
-                  }
-                  showChevron
-                  chevronOpen={reviewExpanded}
-                  onChevronPress={() => setReviewExpanded((v) => !v)}
-                  rightSlot={
-                    <YStack
-                      paddingVertical={6}
-                      paddingHorizontal={14}
-                      borderRadius={999}
-                      backgroundColor="rgba(0,0,0,0.35)"
-                      borderWidth={1}
-                      borderColor="rgba(255,255,255,0.08)"
-                    >
-                      <Text color="$textMuted" fontSize={12} fontWeight="800">
-                        {reviewLoading ? "…" : `${reviewCounts.total}`}
-                      </Text>
-                    </YStack>
-                  }
-
-                  footer={
-                    reviewExpanded ? (
-                      <YStack gap={10}>
-                        <XStack
-                          alignItems="center"
-                          justifyContent="space-between"
-                          paddingVertical={6}
-                        >
-                          <YStack gap={2}>
-                            <Text fontSize={14} fontWeight="800" color="$color">
-                              Grammar
-                            </Text>
-                            <Text color="$textMuted" fontSize={12}>
-                              {reviewCounts.grammar > 0 ? "Overdue" : "No overdue reviews."}
-                            </Text>
+                            <PillProgressRow
+                              total={learnSettings?.grammarDailyTarget ?? 0}
+                              filled={learnStats.grammarCompletedToday}
+                              tone="muted"
+                            />
                           </YStack>
-                          <YStack
-                            paddingVertical={6}
-                            paddingHorizontal={14}
-                            borderRadius={999}
-                            backgroundColor="rgba(0,0,0,0.35)"
-                            borderWidth={1}
-                            borderColor="rgba(255,255,255,0.08)"
-                          >
-                            <Text fontWeight="900" color="$color">
-                              {reviewLoading ? "—" : reviewCounts.grammar}
-                            </Text>
+                          <YStack alignItems="center" marginLeft={10}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                router.push("/(modals)/learn-settings")
+                              }
+                              activeOpacity={0.8}
+                            >
+                              <IconSymbol
+                                name="ellipsis"
+                                size={18}
+                                weight="medium"
+                                color="rgba(255,255,255,0.7)"
+                              />
+                            </TouchableOpacity>
                           </YStack>
                         </XStack>
 
-                        <XStack
-                          alignItems="center"
-                          justifyContent="space-between"
-                          paddingVertical={6}
+                        <TouchableOpacity
+                          onPress={() =>
+                            router.push("/(modals)/learn-settings")
+                          }
+                          activeOpacity={0.8}
                         >
-                          <YStack gap={2}>
-                            <Text fontSize={14} fontWeight="800" color="$color">
-                              Vocab
-                            </Text>
-                            <Text color="$textMuted" fontSize={12}>
-                              {reviewCounts.vocab > 0 ? "Overdue" : "No overdue reviews."}
-                            </Text>
-                          </YStack>
-                          <YStack
+                          <XStack
+                            alignItems="center"
+                            justifyContent="space-between"
                             paddingVertical={6}
-                            paddingHorizontal={14}
-                            borderRadius={999}
-                            backgroundColor="rgba(0,0,0,0.35)"
-                            borderWidth={1}
-                            borderColor="rgba(255,255,255,0.08)"
                           >
-                            <Text fontWeight="900" color="$color">
-                              {reviewLoading ? "—" : reviewCounts.vocab}
+                            <Text fontSize={14} fontWeight="800" color="$color">
+                              Learn Queue Settings
                             </Text>
-                          </YStack>
-                        </XStack>
+                            <IconSymbol
+                              name="gearshape"
+                              size={18}
+                              weight="medium"
+                              color="rgba(255,255,255,0.7)"
+                            />
+                          </XStack>
+                        </TouchableOpacity>
                       </YStack>
-                    ) : null
-                  }
-                />
+                    ) : null}
+                  </YStack>
+                }
+              />
 
-                <ActionCard
-                  title="Switch Profile"
-                  subtitle="Choose a different language pack"
-                  onPress={() => router.push("/(onboarding)/profile")}
-                />
+              <ActionCard
+                title="Practice"
+                subtitle={practiceSubtitle}
+                highlight={canResumeSession}
+                disabled={!activeLanguageId}
+                onPress={handlePracticePress}
+              />
+
+              <ActionCard
+                title="Apply"
+                subtitle="Freeform chat practice"
+                disabled={!activeLanguageId}
+                onPress={() => router.push("/(app)/apply")}
+              />
+
+              <ActionCard
+                title="Review"
+                highlight={!reviewLoading && reviewCounts.total > 0}
+                subtitle={
+                  reviewLoading
+                    ? "Loading reviews…"
+                    : reviewCounts.total > 0
+                      ? `You have ${reviewCounts.total} reviews overdue.`
+                      : "No reviews are overdue right now."
+                }
+                disabled={!activeLanguageId}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(app)/review",
+                    params: { run: String(Date.now()) },
+                  })
+                }
+                showChevron
+                chevronOpen={reviewExpanded}
+                onChevronPress={() => setReviewExpanded((v) => !v)}
+                rightSlot={
+                  <YStack
+                    paddingVertical={6}
+                    paddingHorizontal={14}
+                    borderRadius={999}
+                    backgroundColor="rgba(0,0,0,0.35)"
+                    borderWidth={1}
+                    borderColor="rgba(255,255,255,0.08)"
+                  >
+                    <Text color="$textMuted" fontSize={12} fontWeight="800">
+                      {reviewLoading ? "…" : `${reviewCounts.total}`}
+                    </Text>
+                  </YStack>
+                }
+                footer={
+                  reviewExpanded ? (
+                    <YStack gap={10}>
+                      <XStack
+                        alignItems="center"
+                        justifyContent="space-between"
+                        paddingVertical={6}
+                      >
+                        <YStack gap={2}>
+                          <Text fontSize={14} fontWeight="800" color="$color">
+                            Grammar
+                          </Text>
+                          <Text color="$textMuted" fontSize={12}>
+                            {reviewCounts.grammar > 0
+                              ? "Overdue"
+                              : "No overdue reviews."}
+                          </Text>
+                        </YStack>
+                        <YStack
+                          paddingVertical={6}
+                          paddingHorizontal={14}
+                          borderRadius={999}
+                          backgroundColor="rgba(0,0,0,0.35)"
+                          borderWidth={1}
+                          borderColor="rgba(255,255,255,0.08)"
+                        >
+                          <Text fontWeight="900" color="$color">
+                            {reviewLoading ? "—" : reviewCounts.grammar}
+                          </Text>
+                        </YStack>
+                      </XStack>
+
+                      <XStack
+                        alignItems="center"
+                        justifyContent="space-between"
+                        paddingVertical={6}
+                      >
+                        <YStack gap={2}>
+                          <Text fontSize={14} fontWeight="800" color="$color">
+                            Vocab
+                          </Text>
+                          <Text color="$textMuted" fontSize={12}>
+                            {reviewCounts.vocab > 0
+                              ? "Overdue"
+                              : "No overdue reviews."}
+                          </Text>
+                        </YStack>
+                        <YStack
+                          paddingVertical={6}
+                          paddingHorizontal={14}
+                          borderRadius={999}
+                          backgroundColor="rgba(0,0,0,0.35)"
+                          borderWidth={1}
+                          borderColor="rgba(255,255,255,0.08)"
+                        >
+                          <Text fontWeight="900" color="$color">
+                            {reviewLoading ? "—" : reviewCounts.vocab}
+                          </Text>
+                        </YStack>
+                      </XStack>
+                    </YStack>
+                  ) : null
+                }
+              />
+
+              <ActionCard
+                title="Switch Profile"
+                subtitle="Choose a different language pack"
+                onPress={() => router.push("/(onboarding)/profile")}
+              />
             </>
           </YStack>
         </YStack>
