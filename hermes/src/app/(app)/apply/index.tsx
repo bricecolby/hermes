@@ -24,14 +24,14 @@ import { useAppState } from "@/state/AppState";
 
 import { llmClient } from "shared/services/llm/client";
 import {
-  buildApplyEvaluatorPrompt,
   buildApplyPersonaPrompt,
   continueApplyConversation,
-  evaluateApplyConversation,
-  fuzzyMatchTargets,
+  loadApplyTargetSurfaceMap,
+  matchTargetsBySurfaceForms,
   loadApplyContext,
   startApplyConversation,
   type ApplyChatContext,
+  type ApplyTargetSurfaceMap,
 } from "shared/services/llm/applyChat";
 
 import { listLanguageProfilesForUsername, type LanguageProfileRow } from "@/db/queries/users";
@@ -45,9 +45,6 @@ type ChatMessage = {
   id: string;
   role: "assistant" | "user";
   content: string;
-  correction?: string | null;
-  feedback?: string | null;
-  isCorrect?: boolean | null;
 };
 
 type TargetChipState = {
@@ -192,6 +189,7 @@ export default function Apply() {
 
   const [sessionId, setSessionId] = useState<number | null>(null);
   const [targets, setTargets] = useState<TargetChipState[]>([]);
+  const [targetSurfaceMap, setTargetSurfaceMap] = useState<ApplyTargetSurfaceMap>({});
 
   const scrollRef = useRef<ScrollView | null>(null);
   const initInFlightRef = useRef(false);
@@ -276,6 +274,7 @@ export default function Apply() {
           languageId: activeLanguageId,
           modelKey: "ema_v1",
         });
+        const nextSurfaceMap = await loadApplyTargetSurfaceMap(db, next.targets);
 
         if (opts?.targetsOnly) {
           setContext((prev) => ({
@@ -293,6 +292,7 @@ export default function Apply() {
             status: "active" as const,
           }))
         );
+        setTargetSurfaceMap(nextSurfaceMap);
       } catch (e) {
         console.warn("[apply] context load failed", e);
       } finally {
@@ -349,18 +349,7 @@ export default function Apply() {
       learningName: activeProfile.learningName,
       learningCode: activeProfile.learningCode,
       nativeName: activeProfile.nativeName,
-      knownVocab: context.knownVocab,
-      knownGrammar: context.knownGrammar,
-      targets: context.targets,
-    });
-  }, [activeProfile, context]);
-
-  const evaluatorPrompt = useMemo(() => {
-    if (!activeProfile) return null;
-    return buildApplyEvaluatorPrompt({
-      learningName: activeProfile.learningName,
-      learningCode: activeProfile.learningCode,
-      nativeName: activeProfile.nativeName,
+      learnerLevel: "A1",
       knownVocab: context.knownVocab,
       knownGrammar: context.knownGrammar,
       targets: context.targets,
@@ -434,12 +423,13 @@ export default function Apply() {
     if (targets.length === 0) return;
     const allCelebrated = targets.every((t) => t.status === "celebrated");
     if (allCelebrated && !loadingContext) {
+      console.log("[apply] all targets completed; loading new targets");
       refreshContext({ targetsOnly: true });
     }
   }, [targets, loadingContext, refreshContext]);
 
   async function handleSend() {
-    if (!input.trim() || !personaPrompt || !evaluatorPrompt || sending) return;
+    if (!input.trim() || !personaPrompt || sending) return;
 
     const userMessage = input.trim();
     const responseMs = lastAssistantAt ? Math.max(0, Date.now() - lastAssistantAt) : null;
@@ -456,15 +446,6 @@ export default function Apply() {
     setMessages(nextMessages);
 
     try {
-      const evaluation = await evaluateApplyConversation(
-        llmClient.complete.bind(llmClient),
-        evaluatorPrompt,
-        messages.map((m) => ({ role: m.role, content: m.content })),
-        userMessage
-      );
-
-      console.log("[apply] evaluator parsed", evaluation);
-
       const assistantMessage = await continueApplyConversation(
         llmClient.complete.bind(llmClient),
         personaPrompt,
@@ -474,45 +455,19 @@ export default function Apply() {
 
       console.log("[apply] assistant reply", assistantMessage);
 
-      const targetIdSet = new Set(targets.map((t) => t.conceptId));
-      const fuzzyConceptIds = fuzzyMatchTargets(userMessage, context.targets);
-      const fuzzyIdSet = new Set(fuzzyConceptIds);
-      const evaluatorConcepts = (evaluation.evaluation.conceptResults ?? []).filter(
-        (cr) => targetIdSet.has(cr.conceptId) && fuzzyIdSet.has(cr.conceptId)
-      );
-      const fuzzyConcepts = fuzzyConceptIds
-        .filter((id) => !evaluatorConcepts.some((cr) => cr.conceptId === id))
-        .map((id) => ({
+      const matchedConceptIds = matchTargetsBySurfaceForms(userMessage, targetSurfaceMap);
+      const conceptResults = matchedConceptIds.map((id) => ({
           conceptId: id,
           isCorrect: true,
           score: 1,
           maxScore: 1,
-          evidence: { source: "fuzzy" },
+          evidence: { source: "surface_form" },
         }));
 
-      const conceptResults = [...evaluatorConcepts, ...fuzzyConcepts];
-
       console.log("[apply] concept results", {
-        evaluatorConcepts,
-        fuzzyConceptIds,
+        matchedConceptIds,
         conceptResults,
       });
-
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === userId
-            ? {
-                ...m,
-                correction: evaluation.correction,
-                feedback: evaluation.evaluation.feedback ?? null,
-                isCorrect:
-                  typeof evaluation.evaluation.isCorrect === "boolean"
-                    ? evaluation.evaluation.isCorrect
-                    : null,
-              }
-            : m
-        )
-      );
 
       setMessages((prev) => [
         ...prev,
@@ -536,20 +491,18 @@ export default function Apply() {
         );
       }
 
-      console.log("Apply evaluation:", evaluation);
-
       if (sessionId && activeProfileId) {
         await recordPracticeAttemptTx({
           db,
           sessionId,
           userId: activeProfileId,
-          modality: "interaction",
+          modality: "production",
           skill: "writing",
           itemType: "apply_v1.chat",
           promptText: lastPromptText ?? "",
           questionJson: {
             type: "apply_v1.chat",
-            mode: "interaction",
+            mode: "production",
             skills: ["writing"],
             conceptIds: context.targets.map((t) => t.conceptId),
             assistantPrompt: lastPromptText,
@@ -557,14 +510,23 @@ export default function Apply() {
           userResponseJson: { text: userMessage },
           evaluation: {
             type: "apply_v1.chat",
-            mode: "interaction",
+            mode: "production",
             skills: ["writing"],
-            isCorrect: evaluation.evaluation.isCorrect,
-            score: evaluation.evaluation.score,
+            isCorrect: conceptResults.length > 0,
+            score:
+              context.targets.length > 0
+                ? Math.min(1, conceptResults.length / context.targets.length)
+                : conceptResults.length > 0
+                  ? 1
+                  : 0,
             conceptResults,
-            feedback: evaluation.evaluation.feedback,
+            feedback: undefined,
           },
           responseMs: responseMs ?? undefined,
+        });
+        console.log("[apply] production attempt recorded", {
+          matchedConceptIds,
+          targetCount: context.targets.length,
         });
       }
     } catch (e) {
@@ -664,22 +626,6 @@ export default function Apply() {
                           <Text color="$color">{m.content}</Text>
                         </YStack>
 
-                        {m.correction ? (
-                          <YStack
-                            padding={10}
-                            borderRadius={12}
-                            backgroundColor="rgba(36, 198, 138, 0.12)"
-                            borderWidth={1}
-                            borderColor="rgba(36, 198, 138, 0.3)"
-                          >
-                            <Text color="$green11" fontSize={13} fontWeight="700">
-                              Suggested correction
-                            </Text>
-                            <Text color="$color" fontSize={13} marginTop={4}>
-                              {m.correction}
-                            </Text>
-                          </YStack>
-                        ) : null}
                       </YStack>
                     ))}
 

@@ -70,6 +70,8 @@ export type ApplyChatContext = {
   targets: ConceptRefRow[];
 };
 
+export type ApplyTargetSurfaceMap = Record<number, string[]>;
+
 export type ApplyChatEvaluation = {
   isCorrect?: boolean;
   score: number;
@@ -224,11 +226,13 @@ export function buildApplyPersonaPrompt(params: {
   learningName: string;
   learningCode: string;
   nativeName: string;
+  learnerLevel: string;
   knownVocab: ConceptRefRow[];
   knownGrammar: ConceptRefRow[];
   targets: ConceptRefRow[];
 }) {
-  const { learningName, learningCode, nativeName, knownVocab, knownGrammar, targets } = params;
+  const { learningName, learningCode, nativeName, learnerLevel, knownVocab, knownGrammar, targets } =
+    params;
 
   const vocabLines = knownVocab.map(formatConcept).slice(0, 40).join("\n");
   const grammarLines = knownGrammar.map(formatConcept).slice(0, 25).join("\n");
@@ -237,11 +241,14 @@ export function buildApplyPersonaPrompt(params: {
   return [
     `You are Hermes, a patient language tutor for ${learningName} (${learningCode}).`,
     `The learner's native language is ${nativeName}.`,
+    `The learner's current CEFR working level is ${learnerLevel}.`,
     "Conversation rules:",
-    `- Respond in ${learningName} only (not ${nativeName}) except for short correction notes if needed.`,
+    `- Respond in ${learningName} only (not ${nativeName}).`,
     "- Keep responses short, natural, and conversational.",
-    "- Try to use only words and grammar the learner has been exposed to.",
-    "- Your goal is to elicit the target concepts from the learner's responses.",
+    "- Keep language mostly around the learner's level while still natural.",
+    "- Have a normal conversation; do not switch into explicit testing or grading mode.",
+    "- Prefer using words and grammar the learner has seen.",
+    "- If natural, steer toward target concepts, but do not force all of them in one turn.",
     "",
     "Known user vocabulary (conceptId, word - translation):",
     vocabLines || "(none)",
@@ -252,18 +259,17 @@ export function buildApplyPersonaPrompt(params: {
     "Target concepts to elicit (only evaluate these):",
     targetLines || "(none)",
     "",
-    "When the learner replies:",
-    "Your goal is to naturally elicit the target concepts from the learner's responses.",
+    "When the learner replies, continue naturally with one concise response.",
   ].join("\n");
 }
 
-const DIACRITICS_RE = /[\\u0300-\\u036f]+/g;
-const ZERO_WIDTH_RE = /[\\u200B-\\u200D\\uFEFF]/g;
+const DIACRITICS_RE = /[\u0300-\u036f]+/g;
+const ZERO_WIDTH_RE = /[\u200B-\u200D\uFEFF]/g;
 let NON_WORD_RE: RegExp;
 try {
-  NON_WORD_RE = new RegExp("[^\\\\p{L}\\\\p{N}]+", "gu");
+  NON_WORD_RE = new RegExp("[^\\p{L}\\p{N}]+", "gu");
 } catch {
-  NON_WORD_RE = /[^0-9A-Za-z\\u0400-\\u04FF]+/g;
+  NON_WORD_RE = /[^0-9A-Za-z\u0400-\u04FF]+/g;
 }
 
 function stripDiacritics(input: string) {
@@ -308,6 +314,106 @@ export function fuzzyMatchTargets(
   }
 
   return matches;
+}
+
+export async function loadApplyTargetSurfaceMap(
+  db: SQLiteDatabase,
+  targets: ConceptRefRow[]
+): Promise<ApplyTargetSurfaceMap> {
+  const out: ApplyTargetSurfaceMap = {};
+  if (!targets.length) return out;
+
+  for (const t of targets) {
+    const title = normalizeText((t.title ?? "").trim());
+    if (title) {
+      out[t.conceptId] = [title];
+    } else {
+      out[t.conceptId] = [];
+    }
+  }
+
+  const vocabTargets = targets.filter((t) => t.kind === "vocab_item");
+  if (!vocabTargets.length) return out;
+
+  const placeholders = vocabTargets.map(() => "?").join(", ");
+  const rows = await db.getAllAsync<{
+    conceptId: number;
+    surfaceForm: string | null;
+  }>(
+    `
+    SELECT
+      c.id AS conceptId,
+      vf.surface_form AS surfaceForm
+    FROM concepts c
+    JOIN vocab_forms vf
+      ON c.kind = 'vocab_item'
+     AND c.ref_id = vf.vocab_item_id
+    WHERE c.id IN (${placeholders})
+    `,
+    vocabTargets.map((t) => t.conceptId)
+  );
+
+  for (const row of rows) {
+    const norm = normalizeText((row.surfaceForm ?? "").trim());
+    if (!norm) continue;
+    const prev = out[row.conceptId] ?? [];
+    if (!prev.includes(norm)) {
+      out[row.conceptId] = [...prev, norm];
+    }
+  }
+
+  const debugSummary = targets.map((t) => ({
+    conceptId: t.conceptId,
+    title: t.title ?? null,
+    normalizedTitle: normalizeText((t.title ?? "").trim()),
+    formsCount: out[t.conceptId]?.length ?? 0,
+    formsPreview: (out[t.conceptId] ?? []).slice(0, 8),
+  }));
+  console.log("[apply][targets] loaded surface map", debugSummary);
+
+  return out;
+}
+
+export function matchTargetsBySurfaceForms(
+  userMessage: string,
+  targetSurfaceMap: ApplyTargetSurfaceMap
+): number[] {
+  const normalizedUser = normalizeText(userMessage);
+  if (!normalizedUser) return [];
+  const hay = ` ${normalizedUser} `;
+  console.log("[apply][match] normalized user", {
+    raw: userMessage,
+    normalized: normalizedUser,
+  });
+
+  const hits: number[] = [];
+  const checks: Array<{
+    conceptId: number;
+    formsChecked: number;
+    matchedForm: string | null;
+    matched: boolean;
+  }> = [];
+  for (const [conceptIdRaw, forms] of Object.entries(targetSurfaceMap)) {
+    const conceptId = Number(conceptIdRaw);
+    if (!Number.isFinite(conceptId)) continue;
+    let matchedForm: string | null = null;
+    const found = forms.some((f) => {
+      const needle = ` ${normalizeText(f)} `;
+      const ok = needle.trim().length > 0 && hay.includes(needle);
+      if (ok && matchedForm == null) matchedForm = normalizeText(f);
+      return ok;
+    });
+    checks.push({
+      conceptId,
+      formsChecked: forms.length,
+      matchedForm,
+      matched: found,
+    });
+    if (found) hits.push(conceptId);
+  }
+  console.log("[apply][match] checks", checks);
+  console.log("[apply][match] hits", hits);
+  return hits;
 }
 
 
