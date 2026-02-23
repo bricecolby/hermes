@@ -19,6 +19,9 @@ const MODEL_KEY = "ema_v1";
 
 // Accuracy EMA
 const MASTERY_ALPHA = 0.15;
+const MASTERY_ALPHA_EASY = 0.28;
+const MASTERY_ALPHA_FORGOT = 0.75;
+const FORGOT_MASTERY_FLOOR = 0.08;
 
 // RT avg smoothing 
 const RT_BETA = 0.12;
@@ -34,19 +37,16 @@ const R_TARGET = 0.75;
 const LN2 = Math.log(2);
 
 // Half-life multipliers 
-const SUCCESS_HARD = 1.7;  
-const SUCCESS_EASY = 1.25;
+const SUCCESS_HARD = 1.7;
+const SUCCESS_EASY = 2.5;
 const FAIL_LATE_DIV = 1.7; 
 const FAIL_EARLY_DIV = 1.25;
+const FORGOT_DUE_DAYS = 0.02; // ~29 minutes
+
+type MasteryOutcome = "success_easy" | "success_hard" | "failure" | "forgot";
 
 function clamp(n: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, n));
-}
-
-function parseIso(iso?: string | null): number | null {
-  if (!iso) return null;
-  const t = Date.parse(iso);
-  return Number.isFinite(t) ? t : null;
 }
 
 function daysBetween(aIso: string, bIso: string) {
@@ -62,6 +62,23 @@ function computeDueLagDays(hDays: number) {
 function addDaysIso(fromIso: string, days: number) {
   const t = Date.parse(fromIso);
   return new Date(t + days * 24 * 60 * 60 * 1000).toISOString();
+}
+
+function resolveMasteryOutcome(cr: { isCorrect?: boolean; evidence?: unknown }): MasteryOutcome {
+  const evidence =
+    cr.evidence && typeof cr.evidence === "object"
+      ? (cr.evidence as Record<string, unknown>)
+      : null;
+  const outcome = evidence?.masteryOutcome;
+  if (
+    outcome === "success_easy" ||
+    outcome === "success_hard" ||
+    outcome === "failure" ||
+    outcome === "forgot"
+  ) {
+    return outcome;
+  }
+  return cr.isCorrect ? "success_hard" : "failure";
 }
 
 async function upsertMasteryRow(
@@ -163,17 +180,20 @@ async function getRtBaselineAvg(
 function updateHalfLifeDays(params: {
   oldHDays: number;
   lastLagDays: number;
-  isCorrect: boolean;
+  outcome: MasteryOutcome;
 }) {
-  const { oldHDays, lastLagDays, isCorrect } = params;
+  const { oldHDays, lastLagDays, outcome } = params;
+  if (outcome === "forgot") return H_MIN_DAYS;
 
   // predicted recall at review time
   const R_pred = Math.pow(2, -lastLagDays / oldHDays);
 
   let hNew = oldHDays;
 
-  if (isCorrect) {
-    hNew *= R_pred <= 0.9 ? SUCCESS_HARD : SUCCESS_EASY;
+  if (outcome === "success_easy") {
+    hNew *= SUCCESS_EASY;
+  } else if (outcome === "success_hard") {
+    hNew *= R_pred <= 0.9 ? SUCCESS_HARD : 1.35;
   } else {
     const late = lastLagDays >= 0.5 * oldHDays;
     hNew /= late ? FAIL_LATE_DIV : FAIL_EARLY_DIV;
@@ -200,13 +220,20 @@ export async function applyAttemptToMasteryForConcepts(
 
   for (const cr of conceptResults) {
     const conceptId = cr.conceptId;
-    const isCorrect = cr.isCorrect ? 1 : 0;
+    const masteryOutcome = resolveMasteryOutcome(cr);
+    const isCorrect =
+      masteryOutcome === "success_easy" || masteryOutcome === "success_hard" ? 1 : 0;
 
     await upsertMasteryRow(db, { userId, conceptId, modality });
     const row = await getMasteryRow(db, { userId, conceptId, modality });
 
     const masteryOld = row?.mastery ?? 0.5;
-    const masteryNew = masteryOld + MASTERY_ALPHA * ((isCorrect ? 1 : 0) - masteryOld);
+    const masteryNew =
+      masteryOutcome === "forgot"
+        ? clamp(masteryOld + MASTERY_ALPHA_FORGOT * (FORGOT_MASTERY_FLOOR - masteryOld), 0, 1)
+        : masteryOld +
+          (masteryOutcome === "success_easy" ? MASTERY_ALPHA_EASY : MASTERY_ALPHA) *
+            ((isCorrect ? 1 : 0) - masteryOld);
 
     // half-life update
     const oldHDays = row?.half_life_days ?? H0_DAYS;
@@ -219,10 +246,11 @@ export async function applyAttemptToMasteryForConcepts(
     const hNew = updateHalfLifeDays({
       oldHDays,
       lastLagDays: lagDays,
-      isCorrect: Boolean(isCorrect),
+      outcome: masteryOutcome,
     });
 
-    const dueLag = computeDueLagDays(hNew);
+    const dueLag =
+      masteryOutcome === "forgot" ? FORGOT_DUE_DAYS : computeDueLagDays(hNew);
     const dueAtIso = addDaysIso(attemptCreatedAtIso, dueLag);
 
     // RT updates (correct-only recommended)

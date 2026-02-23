@@ -6,7 +6,11 @@ import * as SQLite from "expo-sqlite";
 
 import { Screen } from "@/components/ui/Screen";
 import { AppHeader } from "@/components/ui/AppHeader";
-import { FlashcardCard, type FlashcardViewModel } from "@/components/practice/FlashcardCard";
+import {
+  FlashcardCard,
+  type FlashcardMasteryOutcome,
+  type FlashcardViewModel,
+} from "@/components/practice/FlashcardCard";
 import { useAppState } from "@/state/AppState";
 
 import { startPracticeSession } from "@/db/queries/sessions";
@@ -143,7 +147,11 @@ export default function Review() {
     };
   }, [db, languageId, userId, run, setSessionDbId]);
 
-  async function handleSubmit(payload: { isCorrect: boolean; responseMs: number }) {
+  async function handleSubmit(payload: {
+    isCorrect: boolean;
+    responseMs: number;
+    masteryOutcome: FlashcardMasteryOutcome;
+  }) {
     if (!current) return;
 
     const sid = localSessionId ?? sessionDbId;
@@ -156,6 +164,7 @@ export default function Review() {
 
     const isCorrect = payload.isCorrect === true;
     const responseMs = payload.responseMs;
+    const masteryOutcome = payload.masteryOutcome;
 
     try {
       const questionJson = {
@@ -179,7 +188,7 @@ export default function Review() {
             score: isCorrect ? 1 : 0,
             maxScore: 1,
             isCorrect,
-            evidence: { source: "review" },
+            evidence: { source: "review", masteryOutcome },
           },
         ],
         feedback: isCorrect ? "Correct." : "Incorrect.",
@@ -194,7 +203,7 @@ export default function Review() {
         itemType: current.itemType,
         promptText: current.front,
         questionJson,
-        userResponseJson: { isCorrect },
+        userResponseJson: { isCorrect, masteryOutcome },
         evaluation,
         responseMs,
       });

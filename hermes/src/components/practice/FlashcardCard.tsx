@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   PanResponder,
@@ -16,17 +16,29 @@ export type FlashcardViewModel = {
   back: string;
 };
 
+export type FlashcardMasteryOutcome =
+  | "success_easy"
+  | "success_hard"
+  | "failure"
+  | "forgot";
+
 type Props = {
   item: FlashcardViewModel;
   locked?: boolean;
-  onSubmit: (payload: { isCorrect: boolean; responseMs: number }) => void | Promise<void>;
+  onSubmit: (payload: {
+    isCorrect: boolean;
+    responseMs: number;
+    masteryOutcome: FlashcardMasteryOutcome;
+  }) => void | Promise<void>;
   fullScreen?: boolean;
   showTimer?: boolean;
 };
 
 const NEUTRAL_BORDER = "rgba(255,255,255,0.08)";
 const CORRECT_BORDER = "rgba(34,197,94,0.85)";
-const WRONG_BORDER = "rgba(251,113,133,0.85)";
+const FAIL_BORDER = "rgba(250,204,21,0.9)";
+const EASY_BORDER = "rgba(96,165,250,0.9)";
+const FORGOT_BORDER = "rgba(251,113,133,0.9)";
 
 export function FlashcardCard({
   item,
@@ -37,10 +49,12 @@ export function FlashcardCard({
 }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [isBack, setIsBack] = useState(false);
+  const [swipeBorderColor, setSwipeBorderColor] = useState(NEUTRAL_BORDER);
 
   const { reset, elapsedMs, startAtMs } = useResponseTimer();
 
   const translateX = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(0)).current;
 
   // 0 = front, 1 = back
   const flip = useRef(new Animated.Value(0)).current;
@@ -48,13 +62,6 @@ export function FlashcardCard({
   const rotateZ = translateX.interpolate({
     inputRange: [-160, 0, 160],
     outputRange: ["-8deg", "0deg", "8deg"],
-  });
-
-  // Border shifts toward wrong/correct as you indicate a decision with swipe
-  const borderColor = translateX.interpolate({
-    inputRange: [-120, 0, 120],
-    outputRange: [WRONG_BORDER, NEUTRAL_BORDER, CORRECT_BORDER],
-    extrapolate: "clamp",
   });
 
   // 3D flip (front/back faces)
@@ -80,17 +87,23 @@ export function FlashcardCard({
   useEffect(() => {
     setSubmitted(false);
     setIsBack(false);
+    setSwipeBorderColor(NEUTRAL_BORDER);
     translateX.setValue(0);
+    translateY.setValue(0);
     flip.setValue(0);
     reset();
-  }, [item.conceptId, translateX, flip, reset]);
+  }, [item.conceptId, translateX, translateY, flip, reset]);
 
-  function commit(isCorrect: boolean) {
-    if (locked || submitted) return;
-    setSubmitted(true);
-    const responseMs = elapsedMs();
-    onSubmit({ isCorrect, responseMs });
-  }
+  const commit = useCallback(
+    (outcome: FlashcardMasteryOutcome) => {
+      if (locked || submitted) return;
+      setSubmitted(true);
+      const responseMs = elapsedMs();
+      const isCorrect = outcome === "success_easy" || outcome === "success_hard";
+      onSubmit({ isCorrect, responseMs, masteryOutcome: outcome });
+    },
+    [elapsedMs, locked, onSubmit, submitted]
+  );
 
   function toggleFlip() {
     if (locked || submitted) return;
@@ -105,36 +118,124 @@ export function FlashcardCard({
     }).start();
   }
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dx) > 12,
-      onPanResponderMove: Animated.event([null, { dx: translateX }], {
-        useNativeDriver: false,
-      }),
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+      onMoveShouldSetPanResponder: (_, g) =>
+        !locked && !submitted && (Math.abs(g.dx) > 12 || Math.abs(g.dy) > 12),
+      onPanResponderMove: (_, g) => {
+        translateX.setValue(g.dx);
+        translateY.setValue(g.dy);
+
+        const absDx = Math.abs(g.dx);
+        const absDy = Math.abs(g.dy);
+        const nextColor =
+          absDx < 18 && absDy < 18
+            ? NEUTRAL_BORDER
+            : absDx >= absDy
+              ? g.dx >= 0
+                ? CORRECT_BORDER
+                : FAIL_BORDER
+              : g.dy < 0
+                ? EASY_BORDER
+                : FORGOT_BORDER;
+        setSwipeBorderColor(nextColor);
+      },
         onPanResponderRelease: (_, g) => {
-          if (g.dx > 120) {
-            commit(true);
-            Animated.timing(translateX, {
-              toValue: 420,
-              duration: 180,
-              useNativeDriver: false,
-            }).start();
-          } else if (g.dx < -120) {
-            commit(false);
-            Animated.timing(translateX, {
-              toValue: -420,
-              duration: 180,
-              useNativeDriver: false,
-            }).start();
+          const absDx = Math.abs(g.dx);
+          const absDy = Math.abs(g.dy);
+          const horizontal = absDx >= absDy;
+
+          if (horizontal && g.dx > 120) {
+            setSwipeBorderColor(CORRECT_BORDER);
+            commit("success_hard");
+            Animated.parallel([
+              Animated.timing(translateX, {
+                toValue: 420,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+              Animated.timing(translateY, {
+                toValue: 0,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+            ]).start();
+          } else if (horizontal && g.dx < -120) {
+            setSwipeBorderColor(FAIL_BORDER);
+            commit("failure");
+            Animated.parallel([
+              Animated.timing(translateX, {
+                toValue: -420,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+              Animated.timing(translateY, {
+                toValue: 0,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+            ]).start();
+          } else if (!horizontal && g.dy < -100) {
+            setSwipeBorderColor(EASY_BORDER);
+            commit("success_easy");
+            Animated.parallel([
+              Animated.timing(translateX, {
+                toValue: 0,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+              Animated.timing(translateY, {
+                toValue: -420,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+            ]).start();
+          } else if (!horizontal && g.dy > 100) {
+            setSwipeBorderColor(FORGOT_BORDER);
+            commit("forgot");
+            Animated.parallel([
+              Animated.timing(translateX, {
+                toValue: 0,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+              Animated.timing(translateY, {
+                toValue: 420,
+                duration: 180,
+                useNativeDriver: false,
+              }),
+            ]).start();
           } else {
+            setSwipeBorderColor(NEUTRAL_BORDER);
+            Animated.parallel([
+              Animated.spring(translateX, {
+                toValue: 0,
+                useNativeDriver: false,
+              }),
+              Animated.spring(translateY, {
+                toValue: 0,
+                useNativeDriver: false,
+              }),
+            ]).start();
+          }
+        },
+        onPanResponderTerminate: () => {
+          setSwipeBorderColor(NEUTRAL_BORDER);
+          Animated.parallel([
             Animated.spring(translateX, {
               toValue: 0,
               useNativeDriver: false,
-            }).start();
-          }
+            }),
+            Animated.spring(translateY, {
+              toValue: 0,
+              useNativeDriver: false,
+            }),
+          ]).start();
         },
-    })
-  ).current;
+      }),
+    [commit, locked, submitted, translateX, translateY]
+  );
 
   return (
     <View style={[styles.wrap, fullScreen && styles.wrapFull]}>
@@ -145,8 +246,8 @@ export function FlashcardCard({
           styles.card,
           fullScreen && styles.cardFull,
           {
-            borderColor,
-            transform: [{ translateX }, { rotate: rotateZ }],
+            borderColor: swipeBorderColor,
+            transform: [{ translateX }, { translateY }, { rotate: rotateZ }],
           },
         ]}
       >
@@ -189,18 +290,34 @@ export function FlashcardCard({
       <View style={[styles.actions, fullScreen && styles.actionsFull]}>
         <TouchableOpacity
           disabled={locked || submitted}
-          onPress={() => commit(false)}
-          style={[styles.actionBtn, styles.wrong]}
+          onPress={() => commit("forgot")}
+          style={[styles.actionBtn, styles.forgot]}
         >
-          <Text style={styles.actionText}>✕</Text>
+          <Text style={[styles.actionText, styles.forgotText]}>✕✕✕</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           disabled={locked || submitted}
-          onPress={() => commit(true)}
+          onPress={() => commit("failure")}
+          style={[styles.actionBtn, styles.fail]}
+        >
+          <Text style={[styles.actionText, styles.failText]}>✕</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          disabled={locked || submitted}
+          onPress={() => commit("success_hard")}
           style={[styles.actionBtn, styles.correct]}
         >
-          <Text style={styles.actionText}>✓</Text>
+          <Text style={[styles.actionText, styles.correctText]}>✓</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          disabled={locked || submitted}
+          onPress={() => commit("success_easy")}
+          style={[styles.actionBtn, styles.easy]}
+        >
+          <Text style={[styles.actionText, styles.easyText]}>✓✓✓</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -258,7 +375,8 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     gap: 14,
-    justifyContent: "space-between",
+    justifyContent: "center",
+    flexWrap: "wrap",
   },
   actionsFull: {
     paddingBottom: 6,
@@ -270,19 +388,40 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
   },
-  wrong: {
-    backgroundColor: "rgba(251,113,133,0.18)",
+  fail: {
+    backgroundColor: "rgba(250,204,21,0.18)",
     borderWidth: 1,
-    borderColor: "rgba(251,113,133,0.6)",
+    borderColor: "rgba(250,204,21,0.6)",
   },
   correct: {
     backgroundColor: "rgba(34,197,94,0.18)",
     borderWidth: 1,
     borderColor: "rgba(34,197,94,0.6)",
   },
+  easy: {
+    backgroundColor: "rgba(96,165,250,0.18)",
+    borderWidth: 1,
+    borderColor: "rgba(96,165,250,0.6)",
+  },
+  forgot: {
+    backgroundColor: "rgba(251,113,133,0.18)",
+    borderWidth: 1,
+    borderColor: "rgba(251,113,133,0.6)",
+  },
   actionText: {
     fontSize: 20,
     fontWeight: "900",
-    color: "#E6EBFF",
+  },
+  failText: {
+    color: "rgba(250,204,21,0.95)",
+  },
+  correctText: {
+    color: "rgba(34,197,94,0.95)",
+  },
+  easyText: {
+    color: "rgba(96,165,250,0.95)",
+  },
+  forgotText: {
+    color: "rgba(251,113,133,0.95)",
   },
 });

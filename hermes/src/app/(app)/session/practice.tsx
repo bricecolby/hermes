@@ -15,7 +15,11 @@ import { FlashcardBasicSchema } from "shared/domain/practice/items/flashcardBasi
 import { ClozeFreeFillSchema } from "shared/domain/practice/items/clozeFreeFillPracticeItem";
 
 import { McqCard, type McqViewModel } from "../../../components/practice/McqCard";
-import { FlashcardCard, type FlashcardViewModel } from "../../../components/practice/FlashcardCard";
+import {
+  FlashcardCard,
+  type FlashcardMasteryOutcome,
+  type FlashcardViewModel,
+} from "../../../components/practice/FlashcardCard";
 import { ClozeCard, type ClozeFreeFillViewModel as ClozeViewModel } from "../../../components/practice/ClozeCard";
 
 import { useSQLiteContext } from "expo-sqlite";
@@ -99,6 +103,30 @@ export default function Practice() {
     let evaluation;
     try {
       evaluation = item.evaluate(payload);
+      const masteryOutcome =
+        payload && typeof payload === "object"
+          ? (payload as { masteryOutcome?: unknown }).masteryOutcome
+          : undefined;
+      if (
+        masteryOutcome === "success_easy" ||
+        masteryOutcome === "success_hard" ||
+        masteryOutcome === "failure" ||
+        masteryOutcome === "forgot"
+      ) {
+        evaluation = {
+          ...evaluation,
+          conceptResults: (evaluation.conceptResults ?? []).map((cr) => ({
+            ...cr,
+            evidence: {
+              ...(cr.evidence && typeof cr.evidence === "object"
+                ? (cr.evidence as Record<string, unknown>)
+                : {}),
+              masteryOutcome,
+              source: "session",
+            },
+          })),
+        };
+      }
     } catch (e) {
       console.error("[practice] evaluate failed", e);
       setFeedback({
@@ -165,8 +193,16 @@ export default function Practice() {
     await submitAny({ choiceId: payload.choiceId }, mcqVm?.correctChoiceId ?? "", payload.responseMs);
   }
 
-  async function handleFlashcardSubmit(payload: { isCorrect: boolean; responseMs: number }) {
-    await submitAny({ isCorrect: payload.isCorrect }, "", payload.responseMs);
+  async function handleFlashcardSubmit(payload: {
+    isCorrect: boolean;
+    responseMs: number;
+    masteryOutcome: FlashcardMasteryOutcome;
+  }) {
+    await submitAny(
+      { isCorrect: payload.isCorrect, masteryOutcome: payload.masteryOutcome },
+      "",
+      payload.responseMs
+    );
   }
   
   async function handleClozeSubmit(payload: { responses: Record<string, string>; responseMs: number }) {

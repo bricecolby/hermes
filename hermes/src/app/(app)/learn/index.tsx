@@ -6,7 +6,11 @@ import * as SQLite from "expo-sqlite";
 
 import { Screen } from "@/components/ui/Screen";
 import { AppHeader } from "@/components/ui/AppHeader";
-import { FlashcardCard, type FlashcardViewModel } from "@/components/practice/FlashcardCard";
+import {
+  FlashcardCard,
+  type FlashcardMasteryOutcome,
+  type FlashcardViewModel,
+} from "@/components/practice/FlashcardCard";
 import { useAppState } from "@/state/AppState";
 
 import { startPracticeSession } from "@/db/queries/sessions";
@@ -182,7 +186,11 @@ export default function Learn() {
     };
   }, [db, languageId, userId, run, setSessionDbId]);
 
-  async function handleSubmit(payload: { isCorrect: boolean; responseMs: number }) {
+  async function handleSubmit(payload: {
+    isCorrect: boolean;
+    responseMs: number;
+    masteryOutcome: FlashcardMasteryOutcome;
+  }) {
     if (!current) return;
 
     console.log("[learn] logging attempt", { sessionDbId, localSessionId, current, payload });
@@ -197,6 +205,7 @@ export default function Learn() {
 
     const isCorrect = payload.isCorrect === true;
     const responseMs = payload.responseMs;
+    const masteryOutcome = payload.masteryOutcome;
 
     try {
       const questionJson = {
@@ -220,7 +229,7 @@ export default function Learn() {
             score: isCorrect ? 1 : 0,
             maxScore: 1,
             isCorrect,
-            evidence: { source: "learn" },
+            evidence: { source: "learn", masteryOutcome },
           },
         ],
         feedback: isCorrect ? "Correct." : "Incorrect.",
@@ -235,7 +244,7 @@ export default function Learn() {
         itemType: current.itemType,
         promptText: current.front,
         questionJson,
-        userResponseJson: { isCorrect },
+        userResponseJson: { isCorrect, masteryOutcome },
         evaluation,
         responseMs,
       });

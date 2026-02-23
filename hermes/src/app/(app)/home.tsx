@@ -32,26 +32,95 @@ type LearnStats = {
   grammarCompletedToday: number;
 };
 
+type RGB = { r: number; g: number; b: number };
+
+function parseColorToRgb(input: string): RGB | null {
+  const s = input.trim();
+  const hex = s.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (hex) {
+    const raw = hex[1];
+    const full =
+      raw.length === 3
+        ? `${raw[0]}${raw[0]}${raw[1]}${raw[1]}${raw[2]}${raw[2]}`
+        : raw;
+    return {
+      r: parseInt(full.slice(0, 2), 16),
+      g: parseInt(full.slice(2, 4), 16),
+      b: parseInt(full.slice(4, 6), 16),
+    };
+  }
+
+  const rgb = s.match(
+    /^rgba?\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})(?:\s*,\s*[0-9.]+\s*)?\)$/i
+  );
+  if (rgb) {
+    return {
+      r: Math.max(0, Math.min(255, Number(rgb[1]))),
+      g: Math.max(0, Math.min(255, Number(rgb[2]))),
+      b: Math.max(0, Math.min(255, Number(rgb[3]))),
+    };
+  }
+
+  return null;
+}
+
+function gradientAt(a: RGB, b: RGB, t: number, alpha: number): string {
+  const clamped = Math.max(0, Math.min(1, t));
+  const r = Math.round(a.r + (b.r - a.r) * clamped);
+  const g = Math.round(a.g + (b.g - a.g) * clamped);
+  const bCh = Math.round(a.b + (b.b - a.b) * clamped);
+  return `rgba(${r},${g},${bCh},${alpha})`;
+}
+
 function startOfDayIso() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   return d.toISOString();
 }
 
-function PillRow({ total, filled }: { total: number; filled: number }) {
+function PillRow({
+  total,
+  filled,
+  tone = "strong",
+}: {
+  total: number;
+  filled: number;
+  tone?: "strong" | "muted";
+}) {
   const theme = useTheme();
-  const safeFilled = Math.min(Math.max(filled, 0), total);
+  const safeTotal = Math.max(0, total);
+  const safeFilled = Math.min(Math.max(filled, 0), safeTotal);
   const [width, setWidth] = useState(0);
-  const minPillWidth = 2;
-  const gap = Math.max(1, Math.floor(minPillWidth / 2));
-  const maxPillsForWidth = width > 0 ? Math.floor((width + gap) / (minPillWidth + gap)) : total;
-  const count = width > 0 ? Math.min(total, maxPillsForWidth) : total;
-  const pillWidth =
-    width > 0 && count > 0
-      ? Math.max(minPillWidth, Math.floor((width - gap * (count - 1)) / count))
-      : minPillWidth;
-  const pillHeight = Math.max(3, Math.floor(pillWidth * 0.6));
-  const fillColor = resolveThemeColor(theme.gradB, "rgba(215, 255, 235, 0.9)");
+  const gap = tone === "strong" ? 3 : 6;
+  const minPillWidth = tone === "strong" ? 6 : 10;
+  const maxPillWidth = tone === "strong" ? 16 : 20;
+  const pillHeight = tone === "strong" ? 8 : 12;
+  const gradA = parseColorToRgb(resolveThemeColor(theme.gradA, "#2BCEFB")) ?? {
+    r: 43,
+    g: 206,
+    b: 251,
+  };
+  const gradB = parseColorToRgb(resolveThemeColor(theme.gradB, "#2CD1AA")) ?? {
+    r: 44,
+    g: 209,
+    b: 170,
+  };
+  const emptyColor = tone === "strong" ? "rgba(255,255,255,0.12)" : "rgba(14,56,46,0.55)";
+
+  let count = safeTotal;
+  let pillWidth = maxPillWidth;
+
+  if (width > 0 && safeTotal > 0) {
+    const naturalWidth = safeTotal * maxPillWidth + gap * (safeTotal - 1);
+    if (naturalWidth > width) {
+      const maxVisible = Math.max(1, Math.floor((width + gap) / (minPillWidth + gap)));
+      count = Math.min(safeTotal, maxVisible);
+      pillWidth = Math.max(minPillWidth, Math.floor((width - gap * (count - 1)) / count));
+    }
+  }
+
+  const shownFilled =
+    safeTotal <= 0 || count <= 0 ? 0 : Math.round((safeFilled / safeTotal) * count);
 
   return (
     <YStack
@@ -63,8 +132,30 @@ function PillRow({ total, filled }: { total: number; filled: number }) {
             key={i}
             width={pillWidth}
             height={pillHeight}
-            borderRadius={999}
-            backgroundColor={i < safeFilled ? fillColor : "rgba(255,255,255,0.12)"}
+            borderRadius={tone === "strong" ? 999 : 14}
+            backgroundColor={
+              i < shownFilled
+                ? gradientAt(
+                    gradA,
+                    gradB,
+                    shownFilled <= 1 ? 1 : i / (shownFilled - 1),
+                    tone === "strong" ? 0.92 : 0.38
+                  )
+                : emptyColor
+            }
+            borderWidth={tone === "muted" ? 1 : 0}
+            borderColor={
+              tone === "muted"
+                ? i < shownFilled
+                  ? gradientAt(
+                      gradA,
+                      gradB,
+                      shownFilled <= 1 ? 1 : i / (shownFilled - 1),
+                      0.78
+                    )
+                  : "rgba(44,209,170,0.32)"
+                : "transparent"
+            }
           />
         ))}
       </XStack>
@@ -343,6 +434,7 @@ export default function Home() {
                               <PillRow
                                 total={learnSettings?.vocabDailyTarget ?? 0}
                                 filled={learnStats.vocabCompletedToday}
+                                tone="muted"
                               />
                             </YStack>
                             <YStack alignItems="center" marginLeft={10}>
@@ -379,6 +471,7 @@ export default function Home() {
                               <PillRow
                                 total={learnSettings?.grammarDailyTarget ?? 0}
                                 filled={learnStats.grammarCompletedToday}
+                                tone="muted"
                               />
                             </YStack>
                             <YStack alignItems="center" marginLeft={10}>
