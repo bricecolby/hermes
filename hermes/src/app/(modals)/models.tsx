@@ -1,21 +1,35 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Alert, ActivityIndicator } from "react-native";
+import { Alert, ActivityIndicator, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ScrollView } from "react-native";
 import { YStack, XStack, Text, Button } from "tamagui";
 
 import { Screen } from "@/components/ui/Screen";
 import { HermesButton } from "@/components/ui/HermesButton";
-import { MODEL_CATALOG, type ModelPurpose } from "shared/services/llm/modelCatalog";
+import { HermesTextField } from "@/components/ui/HermesTextField.tsx";
 import {
+  cloudProviderLabel,
+  MODEL_CATALOG,
+  isCloudModelCard,
+  isLocalModelCard,
+  type ModelPurpose,
+} from "shared/services/llm/modelCatalog";
+import {
+  clearActiveModelId,
+  getActiveModelId,
   ensureModelOnDevice,
   deleteModel,
   getActiveModelUri,
+  setActiveModelId,
   setActiveModelUri,
   getModelFileUri,
   modelIsDownloaded,
   clearActiveModelUri,
 } from "shared/services/llm/modelStore";
+import {
+  hasCloudApiKey,
+  removeCloudApiKey,
+  setCloudApiKey,
+} from "shared/services/llm/cloudCredentials";
 import { llmClient } from "shared/services/llm/client";
 
 export default function ModelsModal() {
@@ -24,6 +38,9 @@ export default function ModelsModal() {
 
   const [busyId, setBusyId] = useState<string | null>(null);
   const [downloaded, setDownloaded] = useState<Record<string, boolean>>({});
+  const [cloudConfigured, setCloudConfigured] = useState<Record<string, boolean>>({});
+  const [cloudApiKeyDrafts, setCloudApiKeyDrafts] = useState<Record<string, string>>({});
+  const [activeModelId, setActiveModelIdState] = useState<string | null>(null);
   const [activeUri, setActiveUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,15 +57,28 @@ export default function ModelsModal() {
     (async () => {
       try {
         setLoading(true);
+        const activeModel = await getActiveModelId();
         const active = await getActiveModelUri();
-        const entries = await Promise.all(
-          MODEL_CATALOG.map(async (m) => [m.id, await modelIsDownloaded(m.filename)] as const)
+        const localEntries = await Promise.all(
+          MODEL_CATALOG.filter(isLocalModelCard).map(
+            async (m) => [m.id, await modelIsDownloaded(m.filename)] as const
+          )
+        );
+        const cloudEntries = await Promise.all(
+          MODEL_CATALOG.filter(isCloudModelCard).map(
+            async (m) => [m.id, await hasCloudApiKey(m.provider)] as const
+          )
         );
 
         if (cancelled) return;
-        const next: Record<string, boolean> = {};
-        for (const [id, ok] of entries) next[id] = ok;
-        setDownloaded(next);
+        const nextLocal: Record<string, boolean> = {};
+        for (const [id, ok] of localEntries) nextLocal[id] = ok;
+        const nextCloud: Record<string, boolean> = {};
+        for (const [id, ok] of cloudEntries) nextCloud[id] = ok;
+
+        setDownloaded(nextLocal);
+        setCloudConfigured(nextCloud);
+        setActiveModelIdState(activeModel);
         setActiveUri(active);
       } finally {
         if (!cancelled) setLoading(false);
@@ -61,24 +91,39 @@ export default function ModelsModal() {
   }, []);
 
   async function refresh() {
+    const activeModel = await getActiveModelId();
     const active = await getActiveModelUri();
-    const entries = await Promise.all(
-      MODEL_CATALOG.map(async (m) => [m.id, await modelIsDownloaded(m.filename)] as const)
+    const localEntries = await Promise.all(
+      MODEL_CATALOG.filter(isLocalModelCard).map(
+        async (m) => [m.id, await modelIsDownloaded(m.filename)] as const
+      )
     );
-    const next: Record<string, boolean> = {};
-    for (const [id, ok] of entries) next[id] = ok;
-    setDownloaded(next);
+    const cloudEntries = await Promise.all(
+      MODEL_CATALOG.filter(isCloudModelCard).map(
+        async (m) => [m.id, await hasCloudApiKey(m.provider)] as const
+      )
+    );
+    const nextLocal: Record<string, boolean> = {};
+    for (const [id, ok] of localEntries) nextLocal[id] = ok;
+    const nextCloud: Record<string, boolean> = {};
+    for (const [id, ok] of cloudEntries) nextCloud[id] = ok;
+
+    setDownloaded(nextLocal);
+    setCloudConfigured(nextCloud);
+    setActiveModelIdState(activeModel);
     setActiveUri(active);
   }
 
   async function onDownload(modelId: string) {
     const m = MODEL_CATALOG.find((x) => x.id === modelId);
     if (!m) return;
+    if (!isLocalModelCard(m)) return;
     if (busyId) return;
 
     setBusyId(m.id);
     try {
       const uri = await ensureModelOnDevice(m.url, m.filename, m.minFreeBytes);
+      await setActiveModelId(m.id);
       await setActiveModelUri(uri);
       llmClient.reset();
       await refresh();
@@ -93,6 +138,7 @@ export default function ModelsModal() {
   async function onDelete(modelId: string) {
     const m = MODEL_CATALOG.find((x) => x.id === modelId);
     if (!m) return;
+    if (!isLocalModelCard(m)) return;
     if (busyId) return;
 
     setBusyId(m.id);
@@ -101,6 +147,9 @@ export default function ModelsModal() {
       const active = await getActiveModelUri();
       if (active && active === getModelFileUri(m.filename)) {
         await clearActiveModelUri();
+      }
+      if (activeModelId === m.id) {
+        await clearActiveModelId();
       }
       llmClient.reset();
       await refresh();
@@ -115,13 +164,83 @@ export default function ModelsModal() {
   async function onSelect(modelId: string) {
     const m = MODEL_CATALOG.find((x) => x.id === modelId);
     if (!m) return;
+    if (!isLocalModelCard(m)) return;
     if (busyId) return;
 
     const uri = getModelFileUri(m.filename);
+    await setActiveModelId(m.id);
     await setActiveModelUri(uri);
     llmClient.reset();
     await refresh();
     router.back();
+  }
+
+  async function onSelectCloud(modelId: string) {
+    const m = MODEL_CATALOG.find((x) => x.id === modelId);
+    if (!m) return;
+    if (!isCloudModelCard(m)) return;
+    if (busyId) return;
+
+    const hasKey = await hasCloudApiKey(m.provider);
+    if (!hasKey) {
+      Alert.alert("Missing API key", "Save your API key first.");
+      return;
+    }
+
+    setBusyId(m.id);
+    try {
+      await setActiveModelId(m.id);
+      await clearActiveModelUri();
+      llmClient.reset();
+      await refresh();
+      router.back();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function onSaveCloudKey(modelId: string) {
+    const m = MODEL_CATALOG.find((x) => x.id === modelId);
+    if (!m) return;
+    if (!isCloudModelCard(m)) return;
+    if (busyId) return;
+
+    const key = (cloudApiKeyDrafts[modelId] ?? "").trim();
+    if (!key) {
+      Alert.alert("Missing API key", "Paste your API key before saving.");
+      return;
+    }
+
+    setBusyId(m.id);
+    try {
+      await setCloudApiKey(m.provider, key);
+      setCloudApiKeyDrafts((prev) => ({ ...prev, [modelId]: "" }));
+      await refresh();
+      Alert.alert("Saved", `${m.name} API key is saved on this device.`);
+    } catch (e: any) {
+      Alert.alert("Save failed", e?.message ?? String(e));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function onRemoveCloudKey(modelId: string) {
+    const m = MODEL_CATALOG.find((x) => x.id === modelId);
+    if (!m) return;
+    if (!isCloudModelCard(m)) return;
+    if (busyId) return;
+
+    setBusyId(m.id);
+    try {
+      await removeCloudApiKey(m.provider);
+      setCloudApiKeyDrafts((prev) => ({ ...prev, [modelId]: "" }));
+      await refresh();
+      Alert.alert("Removed", `${m.name} API key was removed from this device.`);
+    } catch (e: any) {
+      Alert.alert("Remove failed", e?.message ?? String(e));
+    } finally {
+      setBusyId(null);
+    }
   }
 
   return (
@@ -142,8 +261,11 @@ export default function ModelsModal() {
                 <Text color="$textMuted">No models available for this category yet.</Text>
               ) : null}
               {visibleModels.map((m) => {
-                const isDownloaded = downloaded[m.id] === true;
-                const isActive = activeUri === getModelFileUri(m.filename);
+                const isDownloaded = isLocalModelCard(m) ? downloaded[m.id] === true : false;
+                const isCloudReady = isCloudModelCard(m) ? cloudConfigured[m.id] === true : false;
+                const isActive = activeModelId
+                  ? activeModelId === m.id
+                  : isLocalModelCard(m) && activeUri === getModelFileUri(m.filename);
                 const busy = busyId === m.id;
 
                 return (
@@ -192,30 +314,83 @@ export default function ModelsModal() {
                       </Text>
                     </XStack>
 
-                    <XStack gap="$2" flexWrap="wrap">
-                      {!isDownloaded ? (
-                        <HermesButton
-                          label={busy ? "Downloading…" : "Download"}
-                          variant="primary"
-                          onPress={() => onDownload(m.id)}
-                        />
-                      ) : (
-                        <>
+                    {isLocalModelCard(m) ? (
+                      <XStack gap="$2" flexWrap="wrap">
+                        {!isDownloaded ? (
                           <HermesButton
-                            label={isActive ? "Selected" : "Use for Chat"}
-                            variant="secondary"
-                            onPress={() => onSelect(m.id)}
-                          />
-                          <Button
-                            theme="red"
+                            label={busy ? "Downloading…" : "Download"}
+                            variant="primary"
                             disabled={busy}
-                            onPress={() => onDelete(m.id)}
-                          >
-                            {busy ? "Deleting…" : "Delete"}
-                          </Button>
-                        </>
-                      )}
-                    </XStack>
+                            onPress={() => onDownload(m.id)}
+                          />
+                        ) : (
+                          <>
+                            <HermesButton
+                              label={isActive ? "Selected" : "Use for Chat"}
+                              variant="secondary"
+                              disabled={busy}
+                              onPress={() => onSelect(m.id)}
+                            />
+                            <Button
+                              theme="red"
+                              disabled={busy}
+                              onPress={() => onDelete(m.id)}
+                            >
+                              {busy ? "Deleting…" : "Delete"}
+                            </Button>
+                          </>
+                        )}
+                      </XStack>
+                    ) : (
+                      <YStack gap="$2">
+                        <Text color="$textMuted" fontSize={12}>
+                          {isCloudReady
+                            ? "API key is configured on this device."
+                            : `Paste your ${cloudProviderLabel(m.provider)} API key to enable this cloud model.`}
+                        </Text>
+                        <HermesTextField
+                          value={cloudApiKeyDrafts[m.id] ?? ""}
+                          onChangeText={(next) =>
+                            setCloudApiKeyDrafts((prev) => ({ ...prev, [m.id]: next }))
+                          }
+                          placeholder={`${cloudProviderLabel(m.provider)} API key`}
+                          secureTextEntry
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          editable={!busy}
+                        />
+                        <XStack gap="$2" flexWrap="wrap">
+                          {isCloudReady ? (
+                            <HermesButton
+                              label={isActive ? "Selected" : "Use for Chat"}
+                              variant="secondary"
+                              marginTop={0}
+                              disabled={busy}
+                              onPress={() => onSelectCloud(m.id)}
+                            />
+                          ) : null}
+                          <HermesButton
+                            label={busy ? "Saving…" : isCloudReady ? "Update key" : "Save key"}
+                            variant="primary"
+                            marginTop={0}
+                            disabled={busy}
+                            onPress={() => onSaveCloudKey(m.id)}
+                          />
+                          {isCloudReady ? (
+                            <Button
+                              theme="red"
+                              disabled={busy}
+                              onPress={() => onRemoveCloudKey(m.id)}
+                            >
+                              {busy ? "Removing…" : "Remove key"}
+                            </Button>
+                          ) : null}
+                        </XStack>
+                        <Text color="$textMuted" fontSize={11}>
+                          Create key: {m.setupUrl}
+                        </Text>
+                      </YStack>
+                    )}
                   </YStack>
                 );
               })}

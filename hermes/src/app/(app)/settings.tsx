@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { useFocusEffect } from "@react-navigation/native";
 import { Button, Text, YStack, XStack } from "tamagui";
 import { useSQLiteContext } from "expo-sqlite";
 
@@ -11,11 +12,12 @@ import { getLearnSettings, upsertLearnSettings, type LearnSettings } from "@/db/
 import { HermesButton } from "@/components/ui/HermesButton";
 
 import {
+  getActiveModelId,
   getActiveModelUri,
   getModelFileUri,
   modelFileExists,
 } from "shared/services/llm/modelStore";
-import { MODEL_CATALOG } from "shared/services/llm/modelCatalog";
+import { MODEL_CATALOG, isLocalModelCard } from "shared/services/llm/modelCatalog";
 import { AppHeader } from "@/components/ui/AppHeader";
 
 export default function Settings() {
@@ -24,12 +26,15 @@ export default function Settings() {
   const { setActiveLanguage, activeProfileId, activeLanguageId } = useAppState();
 
   const [activeUri, setActiveUri] = useState<string | null>(null);
+  const [activeModelId, setActiveModelId] = useState<string | null>(null);
   const [activeUriExists, setActiveUriExists] = useState<boolean | null>(null);
   const [learnSettings, setLearnSettings] = useState<LearnSettings | null>(null);
   const [learnSettingsLoading, setLearnSettingsLoading] = useState(false);
 
   const refresh = useCallback(async () => {
+    const modelId = await getActiveModelId();
     const uri = await getActiveModelUri();
+    setActiveModelId(modelId);
     setActiveUri(uri);
 
     if (uri) {
@@ -43,6 +48,12 @@ export default function Settings() {
   useEffect(() => {
     refresh().catch(() => {});
   }, [refresh]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refresh().catch(() => {});
+    }, [refresh])
+  );
 
   useEffect(() => {
     if (!activeProfileId || !activeLanguageId) return;
@@ -70,9 +81,15 @@ export default function Settings() {
   }, [db, activeProfileId, activeLanguageId]);
 
   const activeChatModel = useMemo(() => {
+    if (activeModelId) {
+      return MODEL_CATALOG.find((m) => m.id === activeModelId) ?? null;
+    }
     if (!activeUri) return null;
-    return MODEL_CATALOG.find((m) => getModelFileUri(m.filename) === activeUri) ?? null;
-  }, [activeUri]);
+    return (
+      MODEL_CATALOG.find((m) => isLocalModelCard(m) && getModelFileUri(m.filename) === activeUri) ??
+      null
+    );
+  }, [activeModelId, activeUri]);
 
   const openModelPicker = (purpose: "chat" | "tts" | "stt" | "all") => {
     router.push({

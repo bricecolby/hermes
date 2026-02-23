@@ -12,6 +12,8 @@ type Props = {
   placeholder?: string;
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
   autoCorrect?: boolean;
+  secureTextEntry?: boolean;
+  editable?: boolean;
 
   multiline?: boolean;
   minHeight?: number;
@@ -31,6 +33,8 @@ export const HermesTextField = forwardRef<any, Props>(function HermesTextField(
     placeholder,
     autoCapitalize = "none",
     autoCorrect = false,
+    secureTextEntry = false,
+    editable = true,
     multiline = false,
     minHeight,
     leftIcon,
@@ -71,6 +75,8 @@ export const HermesTextField = forwardRef<any, Props>(function HermesTextField(
           placeholder={placeholder}
           autoCorrect={autoCorrect}
           autoCapitalize={autoCapitalize}
+          secureTextEntry={secureTextEntry}
+          editable={editable}
           multiline={multiline}
           textAlignVertical={multiline ? "top" : "center"}
           backgroundColor="transparent"

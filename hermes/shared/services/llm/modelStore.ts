@@ -2,13 +2,14 @@
 import { Directory, File, Paths } from "expo-file-system";
 import * as LegacyFS from "expo-file-system/legacy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MODEL_CATALOG } from "./modelCatalog";
+import { MODEL_CATALOG, isLocalModelCard } from "./modelCatalog";
 
 const MODEL_SUBDIR = "models";
 const MIN_MODEL_BYTES = 50_000_000;
 
 // Persisted "active model" pointer (device-specific)
 const ACTIVE_MODEL_URI_KEY = "llm.activeModelUri";
+const ACTIVE_MODEL_ID_KEY = "llm.activeModelId";
 
 
 /**
@@ -96,6 +97,27 @@ export async function clearActiveModelUri(): Promise<void> {
 }
 
 /**
+ * Persist which model id should be used by default on this device.
+ */
+export async function setActiveModelId(modelId: string): Promise<void> {
+  await AsyncStorage.setItem(ACTIVE_MODEL_ID_KEY, modelId);
+}
+
+/**
+ * Retrieve the persisted active model id, if any.
+ */
+export async function getActiveModelId(): Promise<string | null> {
+  return AsyncStorage.getItem(ACTIVE_MODEL_ID_KEY);
+}
+
+/**
+ * Clear active model id selection.
+ */
+export async function clearActiveModelId(): Promise<void> {
+  await AsyncStorage.removeItem(ACTIVE_MODEL_ID_KEY);
+}
+
+/**
  * Verify the model file still exists at the provided URI.
  */
 export async function modelFileExists(uri: string): Promise<boolean> {
@@ -109,6 +131,7 @@ export async function modelFileExists(uri: string): Promise<boolean> {
 
 export async function findFirstDownloadedModelUri(): Promise<string | null> {
   for (const m of MODEL_CATALOG) {
+    if (!isLocalModelCard(m)) continue;
     if (await modelIsDownloaded(m.filename)) {
       return getModelFileUri(m.filename);
     }
